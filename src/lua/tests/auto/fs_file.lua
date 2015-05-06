@@ -1,0 +1,85 @@
+-- Tests the fs.File object.
+
+local ensure = devel.ensure
+
+local function test()
+
+  local filename = fs.temporary_file { name_only=true }
+
+  local contents_typo = "onE\ntwo\n\nthree\nfour"
+  local contents_ok   = "one\ntwo\n\nthree\nfour"
+
+  --
+  -- Create the file
+  --
+  local f = assert(fs.open(filename,'w+'))
+  assert(f:write(contents_typo))
+
+  --
+  -- Check seek()
+  --
+  local typo_from_end = (contents_typo:len() + 1 - contents_typo:find('E'))
+  assert(f:seek("cur", -typo_from_end))
+  assert(f:write("e")) -- Fix typo: change "onE" to "one".
+
+  f:seek("set")
+  ensure.equal(f:read("*a"), contents_ok, "seek() does flush(); negative offsets work")
+
+  --
+  -- Check output buffering.
+  --
+  f:seek("set")
+  for ch in contents_ok:gmatch "." do
+    f:write(ch)
+  end
+  f:seek("set")
+  ensure.equal(f:read("*a"), contents_ok, "output buffering")
+
+  --
+  -- Check buffering. Read bytes.
+  --
+
+  f.ibuffer.BUFSIZ = 3 -- use a ridiculously small buffer of 3 bytes. (no public method for this; don't ever access ibuffer yourself!)
+
+  f:seek("set")
+  local s = ""
+  while true do
+    local ch = f:read(1)
+    if ch then
+      s = s .. ch
+    else
+      break
+    end
+  end
+  ensure.equal(s, contents_ok, "input buffering, byte by byte")
+
+  ensure.equal(f:read(), nil, "EOF detection feature")
+
+  --
+  -- Check buffering. Read lines.
+  --
+  f:seek("set")
+  local s = ""
+  while true do
+    local ln = f:read("*L")
+    if ln then
+      s = s .. ln
+    else
+      break
+    end
+  end
+  ensure.equal(s, contents_ok, "input buffering, line by line")
+
+  --
+  -- Check buffering. Read whole.
+  --
+  f:seek("set")
+  ensure.equal(f:read("*a"), contents_ok, "input buffering, slurp file")
+
+  -- Bye.
+  assert(f:close())
+  assert(fs.unlink(filename))
+
+end
+
+test()

@@ -143,7 +143,7 @@ typedef struct WPanel
 
 extern panelized_panel_t panelized_panel;
 
-extern panel_field_t panel_fields[];
+extern panel_field_t *panel_fields;
 
 extern hook_t *select_file_hook;
 
@@ -158,6 +158,9 @@ void panel_clean_dir (WPanel * panel);
 void panel_reload (WPanel * panel);
 void panel_set_sort_order (WPanel * panel, const panel_field_t * sort_order);
 void panel_re_sort (WPanel * panel);
+
+void panel_fields_init (void);
+gboolean panel_fields_register (const panel_field_t * field);
 
 #ifdef HAVE_CHARSET
 void panel_change_encoding (WPanel * panel);
@@ -176,6 +179,7 @@ void select_item (WPanel * panel);
 void recalculate_panel_summary (WPanel * panel);
 void file_mark (WPanel * panel, int idx, int val);
 void do_file_mark (WPanel * panel, int idx, int val);
+void set_panel_filter_to (WPanel * p, char *allocated_filter_string); /* implemented in cmd.c */
 
 gboolean do_panel_cd (struct WPanel *panel, const vfs_path_t * new_dir_vpath, enum cd_enum cd_type);
 

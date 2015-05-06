@@ -1,0 +1,14 @@
+
+HISTORY AND RATIONALE
+
+The original plan was to exposes MC's fileops (src/filemanager/file.c)
+to Lua. However, it was soon discovered that MC's code wasn't quite
+decoupled from the UI, and even if it was, trying to mold it to fit a
+flexible scripting environment was going to make everybody's life hard.
+
+But it was felt that not providing fileops to the user would be a study
+in irony. So a quick pure Lua solution was written.
+
+It turns out that this pure Lua solution is quite decent. It also allows
+for experimentation, which is a good thing in this early stage of
+MC/Lua. The use of coroutines makes it quite flexible.

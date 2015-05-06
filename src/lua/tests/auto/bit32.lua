@@ -1,0 +1,20 @@
+
+local ensure = devel.ensure
+
+local band = require('utils.bit32').band
+local bor = require('utils.bit32').bor
+
+local function hex(s)
+  return tonumber(s, 16)
+end
+
+local function test()
+  ensure(band(hex"ffffffff") == hex"ffffffff", "testing that 32 bits are supported.")
+  ensure(band(hex"ffffffff"+2) == 1, "testing that only 32 bits are supported")
+  ensure(bor(hex"ffffff00", hex"cce") == hex"ffffffce", "testing bor()")
+  ensure(band(hex"1f1", hex"2f2", hex"4f4") == hex"0f0", "testing band()")
+  ensure(band() == hex"ffffffff", "testing band() with no arguments")
+  ensure(bor() == 0, "testing bor() with no arguments")
+end
+
+test()

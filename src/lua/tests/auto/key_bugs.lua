@@ -1,0 +1,38 @@
+-- This file demonstrates a few minor bugs in lib/tty/key.c
+
+local ensure = devel.ensure
+
+local function test()
+
+  -- Bug #1: The reverse of 'shift-f1' gives us 'meta-f1':
+  ensure.equal(tty.keycode_to_keyname(tty.keyname_to_keycode('S-F1')), 'M-F1', '"shift as meta" bug.')
+
+  --[[
+    That's because of a bug in lib/tty/key.c:lookup_key_by_code(),
+
+    if (mod & KEY_M_SHIFT)
+    {
+        if (lookup_keycode (KEY_M_ALT, &idx))      -- should be KEY_M_SHIFT  !!
+        {
+  ]]
+
+  -- Bug #2: Can't reverse the name of C-Space (aka C-@).
+  ensure.throws(function()
+    tty.keycode_to_keyname(tty.keyname_to_keycode('C-Space')) -- throws "Invalid key code '16384'"
+  end, nil, "irreversibility of C-space")
+
+  --[[
+    That's because of a bug in lib/tty/key.c:lookup_key_by_code(),
+
+    if (lookup_keycode (k, &key_idx) || (k > 0 && k < 256))
+    {
+
+    But k is 0 for this key (for C-b, k is 2; for C-a, k is 1; for C-Space, k is 0).
+  ]]
+
+  -- Bug #3: Control keys with "invalid" characters are reported as some other keys (instead of signaling error).
+  ensure.equal(tty.keycode_to_keyname(tty.keyname_to_keycode('C-1')), 'C-q', "control key with invalid characters.")
+
+end
+
+test()

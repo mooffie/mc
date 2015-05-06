@@ -1,0 +1,3 @@
+#!/usr/bin/env mcscript
+
+require('samples.apps.calc').run()

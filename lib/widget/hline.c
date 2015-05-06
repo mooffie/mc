@@ -129,7 +129,7 @@ hline_new (int y, int x, int width)
 
     l = g_new (WHLine, 1);
     w = WIDGET (l);
-    widget_init (w, y, x, lines, width < 0 ? 1 : width, hline_callback, NULL);
+    widget_init (w, y, x, lines, width < 0 ? 1 : width, hline_callback, NULL, "HLine");
     l->text = NULL;
     l->auto_adjust_cols = (width < 0);
     l->transparent = FALSE;

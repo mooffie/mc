@@ -1,0 +1,64 @@
+
+-- This script tests that the __gc operator is called for tables.
+-- This feature is built-in for Lua 5.2. For earlier Luas it is the call
+-- to utils.magic.enable_table_gc() that makes it happen.
+
+--
+-- The output of this test must be:
+--
+--   hi from __gc, #1
+--   hi from __gc, #2
+--   File's __gc works
+--
+-- It will surely be the case for Lua 5.2, so the test is only useful for 5.1/JIT.
+
+local function test_gc()
+
+  local function hi(id)
+    return function()
+      print('hi from __gc, ' .. id)
+    end
+  end
+
+  ----------------------------------------
+
+  do
+    local t = {}
+    setmetatable(t, { __gc = hi('#1') })
+    utils.magic.enable_table_gc(t)
+  end
+  collectgarbage()
+  collectgarbage()
+
+  ----------------------------------------
+
+  do
+    local t = {}
+    setmetatable(t, { })
+    getmetatable(t).__gc = hi('#2')
+    utils.magic.enable_table_gc(t)
+  end
+  collectgarbage()
+  collectgarbage()
+
+  ----------------------------------------
+
+  local filename
+  do
+    local f
+    f, filename = fs.temporary_file()
+    f:write('house')
+    -- The file's __gc will flush/close the file.
+  end
+  collectgarbage()
+  collectgarbage()
+  local contents = fs.open(filename):read('*all')
+  if contents == 'house' then
+    print "File's __gc works"
+  else
+    print "File's __gc fails"
+  end
+
+end
+
+test_gc()

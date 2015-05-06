@@ -68,6 +68,10 @@
 #include "src/learn.h"          /* learn_keys */
 #include "src/keybind-defaults.h"
 
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#endif
+
 #include "edit-impl.h"
 #include "editwidget.h"
 #ifdef HAVE_ASPELL
@@ -632,7 +636,7 @@ is_blank (const edit_buffer_t * buf, off_t offset)
 /* --------------------------------------------------------------------------------------------- */
 /** returns the offset of line i */
 
-static off_t
+/*static*/ off_t  /* @FIXME: we make this useful function non-static so others can use it. */
 edit_find_line (WEdit * edit, long line)
 {
     long i, j = 0;
@@ -2043,13 +2047,15 @@ edit_init (WEdit * edit, int y, int x, int lines, int cols, const vfs_path_t * f
         edit->x_prev = x_prev;
         edit->lines_prev = lines_prev;
         edit->cols_prev = cols_prev;
+
+        WIDGET (edit)->lua_class_name = "Editbox";
     }
     else
     {
         edit = g_malloc0 (sizeof (WEdit));
         to_free = TRUE;
 
-        widget_init (WIDGET (edit), y, x, lines, cols, NULL, NULL);
+        widget_init (WIDGET (edit), y, x, lines, cols, NULL, NULL, "Editbox");
         edit->fullscreen = TRUE;
         edit_save_size (edit);
     }
@@ -2110,6 +2116,10 @@ edit_init (WEdit * edit, int y, int x, int lines, int cols, const vfs_path_t * f
 
     edit_load_macro_cmd (edit);
 
+#ifdef ENABLE_LUA
+    mc_lua_trigger_event__with_widget ("editbox::load", WIDGET (edit));
+#endif
+
     return edit;
 }
 
@@ -2121,6 +2131,25 @@ edit_clean (WEdit * edit)
 {
     if (edit == NULL)
         return FALSE;
+
+#ifdef ENABLE_LUA
+    /*
+     * The widget has been sent MSG_DESTROY already. Since we
+     * invalidate Lua wrappers before MSG_DESTROY is sent (see dialog.c:
+     * notify_lua_on_widget_destruction() is called before MSG_DESTROY is
+     * broadcasted), the Lua wrapper seen in the <<unload>> handler would
+     * be a new one, different than the one seen in earlier event
+     * handlers (e.g., in <<load>>).
+     *
+     * The implication is that you can't store data on the Lua wrapper
+     * in <<load>> and expect to see it in <<unload>>.
+     *
+     * It would be nice to "fix" this for Editboxes. Maybe we should add a
+     * flag to widgets that governs whether notify_lua_on_widget_destruction()
+     * is called before or after MSG_DESTROY.
+     */
+    mc_lua_trigger_event__with_widget ("editbox::unload", WIDGET (edit));
+#endif
 
     /* a stale lock, remove it */
     if (edit->locked)

@@ -1,0 +1,16 @@
+
+This directory contains:
+
+(1) MC's core (in modules/core). "The core" is the the part of MC's Lua
+    support that's written in Lua itself.
+
+(2) MC's sample scripts (in modules/samples).
+
+(3) Scripts installed by your administrator or distro.
+
+    (3a) Modules should be placed in the modules/ directory.
+
+    (3b) OTOH, files placed directly in this directory (that is, outside
+         modules/) will be run automatically when MC starts, for all users.
+         MC itself places no file here. This feature is reserved for
+         administrators and distros who want to customize MC for their users.

@@ -59,6 +59,7 @@ void view_cmd (void);
 void view_file_cmd (void);
 void view_raw_cmd (void);
 void view_filtered_cmd (void);
+void do_edit (const vfs_path_t * what_vpath);
 void do_edit_at_line (const vfs_path_t * what_vpath, gboolean internal, long start_line);
 void edit_cmd (void);
 void edit_cmd_new (void);

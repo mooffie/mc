@@ -66,6 +66,10 @@
 #ifdef ENABLE_SUBSHELL
 #include "src/subshell.h"       /* do_subshell_chdir() */
 #endif
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#include "src/lua/modules/fields.h"     /* mc_lua_set_current_field() */
+#endif
 
 #include "dir.h"
 #include "boxes.h"
@@ -109,7 +113,7 @@ static const char *string_space (file_entry *, int);
 static const char *string_dot (file_entry *, int);
 
 /* *INDENT-OFF* */
-panel_field_t panel_fields[] = {
+panel_field_t _panel_fields[] = {
     {
      "unsorted", 12, 1, J_LEFT_FIT,
      /* TRANSLATORS: one single character to represent 'unsorted' sort mode  */
@@ -308,6 +312,70 @@ panel_field_t panel_fields[] = {
     }
 };
 /* *INDENT-ON* */
+
+/* --------------------------------------------------------------------------------------------- */
+/*
+ * To allow users to register fields (via scripts), we store the fields not
+ * in a static C array but in a GArray.
+ *
+ * We conveniently #define 'panel_fields' to make the rest of the code work
+ * as if nothing has changed.
+ */
+
+GArray *panel_fields__array = NULL;
+#define panel_fields         ((panel_field_t *)panel_fields__array->data)
+
+#define BUILTIN_FIELDS_COUNT (G_N_ELEMENTS(_panel_fields) - 1)
+#define MAX_USER_FIELDS      100
+#define MAX_FIELDS           (BUILTIN_FIELDS_COUNT + MAX_USER_FIELDS)
+
+void
+panel_fields_init ()
+{
+
+    if (!panel_fields__array)
+        panel_fields__array =
+            g_array_sized_new (TRUE, TRUE, sizeof (panel_field_t), MAX_FIELDS + 1);
+
+    /* We allow calling this function again later to clear all user-registered fields: */
+    g_array_set_size (panel_fields__array, 0);
+
+    g_array_append_vals (panel_fields__array, _panel_fields, BUILTIN_FIELDS_COUNT);
+}
+
+/**
+ * Allow for registering fields at runtime.
+ */
+gboolean
+panel_fields_register (const panel_field_t * field)
+{
+    panel_field_t *found;
+
+    found = const_cast (panel_field_t *, panel_get_field_by_id (field->id));
+    if (found)
+    {
+        *found = *field;
+    }
+    else
+    {
+        /*
+         * We don't let the array grow. If it grows (that is, reallocated),
+         * the panel->sort field pointer will become invalid and we'll crash.
+         * That's the reason we pre-allocate MAX_FIELDS in panel_fields_init().
+         * See also the notes in fields.lua.
+         *
+         * We'll remove this limitation once we tackle panel->sort.
+         */
+        if (panel_fields__array->len < MAX_FIELDS)
+            g_array_append_val (panel_fields__array, *field);
+        else
+            return FALSE;
+    }
+
+    return TRUE;
+}
+
+/* --------------------------------------------------------------------------------------------- */
 
 mc_fhl_t *mc_filehighlight = NULL;
 
@@ -792,6 +860,10 @@ format_file (char *dest, int limit, WPanel * panel, int file_index, int width, i
             int len, perm;
             const char *prepared_text;
             int name_offset = 0;
+
+#ifdef ENABLE_LUA
+            mc_lua_set_current_field (panel, format->id);
+#endif
 
             if (empty_line)
                 txt = " ";
@@ -3063,11 +3135,17 @@ _do_panel_cd (WPanel * panel, const vfs_path_t * new_dir_vpath, enum cd_enum cd_
     /* Reload current panel */
     panel_clean_dir (panel);
 
+#ifdef ENABLE_LUA
+    mc_lua_set_current_field (panel, panel->sort_info.sort_field->id);
+#endif
     panel->count =
         do_load_dir (panel->cwd_vpath, &panel->dir, panel->sort_info.sort_field->sort_routine,
                      panel->sort_info.reverse, panel->sort_info.case_sensitive,
                      panel->sort_info.exec_first, panel->filter);
     try_to_select (panel, get_parent_dir_name (panel->cwd_vpath, olddir_vpath));
+#ifdef ENABLE_LUA
+    mc_lua_trigger_event__with_widget ("panel::load", WIDGET (panel));
+#endif
 
     load_hint (0);
     panel->dirty = 1;
@@ -3417,6 +3495,9 @@ panel_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *d
         mini_info_separator (panel);
         display_mini_info (panel);
         panel->dirty = 0;
+#ifdef ENABLE_LUA
+        mc_lua_trigger_event__with_widget ("panel::draw", WIDGET (panel));
+#endif
         return MSG_HANDLED;
 
     case MSG_FOCUS:
@@ -3437,9 +3518,15 @@ panel_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *d
 
         update_xterm_title_path ();
         select_item (panel);
+#ifdef ENABLE_LUA
+        mc_lua_trigger_event__with_widget ("panel::activate", WIDGET (panel));
+#endif
         show_dir (panel);
         paint_dir (panel);
         panel->dirty = 0;
+#ifdef ENABLE_LUA
+        mc_lua_trigger_event__with_widget ("panel::draw", WIDGET (panel));
+#endif
 
         bb = find_buttonbar (w->owner);
         midnight_set_buttonbar (bb);
@@ -3452,6 +3539,9 @@ panel_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *d
         panel->active = 0;
         show_dir (panel);
         unselect_item (panel);
+#ifdef ENABLE_LUA
+        mc_lua_trigger_event__with_widget ("panel::draw", WIDGET (panel));
+#endif
         return MSG_HANDLED;
 
     case MSG_KEY:
@@ -3763,6 +3853,9 @@ update_one_panel_widget (WPanel * panel, panel_update_flags_t flags, const char 
     {
         panel->is_panelized = FALSE;
         mc_setctl (panel->cwd_vpath, VFS_SETCTL_FLUSH, 0);
+#ifdef ENABLE_LUA
+        mc_lua_trigger_event__with_widget ("panel::flush", WIDGET (panel));
+#endif
         memset (&(panel->dir_stat), 0, sizeof (panel->dir_stat));
     }
 
@@ -4054,7 +4147,7 @@ panel_new_with_dir (const char *panel_name, const vfs_path_t * vpath)
     panel = g_new0 (WPanel, 1);
     w = WIDGET (panel);
     /* No know sizes of the panel at startup */
-    widget_init (w, 0, 0, 0, 0, panel_callback, panel_event);
+    widget_init (w, 0, 0, 0, 0, panel_callback, panel_event, "Panel");
     /* We do not want the cursor */
     widget_want_cursor (w, FALSE);
 
@@ -4142,10 +4235,16 @@ panel_new_with_dir (const char *panel_name, const vfs_path_t * vpath)
     }
 
     /* Load the default format */
+#ifdef ENABLE_LUA
+    mc_lua_set_current_field (panel, panel->sort_info.sort_field->id);
+#endif
     panel->count =
         do_load_dir (panel->cwd_vpath, &panel->dir, panel->sort_info.sort_field->sort_routine,
                      panel->sort_info.reverse, panel->sort_info.case_sensitive,
                      panel->sort_info.exec_first, panel->filter);
+#ifdef ENABLE_LUA
+    mc_lua_trigger_event__with_widget ("panel::load", WIDGET (panel));
+#endif
 
     /* Restore old right path */
     if (curdir != NULL)
@@ -4189,10 +4288,16 @@ panel_reload (WPanel * panel)
     memset (&(panel->dir_stat), 0, sizeof (panel->dir_stat));
     show_dir (panel);
 
+#ifdef ENABLE_LUA
+    mc_lua_set_current_field (panel, panel->sort_info.sort_field->id);
+#endif
     panel->count =
         do_reload_dir (panel->cwd_vpath, &panel->dir, panel->sort_info.sort_field->sort_routine,
                        panel->count, panel->sort_info.reverse, panel->sort_info.case_sensitive,
                        panel->sort_info.exec_first, panel->filter);
+#ifdef ENABLE_LUA
+    mc_lua_trigger_event__with_widget ("panel::load", WIDGET (panel));
+#endif
 
     panel->dirty = 1;
     if (panel->selected >= panel->count)
@@ -4322,6 +4427,9 @@ select_item (WPanel * panel)
     panel->dirty = 1;
 
     execute_hooks (select_file_hook);
+#ifdef ENABLE_LUA
+    mc_lua_trigger_event__with_widget ("panel::select-file", WIDGET (panel));
+#endif
 }
 
 /* --------------------------------------------------------------------------------------------- */
@@ -4447,6 +4555,9 @@ panel_re_sort (WPanel * panel)
 
     filename = g_strdup (selection (panel)->fname);
     unselect_item (panel);
+#ifdef ENABLE_LUA
+    mc_lua_set_current_field (panel, panel->sort_info.sort_field->id);
+#endif
     do_sort (&panel->dir, panel->sort_info.sort_field->sort_routine, panel->count - 1,
              panel->sort_info.reverse, panel->sort_info.case_sensitive,
              panel->sort_info.exec_first);
@@ -4777,7 +4888,6 @@ panel_init (void)
     mc_event_add (MCEVENT_GROUP_FILEMANAGER, "update_panels", event_update_panels, NULL, NULL);
     mc_event_add (MCEVENT_GROUP_FILEMANAGER, "panel_save_current_file_to_clip_file",
                   panel_save_current_file_to_clip_file, NULL, NULL);
-
 }
 
 /* --------------------------------------------------------------------------------------------- */

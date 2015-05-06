@@ -71,4 +71,4 @@ else
     libmc_la_LIBADD += $(GLIB_LIBS)
 endif
 
-libmc_la_LIBADD += $(PCRE_LIBS) $(LIBICONV) $(INTLLIBS)
+libmc_la_LIBADD += $(PCRE_LIBS) $(LIBICONV) $(INTLLIBS) $(LUA_LIBS)

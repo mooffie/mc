@@ -242,3 +242,15 @@ tty_color_set_defaults (const char *fgcolor, const char *bgcolor, const char *at
 }
 
 /* --------------------------------------------------------------------------------------------- */
+
+/* This function is the "reverse" of allocating a color. It's the key
+ * to creating "screen shots" and HTML output. */
+tty_color_pair_t *
+tty_color_pair_number_to_struct (int clr)
+{
+    return (tty_color_pair_t *) g_hash_table_find (mc_tty_color__hashtable,
+                                                   tty_color_get_next_cpn_cb,
+                                                   GSIZE_TO_POINTER (clr));
+}
+
+/* --------------------------------------------------------------------------------------------- */

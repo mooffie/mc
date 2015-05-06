@@ -139,7 +139,8 @@ hotkey_draw (Widget * w, const hotkey_t hotkey, gboolean focused)
 
 void
 widget_init (Widget * w, int y, int x, int lines, int cols,
-             widget_cb_fn callback, mouse_h mouse_handler)
+             widget_cb_fn callback, mouse_h mouse_handler,
+             const char *lua_class_name)
 {
     w->x = x;
     w->y = y;
@@ -149,6 +150,7 @@ widget_init (Widget * w, int y, int x, int lines, int cols,
     w->mouse = mouse_handler;
     w->set_options = widget_default_set_options_callback;
     w->owner = NULL;
+    w->lua_class_name = lua_class_name;
 
     /* Almost all widgets want to put the cursor in a suitable place */
     w->options = W_WANT_CURSOR;

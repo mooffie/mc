@@ -668,3 +668,60 @@ tty_beep (void)
 }
 
 /* --------------------------------------------------------------------------------------------- */
+
+/**
+ * See description at 'tty-slang.c'.
+ *
+ * The imperfections of this ncurses implementation are excusable: this
+ * feature is not meant to be used in MC itself but to ease development
+ * tasks (writing tests, generating "screenshots" for documentation).
+ */
+gboolean
+tty_read_screen (int y, int x, char **str, int *color)
+{
+    int saved_x, saved_y;
+    chtype ct;
+    int ct_char;
+    int ct_color;
+    char ch;
+
+    if (!yx_in_screen(y, x))
+        return FALSE;
+
+    tty_getyx (&saved_y, &saved_x);
+    ct = mvinch (y, x);
+    tty_gotoyx (saved_y, saved_x);
+
+    ct_char = ct & A_CHARTEXT;
+    ct_color = PAIR_NUMBER (ct & A_COLOR);
+
+    if (ct_char > 127)
+    {
+        /* We currently support only ASCII. We use "!", not "?", to show
+           that it's an implementation issue, not an encoding error. */
+        ch = '!';
+        /* For some reason, the color index is jumbled in this case (even
+           when we aren't in UTF-8 mode). We reset it to "normal". */
+        ct_color = 1;
+    }
+    else if (ct & A_ALTCHARSET)
+    {
+        /* Line-drawing characters (ACS_*). We don't bother processing
+           them. We could look them up in mc_tty_frm[], as tty_print_alt_char
+           does. */
+        ch = '#';
+    }
+    else
+    {
+        ch = ct_char;
+    }
+
+    if (str != NULL)
+        *str = g_strndup (&ch, 1);
+    if (color != NULL)
+        *color = ct_color;
+
+    return TRUE;
+}
+
+/* --------------------------------------------------------------------------------------------- */

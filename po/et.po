@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # kristjanrats <kristjanrats@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Midnight Commander\n"
-"Report-Msgid-Bugs-To: http://www.midnight-commander.org/report\n"
-"POT-Creation-Date: 2013-07-05 09:13+0400\n"
+"Report-Msgid-Bugs-To: http://www.midnight-commander.org/\n"
+"POT-Creation-Date: 2015-05-07 15:48+0300\n"
 "PO-Revision-Date: 2013-07-30 09:29+0000\n"
 "Last-Translator: kristjanrats <kristjanrats@gmail.com>\n"
-"Language-Team: Estonian (http://www.transifex.com/projects/p/mc/language/et/)\n"
+"Language-Team: Estonian (http://www.transifex.com/projects/p/mc/language/"
+"et/)\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: et\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Warning: cannot load codepages list"
@@ -557,6 +558,9 @@ msgstr ""
 msgid "Edit files"
 msgstr ""
 
+msgid "Run a Lua script"
+msgstr ""
+
 msgid "Forces xterm features"
 msgstr ""
 
@@ -667,6 +671,9 @@ msgid "Arguments parse error!"
 msgstr ""
 
 msgid "No arguments given to the viewer."
+msgstr ""
+
+msgid "No pathname of a script to execute was given."
 msgstr ""
 
 msgid "Two files are required to evoke the diffviewer."
@@ -1736,8 +1743,7 @@ msgstr ""
 msgid "Sort order"
 msgstr ""
 
-#. TRANSLATORS: no need to translate 'Confirmation', it's just a context
-#. prefix
+#. TRANSLATORS: no need to translate 'Confirmation', it's just a context prefix
 msgid "Confirmation|&Delete"
 msgstr ""
 
@@ -2552,9 +2558,6 @@ msgid "Source"
 msgstr ""
 
 msgid "Target"
-msgstr ""
-
-msgid "Deleting"
 msgstr ""
 
 msgid "Follow &links"
@@ -3498,6 +3501,10 @@ msgid "Built with GLib %d.%d.%d\n"
 msgstr ""
 
 #, c-format
+msgid "With Lua (%s)\n"
+msgstr ""
+
+#, c-format
 msgid "Virtual File Systems:"
 msgstr ""
 
@@ -3523,10 +3530,19 @@ msgstr ""
 msgid "VFS plugins and scripts:"
 msgstr ""
 
+msgid "Lua scripts:"
+msgstr ""
+
 msgid "User data"
 msgstr ""
 
 msgid "Cache directory:"
+msgstr ""
+
+#, c-format
+msgid ""
+"(You may override Lua's default script directories with the\n"
+"environment variables %s and %s.)\n"
 msgstr ""
 
 #, c-format

@@ -887,6 +887,14 @@ file_progress_show (FileOpContext * ctx, off_t done, off_t total,
 
     ui = ctx->ui;
 
+    /*
+     * The following anti-crash hack is for some bug that was probably fixed
+     * already in master. It has nothing to do with our Lua support, of course.
+     * We should remove this when we rebase our branch on master.
+     */
+    if (ui->progress_file_gauge == NULL)  /* ANTI-CRASH BUG: THIS WIDGET IS NULL SOMETIMES. */
+        return;
+
     if (total == 0)
     {
         gauge_show (ui->progress_file_gauge, 0);
@@ -934,7 +942,14 @@ file_progress_show_count (FileOpContext * ctx, size_t done, size_t total)
         g_snprintf (buffer, BUF_TINY, _("Files processed: %zu/%zu"), done, total);
     else
         g_snprintf (buffer, BUF_TINY, _("Files processed: %zu"), done);
-    label_set_text (ui->total_files_processed_label, buffer);
+
+    /*
+     * The following anti-crash hack is for some bug that was probably fixed
+     * already in master. It has nothing to do with our Lua support, of course.
+     * We should remove this when we rebase our branch on master.
+     */
+    if (ui->total_files_processed_label)  /* ANTI-CRASH BUG: THIS WIDGET IS NULL SOMETIMES. */
+        label_set_text (ui->total_files_processed_label, buffer);
 }
 
 /* --------------------------------------------------------------------------------------------- */
@@ -1023,6 +1038,14 @@ file_progress_show_source (FileOpContext * ctx, const vfs_path_t * s_vpath)
 
     ui = ctx->ui;
 
+    /*
+     * The following anti-crash hack is for some bug that was probably fixed
+     * already in master. It has nothing to do with our Lua support, of course.
+     * We should remove this when we rebase our branch on master.
+     */
+    if (ui->src_file_label == NULL)  /* ANTI-CRASH BUG: THIS WIDGET IS NULL SOMETIMES. */
+        return;
+
     if (s_vpath != NULL)
     {
         char *s;
@@ -1050,6 +1073,14 @@ file_progress_show_target (FileOpContext * ctx, const vfs_path_t * s_vpath)
         return;
 
     ui = ctx->ui;
+
+    /*
+     * The following anti-crash hack is for some bug that was probably fixed
+     * already in master. It has nothing to do with our Lua support, of course.
+     * We should remove this when we rebase our branch on master.
+     */
+    if (ui->tgt_file_label == NULL)  /* ANTI-CRASH BUG: THIS WIDGET IS NULL SOMETIMES. */
+        return;
 
     if (s_vpath != NULL)
     {

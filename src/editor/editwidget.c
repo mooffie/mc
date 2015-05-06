@@ -60,6 +60,9 @@
 #include "src/filemanager/cmd.h"        /* view_other_cmd(), save_setup_cmd()  */
 #include "src/learn.h"          /* learn_keys() */
 #include "src/args.h"           /* mcedit_arg_t */
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#endif
 
 #include "edit-impl.h"
 #include "editwidget.h"
@@ -1018,6 +1021,9 @@ edit_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, v
         widget_set_size (WIDGET (menubar), w->y, w->x, 1, w->cols);
         menubar_arrange (menubar);
         g_list_foreach (h->widgets, (GFunc) edit_dialog_resize_cb, NULL);
+#ifdef ENABLE_LUA
+        mc_lua_trigger_event__with_widget("editor::layout", w);
+#endif
         return MSG_HANDLED;
 
     case MSG_ACTION:
@@ -1087,7 +1093,7 @@ edit_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, v
 
 /* --------------------------------------------------------------------------------------------- */
 
-static cb_ret_t
+cb_ret_t  /* @FIXME: See comment in edit-impl.h as to why this is non-static. */
 edit_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *data)
 {
     WEdit *e = (WEdit *) w;
@@ -1234,6 +1240,10 @@ edit_files (const GList * files)
         /* at least one file has been opened succefully */
         ok = ok || f_ok;
     }
+
+#ifdef ENABLE_LUA
+    mc_lua_trigger_event__with_widget("editor::layout", WIDGET (edit_dlg));
+#endif
 
     if (ok)
         dlg_run (edit_dlg);

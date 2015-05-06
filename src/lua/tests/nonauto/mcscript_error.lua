@@ -1,0 +1,8 @@
+
+-- This script contains a syntax error.
+--
+-- * mcscript should give a proper error message.
+-- * exist code shouldn't be zero.
+
+4 4 4
+

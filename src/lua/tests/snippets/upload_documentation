@@ -1,0 +1,24 @@
+#!/usr/bin/env mcscript
+
+--[[
+
+This is how I upload the documentation to the server.
+
+(Well, no more. Turns out MC has a date bug over sh://.)
+
+]]
+
+local src = '../../doc/ldoc/html'
+local trg = 'sh://www.typo.co.il/vhosts/coil/typo/users/mooffie/public_html/mc-lua/docs'
+
+mc.cp(
+  src,
+  trg,
+  {
+    decide_on_overwrite = function ()
+      --return "update"  -- MC's sh:// has a timezone bug here. See comment at mc.cp().
+      return "skip"
+    end,
+    deref = true,  -- The screenshots are symlinked, so we deref.
+  }
+)

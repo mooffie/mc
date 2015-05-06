@@ -18,6 +18,7 @@ struct WPanel;
 /*** declarations of public functions ************************************************************/
 
 void external_panelize (void);
+void do_external_panelize (char *command);
 void load_panelize (void);
 void save_panelize (void);
 void done_panelize (void);

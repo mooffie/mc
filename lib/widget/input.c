@@ -1014,7 +1014,7 @@ input_new (int y, int x, const int *input_colors, int width, const char *def_tex
 
     in = g_new (WInput, 1);
     w = WIDGET (in);
-    widget_init (w, y, x, 1, width, input_callback, input_event);
+    widget_init (w, y, x, 1, width, input_callback, input_event, "Input");
     w->options |= W_IS_INPUT;
     w->set_options = input_set_options_callback;
 

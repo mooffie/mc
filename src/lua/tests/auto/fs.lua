@@ -1,0 +1,173 @@
+
+local posix = require "fs.filedes"
+local const = require "fs"
+local bor = require "utils.bit32".bor
+
+local ensure = devel.ensure
+
+local function list_iterator(list)
+  local next_key = nil
+  return function()
+    local value
+    next_key, value = next(list, next_key)
+    return value
+  end
+end
+
+local function contains(needle, iter, ...)
+  if type(iter) == "table" then
+    iter = list_iterator(iter)
+  end
+  for v in iter, ... do
+    if v == needle then
+      return true
+    end
+  end
+end
+
+local function is_triad(a,b,c)
+  return (not a) and b and c
+end
+
+local DIR = "/tmp"
+local TMP_FILE = DIR .. "/mclua.txt"
+local TMP_FILE_HLINK = DIR .. "/mclua.hard.txt"
+local TMP_FILE_SLINK = DIR .. "/mclua.symb.txt"
+local TMP_FILE_RENAMED = DIR .. "/mclua2.txt"
+local TMP_DIR = DIR .. "/mclua.dir"
+
+local function test_basic()
+
+  local function unlink_all()
+    fs.unlink(TMP_FILE)
+    fs.unlink(TMP_FILE_HLINK)
+    fs.unlink(TMP_FILE_SLINK)
+    fs.unlink(TMP_FILE_RENAMED)
+    fs.rmdir(TMP_DIR)
+  end
+  unlink_all()
+
+  local fd, _, _ = posix.open(TMP_FILE, bor(const.O_RDWR, const.O_CREAT, const.O_TRUNC))
+  ensure(fd ~= nil, "Creating a file")
+
+  local contents = "The quick brown fox jumps over the lazy dog."
+  ensure(posix.write(fd, contents) == contents:len(), "Writing to file")
+
+  -- Seek to 5 bytes before EOF.
+  ensure(posix.lseek(fd, -5, const.SEEK_CUR) == contents:len() - 5, "Seeking")
+  ensure(posix.read(fd, 1000) == contents:sub(-5), "Reading")
+
+  ensure(posix.fstat(fd, 'size') == contents:len() , "fstat(), 1")
+  ensure(posix.fstat(fd).size == contents:len() , "fstat(), 2")
+  ensure(fs.stat(TMP_FILE, 'size') == contents:len() , "stat(), 1")
+  ensure(fs.stat(TMP_FILE).size == contents:len() , "stat(), 2")
+
+  fs.chmod(TMP_FILE, tonumber("777", 8))
+  ensure(fs.stat(TMP_FILE).perm == tonumber("777", 8), "chmod()")
+
+  fs.link(TMP_FILE, TMP_FILE_HLINK)
+  ensure(fs.stat(TMP_FILE_HLINK, 'nlink') == 2, "link(), 1")
+  ensure(fs.stat(TMP_FILE_HLINK, 'ino') == fs.stat(TMP_FILE, 'ino'), "link(), 2")
+
+  fs.symlink(TMP_FILE, TMP_FILE_SLINK)
+  ensure(fs.lstat(TMP_FILE_SLINK, "type") == "link", "symlink()")
+  ensure(fs.readlink(TMP_FILE_SLINK) == TMP_FILE, "readlink()")
+
+  ensure(posix.close(fd), "Closing")
+
+  fs.unlink(TMP_FILE_HLINK)
+  ensure(fs.stat(TMP_FILE_HLINK) == nil, "unlink()")
+
+  local fd, errmsg, errcode = posix.open(TMP_FILE_HLINK)
+  ensure(fd == nil and errcode == const.ENOENT, 'Returning failure on opening non-existent file.')
+
+  fs.rename(TMP_FILE_SLINK, TMP_FILE_RENAMED)
+  ensure(fs.lstat(TMP_FILE_RENAMED, "type") == "link", "rename()")
+
+  fs.mkdir(TMP_DIR)
+  ensure(fs.lstat(TMP_DIR, "type") == "directory", "mkdir()")
+  fs.rmdir(TMP_DIR)
+  ensure(fs.lstat(TMP_DIR) == nil, "rmdir()")
+
+  fs.utime(TMP_FILE, 666, 777)
+  ensure(fs.stat(TMP_FILE).mtime == 666 and fs.stat(TMP_FILE).atime == 777, "utime()")
+
+  -- Test chown(). But we disable it by default as we're doing here things that may not be too portable.
+  if false then
+    local current_gid, current_uid = fs.stat(TMP_FILE, "uid", "gid")
+    local new_gid = -1
+    -- http://pubs.opengroup.org/onlinepubs/007908799/xcu/id.html
+    for gid in io.popen("id -G"):read():gmatch("%d+") do
+      gid = gid + 0
+      if gid ~= current_gid then
+        new_gid = gid
+        break
+      end
+    end
+    assert(new_gid ~= -1, "Couldn't figure out a group to chown() to.")
+    fs.chown(TMP_FILE, nil, new_gid)
+    ensure(fs.stat(TMP_FILE).uid == current_uid and fs.stat(TMP_FILE).gid == new_gid, "chown()")
+  end
+
+  local to_find = TMP_FILE:sub(DIR:len() + 2)
+  ensure(contains(to_find, fs.dir(DIR)), "dir() (looking for '" .. to_find .. "')")
+  ensure(contains(to_find, fs.files(DIR)), "files() (looking for '" .. to_find .. "')")
+
+  unlink_all()
+
+end
+
+local function test_dir_behavior()
+  -- Test various behaviors of dir() and files()
+  ensure(not contains(".", fs.dir(DIR)) and not contains("..", fs.dir(DIR)), "dir() shouldn't return '.' and '..'")
+  ensure(not contains(".", fs.files(DIR)) and not contains("..", fs.files(DIR)), "files() shouldn't return '.' and '..'")
+  ensure(is_triad(fs.dir("/NON_EXISTENT")), "dir() should return a triad on failure")
+  ensure.throws(function()
+    fs.files("/NON_EXISTENT")
+  end, nil, "files() should raise error on failure")
+end
+
+local function test_vpath()
+  local s = "/sh://john:secret@server.org/dir/uClibc-snapshot.tar.bz2/utar://uClibc/extra/config/kconfig-to-uclibc.patch.gz/patchfs://config/lxdialog"
+  local vp = fs.VPath(s)
+
+  ensure(vp and vp.path and #vp.path == 4, "VPath.new()")
+  ensure(vp.path[2].user == "john" and vp.path[2].password == "secret", "vpath: parsing user/password (FISH must be compiled in)")
+  ensure(vp:last().path == "config/lxdialog", "vpath:last()")
+  ensure(vp:last().path == vp:tail(), "vpath:tail()")
+
+  ensure.throws(function()
+    fs.VPath(1234)
+  end, "got number", "VPath.new() ought not to accept a number")
+
+end
+
+local function test_statbuf()
+
+  local st
+
+  st = fs.StatBuf {
+    size = 100,
+
+    -- Some random number, just to make sure that "mode" is indeed ignored: "type" and "perm" have higher precedence.
+    mode = tonumber("060123", 8),
+
+    type = "directory",
+    perm = 111,
+  }
+
+  ensure(st.type == "directory" and st.perm == 111, "StatBuf(), testing 'type' and 'perm'")
+  ensure(st.size == 100, "StatBuf(), testing 'size'")
+  ensure(st.blksize > 0, "StatBuf(), testing default 'blksize'")
+
+  ensure.throws(function()
+    fs.StatBuf { invalid_field = 123 }
+  end, nil, "Statbuf(), testing rejection of invalid fields");
+
+end
+
+test_basic()
+test_dir_behavior()
+test_vpath()
+test_statbuf()
+--os.exit()
