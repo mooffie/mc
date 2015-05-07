@@ -30,7 +30,7 @@ One you use a single "slow" field you can use all of them without incurring
 further loss of performance.
 
 If you're conscious about performance, you can enable and disable the
-"slow" fields with a hotkey:
+"slow" fields with a hotkey (alternatively, see the "snapshots" tip below):
 
     local gitf = require('samples.fields.git')
     gitf.enabled = false  -- start disabled.
@@ -54,17 +54,11 @@ using these fields.
 
 ---------------------------------------------------------------------
 
-As a convenience, instead of typing the above format strings you can
-use the following code to do the job:
+Tip:
 
-    local function git_adjust(pnl)
-      pnl.list_type = "custom"
-      -- you may want to use "mtime" instead of "perm"
-      pnl.custom_format = "half type name | size | perm | gitstatus | gitdate | gitauthor | gitmessage"
-      pnl.custom_mini_status = true
-      pnl.custom_mini_status_format = "half type name:20 | gitcommit:10 | gitmessage"
-    end
-    ui.Panel.bind('C-y', git_adjust)
+Use the "snapshots" module to save your custom format and restore it
+whenever you wish. You can have one snapshot to "disable" the git fields
+and another to "enable" them.
 
 ]]
 

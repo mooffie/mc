@@ -372,3 +372,12 @@ and in your module's documentation provide the following code snippet for activa
 (The sequence 'C-f u e' stands for "[f]ields, [u]pcase, [e]nable". Of
 course, you may use any other sequence, but perhaps it's wiser for the
 community to settle on this convention.)
+
+**An alternative**
+
+An alternative to this scheme of enabling/disabling fields, at least from
+the point of view of the user, is to use the
+@{git:snapshots|snapshots} module. The idea is to store, in a
+snapshot, your custom format(s) only (a custom format which would contain
+the fields in question). You may also setup another snapshot without the
+fields. You can then very easily toggle the fields.
