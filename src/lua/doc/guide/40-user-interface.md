@@ -21,9 +21,9 @@ First, we create a dialog:
 
 Next, we populate it with widgets:
 
-    dlg:add(ui.Label("A label telling you that life is beautiful."))
-    dlg:add(ui.Checkbox("Do you like pizza?"))
-    dlg:add(ui.Button("Click me!"))
+    dlg:add(ui.Label(T"A label telling you that life is beautiful."))
+    dlg:add(ui.Checkbox(T"Do you like pizza?"))
+    dlg:add(ui.Button(T"Click me!"))
     ...
 
 Finally, we show the dialog:

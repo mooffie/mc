@@ -101,7 +101,7 @@ an "info" basket containing the panel and the panel's direcrory:
       expand = true,
     }
 
-(For a field that uses the @{fs.StatBuf|stat} argument, see the next example.)
+(The next example shows a field that uses the @{fs.StatBuf|stat} argument.)
 
 We've also shown in this example a few render-related keys
 (@{fields.default_align|default_align},
@@ -224,7 +224,7 @@ some fields may require launching an external program:
 Clearly, if we had to launch the external program each time our `render`
 function is called the result would be extremely slow.
 
-To solve this problem with can launch the external program to process an
+To solve this problem we can launch the external program to process an
 entire directory. We'd store the result in some cache. Then our 'render'
 function would look up in this cache.
 

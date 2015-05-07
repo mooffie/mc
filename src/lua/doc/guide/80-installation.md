@@ -142,7 +142,7 @@ First, let's download and compile Lua:
 
 Ensure you now have a `liblua.a` file in `/home/mooffie/lua-5.3.0/src`.
 
-(We don't have to do `make install` because in this example we'll be
+(We don't have to do `make install` here because in this example we'll be
 compiling MC against Lua's static library. Static libraries don't need
 to exist on a system once the executable using them has been created.)
 
@@ -161,7 +161,7 @@ Now:
     @plain
     $ ../configure --with-lua LUA_LIBS="-L/home/mooffie/lua-5.3.0/src -llua -lm -ldl" LUA_CFLAGS="-I/home/mooffie/lua-5.3.0/src"
 
-...and pay attention to the last summary line 'configure' prints.
+...and, as before, pay attention to the last summary line 'configure' prints.
 
 Finally, continue with `make` and `make install`, as demonstrated in step 5.
 

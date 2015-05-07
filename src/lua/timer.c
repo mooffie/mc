@@ -77,8 +77,8 @@ mc_lua_timer_unlock ()
  *   call returns zero.
  *
  * - mc_lua_timer_now() is monotonous: if the admin sets the clock to earlier
- *   time, mc_lua_timer_now() will detect this and at most return a reading
- *   equal to the previous reading.
+ *   time, mc_lua_timer_now() will detect this and at the least return a
+ *   reading equal to the previous reading.
  */
 pit_t
 mc_lua_timer_now ()
@@ -89,7 +89,7 @@ mc_lua_timer_now ()
     struct timeval now;
 
     /* We're using gettimeofday(), not clock_gettime() because: (1) the
-       former is what's already used throughout MC. (2) According
+       former is what's already used throughout MC. (2) According to
        clock_gettime's manual page(s), while Linux and BSD do support
        CLOCK_MONOTONIC, which could free us from the need to handle the
        monotony issue ourselves, this is not guaranteed to be supported

@@ -146,7 +146,7 @@ problem for one syntax (say JavaScript) doesn't break other syntaxes
 (say PHP or Haskell)?
 
 The solution is simple and pleasant: Thanks to our Lua integration we
-can @{git:misc/bin/htmlize|convert a source file to HTML}. So we can
+can @{~shots#htmlizer|convert a source file to HTML}. So we can
 create a corpus of demonstrative source files in different languages
 (JavaScript, PHP, Haskell, ...) and store together with them their
 correct highlighted syntax in HTML form. The task of testing your patch

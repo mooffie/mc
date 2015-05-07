@@ -37,6 +37,15 @@ very complicated structures. The output will be shown in MC's viewer for
 your convenience (or on stdout if MC's screen hasn't been initialized
 yet).
 
+## Use T"string" when possible
+
+Throughout the documentation, and stock code, you'll see that
+human-readable strings are preceded by "T":
+
+    alert(T"Who do you love?")
+
+This makes your strings @{locale|localizable}.
+
 ## Modules
 
 The Lua integration is organized in modules. While you may use
@@ -106,7 +115,7 @@ written 3'rd party code), this is still selectively permissible using
 
 [tip]
 
-Our @{git:editbox/linter.lua|linter} (if you have
+Our @{~shots#linter|linter} (if you have
 [lualint](http://lua-users.org/wiki/LuaLint) installed) will flag global
 variables for you. It does static analysis of your code so even global
 variables in branches that don't get executed will be detected.
@@ -131,13 +140,3 @@ The following bad calls demonstrate this:
   --<small>_Error: bad argument #1 to 'draw_string' (canvas expected, got string)_</small>
 - `pnl.clear()`
   --<small>_Error: attempt to index local 'self' (a nil value)_</small>
-
-## Use T"string" when possible
-
-Throughout the documentation, and stock code, you'll see that
-human-readable strings are preceded by "T":
-
-    alert(T"Who do you love?")
-
-This makes your strings @{locale|localizable}.
-

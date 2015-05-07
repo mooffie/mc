@@ -8,8 +8,8 @@ A "sol" link points to a solution, or to a way of solving.
 
 ** NAVIGATION AIDS **
 
-- @{280} and @{2733} (and @{2842}) "Fast switch between recently used files"   @{git:recently-visited-files/init.lua|sol}
-- @{1581} "Tabs, or tab equivalent"   @{git:snapshots/init.lua|sol}, @{git:docker.lua|sol}
+- @{280} and @{2733} (and @{2842}) "Fast switch between recently used files"   @{~shots#recent|sol}
+- @{1581} "Tabs, or tab equivalent"   @{~shots#snapshots|sol}, @{git:docker.lua|sol}
 
 ** ACCESSORIES **
 
@@ -28,9 +28,9 @@ A "sol" link points to a solution, or to a way of solving.
 - @{2421} "highlight occurences of pattern."  @{ui.Editbox:add_keyword|sol}
 - @{2875} "super tab" @{git:supertab.lua|sol}
 - @{2749} "C-code navigation via cscope"
-- @{3068} "Vim's modeline support"  @{git:modeline.lua|sol}
+- @{3068} "Vim's modeline support"  @{~shots#modeline|sol}
 - @{322} "when comma is inserted, add space" (joke, but instructive)
-- @{1688} "Warn if no write permission" (also @{3163}) @{git:access-warning.lua|sol}
+- @{1688} "Warn if no write permission" (also @{3163}) @{~shots#warning|sol}
 - @{1480} "Home key behavior" @{git:superhome.lua|sol}
 - @{400} "multiline search in mcedit"  @{git:search_by_regex.lua|sol}
 
@@ -135,7 +135,7 @@ No problem for LuaFS:
 
 - @{2454} "Make reloading extfs contents possible"
 - @{2997} "autodetecting files with different extensions"  @{git:luafs/panel.lua|sol} (on_panel_enter)
-- @{3186} "Base64 and Quoted-Printable decode" @{git:mht.lua|sol}
+- @{3186} "Base64 and Quoted-Printable decode"  @{utils.text.transport|sol}
 - @{3193} "mtp plugin"
 - @{2392} "IMAP FS (MC + IMAP folders)"
 
