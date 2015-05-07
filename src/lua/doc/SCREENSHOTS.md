@@ -108,9 +108,9 @@ __can__ do this but with MC it's like shooting in the dark: you don't
 know the names you'll end up with till you perform the rename, and then
 you may discover, to your dismay, that you'll be overwriting some files!
 
-_Visual Rename_ solves this by showing you, as you type, how your files
-will end up. It also warns you if clashes (overwriting files) will
-occur. You can also rename files down a directory tree by
+@{git:visren|Visual Rename} solves this by showing you, as you type, how
+your files will end up. It also warns you if clashes (overwriting files)
+will occur. You can also rename files down a directory tree by
 "panelize"ing first.
 
 You may even plug in your own code. No more wasting time on writing

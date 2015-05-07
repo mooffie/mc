@@ -24,7 +24,8 @@ dir = "html"  -- output directory.
 project = "mc^2"
 
 -- Where git links point to:
-local git_repository_base = 'https://github.com/MidnightCommander/mc/blob/master/'
+local git_repository_base = 'https://github.com/mooffie/mc/blob/lua-4.8.10/'
+
 -- Where ticket links point to:
 local bug_tracker_base = 'http://www.midnight-commander.org/ticket/'
 

@@ -23,9 +23,13 @@ trimmed down recipe:
     $ make
     $ make install
 
+Don't forget the `--with-lua` option!
+
 This will install mc in your $HOME/local folder (because we don't want
 to overwrite the system's MC, although you're free to do that if you
 wish).
+
+(If anything went wrong, see the full @{~installation|installation document}.)
 
 ## Writing your first Lua script
 
