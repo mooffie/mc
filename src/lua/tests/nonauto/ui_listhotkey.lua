@@ -1,0 +1,22 @@
+
+local function test()
+
+  local dlg = ui.Dialog{"listbox with hotkeys", padding=0}
+
+  local lst = ui.Listbox()
+  local l = {
+    {"one (z)", hotkey='z'},
+    {"two (C-a)", hotkey='C-a'},
+    {"three (F3)", hotkey='<f3>'},
+  }
+  lst.items = l
+
+  dlg:add(lst)
+
+  if dlg:run() then
+    alert('item selected: ' .. lst.value)
+  end
+
+end
+
+test()

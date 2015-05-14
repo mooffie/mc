@@ -749,3 +749,56 @@ tty_beep (void)
 }
 
 /* --------------------------------------------------------------------------------------------- */
+
+/**
+ * Read character and color at a certain position within the virtual
+ * screen.
+ *
+ * (More than one characters may be returned: when combining characters
+ * are used. See the fine documentation for SLsmg_char_at().)
+ *
+ * Output variables:
+ *
+ * 'str' will point to the character(s) read (use g_free() to
+ * free). 'color' will be filled with the color. Any can be NULL.
+ *
+ * The function returns TRUE on success.
+ */
+gboolean
+tty_read_screen (int y, int x, char **str, int *color)
+{
+    int saved_x, saved_y;
+    SLsmg_Char_Type ct;
+    int success;
+
+    tty_getyx (&saved_y, &saved_x);
+    tty_gotoyx (y, x);
+    success = !SLsmg_char_at (&ct);
+    tty_gotoyx (saved_y, saved_x);
+
+    if (!success)
+        return FALSE;
+
+    if (str != NULL)
+    {
+        GString *buf = g_string_sized_new (8);
+        unsigned i;
+
+        for (i = 0; i < ct.nchars; i++)
+        {
+            if (mc_global.utf8_display)
+                g_string_append_unichar (buf, (gunichar) ct.wchars[i]);
+            else
+                g_string_append_c (buf, (char) ct.wchars[i]);
+        }
+
+        *str = g_string_free (buf, FALSE);
+    }
+
+    if (color != NULL)
+        *color = ct.color & SLSMG_COLOR_MASK;
+
+    return TRUE;
+}
+
+/* --------------------------------------------------------------------------------------------- */

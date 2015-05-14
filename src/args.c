@@ -37,6 +37,9 @@
 #ifdef ENABLE_VFS_SMB
 #include "src/vfs/smbfs/smbfs.h"        /* smbfs_set_debugf()  */
 #endif
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_create_argv() */
+#endif
 
 #include "src/textconf.h"
 
@@ -85,6 +88,10 @@ static gboolean parse_mc_e_argument (const gchar * option_name, const gchar * va
                                      gpointer data, GError ** mcerror);
 static gboolean parse_mc_v_argument (const gchar * option_name, const gchar * value,
                                      gpointer data, GError ** mcerror);
+#ifdef ENABLE_LUA
+static gboolean parse_mc_script_argument (const gchar * option_name, const gchar * value,
+                                          gpointer data, GError ** mcerror);
+#endif
 
 static GOptionContext *context;
 
@@ -185,6 +192,15 @@ static const GOptionEntry argument_main_table[] = {
      parse_mc_e_argument,
      N_("Edit files"),
      "<file> ..." },
+
+#ifdef ENABLE_LUA
+    {
+     "script", 'L', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_CALLBACK,
+     parse_mc_script_argument,
+     N_("Run a Lua script"),
+     "<file>"
+    },
+#endif /* ENABLE_LUA */
 
     {
      NULL, '\0', 0, 0, NULL, NULL, NULL /* Complete struct initialization */
@@ -463,6 +479,23 @@ parse_mc_v_argument (const gchar * option_name, const gchar * value, gpointer da
 
     return TRUE;
 }
+
+/* --------------------------------------------------------------------------------------------- */
+
+#ifdef ENABLE_LUA
+static gboolean
+parse_mc_script_argument (const gchar * option_name, const gchar * value, gpointer data, GError ** mcerror)
+{
+    (void) option_name;
+    (void) data;
+    (void) mcerror;
+
+    mc_global.mc_run_mode = MC_RUN_SCRIPT;
+    mc_run_param0 = g_strdup (value);
+
+    return TRUE;
+}
+#endif
 
 /* --------------------------------------------------------------------------------------------- */
 /**
@@ -747,6 +780,23 @@ mc_setup_by_args (int argc, char **argv, GError ** mcerror)
         }
         mc_global.mc_run_mode = MC_RUN_VIEWER;
     }
+#ifdef ENABLE_LUA
+    else if (strncmp (base, "mcs", 3) == 0)
+    {
+        /* mcs* is link to mc */
+
+        if (tmp != NULL)
+            mc_run_param0 = g_strdup (tmp);
+        else
+        {
+            mc_propagate_error (mcerror, 0, "%s\n", _("No pathname of a script to execute was given."));
+            return FALSE;
+        }
+        /* Arguments start at index 2 (as at index 1 is the script name). */
+        mc_lua_create_argv (mc_run_param0, argc, argv, 2);
+        mc_global.mc_run_mode = MC_RUN_SCRIPT;
+    }
+#endif /* ENABLE_LUA */
 #ifdef USE_DIFF_VIEW
     else if (strncmp (base, "mcd", 3) == 0 || strcmp (base, "diff") == 0)
     {
@@ -782,6 +832,13 @@ mc_setup_by_args (int argc, char **argv, GError ** mcerror)
         case MC_RUN_VIEWER:
             /* mc_run_param0 is set up in parse_mc_v_argument() */
             break;
+
+#ifdef ENABLE_LUA
+        case MC_RUN_SCRIPT:
+            mc_lua_create_argv (mc_run_param0, argc, argv, 1);
+            /* mc_run_param0 is set up in parse_mc_script_argument() */
+            break;
+#endif /* ENABLE_LUA */
 
         case MC_RUN_DIFFVIEWER:
             /* not implemented yet */

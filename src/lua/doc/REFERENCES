@@ -1,0 +1,159 @@
+
+===== I18N ===
+
+- There's purportedly Lua support in `xgettext`. Check it out.
+- http://www.pixelbeat.org/programming/i18n.html
+
+
+===== Learn APIs from others =========
+
+File system
+  http://www.boost.org/doc/libs/1_53_0/libs/filesystem/doc/index.htm
+  Watching for changes
+    http://stevedonovan.github.io/winapi/api.html#watch_for_file_changes
+  https://github.com/moteus/lua-path
+
+TTY/Style
+  https://github.com/leafo/moonscript/blob/master/extra/scintillua/lexers/themes/moon.lua    **
+
+Thread
+  Roblox (google: "lua scheduler wait" )
+
+Regex/split
+  http://tech.3scale.net/2013/01/09/augment-your-api-without-touching-it/
+
+APIs to make shell-related work easy?
+  read: http://stackoverflow.com/questions/3637668/why-are-scripting-languages-e-g-perl-python-ruby-not-suitable-as-shell-lang
+    which links to: http://viewsourcecode.org/why/hacking/wearingRubySlippersToWork.html
+  http://everythingsysadmin.com/perl2python.html **
+
+Editor
+  See what we can learn from Tk::text's API.
+  Scintila
+  http://www.yellowbrain.com/stc/index.html
+  http://docs.wxwidgets.org/3.0/classwx_styled_text_ctrl.html
+  http://www.tecgraf.puc-rio.br/iup/en/ctrl/iup_scintilla.html  (+ ui widgets)
+  file://localhost/usr/share/doc/python-fltk-doc/CH4_Editor.html (code at bottom has syntax parser?)
+
+Misc
+  http://docs.wxwidgets.org/3.0/overview_events.html ?
+  https://github.com/stevedonovan/winapi/blob/master/examples/
+
+
+====== Lua topics =========
+
+- http://loop.luaforge.net/
+  Object-oriented framework.
+
+
+===== Interesting =====
+
+- http://code.google.com/p/termbox/
+  "ncurses alternative"
+
+- images in console
+  http://ranger.nongnu.org/
+
+- other "commanders":
+  - https://github.com/corporateshark/WalCommander **
+  - http://www.webupd8.org/2010/02/3-linux-console-file-managers-you.html
+  - UnixTree ( http://unixtree.org , http://linmagazine.co.il/book/view/6554 )
+
+
+===== References =======
+
+- http://www.c-for-dummies.com/ncurses/ ?
+
+
+==== Learn Lua integration from others ========
+
+- package "libquvi-scripts"
+
+- VLC
+
+- Ipe
+
+= C =
+
+- Conky's Cairo.
+
+- http://wxcode.sourceforge.net/components/wxscript/
+
+  "A set of abstract classes to add a script-interpreter support to your
+   wxWidgets applications/libraries. The implementation of these interfaces
+   for the Lua, Python, UnderC and CINT interpreters (these two are C/C++
+   intepreters) are provided. The advantage of a single basic interface
+   makes extremely easy for the programmer not only to add scripting
+   support to its program but also to give the user multi-scripting
+   languages support, learning how to use a single set of powerful classes:
+   wxPython, wxLua, wxUnderC and wxCINT. These classes are easily
+   extensible and they support Unicode as well."
+
+- wxLua
+
+- https://github.com/lwindolf/liferea    (not Lua)
+
+  "Liferea 1.10+ support GObject Introspection based plugins using
+   libpeas. The Liferea distribution comes with a set of Python plugin e.g.
+   the media player, GNOME keyring support, a tray icon plugin and maybe
+   others."
+
+   http://lzone.de/Writing-Liferea-Plugins-Tutorial-Part-1
+
+     "The important point is: by Liferea using GI (as all GNOME applications
+      and many other GTK applications do now) plugins can be written in
+      practically any scripting language."
+
+
+======= Ideas for samples ==========
+
+Fields
+  index: show running number (nah! better to print "5/728" at bottom!)
+  bm: show "B"/"*" if there are bookmarks/position saved.
+
+Panel
+  trash ("safe delete")
+    http://www.midnight-commander.org/ticket/3072
+      http://linmagazine.co.il/node/view/50738 (mentions node.js compat wrapper)
+      http://forums.bodhilinux.com/index.php?/topic/1098-the-trash-can-command-line-style/
+  Warn, using a docked lanel, if the shell has something typed into
+    it (see #2110, #213).
+
+Games
+  http://www.inn.co.il/Children/Flash.aspx/g/36  (mountains in the BG)
+  http://linmagazine.co.il/node/view/50648  "2048" ?
+  http://motris.livejournal.com/141491.html ***
+  http://en.wikipedia.org/wiki/Pac-Man
+  http://www.mobygames.com/game/dos/showtext-included-games/screenshots *
+  http://www.classicdosgames.com/game/MasterMind.html
+  http://dwarffortresswiki.org/index.php/Main_Page *
+  http://www.dosgames.com/
+
+Apps
+  some alarm program or a time tracker (gtimer *, osmo, pal)
+  Programs similar to our Visual Rename:
+  - http://www.krename.net/Screenshots.11.0.html
+  - https://github.com/laurent22/massren (and emacs's dired)
+
+Editor
+  ^L to also center line in editor.
+
+Environment variables editor?
+  "Versions 2.05 and later of bash use a different format for the output of
+   the set builtin, designed to make evaluating its output easier. However,
+   this output is not compatible with earlier versions of bash (or with
+   many other shells, probably)."
+
+General
+  A ruler to measure distance (useful in the editor, but also elsewhere).
+
+
+===== Misc =====
+
+The screenshots currently in ldoc are huge. Here are some to prove there are
+small and pleasant fonts:
+
+  http://www.midnight-commander.org/attachment/ticket/122/15480-mcbug.png   (BTW, it shows a panel scrollbar!)
+  http://www.midnight-commander.org/attachment/ticket/3413/mc-info-overflow.png
+  http://www.midnight-commander.org/ticket/1511   (DosNavigator shots. Oh, the nostalgy!)
+

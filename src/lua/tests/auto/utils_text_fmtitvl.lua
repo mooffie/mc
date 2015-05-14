@@ -1,0 +1,32 @@
+
+local ensure = devel.ensure
+
+local format_interval_tiny = require('utils.text').format_interval_tiny
+
+local function test()
+
+  local minute = 60
+  local hour = 60*60
+  local day = 60*60*24
+  local month = 60*60*24*30
+
+  local check = function(itvl, expected)
+    ensure.equal(format_interval_tiny(itvl), expected, expected)
+  end
+
+  check(45, "45s")
+  check(minute*6.5, "7m")
+  check(minute*98.2, "98m")
+  check(minute*120, "2h")
+  check(hour*23.4, "23h")
+  check(day*1.6, "2d")
+  check(day*29, "29d")
+  check(day*30, "1M")
+  check(month*7.9, "8M")
+  check(day*365*1.8, "2Y")
+  check(0.2, "0s")
+  check(-minute, "+1m")
+
+end
+
+test()

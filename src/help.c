@@ -1046,7 +1046,7 @@ mousedispatch_new (int y, int x, int yl, int xl)
     Widget *w;
 
     w = g_new (Widget, 1);
-    widget_init (w, y, x, yl, xl, md_callback, help_event);
+    widget_init (w, y, x, yl, xl, md_callback, help_event, NULL);
     return w;
 }
 

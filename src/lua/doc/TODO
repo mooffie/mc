@@ -1,0 +1,31 @@
+
+vpath
+  - i18n: in a few places (C only) I use vpath->str. Is it intended for tty output only?
+  - i18n: do we need ui.Panel:to_tty (a la ui.Editbox:to_tty) ? In other words,
+    is ui.Panel:marked for the tty or for disk i/o?
+  - Have decent dirname(), basename(), join(). The couple at 'utils.path' are ad-hoc.
+  - Have an fs.mkdir_p() which does support the VFS (in contrast to fs.nonvfs_mkdir_p()).
+
+
+ui
+  - autoloading widgets? currently, we unconditionaly require 'ui.lua' and 'ui/*.lua'.
+    See comments in _bootstrap.lua and ui.lua.
+
+
+misc
+  - see if http://getmoai.com/forums/luajit-traceback-in-coroutine-t2662/
+    anyhow applies to us (LuaJIT "debug mode").
+  - git-related features (fields, etc.) cause error message printed (stderr) when
+    the repository is not valid (right after "git init").
+
+
+ldoc
+  - use better colors for code snippet?
+    (see http://google-code-prettify.googlecode.com/svn/trunk/styles/index.html
+     and http://swfoo.com/?p=632 )
+  - mc.css: different style for notes/tips? Firefox doesn't manage the rounded corners well.
+
+
+misc
+  - Ask MC's maintainers to add '--leave-preprocessor-space' (short: '-lps') to
+    indent's invocation in doc/HACKING (for our capi.h).

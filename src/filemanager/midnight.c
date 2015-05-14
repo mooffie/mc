@@ -85,6 +85,10 @@
 #include "src/diffviewer/ydiff.h"
 #endif
 
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_run_script() */
+#endif
+
 #include "src/consaver/cons.saver.h"    /* show_console_contents */
 
 #include "midnight.h"
@@ -1010,6 +1014,11 @@ mc_maybe_editor_or_viewer (void)
         ret = dview_diff_cmd (mc_run_param0, mc_run_param1);
         break;
 #endif /* USE_DIFF_VIEW */
+#ifdef ENABLE_LUA
+    case MC_RUN_SCRIPT:
+        ret = (mc_lua_run_script (NULL) != MC_LUA_SCRIPT_RESULT_ERROR);
+        break;
+#endif /* ENABLE_LUA */
     default:
         ret = FALSE;
     }

@@ -76,6 +76,10 @@
 #include "selcodepage.h"
 #endif /* HAVE_CHARSET */
 
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"
+#endif
+
 #include "consaver/cons.saver.h"        /* cons_saver_pid */
 
 /*** global variables ****************************************************************************/
@@ -291,6 +295,14 @@ main (int argc, char *argv[])
         goto startup_exit_falure;
     }
 
+#ifdef ENABLE_LUA
+    /* We do this before vfs_init() in case LuaFS's initialization code,
+     * in the future, would want to access Lua's VM.
+     * We also do this before mc_setup_by_args(), which needs the VM
+     * for exporting 'argv' to the Lua side. */
+    mc_lua_init();
+#endif
+
     vfs_init ();
     vfs_plugins_init ();
 
@@ -316,6 +328,8 @@ main (int argc, char *argv[])
     /* Set up temporary directory after VFS initialization */
     mc_tmpdir ();
 
+    panel_fields_init();
+
     /* do this after vfs initialization and vfs working directory setup
        due to mc_setctl() and mcedit_arg_vpath_new() calls in mc_setup_by_args() */
     if (!mc_setup_by_args (argc, argv, &mcerror))
@@ -326,6 +340,48 @@ main (int argc, char *argv[])
         mc_event_deinit (NULL);
         goto startup_exit_falure;
     }
+
+#ifdef ENABLE_LUA
+    /* Run system and user startup scripts. */
+    mc_lua_load();
+#endif
+
+#ifdef ENABLE_LUA
+    if (mc_global.mc_run_mode == MC_RUN_SCRIPT)
+    {
+        /* Standalone mode: we're to run the script given on the command line. */
+        int result;
+
+        result = mc_lua_run_script ((char *) mc_run_param0);
+
+        if (result != MC_LUA_SCRIPT_RESULT_CONTINUE)
+        {
+          /* The script does not ask us to continue to the UI stage, so we stop here.
+           * @todo: Exit gracefully, executing the various shutdown procedures. */
+          return (result == MC_LUA_SCRIPT_RESULT_ERROR) ? EXIT_FAILURE : EXIT_SUCCESS;
+        }
+        /* We'll be resuming the script's execution when the UI is loaded
+         * (see midnight.c:mc_maybe_editor_or_viewer). */
+    }
+#endif
+
+#ifdef HAVE_LIBGPM
+    /*
+     * When MC is already running as an ancestor (a plausible scenario
+     * when using mcscript), and when using GPM in the *console* (but not
+     * in xterm), the mouse support won't actually work (a bug). Worse, it
+     * will make MC's timeout mechanism (in tty_get_event()) not work,
+     * which in turn will make our Lua timers not work.
+     *
+     * We don't care too much about the mouse, but many Lua apps put
+     * timers to good use (MC itself too, for vfs_timeout_handler()), so
+     * we kill the mouse to save the timers.
+     *
+     * This, of course, is a temporary hackish solution.
+     */
+    if (g_getenv ("MC_SID") && !g_getenv ("DISPLAY"))
+        mc_args__nomouse = TRUE;
+#endif
 
     /* check terminal type
      * $TEMR must be set and not empty
@@ -402,6 +458,9 @@ main (int argc, char *argv[])
        separate for the normal and alternate screens */
     enable_bracketed_paste ();
 
+    /* Inform whoever wants to know that the UI subsystem is ready. */
+    mc_event_raise (MCEVENT_GROUP_DIALOG, "ui_is_ready", NULL);
+
     /* subshell_prompt is NULL here */
     mc_prompt = (geteuid () == 0) ? "# " : "$ ";
 
@@ -422,8 +481,16 @@ main (int argc, char *argv[])
 
     free_keymap_defs ();
 
+#ifdef ENABLE_LUA
+    mc_lua_before_vfs_shutdown ();
+#endif
+
     /* Virtual File System shutdown */
     vfs_shut ();
+
+#ifdef ENABLE_LUA
+    mc_lua_shutdown ();
+#endif
 
     flush_extension_file ();    /* does only free memory */
 

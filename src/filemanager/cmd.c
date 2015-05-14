@@ -163,7 +163,7 @@ do_view_cmd (gboolean normal)
 
 /* --------------------------------------------------------------------------------------------- */
 
-static inline void
+/*static inline*/ void   /* @FIXME: this should be public: lua/modules/mc.c wants this */
 do_edit (const vfs_path_t * what_vpath)
 {
     edit_file_at_line (what_vpath, use_internal_edit != 0, 0);
@@ -171,7 +171,7 @@ do_edit (const vfs_path_t * what_vpath)
 
 /* --------------------------------------------------------------------------------------------- */
 
-static void
+/*static*/ void           /* @FIXME: this should be public: lua/modules/ui-panel.c wants this */
 set_panel_filter_to (WPanel * p, char *allocated_filter_string)
 {
     g_free (p->filter);

@@ -379,6 +379,33 @@ else
     AC_DEFINE_UNQUOTED([MC_USERCONF_DIR], ["$with_homedir"], [Where configs will be placed relative to $HOME])
 fi
 
+dnl ############################################################################
+dnl Lua
+dnl ############################################################################
+
+MC_PRINTF_I18N_GROUPING
+
+MC_WITH_LUA
+if test -n "$with_lua"; then
+    MC_CHECK_LUA
+    AC_DEFINE(ENABLE_LUA, [1], [Support for Lua])
+    lua_msg="yes ($lua_engine_title)"
+else
+    lua_msg="no"
+fi
+
+AM_CONDITIONAL(USE_LUA, [test -n "$with_lua"])
+
+dnl Where system Lua scripts are kept:
+AC_SUBST([mcluasystemdir], ['${libexecdir}/${PACKAGE}/lua'])
+dnl (see http://stackoverflow.com/questions/3538705/adding-a-custom-installation-directory-option-to-autoconf-generated-configure-sc )
+
+dnl We can optionally expose some crypto capabilities via Lua.
+PKG_CHECK_MODULES([GLIB_WITH_CRYPTO], [glib-2.0 >= 2.16],
+    [
+        AC_DEFINE([HAVE_G_COMPUTE_CHECKSUM_FOR_DATA], [1], [Can compute checksums])
+    ],
+    [:])
 
 dnl ############################################################################
 dnl MC options
@@ -529,6 +556,8 @@ src/man2hlp/Makefile
 src/viewer/Makefile
 src/diffviewer/Makefile
 src/filemanager/Makefile
+src/lua/Makefile
+src/lua/library/Makefile
 
 src/vfs/Makefile
 
@@ -572,6 +601,8 @@ src/vfs/ftpfs/Makefile
 src/vfs/sftpfs/Makefile
 
 src/vfs/local/Makefile
+
+src/vfs/luafs/Makefile
 
 src/vfs/sfs/Makefile
 
@@ -658,6 +689,7 @@ Configuration:
   Diff viewer:                ${diff_msg}
   Support for charset:        ${charset_msg}
   Search type:                ${SEARCH_TYPE}
+  Lua support:                ${lua_msg}
 ])
 
 dnl option checking is disable by default due to AC_CONFIG_SUBDIRS

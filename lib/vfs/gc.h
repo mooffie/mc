@@ -31,5 +31,7 @@ void vfs_rmstamp (struct vfs_class *vclass, vfsid id);
 void vfs_stamp_create (struct vfs_class *vclass, vfsid id);
 void vfs_gc_done (void);
 
+struct vfs_stamping *debug__vfs_get_stamps (void);
+
 /*** inline functions ****************************************************************************/
 #endif /* MC_VFS_GC_H */

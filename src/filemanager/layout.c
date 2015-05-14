@@ -57,6 +57,9 @@
 #ifdef ENABLE_SUBSHELL
 #include "src/subshell.h"
 #endif
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_trigger_event() */
+#endif
 
 #include "command.h"
 #include "midnight.h"
@@ -751,6 +754,10 @@ setup_panels (void)
         widget_set_size (WIDGET (the_hint), height + start_y, 0, 1, COLS);
     else
         widget_set_size (WIDGET (the_hint), 0, 0, 0, 0);
+
+#ifdef ENABLE_LUA
+    mc_lua_trigger_event ("filemanager::layout");
+#endif
 
     update_xterm_title_path ();
 }

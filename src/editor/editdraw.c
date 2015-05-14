@@ -54,6 +54,9 @@
 #endif
 
 #include "src/setup.h"          /* edit_tab_spacing */
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#endif
 
 #include "edit-impl.h"
 #include "editwidget.h"
@@ -515,10 +518,7 @@ edit_draw_this_line (WEdit * edit, off_t b, long row, long start_col, long end_c
     if (row > w->lines - 1 - EDIT_TEXT_VERTICAL_OFFSET - 2 * (edit->fullscreen ? 0 : 1))
         return;
 
-    if (book_mark_query_color (edit, edit->start_line + row, BOOK_MARK_COLOR))
-        book_mark = BOOK_MARK_COLOR;
-    else if (book_mark_query_color (edit, edit->start_line + row, BOOK_MARK_FOUND_COLOR))
-        book_mark = BOOK_MARK_FOUND_COLOR;
+    book_mark = book_mark_get_topmost_color (edit, edit->start_line + row);
 
     if (book_mark)
         abn_style = book_mark << 16;
@@ -1138,6 +1138,9 @@ void
 edit_render_keypress (WEdit * edit)
 {
     edit_render (edit, 0, 0, 0, 0, 0);
+#ifdef ENABLE_LUA
+    mc_lua_trigger_event__with_widget("editbox::draw", WIDGET (edit));
+#endif
 }
 
 /* --------------------------------------------------------------------------------------------- */

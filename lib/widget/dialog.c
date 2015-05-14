@@ -45,6 +45,10 @@
 #include "lib/fileloc.h"        /* MC_HISTORY_FILE */
 #include "lib/event.h"          /* mc_event_raise() */
 
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_eat_key(), mc_lua_trigger_event__with_widget() */
+#endif
+
 /*** global variables ****************************************************************************/
 
 /* Color styles for normal and error dialogs */
@@ -485,6 +489,11 @@ dlg_key_event (WDialog * h, int d_key)
     if (h->current == NULL)
         h->current = h->widgets;
 
+#ifdef ENABLE_LUA
+    if (mc_lua_eat_key (d_key))
+        return;
+#endif
+
     /* TAB used to cycle */
     if ((h->flags & DLG_WANT_TAB) == 0)
     {
@@ -780,7 +789,7 @@ dlg_create (gboolean modal, int y1, int x1, int lines, int cols,
     new_d = g_new0 (WDialog, 1);
     w = WIDGET (new_d);
     widget_init (w, y1, x1, lines, cols, (callback != NULL) ? callback : dlg_default_callback,
-                 mouse_handler);
+                 mouse_handler, "Dialog");
     widget_want_cursor (w, FALSE);
 
     new_d->state = DLG_CONSTRUCT;
@@ -1168,6 +1177,10 @@ dlg_redraw (WDialog * h)
 
     send_message (h, NULL, MSG_DRAW, 0, NULL);
     dlg_broadcast_msg (h, MSG_DRAW);
+#ifdef ENABLE_LUA
+    /* Can be used to add decoration to the dialog, like a drop shadow. */
+    mc_lua_trigger_event__with_widget ("dialog::draw", WIDGET (h));
+#endif
     update_cursor (h);
 }
 
@@ -1211,6 +1224,12 @@ dlg_init (WDialog * h)
     while (h->current != NULL && !dlg_focus (h))
         h->current = dlg_widget_next (h, h->current);
 
+
+#ifdef ENABLE_LUA
+    /* Can be used to notify the user with sound on alert boxes, TTS the title,
+       modify widgets data, etc. */
+    mc_lua_trigger_event__with_widget ("dialog::open", WIDGET (h));
+#endif
 
     h->ret_value = 0;
 }
@@ -1275,6 +1294,10 @@ dlg_destroy (WDialog * h)
 {
     /* if some widgets have history, save all history at one moment here */
     dlg_save_history (h);
+#ifdef ENABLE_LUA
+    g_list_foreach (h->widgets, (GFunc) mc_lua_notify_on_widget_destruction, NULL);
+    mc_lua_notify_on_widget_destruction (WIDGET (h));
+#endif
     dlg_broadcast_msg (h, MSG_DESTROY);
     g_list_free_full (h->widgets, g_free);
     mc_event_group_del (h->event_group);

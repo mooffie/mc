@@ -1,0 +1,33 @@
+This directory tree contains tests.
+
+auto/
+
+  Tests that don't require the user's intervention. You can run them with
+  mcscript.
+
+nonauto/
+
+  Tests that require the user's inspection or interaction. Most of
+  them you can run with mcscript. Some require MC (in which case
+  just symlink them to your Lua user folder). Read their headers
+  to see what they're trying to achieve.
+
+  [comment]
+  If, upon restarting MC, you see errors similar to "You can not use
+  tty.get_cols() yet, because the UI has not been initialized", this is
+  because you symlinked, to your Lua user folder, tests designed for
+  mcscript that involve the UI module. If you want these tests to be
+  runnable from MC, change the "test()" call (in their source code) to
+  something like "keymap.bind('C-whatever', test)".
+  [/comment]
+
+snippets/
+
+  These aren't "tests" per se. These are snippets you may actually
+  find useful. They require MC, so symlink them to your Lua user folder.
+  (If it turns out users find a snippet useful, we'd better turn it into
+  a module.)
+
+benchmark/
+
+  benchmarking scripts.

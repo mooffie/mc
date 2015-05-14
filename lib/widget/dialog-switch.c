@@ -41,6 +41,10 @@
 #include "lib/widget.h"
 #include "lib/event.h"
 
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#endif
+
 /*** global variables ****************************************************************************/
 
 WDialog *midnight_dlg = NULL;
@@ -108,6 +112,9 @@ dialog_switch_goto (GList * dlg)
             {
                 /* switch to panels */
                 midnight_dlg->state = DLG_ACTIVE;
+#ifdef ENABLE_LUA
+                mc_lua_trigger_event__with_widget ("dialog::activate", WIDGET (midnight_dlg));
+#endif
                 do_refresh ();
             }
         }
@@ -173,7 +180,12 @@ dialog_switch_remove (WDialog * h)
 
     /* resume forced the current screen */
     if (mc_current != NULL)
+    {
         DIALOG (mc_current->data)->state = DLG_ACTIVE;
+#ifdef ENABLE_LUA
+        mc_lua_trigger_event__with_widget ("dialog::activate", WIDGET (mc_current->data));
+#endif
+    }
 }
 
 /* --------------------------------------------------------------------------------------------- */
@@ -216,6 +228,25 @@ dialog_switch_prev (void)
         prev = g_list_last (mc_dialogs);
 
     dialog_switch_goto (prev);
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+/**
+ * Like dialog_switch_goto() but accepts a WDialog.
+ */
+void
+dialog_switch_dlg (WDialog * h)
+{
+    GList *dlg;
+
+    if (mc_current == NULL)     /* Abort if the topmost dialog is modal. */
+        return;
+
+    dlg = g_list_find (mc_dialogs, h);
+
+    if (dlg != NULL)
+        dialog_switch_goto (dlg);
 }
 
 /* --------------------------------------------------------------------------------------------- */
@@ -263,6 +294,17 @@ dialog_switch_list (void)
         h = g_list_nth (mc_dialogs, dlg_num - 1 - rv);
         dialog_switch_goto (h);
     }
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+/**
+ * For the benefit of applications that want to traverse the dialogs.
+ */
+void
+dialog_switch_foreach (GFunc func, gpointer user_data)
+{
+    g_list_foreach (mc_dialogs, func, user_data);
 }
 
 /* --------------------------------------------------------------------------------------------- */

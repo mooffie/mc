@@ -74,6 +74,10 @@
 #include "undelfs/undelfs.h"
 #endif
 
+#ifdef ENABLE_VFS_LUAFS
+#include "luafs/luafs.h"
+#endif
+
 #include "plugins_init.h"
 
 /*** global variables ****************************************************************************/
@@ -97,6 +101,11 @@ vfs_plugins_init (void)
     /* localfs needs to be the first one */
     init_localfs ();
 
+#ifdef ENABLE_VFS_LUAFS
+    /* We put LuaFS early so it can override paths of the the other filesystems.
+     * I.e., a Lua filesystem handling uzip:// will override ExtFS's uzip://. */
+    init_luafs ();
+#endif /* ENABLE_VFS_LUAFS */
 #ifdef ENABLE_VFS_CPIO
     init_cpiofs ();
 #endif /* ENABLE_VFS_CPIO */
@@ -125,7 +134,6 @@ vfs_plugins_init (void)
 #ifdef ENABLE_VFS_SMB
     init_smbfs ();
 #endif /* ENABLE_VFS_SMB */
-
 }
 
 /* --------------------------------------------------------------------------------------------- */

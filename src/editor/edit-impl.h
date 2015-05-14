@@ -94,6 +94,14 @@ typedef enum
     EDIT_DO_BACKUP
 } edit_save_mode_t;
 
+typedef enum
+{
+    RANGE_TYPE_DEFAULT = 0,
+    RANGE_TYPE_ANY,
+    RANGE_TYPE_SPELLCHECK,
+    RANGE_TYPE_NOT_SPELLCHECK
+} syntax_range_type_t;
+
 /*** structures declarations (and typedefs of structures)*****************************************/
 
 /* search/replace options */
@@ -239,6 +247,7 @@ void edit_update_screen (WEdit * edit);
 void edit_save_size (WEdit * edit);
 gboolean edit_handle_move_resize (WEdit * edit, unsigned long command);
 void edit_toggle_fullscreen (WEdit * edit);
+off_t edit_find_line (WEdit * edit, long line);
 void edit_move_to_line (WEdit * e, long line);
 void edit_move_display (WEdit * e, long line);
 void edit_word_wrap (WEdit * edit);
@@ -267,9 +276,12 @@ void edit_set_filename (WEdit * edit, const vfs_path_t * name_vpath);
 void edit_load_syntax (WEdit * edit, GPtrArray * pnames, const char *type);
 void edit_free_syntax_rules (WEdit * edit);
 int edit_get_syntax_color (WEdit * edit, off_t byte_index);
+gboolean edit_add_syntax_keyword (WEdit * edit, const char *kwd_str, const char *left,
+                                  const char *right, syntax_range_type_t range, int color);
 
 void book_mark_insert (WEdit * edit, long line, int c);
 gboolean book_mark_query_color (WEdit * edit, long line, int c);
+int book_mark_get_topmost_color (WEdit * edit, long line);
 struct edit_book_mark_t *book_mark_find (WEdit * edit, long line);
 gboolean book_mark_clear (WEdit * edit, long line, int c);
 void book_mark_flush (WEdit * edit, int c);
@@ -287,6 +299,16 @@ void format_paragraph (WEdit * edit, gboolean force);
 
 /* either command or char_for_insertion must be passed as -1 */
 void edit_execute_cmd (WEdit * edit, unsigned long command, int char_for_insertion);
+
+/**
+ * @FIXME:
+ *
+ * edit_init() neglects to set w->callback (and w->mouse), so code wishing to
+ * instantiate a WEdit has to do it itself. We expose the callback for such code.
+ *
+ * (Currently, this is only used by src/lua/modules/ui-editbox.c:edit_constructor().)
+ */
+cb_ret_t edit_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *data);
 
 /*** inline functions ****************************************************************************/
 

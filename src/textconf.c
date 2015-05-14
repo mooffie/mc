@@ -34,6 +34,11 @@
 #include "lib/fileloc.h"
 #include "lib/mcconfig.h"
 
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"
+#include "src/lua/capi.h"       /* lua_Number, lua_Integer */
+#endif
+
 #include "src/textconf.h"
 
 /*** global variables ****************************************************************************/
@@ -73,6 +78,9 @@ static const char *const vfs_supported[] = {
 #ifdef ENABLE_VFS_SMB
     "smbfs",
 #endif /* ENABLE_VFS_SMB */
+#ifdef ENABLE_VFS_LUAFS
+    "luafs",
+#endif
     NULL
 };
 #endif /* ENABLE_VFS */
@@ -142,6 +150,10 @@ show_version (void)
     printf (_("Built with GLib %d.%d.%d\n"),
             GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
 
+#ifdef ENABLE_LUA
+    printf (_("With Lua (%s)\n"), mc_lua_engine_name ());
+#endif
+
     for (i = 0; features[i] != NULL; i++)
         printf ("%s", _(features[i]));
 
@@ -161,6 +173,10 @@ show_version (void)
     TYPE_INFO (void *);
     TYPE_INFO (size_t);
     TYPE_INFO (off_t);
+#ifdef ENABLE_LUA
+    TYPE_INFO (lua_Number);
+    TYPE_INFO (lua_Integer);
+#endif
 #undef TYPE_INFO
     (void) printf ("\n");
 }
@@ -199,6 +215,9 @@ show_datadirs_extended (void)
     PRINTF2 ("fish:", LIBEXECDIR, FISH_PREFIX PATH_SEP_STR);
 #endif
 #endif /* ENABLE_VFS_EXTFS || defiined ENABLE_VFS_FISH */
+#ifdef ENABLE_LUA
+    PRINTF_SECTION2 (_("Lua scripts:"), mc_lua_system_dir ());
+#endif
     (void) puts ("");
 
     PRINTF_GROUP (_("User data"));
@@ -216,8 +235,16 @@ show_datadirs_extended (void)
     PRINTF ("mcedit macros:", mc_config_get_data_path (), MC_MACRO_FILE);
     PRINTF ("mcedit external macros:", mc_config_get_data_path (), MC_EXTMACRO_FILE ".*");
 #endif
+#ifdef ENABLE_LUA
+    PRINTF ("Lua scripts:", mc_lua_user_dir (), "");
+#endif
     PRINTF_SECTION2 (_("Cache directory:"), mc_config_get_cache_path ());
 
+#ifdef ENABLE_LUA
+    printf ("\n");
+    printf (_("(You may override Lua's default script directories with the\n"
+              "environment variables %s and %s.)\n"), "MC_LUA_SYSTEM_DIR", "MC_LUA_USER_DIR");
+#endif
 }
 
 #undef PRINTF

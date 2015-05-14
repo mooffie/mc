@@ -105,6 +105,7 @@ struct Widget
     mouse_h mouse;
     void (*set_options) (Widget * w, widget_options_t options, gboolean enable);
     struct WDialog *owner;
+    const char *lua_class_name;
 };
 
 /* structure for label (caption) with hotkey, if original text does not contain
@@ -133,7 +134,7 @@ void hotkey_draw (Widget * w, const hotkey_t hotkey, gboolean focused);
 
 /* widget initialization */
 void widget_init (Widget * w, int y, int x, int lines, int cols,
-                  widget_cb_fn callback, mouse_h mouse_handler);
+                  widget_cb_fn callback, mouse_h mouse_handler, const char *lua_class_name);
 /* Default callback for widgets */
 cb_ret_t widget_default_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm,
                                   void *data);

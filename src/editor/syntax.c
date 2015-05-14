@@ -1520,3 +1520,85 @@ edit_get_syntax_type (const WEdit * edit)
 }
 
 /* --------------------------------------------------------------------------------------------- */
+/*
+ * Adding a keyword to an already-loaded syntax.
+ *
+ * This feature is used by user scripts (currently Lua) for various
+ * creative purposes.
+ *
+ * While it's our policy at this stage not to add features to MC's core
+ * just for the benefit of scripting, it was felt that this feature can
+ * contribute much to explaining the need for scripting and therefore here
+ * we find it worthy to break our policy.
+ */
+
+#if 0
+static gboolean
+edit_add_syntax_keyword__to_rule (struct context_rule *rule, const char *kwd_str, const char *left,
+                                  const char *right, int color)
+{
+    int i;
+    struct key_word *kwd;
+    GString *first_chars;
+
+    /* Find the last keyword. */
+    for (i = 1; rule->keyword[i] != NULL; i++)
+        ;
+
+    if (i >= MAX_WORDS_PER_CONTEXT - 1) /* It's the minimum, so could give false positive. */
+        return FALSE;
+
+    kwd = g_malloc0 (sizeof (struct key_word));
+    kwd->keyword = g_strdup (kwd_str);
+    kwd->first = *kwd->keyword;
+    kwd->color = color;
+    kwd->whole_word_chars_left = g_strdup (left);
+    kwd->whole_word_chars_right = g_strdup (right);
+
+    rule->keyword[i] = kwd;
+    rule->keyword[i + 1] = NULL;
+
+    /* A rule keeps a record of all the letters starting its keywords. */
+    first_chars = g_string_new (rule->keyword_first_chars);
+    g_assert ((int) first_chars->len == i);
+    g_string_append_c (first_chars, kwd->first);
+    rule->keyword_first_chars = g_string_free (first_chars, FALSE);
+
+    return TRUE;
+}
+#endif
+
+gboolean
+edit_add_syntax_keyword (WEdit * edit, const char *kwd_str, const char *left,
+                         const char *right, syntax_range_type_t range, int color)
+{
+#if 0
+    g_assert (kwd_str != NULL);
+
+    if (!edit->rules)
+        return FALSE;
+
+    if (range != RANGE_TYPE_DEFAULT)
+    {
+        int i;
+        for (i = 0; edit->rules[i]; i++)
+        {
+            gboolean match =
+                (range == RANGE_TYPE_ANY) ||
+                (range == RANGE_TYPE_SPELLCHECK && edit->rules[i]->spelling) ||
+                (range == RANGE_TYPE_NOT_SPELLCHECK && !edit->rules[i]->spelling);
+
+            if (match)
+                edit_add_syntax_keyword__to_rule (edit->rules[i], kwd_str, left, right, color);
+        }
+    }
+    else
+        edit_add_syntax_keyword__to_rule (edit->rules[0], kwd_str, left, right, color);
+
+    edit_get_rule (edit, -1);
+#endif
+
+    return TRUE;
+}
+
+/* --------------------------------------------------------------------------------------------- */

@@ -52,6 +52,9 @@
 #include "subshell.h"
 #endif
 #include "setup.h"              /* clear_before_exec */
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_trigger_event() */
+#endif
 
 #include "execute.h"
 
@@ -91,6 +94,10 @@ edition_post_exec (void)
     enable_bracketed_paste ();
     if (mc_global.tty.alternate_plus_minus)
         application_keypad_mode ();
+
+#ifdef ENABLE_LUA
+    mc_lua_trigger_event ("ui::restored");
+#endif
 }
 
 /* --------------------------------------------------------------------------------------------- */
@@ -531,6 +538,13 @@ toggle_panels (void)
     channels_up ();
     if (mc_global.tty.alternate_plus_minus)
         application_keypad_mode ();
+
+#ifdef ENABLE_LUA
+    /* We could put this line in tty_reset_prog_mode() instead. But then we'd
+     * have to do it in two files (slang & ncurses). Unfortunately, in this
+     * file too we have to write this line twice :-( */
+    mc_lua_trigger_event ("ui::restored");
+#endif
 
     /* HACK:
      * Save sigwinch flag that will be reset in mc_refresh() called via update_panels().

@@ -1,7 +1,11 @@
 #
 # LUA Scripting Language syntax highlight
-# // Mike Gorchak <lestat@i.com.ua>
 #
+# History:
+#
+# - 2015: support for long strings and long comments.
+# - 2011: string-literal fixes by Sergei Trofimovich.
+# - 2005: started by Mike Gorchak <lestat@i.com.ua>
 
 context default lightgray
 
@@ -30,7 +34,11 @@ context default lightgray
 
 # Comments
     keyword -- brown
-    keyword ]] brown
+    keyword ]\[=\]] brown
+
+    # The following is needed only for highlighting the start delimiter of "long" strings.
+    # It isn't actually used for the "long" comment delimiter (gods know why).
+    keyword [\[=\][ brown
 
 # Operators
     keyword ( white
@@ -60,6 +68,21 @@ context default lightgray
 
 
 # Library Functions
+
+    # midnight-commander globals
+    keyword whole T cyan
+    keyword whole Q cyan
+    keyword whole N cyan
+    keyword whole E cyan
+    keyword whole abort yellow
+    keyword whole abortive yellow
+    keyword whole assert_arg_type yellow
+    keyword whole import_from yellow
+    keyword whole require_legacy yellow
+    keyword whole declare yellow
+    keyword whole alert yellow
+    keyword whole argv brightmagenta
+
     # basiclib
     keyword whole error yellow
     keyword whole getmetatable yellow
@@ -74,7 +97,7 @@ context default lightgray
     keyword whole tostring yellow
     keyword whole type yellow
     keyword whole assert yellow
-    keyword whole unpack yellow
+    #keyword whole unpack yellow    # modern code should use table.unpack()
     keyword whole rawequal yellow
     keyword whole rawget yellow
     keyword whole rawset yellow
@@ -115,6 +138,7 @@ context default lightgray
     keyword whole table.sort yellow
     keyword whole table.insert yellow
     keyword whole table.remove yellow
+    keyword whole table.unpack yellow
 
     # mathlib
     keyword whole math.abs yellow
@@ -194,15 +218,51 @@ context default lightgray
     keyword whole _VERSION brightmagenta
     keyword whole _G brightmagenta
 
+#
+# Long comments
+#
 
-# Comments
 context exclusive --[[ ]] brown
+    # hightlight "@todo", "@param", "@function" etc. ldoc tags.
+    keyword @\[abcdefghijklmnopqrstuvwxyz\] brightred base
     spellcheck
+context exclusive --[=[ ]=] brown
+    keyword @\[abcdefghijklmnopqrstuvwxyz\] brightred base
+    spellcheck
+context exclusive --[==[ ]==] brown
+    keyword @\[abcdefghijklmnopqrstuvwxyz\] brightred base
+    spellcheck
+context exclusive --[===[ ]===] brown
+    keyword @\[abcdefghijklmnopqrstuvwxyz\] brightred base
+    spellcheck
+# 4 equals and up (the number of ='s don't have to match, but that's the best we can do):
+context exclusive --[====\[=\][ ]====\[=\]] brown
+    keyword @\[abcdefghijklmnopqrstuvwxyz\] brightred base
+    spellcheck
+
+#
+# Long strings
+#
+
+context exclusive [[ ]] brightmagenta
+    spellcheck
+context exclusive [=[ ]=] brightmagenta
+    spellcheck
+context exclusive [==[ ]==] brightmagenta
+    spellcheck
+context exclusive [===[ ]===] brightmagenta
+    spellcheck
+# 4 equals and up (the number of ='s don't have to match, but that's the best we can do):
+context exclusive [====\[=\][ ]====\[=\]] brightmagenta
+    spellcheck
+
 
 context exclusive -- \n brown
+    keyword @\[abcdefghijklmnopqrstuvwxyz\] brightred base
     spellcheck
 
-context linestart # \n brown
+# shebang line
+context linestart #! \n brown
 
 # Strings
 context " " green
@@ -211,6 +271,7 @@ context " " green
     keyword %d brightgreen
     keyword %l brightgreen
     keyword %p brightgreen
+    keyword %q brightgreen
     keyword %s brightgreen
     keyword %u brightgreen
     keyword %w brightgreen
@@ -231,6 +292,7 @@ context ' ' green
     keyword %d brightgreen
     keyword %l brightgreen
     keyword %p brightgreen
+    keyword %q brightgreen
     keyword %s brightgreen
     keyword %u brightgreen
     keyword %w brightgreen
