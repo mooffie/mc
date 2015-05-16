@@ -48,6 +48,8 @@ local M = {
   region = 'east',
 }
 
+local style = nil
+
 --
 -- Note: We have to use rawset/get in several places because, by default, the
 -- "properties" mechanism of widgets protects againt typos by raising exceptions
@@ -56,14 +58,16 @@ local M = {
 
 local function scrollbar_constructor(dlg)
 
-  local style = scrollbar_utils.compile_style(M.style)
-
   local sb = ui.Custom{cols=1}
 
   -- Store it in the dialog so we can refer to it later.
   rawset(dlg, 'scrollbar', sb)
 
   rawset(sb, 'update', function(self, edt)
+
+    if not style then
+      style = scrollbar_utils.compile_style(M.style)
+    end
 
     local c = self:get_canvas()
 
@@ -73,7 +77,7 @@ local function scrollbar_constructor(dlg)
     -- And we might want to compare 'top'/'ht' to their previous values to
     -- see if there's any change.
     --
-    -- HOWEVER, we must first do some benchmarking, to see if there's any
+    -- HOWEVER, one must first do some benchmarking, to see if there's any
     -- justification for this "optimization". There probably isn't any: Lua
     -- is fast enough as it is.
 
@@ -102,9 +106,16 @@ function M.install()
   ui.Editbox.bind('<<draw>>', function(edt)
     local dlg = edt.dialog
     local sb = rawget(dlg, 'scrollbar')
-    if sb and sb:is_alive() then  -- The :is_alive() is needed when restarting Lua (@todo: explain why).
+    -- Just before restarting Lua, the docker destroys all the injected
+    -- widgets and redraws the editor without them. So we have to check
+    -- that the scrollbar is indeed alive.
+    if sb and sb:is_alive() then
       sb:update(edt)
     end
+  end)
+
+  event.bind('ui::skin-change', function()
+    style = nil
   end)
 
 end

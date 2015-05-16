@@ -154,6 +154,18 @@ local function layout(dlg)
     west = sum_property(get_injects(dlg, 'west'), 'cols'),
   })
 
+  --
+  -- The following line is critical.
+  --
+  -- Starting with MC 4.8.12 (commit bf474e), the editor (and viewer) have a
+  -- NULL 'color' table (WDialog.color). Therefore, if you inject builtin
+  -- widgets (ui.Label, etc.) it will segfault MC because such widgets look up
+  -- the dialog's 'color' table.
+  --
+  -- The following line solves the problem (as it sets WDialog.color).
+  --
+  dlg.colorset = "normal"
+
   local function unfocus()
     if dlg:find('Editbox') then
       dlg:find('Editbox'):focus()

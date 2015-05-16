@@ -195,6 +195,13 @@ arg = argv
 -- @moniker ui::restored
 -- @event
 
+--- Triggered when the user changes the skin.
+--
+-- See explanation in @{tty.style}.
+--
+-- @moniker ui::skin-change
+-- @event
+
 --- Triggered after Lua has been restarted (e.g., by pressing `C-x l`, by default).
 --
 --    -- Sound a beep so the user knows Lua's been

@@ -947,13 +947,8 @@ static const struct luaL_Reg ui_label_lib[] = {
 static Widget *
 input_constructor ()
 {
-#if 0
-    return (Widget *) input_new (0, 0, input_get_default_colors (), 10,
-                                 NULL, NULL, INPUT_COMPLETE_NONE);
-#else
     return (Widget *) input_new (0, 0, input_colors, 10,
                                  NULL, NULL, INPUT_COMPLETE_NONE);
-#endif
 }
 
 static int
@@ -1616,7 +1611,7 @@ set_radios_items (WRadio * rad, const char **items, int items_count)
 
     rad_dummy = radio_new (0, 0, items_count, items);
 
-    /* The metrics on the dummy are now the ones we want. */
+    /* The dimensions of the dummy are now the ones we want. */
     WIDGET (rad)->cols = WIDGET (rad_dummy)->cols;
     WIDGET (rad)->lines = WIDGET (rad_dummy)->lines;
 
@@ -2260,18 +2255,6 @@ ui_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, voi
     }
 }
 
-static dlg_colors_t pmenu_colors;
-
-static void
-init_dialog_colors ()
-{
-    pmenu_colors[DLG_COLOR_NORMAL] = PMENU_ENTRY_COLOR;
-    pmenu_colors[DLG_COLOR_FOCUS] = PMENU_SELECTED_COLOR;
-    pmenu_colors[DLG_COLOR_HOT_NORMAL] = PMENU_ENTRY_COLOR;
-    pmenu_colors[DLG_COLOR_HOT_FOCUS] = PMENU_SELECTED_COLOR;
-    pmenu_colors[DLG_COLOR_TITLE] = PMENU_TITLE_COLOR;
-}
-
 /**
  * Title handler.
  *
@@ -2405,8 +2388,6 @@ l_dialog_get_on_idle (lua_State * L)
  *   - `"alarm"` (typically red dominated, for error boxes.)
  *   - `"pmenu"` (colors of popup menus, like the "User menu".)
  *
- * Note: Some widgets don't respect (partially or wholly) the dialog's
- * colorset. It's an MC bug that should be fixed.
  *
  * You'd usually set this property in the constructor call:
  *
@@ -2425,25 +2406,26 @@ l_dialog_get_on_idle (lua_State * L)
  *      end
  *    end
  *
+ * Note: The @{~#groupbox|groupbox} widget, and disabled widgets, don't respect
+ * the dialog's colorset, unless it's `"normal"`. These are MC @{3468|bugs}
+ * that should be fixed.
+ *
  * @attr dialog.colorset
  * @property w
  */
 static int
 l_dialog_set_colorset (lua_State * L)
 {
-#if 0
     static const char *const colorset_names[] = { "normal", "alarm", "pmenu", NULL };
-    static dlg_colors_t *colorsets[] = { &dialog_colors, &alarm_colors, &pmenu_colors };
+    static const int *colorsets[] = { dialog_colors, alarm_colors, listbox_colors };
 
     WDialog *dlg;
 
     dlg = LUA_TO_DIALOG (L, 1);
 
-    memmove (dlg->color, colorsets[luaL_checkoption (L, 2, NULL, colorset_names)],
-             sizeof (dlg_colors_t));
+    dlg->color = colorsets[luaL_checkoption (L, 2, NULL, colorset_names)];
 
     dlg_redraw (dlg);           /* In case the user changes the colorset of an active dialog. */
-#endif
 
     return 0;
 }
@@ -3121,9 +3103,6 @@ ui_is_ready_handler (const gchar * event_group_name, const gchar * event_name,
     (void) event_name;
     (void) init_data;
     (void) data;
-
-    /* This had to wait till now because it should run after the theme is loaded. */
-    init_dialog_colors ();
 
     mc_lua_trigger_event ("ui::ready");
 

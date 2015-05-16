@@ -84,11 +84,15 @@ function M.install()
 
   end)
 
-  ui.Panel.bind("<<activate>>", function(pnl)
+  ui.Panel.bind('<<activate>>', function(pnl)
     -- Redraw the inactive scrollbar in its correct color.
     if ui.Panel.other then
       ui.Panel.other:redraw()
     end
+  end)
+
+  event.bind('ui::skin-change', function()
+    style = nil
   end)
 
 end

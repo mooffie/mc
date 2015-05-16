@@ -109,10 +109,11 @@ quickview:
 - @{3006} "Unescape, reencode and insert string"
 - @{1516} Browser-like 'about:config' dialog to set options
 - @{2506} "udisks support"
+- @{1577} "CD/DVD burning"
 
 Frontend for archivers:
 
-- @{2701} "Compress to format..."
+- @{2701} (and [GH#19](https://github.com/MidnightCommander/mc/issues/19)) "Compress to format..."
 - @{3290} "Universal unpacking"
 - @{2700} "Default extract method of compressed files"
 

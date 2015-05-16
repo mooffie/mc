@@ -128,6 +128,17 @@ only once.
 
 [/note]
 
+[note]
+
+When the user changes the skin, the numbers returned
+by @{style|tty.style}, if you cached them in some variables,
+become invalid. You can solve this problem by resetting your variables on the
+@{~mod:globals*ui::skin-change} event, as demonstrated
+in @{ui.Canvas:set_style}. (Of course, restarting Lua too would solve the
+problem.)
+
+[/note]
+
 @function style
 @args (spec)
 

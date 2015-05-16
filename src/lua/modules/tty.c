@@ -1172,13 +1172,22 @@ l_conv (lua_State * L)
 static int
 l_is_utf8 (lua_State * L)
 {
-    /* We don't use 'mc_global.utf8_display': We want this function to be
+    /*
+     * We don't use 'mc_global.utf8_display': We want this function to be
      * available to Lua code running early, before the UI is ready.
      * 'mc_global.utf8_display' is initialized in load_setup(), which is
      * called relatively late, after mc_lua_load().
      *
      * This is not a critical feature, but it's nice to have.
      */
+
+    /*
+     * UPDATE: Starting with MC 4.8.12 (commit ad5246c), load_setup() _is_
+     * called early. However, it doesn't seem to set mc_global.utf8_display
+     * to a correct value. It seems that it's check_codeset() that does the
+     * job. But the latter _is_ called late.
+     */
+
     static int is_utf8 = -1;
 
     if (is_utf8 == -1)

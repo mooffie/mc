@@ -340,9 +340,9 @@ You can solve this by storing the styles in a table.
 
 In other words, instead of:
 
-    keymap.bind('C-y', function()
+    marquee.on_draw = function(self)
 
-      local c = tty.get_canvas()
+      local c = self:get_canvas()
 
       c:goto_xy(0, 0)
       c:set_style(tty.style("white, red"))
@@ -365,13 +365,13 @@ Do:
       }
     end
 
-    keymap.bind('C-y', function()
-
-      local c = tty.get_canvas()
+    marquee.on_draw = function(self)
 
       if not styles then
         init_styles()
       end
+
+      local c = self:get_canvas()
 
       c:goto_xy(0, 0)
       c:set_style(styles.question)
@@ -383,9 +383,14 @@ Do:
 
     end)
 
+    event.bind('ui::skin-change', function()
+      styles = nil
+    end)
+
 (This code doesn't yet deliver the promised end-user customizability.
-That's because it isn't a module and therefore users don't have a way to
-"reach" into it. See the @{~sample|sample} modules for how to do this.)
+That's because this snippet isn't a module and therefore users don't have
+a way to "reach" into it. See the @{~sample|sample} modules for how to do
+this.)
 
 @function set_style
 @args (style_idx)

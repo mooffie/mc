@@ -64,6 +64,9 @@
 #ifdef ENABLE_BACKGROUND
 #include "src/background.h"     /* task_list */
 #endif
+#ifdef ENABLE_LUA
+#include "src/lua/plumbing.h"   /* mc_lua_trigger_event() */
+#endif
 
 #ifdef HAVE_CHARSET
 #include "lib/charsets.h"
@@ -156,6 +159,9 @@ skin_apply (const gchar * skin_override)
 
     mc_skin_deinit ();
     mc_skin_init (skin_override, &mcerror);
+#ifdef ENABLE_LUA
+    mc_lua_trigger_event ("ui::skin-change");
+#endif
     mc_fhl_free (&mc_filehighlight);
     mc_filehighlight = mc_fhl_new (TRUE);
     dlg_set_default_colors ();

@@ -306,9 +306,10 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
         {
             /* Color and cursor position are arbitrary at this point,
              * so we reset them to something sane: */
-#if 0
-            tty_setcolor (w->owner->color[DLG_COLOR_NORMAL]);
-#endif
+            if (w->owner->color != NULL)        /* in case this widget is injected into the editor/viewer, which have NULL here. */
+                tty_setcolor (w->owner->color[DLG_COLOR_NORMAL]);
+            else
+                tty_setcolor (dialog_colors[DLG_COLOR_NORMAL]);
             widget_move (w, 0, 0);
 
             call_widget_method (w, "on_draw", 0, &method_found);

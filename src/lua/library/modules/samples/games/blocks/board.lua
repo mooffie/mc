@@ -261,6 +261,10 @@ local function init_colors()
   end
 end
 
+event.bind('ui::skin-change', function()
+  colors = nil
+end)
+
 local function draw_current_piece(c)
   for y = 1, #cp do
     local row = cp[y]

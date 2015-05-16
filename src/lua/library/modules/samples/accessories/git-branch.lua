@@ -68,6 +68,10 @@ local function draw(pnl)
 
 end
 
+event.bind('ui::skin-change', function()
+  style = nil
+end)
+
 if git.is_installed() then
   ui.Panel.bind('<<draw>>', draw)
 else
