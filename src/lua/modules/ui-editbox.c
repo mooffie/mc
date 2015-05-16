@@ -1199,27 +1199,27 @@ l_edit_get_option (lua_State * L)
 static int
 l_edit_get_syntax_list (lua_State * L)
 {
-#if 0
-    char **names;
+    GPtrArray *names;
     size_t i;
 
-    names = g_new0 (char *, 1);
-    edit_load_syntax (NULL, &names, NULL);      /* @FIXME: make that function itself call qsort(), instead of all its callers doing it. */
+    names = g_ptr_array_new ();
+    edit_load_syntax (NULL, names, NULL);       /* @FIXME: make that function itself call g_ptr_array_sort(), instead of all its callers doing it? */
 
     lua_newtable (L);
-    for (i = 0; names[i] != NULL; i++)
+
+    for (i = 0; i < names->len; i++)
     {
-        if (!STREQ (names[i], UNKNOWN_FORMAT))
+        const char *name = g_ptr_array_index (names, i);
+
+        if (!STREQ (name, UNKNOWN_FORMAT))
         {
-            lua_pushstring (L, names[i]);
+            lua_pushstring (L, name);
             lua_rawseti (L, -2, i + 1);
         }
     }
 
-    g_strfreev (names);
-#else
-    lua_newtable (L);
-#endif
+    g_ptr_array_foreach (names, (GFunc) g_free, NULL);
+    g_ptr_array_free (names, TRUE);
 
     return 1;
 }

@@ -1532,71 +1532,65 @@ edit_get_syntax_type (const WEdit * edit)
  * we find it worthy to break our policy.
  */
 
-#if 0
 static gboolean
-edit_add_syntax_keyword__to_rule (struct context_rule *rule, const char *kwd_str, const char *left,
+edit_add_syntax_keyword__to_rule (context_rule_t * rule, const char *kwd_str, const char *left,
                                   const char *right, int color)
 {
-    int i;
-    struct key_word *kwd;
-    GString *first_chars;
+    syntax_keyword_t *k;
 
-    /* Find the last keyword. */
-    for (i = 1; rule->keyword[i] != NULL; i++)
-        ;
+    k = g_new0 (syntax_keyword_t, 1);
+    k->keyword = g_strdup (kwd_str);
+    k->color = color;
+    k->whole_word_chars_left = g_strdup (left);
+    k->whole_word_chars_right = g_strdup (right);
 
-    if (i >= MAX_WORDS_PER_CONTEXT - 1) /* It's the minimum, so could give false positive. */
-        return FALSE;
+    g_ptr_array_add (rule->keyword, k);
 
-    kwd = g_malloc0 (sizeof (struct key_word));
-    kwd->keyword = g_strdup (kwd_str);
-    kwd->first = *kwd->keyword;
-    kwd->color = color;
-    kwd->whole_word_chars_left = g_strdup (left);
-    kwd->whole_word_chars_right = g_strdup (right);
+    {
+        /* A rule keeps a record of all the letters starting its keywords. */
+        GString *first_chars;
 
-    rule->keyword[i] = kwd;
-    rule->keyword[i + 1] = NULL;
-
-    /* A rule keeps a record of all the letters starting its keywords. */
-    first_chars = g_string_new (rule->keyword_first_chars);
-    g_assert ((int) first_chars->len == i);
-    g_string_append_c (first_chars, kwd->first);
-    rule->keyword_first_chars = g_string_free (first_chars, FALSE);
+        first_chars = g_string_new (rule->keyword_first_chars);
+        g_string_append_c (first_chars, k->keyword[0]);
+        g_assert (first_chars->len == rule->keyword->len);      /* sanity check */
+        g_free (rule->keyword_first_chars);
+        rule->keyword_first_chars = g_string_free (first_chars, FALSE);
+    }
 
     return TRUE;
 }
-#endif
 
 gboolean
 edit_add_syntax_keyword (WEdit * edit, const char *kwd_str, const char *left,
                          const char *right, syntax_range_type_t range, int color)
 {
-#if 0
     g_assert (kwd_str != NULL);
 
-    if (!edit->rules)
+    if (edit->rules == NULL)
         return FALSE;
 
     if (range != RANGE_TYPE_DEFAULT)
     {
-        int i;
-        for (i = 0; edit->rules[i]; i++)
+        size_t i;
+        for (i = 0; i < edit->rules->len; i++)
         {
+            context_rule_t *rule = CONTEXT_RULE (g_ptr_array_index (edit->rules, i));
+
             gboolean match =
                 (range == RANGE_TYPE_ANY) ||
-                (range == RANGE_TYPE_SPELLCHECK && edit->rules[i]->spelling) ||
-                (range == RANGE_TYPE_NOT_SPELLCHECK && !edit->rules[i]->spelling);
+                (range == RANGE_TYPE_SPELLCHECK && rule->spelling) ||
+                (range == RANGE_TYPE_NOT_SPELLCHECK && !rule->spelling);
 
             if (match)
-                edit_add_syntax_keyword__to_rule (edit->rules[i], kwd_str, left, right, color);
+                edit_add_syntax_keyword__to_rule (rule, kwd_str, left, right, color);
         }
     }
     else
-        edit_add_syntax_keyword__to_rule (edit->rules[0], kwd_str, left, right, color);
+        /* Note: if edit->rules is non NULL, it's guaranteed that edit->rules->len != 0. */
+        edit_add_syntax_keyword__to_rule (CONTEXT_RULE (g_ptr_array_index (edit->rules, 0)),
+                                          kwd_str, left, right, color);
 
     edit_get_rule (edit, -1);
-#endif
 
     return TRUE;
 }
