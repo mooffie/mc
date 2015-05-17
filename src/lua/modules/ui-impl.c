@@ -253,7 +253,7 @@ luaUI_push_widget_ex (lua_State * L, Widget * w, gboolean created_in_c, gboolean
 #if 0
     {
         /*
-         * This is a small teaching aid that shows you that, for example, repeated
+         * This is a small teaching aid that shows you whether, for example, repeated
          * calls to ui.current_widget() return the same Lua widget (unless a GC
          * happens inbetween; BTW, in _bootstrap.lua there's a timer that performs
          * GC, and you may disable it and examine the effect).

@@ -992,40 +992,15 @@ l_input_set_text (lua_State * L)
     gboolean first;
 
     first = ipt->first;
+
+    /* @FIXME: input_assign_text() doesn't reset the left-most column shown.
+     * So we do it ourselves. It may not be necessary, but it won't hurt. */
+    ipt->term_first_shown = 0;
+
     input_assign_text (ipt, text);
-
-#if 0
-    {
-        /* @FIXME: input_assign_text() doesn't reset the left-most column shown. So we do it ourselves: */
-        ipt->term_first_shown = 0;
-        input_update (ipt, FALSE);
-    }
-
-    {
-        /*
-         * When the dialog is initialized, input_load_history() resets
-         * the widget's text (ipt->buffer) to the empty string we supplied
-         * to input_new() (ipt->init_text). So any modifications to the
-         * widget's text done (in a lua script) prior to dlg_run() are lost.
-         *
-         * The following hack "fixes" this.
-         *
-         * @FIXME.
-         */
-        WDialog *dialog;
-
-        dialog = WIDGET (ipt)->owner;
-
-        if (!dialog || dialog->state != DLG_ACTIVE)
-        {
-            g_free (ipt->init_text);
-            ipt->init_text = g_strdup (text);
-        }
-    }
 
     /* @FIXME: input_assign_text() clears in->first. We restore its value: */
     ipt->first = first;
-#endif
 
     return 0;
 }
@@ -1033,22 +1008,12 @@ l_input_set_text (lua_State * L)
 static int
 l_input_set_cols (lua_State * L)
 {
-    WInput *ipt = LUA_TO_INPUT (L, 1);
+    Widget *w = WIDGET (LUA_TO_INPUT (L, 1));
     int cols = luaL_checkint (L, 2);
 
-#if 0
-    /*
-     * Calling widget_set_size() should have been enough. It results
-     * in MSG_RESIZE, which the Input widget should have used to update
-     * its internal variables.
-     *
-     * But the Input widget doesn't do this (@FIXME), so we follow
-     * lib/widget/quick.c example and call input_set_origin() instead.
-     */
-
-    /* Update internal variables of input line */
-    input_set_origin (ipt, WIDGET (ipt)->x, cols);
-#endif
+    /* Trigger update of internal variables of input line (done by its
+     * MSG_RESIZE). We follow lib/widget/quick.c's example here. */
+    widget_set_size (w, w->y, w->x, w->lines, cols);
 
     return 0;
 }
@@ -1146,18 +1111,9 @@ l_input_set_mark (lua_State * L)
     int pos = luaL_optint (L, 2, -1);
 
     if (pos != -1)
-    {
         ipt->mark = pos - 1;
-#if 0
-        ipt->highlight = TRUE;
-#endif
-    }
     else
-    {
-#if 0
-        ipt->highlight = FALSE;
-#endif
-    }
+        ipt->mark = -1;
 
     widget_redraw (WIDGET (ipt));
     return 0;
@@ -1168,11 +1124,9 @@ l_input_get_mark (lua_State * L)
 {
     WInput *ipt = LUA_TO_INPUT (L, 1);
 
-#if 0
-    if (ipt->highlight)
+    if (ipt->mark >= 0)
         lua_pushinteger (L, ipt->mark + 1);
     else
-#endif
         lua_pushnil (L);
 
     return 1;
@@ -1195,7 +1149,6 @@ l_input_set_history (lua_State * L)
     WInput *ipt = LUA_TO_INPUT (L, 1);
     const char *histname = luaL_checkstring (L, 2);
 
-#if 0
     if (WIDGET (ipt)->owner)
     {
         /* The history is loaded in dlg_init() */
@@ -1204,8 +1157,7 @@ l_input_set_history (lua_State * L)
     }
 
     if ((histname != NULL) && (*histname != '\0'))
-        ipt->history_name = g_strdup (histname);
-#endif
+        ipt->history.name = g_strdup (histname);
 
     return 0;
 }
@@ -1524,14 +1476,12 @@ l_listbox_get_items (lua_State * L)
 
         lua_newtable (L);
 
-#if 0
-        for (i = 1, le = lst->list; le != NULL; i++, le = g_list_next (le))
+        for (i = 1, le = listbox_get_first_link (lst); le != NULL; i++, le = g_list_next (le))
         {
             WLEntry *e = LENTRY (le->data);
             lua_pushstring (L, e->text);
             lua_rawseti (L, -2, i);
         }
-#endif
     }
 
     return 1;
