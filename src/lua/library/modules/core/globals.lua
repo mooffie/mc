@@ -242,16 +242,6 @@ arg = argv
 -- @event
 
 ---
--- Triggered after MC layouts the filemanager dialog.
---
--- This event lets the @{git:docker.lua|docker} module add widgets there.
---
--- Note-short: In the future we'll replace this event by, possibly, `dialog::resize`.
---
--- @moniker filemanager::layout
--- @event
-
----
 -- @section end
 
 ------------------------------------------------------------------------------

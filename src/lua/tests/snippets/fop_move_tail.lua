@@ -11,7 +11,7 @@ Idea taken from:
 
 local tail = nil
 
-event.bind('<<dialog::open>>', function(dlg)
+ui.Dialog.bind('<<open>>', function(dlg)
 
   if tail and (dlg.text == T'Move' or dlg.text == T'Copy') then
 

@@ -9,7 +9,7 @@ Idea taken from:
 
 ]]
 
-event.bind('<<dialog::open>>', function(dlg)
+ui.Dialog.bind('<<open>>', function(dlg)
 
   if dlg.text == T'Move' or dlg.text == T'Copy' then
 

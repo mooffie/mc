@@ -49,6 +49,11 @@ To change the colors of the text, use 'style':
     local ticker = require('samples.accessories.ticker')
     ticker.default_style = { color = 'magenta, black', hicolor = 'color209, color52' }
 
+Known issues:
+
+If you change the skin, the tickers will appear in "random" color. Restart
+Lua to fix this.
+
 ]]
 
 local docker = require('samples.libs.docker')

@@ -206,9 +206,11 @@ local function layout(dlg)
 
 end
 
-event.bind('editor::layout', function(dlg)
-  --tty.beep()  -- debugging.
-  layout(dlg)
+ui.Dialog.bind('<<layout>>', function(dlg)
+  if dlg:find('Editbox') then  -- We deal only with editors.
+    --tty.beep()  -- debugging.
+    layout(dlg)
+  end
 end)
 
 --------------------------------- Refreshing ---------------------------------
@@ -218,7 +220,7 @@ end)
 --
 function M.trigger_layout()
   for _, dlg in ipairs(ui.Dialog.screens) do
-    if dlg:find('Editbox') then  -- Yes, this is an editor.
+    if dlg:find('Editbox') then  -- We deal only with editors.
       dlg:set_dimensions(dlg.x, dlg.y, dlg.cols, dlg.rows, true)  -- Note the 'true'!
     end
   end

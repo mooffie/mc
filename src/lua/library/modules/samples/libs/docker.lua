@@ -95,9 +95,7 @@ end
 --
 -- Returns the 'y' coordinates of the regions.
 --
-local function make_room(space)
-
-  local dlg = filemanager_dlg()
+local function make_room(dlg, space)
 
   local function is_panel(w)
     return (w.widget_type == "Panel" or w.widget_type == "Widget")  -- "Widget" when it's a treeview, quickview etc.
@@ -148,18 +146,12 @@ end
 --
 -- Here we make room for our injects and position them.
 --
-local function layout()
+local function layout(dlg)
 
-  local dlg = filemanager_dlg()
-
-  if not dlg then  -- This probably never happens, but won't hurt to check.
-    return
-  end
-
-  local start_y = make_room {
+  local start_y = make_room(dlg, {
     north = sum_property(get_injects 'north', 'rows'),
     south = sum_property(get_injects 'south', 'rows'),
-  }
+  })
 
   local function unfocus()
     local pnl = ui.Panel.current or ui.Panel.other
@@ -188,9 +180,11 @@ local function layout()
 
 end
 
-event.bind('filemanager::layout', function()
-  --tty.beep()  -- debugging.
-  layout()
+ui.Dialog.bind('<<layout>>', function(dlg)
+  if dlg == filemanager_dlg() then  -- We deal only with the filemanager dialog.
+    --tty.beep()  -- debugging.
+    layout(dlg)
+  end
 end)
 
 --------------------------------- Refreshing ---------------------------------

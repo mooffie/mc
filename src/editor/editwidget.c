@@ -1021,7 +1021,7 @@ edit_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, v
         menubar_arrange (menubar);
         g_list_foreach (h->widgets, (GFunc) edit_dialog_resize_cb, NULL);
 #ifdef ENABLE_LUA
-        mc_lua_trigger_event__with_widget("editor::layout", w);
+        mc_lua_trigger_event__with_widget("dialog::layout", w);
 #endif
         return MSG_HANDLED;
 
@@ -1258,7 +1258,7 @@ edit_files (const GList * files)
     }
 
 #ifdef ENABLE_LUA
-    mc_lua_trigger_event__with_widget("editor::layout", WIDGET (edit_dlg));
+    mc_lua_trigger_event__with_widget("dialog::layout", WIDGET (edit_dlg));
 #endif
 
     if (ok)
