@@ -515,6 +515,22 @@ l_widget_get_canvas (lua_State * L)
     return 1;
 }
 
+/**
+ * Sets the widget's `pos_flags`.
+ *
+ * This is the traditional way to layout widgets in C. You may use it together
+ * with, or instead of, our Lua layout model.
+ *
+ * (This is for "advanced users", so this documentation entry isn't currently
+ * exposed in ldoc.)
+ */
+static int
+l_widget_set_pos_flags (lua_State * L)
+{
+    luaUI_check_widget (L, 1)->pos_flags = luaL_checki (L, 2);
+    return 0;
+}
+
 /* The following property is defined in ui-impl.c */
 /**
  * The name of the widget's class.
@@ -543,11 +559,12 @@ static const struct luaL_Reg ui_widget_lib[] = {
     { "get_enabled", l_widget_get_enabled },
     { "command", l_widget_command },
     { "_send_message", l_widget_send_message },
+    { "is_alive", l_widget_is_alive },
     { "redraw", l_widget_redraw },
     { "focus", l_widget_focus },
     { "get_canvas", l_widget_get_canvas },
+    { "set_pos_flags", l_widget_set_pos_flags },
     { "_destroy", l_widget_destroy },
-    { "is_alive", l_widget_is_alive },
     { NULL, NULL }
 };
 /* *INDENT-ON* */
@@ -2482,13 +2499,6 @@ l_dialog_run (lua_State * L)
 }
 
 /**
---See comment bellow. We'll enable this once we work on a branch where the MC bug is fixed.
-int l_widget_set_pos_flags(lua_State* L) {
-  luaUI_check_widget(L, 1)->pos_flags = luaL_checki(L, 2);
-  return 0;
-}*/
-
-/**
  * The method that actually adds a widget to a dialog. End user won't use this
  * so we don't ldoc it.
  */
@@ -2498,26 +2508,12 @@ l_dialog_map_widget (lua_State * L)
     WDialog *dlg = LUA_TO_DIALOG (L, 1);
     Widget *w = luaUI_check_widget (L, 2);
 
-    widget_pos_flags_t pos_flags;
-
     if (w->owner)
         return luaL_error (L,
                            E_
                            ("Attempt is made to add to a dialog a widget which was already added."));
 
-    /* MC bug: it'd have been easier for us to use w->pos_flags directly,
-     * instead of using a shadow variable, but MC doesn't initialize
-     * w->pos_flags, which means that it contains junk. (ButtonBar does use
-     * it, unnecessarily.)
-     *
-     * @todo:
-     * This was fixed in commit 200cb115ab835e5a063fb8290bcba3911dab0608
-     * "(widget_init): init pos_flags member to WPOS_KEEP_DEFAULT"
-     */
-    luaMC_rawgetfield (L, 2, "pos_flags");
-    pos_flags = lua_isnil (L, -1) ? WPOS_KEEP_DEFAULT : lua_tointeger (L, -1);
-
-    add_widget_autopos (dlg, w, pos_flags, NULL);
+    add_widget_autopos (dlg, w, w->pos_flags, NULL);
 
     return 0;
 }

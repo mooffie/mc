@@ -109,7 +109,6 @@ end
 
 WdgtMeta.__allowed_properties = {
   on_destroy = true,
-  pos_flags = true,
   expandx = true,
   expandy = true,
   data = true,

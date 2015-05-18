@@ -2090,8 +2090,6 @@ edit_init (WEdit * edit, int y, int x, int lines, int cols, const vfs_path_t * f
         edit->x_prev = x_prev;
         edit->lines_prev = lines_prev;
         edit->cols_prev = cols_prev;
-
-        WIDGET (edit)->lua_class_name = "Editbox";
     }
     else
     {
