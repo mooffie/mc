@@ -1469,6 +1469,8 @@ edit_handle_move_resize (WEdit * edit, unsigned long command)
             break;
         }
         break;
+    default:
+        break;
     }
 
     return ret;

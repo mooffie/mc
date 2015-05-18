@@ -1127,6 +1127,8 @@ correct_key_code (int code)
         case KEY_KP_MULTIPLY:
             c = '*';
             break;
+        default:
+            break;
         }
 
     return (mod | c);

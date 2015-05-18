@@ -1029,6 +1029,9 @@ set_display_type (int num, panel_view_mode_t type)
 
         mcview_load ((struct mcview_struct *) new_widget, 0, file_name, 0);
         break;
+
+    default:
+        break;
     }
 
     if (type != view_listing)
