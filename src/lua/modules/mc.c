@@ -8,28 +8,28 @@
 
 #include "lib/global.h"
 #include "lib/vfs/vfs.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/utilx.h"
 
-#include "src/execute.h"        /* shell_execute */
+#include "src/execute.h"        /* shell_execute() */
 
-#include "../capi.h"
 #include "../modules.h"
-#include "../utilx.h"
 #include "tty.h"                /* luaTTY_assert_ui_is_ready() */
 #include "fs.h"
 
 /* The following are needed for invoking the editor, viewer, diff: */
 
 #include "src/setup.h"          /* use_internal_view, use_internal_edit */
-#include "src/filemanager/cmd.h"        /* view_file_at_line, view_file, edit_file_at_line, do_edit */
-#include "src/filemanager/ext.h"        /* regex_command */
-#include "src/viewer/mcviewer.h"        /* mcview_viewer */
+#include "src/filemanager/cmd.h"        /* view_file_at_line(), view_file(), edit_file_at_line(), do_edit() */
+#include "src/filemanager/ext.h"        /* regex_command() */
+#include "src/viewer/mcviewer.h"        /* mcview_viewer() */
 #ifdef USE_DIFF_VIEW
-#include "src/diffviewer/ydiff.h"       /* dview_diff_cmd */
+#include "src/diffviewer/ydiff.h"       /* dview_diff_cmd() */
 #endif
 
 /* The following are needed for l_current_widget() */
 
-#include "ui-impl.h"            /* luaUI_push_widget */
+#include "lib/lua/ui-impl.h"            /* luaUI_push_widget() */
 #include "lib/widget/dialog-switch.h"   /* midnight_dlg */
 #include "src/filemanager/layout.h"     /* command_prompt */
 #include "src/filemanager/command.h"    /* cmdline */
@@ -37,7 +37,7 @@
 /* The following are needed for l_expand_format() */
 
 #include "src/editor/editwidget.h"      /* WEdit type */
-#include "src/filemanager/usermenu.h"   /* expand_format */
+#include "src/filemanager/usermenu.h"   /* expand_format() */
 
 
 /**

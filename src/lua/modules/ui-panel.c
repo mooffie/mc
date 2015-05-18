@@ -12,15 +12,15 @@
 
 #include "lib/global.h"
 #include "lib/widget.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/ui-impl.h"    /* luaUI_*() */
 
 #include "src/setup.h"          /* panels_options */
 #include "src/filemanager/panel.h"
 #include "src/filemanager/midnight.h"   /* view_listing (via layout.h) */
 #include "src/filemanager/panelize.h"   /* do_external_panelize() */
 
-#include "../capi.h"
 #include "../modules.h"
-#include "ui-impl.h"
 #include "fs.h"
 
 

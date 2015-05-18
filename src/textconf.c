@@ -33,10 +33,9 @@
 #include "lib/global.h"
 #include "lib/fileloc.h"
 #include "lib/mcconfig.h"
-
 #ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"
-#include "src/lua/capi.h"       /* lua_Number, lua_Integer */
+#include "lib/lua/plumbing.h"
+#include "lib/lua/capi.h"       /* lua_Number, lua_Integer */
 #endif
 
 #include "src/textconf.h"

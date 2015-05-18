@@ -66,7 +66,7 @@ AC_DEFUN([MC_WITH_LUA], [
         done
 
         if test -z "$with_lua"; then
-            AC_MSG_ERROR([I could not find your Lua engine. Instead of relying on pkg-config you may sepcify LUA_CFLAGS and LUA_LIBS explicitly. Please see instructions in src/lua/doc/10-installation.md.])
+            AC_MSG_ERROR([I could not find your Lua engine. Instead of relying on pkg-config you may sepcify LUA_CFLAGS and LUA_LIBS explicitly. Please see instructions in src/lua/doc/guide/80-installation.md.])
         fi
 
     fi

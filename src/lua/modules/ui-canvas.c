@@ -87,10 +87,10 @@ aware of this fact.
 
 #include "lib/tty/tty.h"
 #include "lib/tty/color.h"      /* tty_setcolor() */
+#include "lib/lua/capi.h"
+#include "lib/lua/ui-impl.h"    /* mc_lua_ui_meta_name(), create_widget_metatable() */
 
-#include "../capi.h"
 #include "../modules.h"
-#include "ui-impl.h"            /* mc_lua_ui_meta_name(), create_widget_metatable() */
 
 #include "ui-canvas.h"
 

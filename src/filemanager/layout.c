@@ -50,15 +50,15 @@
 #include "lib/strutil.h"
 #include "lib/widget.h"
 #include "lib/event.h"
+#ifdef ENABLE_LUA
+#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#endif
 
 #include "src/consaver/cons.saver.h"
 #include "src/viewer/mcviewer.h"        /* The view widget */
 #include "src/setup.h"
 #ifdef ENABLE_SUBSHELL
 #include "src/subshell.h"
-#endif
-#ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
 #endif
 
 #include "command.h"

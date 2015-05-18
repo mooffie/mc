@@ -1,0 +1,3 @@
+# A script I use to set ../../version.h's date in the past so make(1) doesn't
+# rebuild the whole system.
+fix-version.h.sh

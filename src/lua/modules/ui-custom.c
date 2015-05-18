@@ -24,10 +24,10 @@ reusable.
 #include "lib/widget.h"
 #include "lib/tty/tty.h"        /* tty_print_string() */
 #include "lib/tty/color.h"      /* tty_setcolor() */
+#include "lib/lua/capi.h"
+#include "lib/lua/ui-impl.h"    /* luaUI_*() */
 
-#include "../capi.h"
 #include "../modules.h"
-#include "ui-impl.h"
 
 #include "ui-custom.h"
 

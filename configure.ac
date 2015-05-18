@@ -400,13 +400,6 @@ dnl Where system Lua scripts are kept:
 AC_SUBST([mcluasystemdir], ['${libexecdir}/${PACKAGE}/lua'])
 dnl (see http://stackoverflow.com/questions/3538705/adding-a-custom-installation-directory-option-to-autoconf-generated-configure-sc )
 
-dnl We can optionally expose some crypto capabilities via Lua.
-PKG_CHECK_MODULES([GLIB_WITH_CRYPTO], [glib-2.0 >= 2.16],
-    [
-        AC_DEFINE([HAVE_G_COMPUTE_CHECKSUM_FOR_DATA], [1], [Can compute checksums])
-    ],
-    [:])
-
 dnl ############################################################################
 dnl MC options
 dnl ############################################################################
@@ -620,6 +613,7 @@ lib/search/Makefile
 lib/skin/Makefile
 lib/strutil/Makefile
 lib/tty/Makefile
+lib/lua/Makefile
 
 lib/vfs/Makefile
 

@@ -13,11 +13,11 @@
 #include "lib/tty/color-internal.h"     /* tty_color_get_index_by_name(), tty_color_pair_t */
 #include "lib/skin.h"           /* mc_skin_color_get(), mc_skin_get() */
 #include "lib/strutil.h"        /* str_*() */
+#include "lib/lua/capi.h"
+#include "lib/lua/plumbing.h"   /* mc_lua_ui_is_ready() */
+#include "lib/lua/utilx.h"
 
-#include "../capi.h"
 #include "../modules.h"
-#include "../plumbing.h"        /* mc_lua_ui_is_ready() */
-#include "../utilx.h"
 #include "ui-canvas.h"          /* luaUI_new_canvas() */
 
 #include "tty.h"

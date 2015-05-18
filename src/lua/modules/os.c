@@ -14,8 +14,8 @@
 #include <unistd.h>             /* getpid() */
 
 #include "lib/global.h"
+#include "lib/lua/capi.h"
 
-#include "../capi.h"
 #include "../modules.h"
 
 

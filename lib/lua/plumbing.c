@@ -18,8 +18,7 @@
 
 #include "capi.h"
 #include "capi-safecall.h"
-#include "modules.h"            /* mc_lua_open_c_modules() */
-#include "modules/ui-impl.h"    /* luaUI_push_widget() */
+#include "ui-impl.h"            /* luaUI_push_widget() */
 #include "utilx.h"              /* E_() */
 
 #ifdef HAVE_LUAJIT
@@ -122,8 +121,8 @@ mc_lua_init (void)
 {
     Lg = luaL_newstate ();
     luaL_openlibs (Lg);
-
-    mc_lua_open_c_modules ();
+    /* We don't call mc_lua_open_c_modules() ourselves, as its in
+     * the 'src' tree, not in 'lib'. We let main() call it. */
     mc_event_add (MCEVENT_GROUP_DIALOG, "ui_is_ready", ui_is_ready_handler, NULL, NULL);
 }
 

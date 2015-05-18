@@ -8,9 +8,9 @@
 
 #include "lib/global.h"
 #include "lib/widget.h"         /* input_dialog(), message() */
+#include "lib/lua/capi.h"
+#include "lib/lua/plumbing.h"   /* mc_lua_ui_is_ready() */
 
-#include "../capi.h"
-#include "../plumbing.h"        /* mc_lua_ui_is_ready() */
 #include "../modules.h"
 #include "tty.h"                /* luaTTY_assert_ui_is_ready() */
 

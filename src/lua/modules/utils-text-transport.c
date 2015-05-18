@@ -7,10 +7,10 @@
 #include <config.h>
 
 #include "lib/global.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/utilx.h"
 
-#include "../capi.h"
 #include "../modules.h"
-#include "../utilx.h"
 
 
 /**
@@ -92,7 +92,7 @@ l_base64_encode (lua_State * L)
     return 1;
 }
 
-#ifdef HAVE_G_COMPUTE_CHECKSUM_FOR_DATA
+#if GLIB_CHECK_VERSION (2, 16, 0)
 
 /**
  * Calculates the checksum of a string.
@@ -134,7 +134,7 @@ l_hash (lua_State * L)
 static const struct luaL_Reg utils_text_transport_lib[] = {
     { "base64_decode", l_base64_decode },
     { "base64_encode", l_base64_encode },
-#ifdef HAVE_G_COMPUTE_CHECKSUM_FOR_DATA
+#if GLIB_CHECK_VERSION (2, 16, 0)
     { "hash", l_hash },
 #endif
     { NULL, NULL }

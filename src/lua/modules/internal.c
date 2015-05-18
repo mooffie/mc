@@ -15,11 +15,11 @@
 #include <unistd.h>             /* usleep() */
 
 #include "lib/global.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/plumbing.h"   /* mc_lua_request_restart() */
+#include "lib/lua/utilx.h"
 
-#include "../capi.h"
-#include "../plumbing.h"        /* mc_lua_request_restart() */
 #include "../modules.h"
-#include "../utilx.h"
 
 
 /**

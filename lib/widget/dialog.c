@@ -43,9 +43,8 @@
 #include "lib/widget.h"
 #include "lib/fileloc.h"        /* MC_HISTORY_FILE */
 #include "lib/event.h"          /* mc_event_raise() */
-
 #ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_eat_key(), mc_lua_trigger_event__with_widget() */
+#include "lib/lua/plumbing.h"   /* mc_lua_eat_key(), mc_lua_trigger_event__with_widget() */
 #endif
 
 /*** global variables ****************************************************************************/

@@ -22,10 +22,10 @@
 #include "lib/vfs/vfs.h"
 #include "lib/vfs/utilvfs.h"    /* vfs_mkstemps() */
 #include "lib/util.h"           /* mc_realpath(),  unix_error_string() */
+#include "lib/lua/capi.h"
 
 #include "src/filemanager/filenot.h"    /* my_mkdir() */
 
-#include "../capi.h"
 #include "../modules.h"
 
 #include "fs.h"

@@ -49,14 +49,14 @@
 #include "lib/strutil.h"        /* utf string functions */
 #include "lib/util.h"           /* is_printable() */
 #include "lib/widget.h"
+#ifdef ENABLE_LUA
+#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#endif
 #ifdef HAVE_CHARSET
 #include "lib/charsets.h"
 #endif
 
 #include "src/setup.h"          /* edit_tab_spacing */
-#ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
-#endif
 
 #include "edit-impl.h"
 #include "editwidget.h"

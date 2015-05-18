@@ -54,6 +54,11 @@
 #include "lib/strutil.h"
 #include "lib/util.h"
 #include "lib/vfs/vfs.h"        /* vfs_init(), vfs_shut() */
+#ifdef ENABLE_LUA
+#include "lib/lua/plumbing.h"
+#endif
+
+#include "src/lua/modules-open.h"       /* mc_lua_open_c_modules() */
 
 #include "filemanager/midnight.h"       /* current_panel */
 #include "filemanager/treestore.h"      /* tree_store_save */
@@ -75,10 +80,6 @@
 #include "lib/charsets.h"
 #include "selcodepage.h"
 #endif /* HAVE_CHARSET */
-
-#ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"
-#endif
 
 #include "consaver/cons.saver.h"        /* cons_saver_pid */
 
@@ -301,6 +302,7 @@ main (int argc, char *argv[])
      * We also do this before mc_setup_by_args(), which needs the VM
      * for exporting 'argv' to the Lua side. */
     mc_lua_init();
+    mc_lua_open_c_modules();
 #endif
 
     vfs_init ();

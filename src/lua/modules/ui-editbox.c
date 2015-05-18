@@ -14,11 +14,11 @@
 #include "src/setup.h"          /* option_tab_spacing */
 #include "src/editor/edit.h"
 #include "src/editor/editwidget.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/ui-impl.h"    /* luaUI_*() */
+#include "lib/lua/utilx.h"
 
-#include "../capi.h"
 #include "../modules.h"
-#include "../utilx.h"
-#include "ui-impl.h"
 #include "fs.h"                 /* luaFS_check_vpath() */
 
 

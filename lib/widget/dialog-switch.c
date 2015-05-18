@@ -40,9 +40,8 @@
 #endif
 #include "lib/widget.h"
 #include "lib/event.h"
-
 #ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
 #endif
 
 /*** global variables ****************************************************************************/

@@ -11,11 +11,11 @@
 #include "lib/global.h"
 #include "lib/widget.h"
 
-#include "../capi.h"
-#include "../capi-safecall.h"
-#include "../utilx.h"
+#include "capi.h"
+#include "capi-safecall.h"
+#include "utilx.h"
 
-#include "../plumbing.h"        /* mc_lua_notify_on_widget_destruction() declaration */
+#include "plumbing.h"           /* declaration of mc_lua_notify_on_widget_destruction() */
 #include "ui-impl.h"
 
 /* ------------------------------------------------------------------ */

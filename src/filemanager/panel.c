@@ -55,6 +55,9 @@
 #include "lib/charsets.h"       /* get_codepage_id () */
 #endif
 #include "lib/event.h"
+#ifdef ENABLE_LUA
+#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#endif
 
 #include "src/setup.h"          /* For loading/saving panel options */
 #include "src/execute.h"
@@ -64,9 +67,6 @@
 #include "src/keybind-defaults.h"       /* global_keymap_t */
 #ifdef ENABLE_SUBSHELL
 #include "src/subshell.h"       /* do_subshell_chdir() */
-#endif
-#ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
 #endif
 
 #include "dir.h"

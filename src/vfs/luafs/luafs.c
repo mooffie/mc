@@ -41,8 +41,8 @@
 #include "lib/vfs/gc.h"         /* vfs_rmstamp() etc., debug__vfs_get_stamps() */
 #include "lib/event.h"          /* mc_event_add() */
 
-#include "src/lua/capi.h"
-#include "src/lua/capi-safecall.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/capi-safecall.h"
 #include "src/lua/modules.h"
 #include "src/lua/modules/fs.h"
 

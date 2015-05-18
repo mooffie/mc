@@ -47,9 +47,8 @@
 #include "lib/global.h"
 
 #include "lib/vfs/vfs.h"
-
 #ifdef ENABLE_LUA
-#include "src/lua/timer.h"      /* mc_lua_execute_ready_timeouts(), mc_lua_has_pending_timeouts() */
+#include "lib/lua/timer.h"      /* mc_lua_execute_ready_timeouts(), mc_lua_has_pending_timeouts() */
 #endif
 
 #include "tty.h"

@@ -8,13 +8,14 @@
 #include <config.h>
 
 #include "lib/global.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/capi-safecall.h"
+#include "lib/widget.h"         /* Widget type */
+#include "lib/lua/ui-impl.h"    /* luaUI_push_widget() */
 
 #include "src/filemanager/panel.h"
 
-#include "../capi.h"
-#include "../capi-safecall.h"
 #include "../modules.h"
-#include "ui-impl.h"            /* luaUI_push_widget() */
 #include "tty.h"                /* luaTTY_check_align() */
 #include "fs.h"                 /* luaFS_push_statbuf() */
 

@@ -102,10 +102,10 @@ can do either `fs.chdir("/")` or `fs.chdir(fs.VPath("/"))`.
 
 #include "lib/global.h"
 #include "lib/vfs/vfs.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/utilx.h"
 
-#include "../capi.h"
 #include "../modules.h"
-#include "../utilx.h"
 
 #include "fs.h"
 

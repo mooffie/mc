@@ -14,12 +14,12 @@
 #include "lib/timefmt.h"        /* file_date() */
 #include "lib/strutil.h"        /* parse_integer() */
 #include "lib/util.h"           /* size_trunc_len() */
+#include "lib/lua/capi.h"
+#include "lib/lua/utilx.h"
 
 #include "src/setup.h"          /* panels_options */
 
-#include "../capi.h"
 #include "../modules.h"
-#include "../utilx.h"
 
 
 /**

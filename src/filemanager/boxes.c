@@ -46,6 +46,9 @@
 #include "lib/skin.h"           /* INPUT_COLOR */
 #include "lib/mcconfig.h"       /* Load/save user formats */
 #include "lib/strutil.h"
+#ifdef ENABLE_LUA
+#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event() */
+#endif
 
 #include "lib/vfs/vfs.h"
 #ifdef ENABLE_VFS_FTP
@@ -63,9 +66,6 @@
 #include "src/execute.h"        /* pause_after_run */
 #ifdef ENABLE_BACKGROUND
 #include "src/background.h"     /* task_list */
-#endif
-#ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_trigger_event() */
 #endif
 
 #ifdef HAVE_CHARSET

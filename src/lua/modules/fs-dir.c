@@ -10,8 +10,8 @@
 
 #include "lib/global.h"
 #include "lib/vfs/vfs.h"
+#include "lib/lua/capi.h"
 
-#include "../capi.h"
 #include "../modules.h"
 #include "fs.h"                 /* get_vpath_argument() */
 

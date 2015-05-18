@@ -101,11 +101,14 @@ directly.
 #include <config.h>
 
 #include "lib/global.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/utilx.h"
 
-#include "../capi.h"
 #include "../modules.h"
-#include "../utilx.h"
 
+/*
+ * Note: MC, starting with 4.8.14, requires GLib 2.14+, so we do know we have regex support.
+ */
 
 /* The Lua userdata. */
 typedef struct

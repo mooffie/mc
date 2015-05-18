@@ -62,6 +62,9 @@
 #include "src/keybind-defaults.h"
 #include "lib/keybind.h"
 #include "lib/event.h"
+#ifdef ENABLE_LUA
+#include "lib/lua/plumbing.h"   /* mc_lua_run_script() */
+#endif
 
 #include "tree.h"
 #include "boxes.h"              /* sort_box(), tree_box() */
@@ -82,10 +85,6 @@
 
 #ifdef USE_DIFF_VIEW
 #include "src/diffviewer/ydiff.h"
-#endif
-
-#ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_run_script() */
 #endif
 
 #include "src/consaver/cons.saver.h"    /* show_console_contents */

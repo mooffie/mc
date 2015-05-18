@@ -42,7 +42,7 @@ DIFFLIB = diffviewer/libdiffviewer.la
 endif
 
 if USE_LUA
-LUALIB = lua/libmclua.la
+LUALIB = lua/libmc-luasrc.la
 endif
 
 libinternal_la_LIBADD = \

@@ -5,11 +5,11 @@
 #include <config.h>
 
 #include "lib/global.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/capi-safecall.h"
+#include "lib/lua/timer.h"
 
-#include "../capi.h"
-#include "../capi-safecall.h"
 #include "../modules.h"
-#include "../timer.h"
 
 
 /**

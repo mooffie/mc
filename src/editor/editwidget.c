@@ -60,7 +60,7 @@
 #include "src/learn.h"          /* learn_keys() */
 #include "src/args.h"           /* mcedit_arg_t */
 #ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
 #endif
 
 #include "edit-impl.h"

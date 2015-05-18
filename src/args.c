@@ -38,7 +38,7 @@
 #include "src/vfs/smbfs/smbfs.h"        /* smbfs_set_debugf()  */
 #endif
 #ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_create_argv() */
+#include "lib/lua/plumbing.h"   /* mc_lua_create_argv() */
 #endif
 
 #include "src/textconf.h"

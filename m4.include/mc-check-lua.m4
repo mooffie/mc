@@ -8,10 +8,6 @@ dnl @copyright Free Software Foundation, Inc.
 
 AC_DEFUN([MC_CHECK_LUA], [
 
-    PKG_CHECK_MODULES([GLIB_WITH_REGEX], [glib-2.0 >= 2.14], [], [
-        AC_MSG_ERROR([The Lua support can't be compiled with your old 'glib'. The Lua support necessitates that 'glib' be >= 2.14 (because it uses the newer glib's Regex facility).])
-    ])
-
     old_CPPFLAGS=$CPPFLAGS
     old_LIBS=$LIBS
     CPPFLAGS="$CPPFLAGS $LUA_CFLAGS"

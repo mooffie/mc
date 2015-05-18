@@ -10,9 +10,9 @@
 
 #include "lib/global.h"
 #include "lib/mcconfig.h"       /* mc_config_get_*() */
+#include "lib/lua/capi.h"
+#include "lib/lua/plumbing.h"
 
-#include "../capi.h"
-#include "../plumbing.h"
 #include "../modules.h"
 
 

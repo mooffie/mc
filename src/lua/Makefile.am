@@ -1,64 +1,53 @@
 SUBDIRS = library
 
-# The following is needed because we have both 'timer.c' and 'modules/timer.c'
-# See http://stackoverflow.com/questions/917948/automake-and-files-with-the-same-name
+# The following option is meant to prevent a clash when two files with the same
+# name reside in this tree (in two different directories, of course). We have _no_
+# such issue in our project, but nevertheless this option has a cute by-product:
+# it displays the "modules/" prefix as it compiles. That's nice to have.
 AUTOMAKE_OPTIONS = subdir-objects
 
-noinst_LTLIBRARIES = libmclua.la
+noinst_LTLIBRARIES = libmc-luasrc.la
 
-libmclua_la_SOURCES = \
-	plumbing.c \
-	plumbing.h \
-	capi-safecall.c \
-	capi-safecall.h \
-	capi.c \
-	capi.h \
-	timer.c \
-	timer.h \
-	utilx.c \
-	utilx.h \
+libmc_luasrc_la_SOURCES = \
 	modules.c \
 	modules.h \
+	modules-open.h \
 	modules/conf.c \
+	modules/fields.c \
+	modules/fields.h \
 	modules/fs.c \
 	modules/fs.h \
 	modules/fs-dir.c \
 	modules/fs-filedes.c \
 	modules/fs-statbuf.c \
 	modules/fs-vpath.c \
-	modules/prompts.c \
 	modules/internal.c \
-	modules/tty.c \
-	modules/tty.h \
 	modules/locale.c \
-	modules/utils-bit32.c \
-	modules/utils-text.c \
-	modules/utils-text-transport.c \
-	modules/regex.c \
-	modules/timer.c \
 	modules/mc.c \
 	modules/os.c \
-	modules/fields.c \
-	modules/fields.h \
-	modules/ui-impl.c \
-	modules/ui-impl.h \
+	modules/prompts.c \
+	modules/regex.c \
+	modules/timer.c \
+	modules/tty.c \
+	modules/tty.h \
 	modules/ui.c \
 	modules/ui-canvas.c \
 	modules/ui-canvas.h \
 	modules/ui-custom.c \
 	modules/ui-custom.h \
+	modules/ui-panel.c \
 	modules/ui-viewer.c \
-	modules/ui-panel.c
+	modules/utils-bit32.c \
+	modules/utils-text.c \
+	modules/utils-text-transport.c
 
 if USE_INTERNAL_EDIT
-    libmclua_la_SOURCES += modules/ui-editbox.c
+    libmc_luasrc_la_SOURCES += modules/ui-editbox.c
 endif
 
-AM_CPPFLAGS = \
-	-DMC_LUA_SYSTEM_DIR=\""$(mcluasystemdir)"\" \
-	-I$(top_srcdir) $(GLIB_CFLAGS) $(PCRE_CPPFLAGS) $(LUA_CFLAGS)
+AM_CPPFLAGS = -I$(top_srcdir) $(GLIB_CFLAGS) $(PCRE_CPPFLAGS) $(LUA_CFLAGS)
 
-libmclua_la_LIBADD = ../../lib/libmc.la
+libmc_luasrc_la_LIBADD = ../../lib/libmc.la
 
 include extra-files-to-dist.mk
 EXTRA_DIST = $(extra_files_to_dist)

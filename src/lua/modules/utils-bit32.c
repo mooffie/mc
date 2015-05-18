@@ -15,8 +15,8 @@
 #include <config.h>
 
 #include "lib/global.h"
+#include "lib/lua/capi.h"
 
-#include "../capi.h"
 #include "../modules.h"
 
 

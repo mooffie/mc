@@ -12,12 +12,12 @@
 
 #include "lib/global.h"
 #include "lib/widget.h"
+#include "lib/lua/capi.h"
+#include "lib/lua/ui-impl.h"    /* luaUI_*() */
 
 #include "src/viewer/internal.h"
 
-#include "../capi.h"
 #include "../modules.h"
-#include "ui-impl.h"
 
 #define LUA_TO_VIEWER(L, i) ((mcview_t *) (luaUI_check_widget (L, i)))
 

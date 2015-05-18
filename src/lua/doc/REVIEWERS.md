@@ -91,15 +91,6 @@ certainly revisit some decisions and see if we can borrow ideas from
 other projects.
 
 
-'src' vs 'lib'
---------------
-
-Some sherlocks would point out that some of the scripting stuff should
-be placed in the 'lib' tree, not in 'src'. They are right. But there are
-some questions the community will have to address before we decide on the
-details.
-
-
 "But it crashes!"
 -----------------
 
@@ -128,17 +119,3 @@ they serve as examples, they have to be small and complete. So the key is
 hardcoded. But if you look at @{git:official-suggestions.lua} you see
 that the proper way is for modules to expose functions and then in your
 startup file(s) to bind these functions to keys.
-
-
-"But it's old!"
----------------
-
-At the time of this writing, the `lua` branch is based on MC 4.8.10,
-which is not the latest release of MC. Rebasing it on up-to-date MC won't
-be a difficult task, as our modifications to MC's core are minimal
-anyway. But why bother? The updated branch of today will be outdated
-tomorrow. It's an endless chase. At the moment, the purpose is to show
-that there's merit in scripting. Whether we use a one-month old MC
-or a one-year old is immaterial. Unless a maintainer says "I'm
-inclined to accept the idea, but let's first see it on master", there'd
-be no point wasting time on porting.

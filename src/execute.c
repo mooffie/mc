@@ -44,6 +44,9 @@
 #include "lib/util.h"
 #include "lib/strutil.h"        /* str_replace_all_substrings() */
 #include "lib/widget.h"
+#ifdef ENABLE_LUA
+#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event() */
+#endif
 
 #include "filemanager/midnight.h"
 #include "filemanager/layout.h" /* use_dash() */
@@ -52,9 +55,6 @@
 #include "subshell.h"
 #endif
 #include "setup.h"              /* clear_before_exec */
-#ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_trigger_event() */
-#endif
 
 #include "execute.h"
 

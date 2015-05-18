@@ -31,10 +31,10 @@ later.
 
 #include "lib/global.h"
 #include "lib/util.h"           /* Q_() */
+#include "lib/lua/capi.h"
+#include "lib/lua/utilx.h"
 
-#include "../capi.h"
 #include "../modules.h"
-#include "../utilx.h"
 
 
 static gboolean numeric_locale_is_posix = FALSE;

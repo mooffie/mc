@@ -55,6 +55,9 @@
 #include "lib/timefmt.h"        /* time formatting */
 #include "lib/lock.h"
 #include "lib/widget.h"
+#ifdef ENABLE_LUA
+#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
+#endif
 
 #ifdef HAVE_CHARSET
 #include "lib/charsets.h"       /* get_codepage_id */
@@ -65,10 +68,6 @@
 #include "src/setup.h"          /* option_tab_spacing */
 #include "src/learn.h"          /* learn_keys */
 #include "src/keybind-defaults.h"
-
-#ifdef ENABLE_LUA
-#include "src/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
-#endif
 
 #include "edit-impl.h"
 #include "editwidget.h"

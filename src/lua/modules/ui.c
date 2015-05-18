@@ -79,13 +79,13 @@ As a quick reference, here’s a snippet that uses some common features:
 #include "lib/event.h"          /* mc_event_*() */
 #include "lib/skin.h"           /* PMENU_*_COLOR */
 #include "lib/util.h"           /* tilde_expand() */
+#include "lib/lua/capi.h"
+#include "lib/lua/capi-safecall.h"
+#include "lib/lua/plumbing.h"
+#include "lib/lua/ui-impl.h"    /* luaUI_*() */
+#include "lib/lua/utilx.h"
 
-#include "../capi.h"
-#include "../capi-safecall.h"
-#include "../plumbing.h"
 #include "../modules.h"
-#include "../utilx.h"
-#include "ui-impl.h"
 #include "ui-custom.h"          /* is_custom() */
 #include "ui-canvas.h"          /* luaUI_new_canvas() */
 #include "tty.h"                /* luaTTY_check_keycode() */
