@@ -332,7 +332,7 @@ GArray *panel_fields__array = NULL;
 #define MAX_FIELDS           (BUILTIN_FIELDS_COUNT + MAX_USER_FIELDS)
 
 void
-panel_fields_init ()
+panel_fields_init (void)
 {
 
     if (!panel_fields__array)

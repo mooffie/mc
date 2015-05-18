@@ -48,7 +48,7 @@ static const struct luaL_Reg mods [] = {
 };
 
 void
-mc_lua_open_c_modules ()
+mc_lua_open_c_modules (void)
 {
     const luaL_Reg *mod = mods;
 

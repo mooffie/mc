@@ -60,7 +60,7 @@ mc_lua_set_next_timeout (pit_t tm)
 }
 
 void
-mc_lua_timer_unlock ()
+mc_lua_timer_unlock (void)
 {
     lock = FALSE;
 }
@@ -81,7 +81,7 @@ mc_lua_timer_unlock ()
  *   reading equal to the previous reading.
  */
 pit_t
-mc_lua_timer_now ()
+mc_lua_timer_now (void)
 {
     static struct timeval last_reading;
     static pit_t current_pit;
@@ -160,7 +160,7 @@ mc_lua_has_pending_timeouts (struct timeval * time_out)
  * MC's event loop calls this function.
  */
 void
-mc_lua_execute_ready_timeouts ()
+mc_lua_execute_ready_timeouts (void)
 {
     if (lock)
         return;

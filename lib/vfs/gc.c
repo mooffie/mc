@@ -100,13 +100,6 @@ static struct vfs_stamping *stamps;
 /*** file scope functions ************************************************************************/
 /* --------------------------------------------------------------------------------------------- */
 
-/* Used for debugging only. */
-struct vfs_stamping *
-debug__vfs_get_stamps ()
-{
-    return stamps;
-}
-
 static void
 vfs_addstamp (struct vfs_class *v, vfsid id)
 {
@@ -338,6 +331,17 @@ vfs_gc_done (void)
 
     if (stamps)
         vfs_rmstamp (stamps->v, stamps->id);
+}
+
+/* --------------------------------------------------------------------------------------------- */
+/**
+ * Used for debugging only. Lets you see all the stamps.
+ */
+
+struct vfs_stamping *
+debug__vfs_get_stamps (void)
+{
+    return stamps;
 }
 
 /* --------------------------------------------------------------------------------------------- */

@@ -35,7 +35,7 @@ edit_update_view (WEdit * e)
 }
 
 static Widget *
-edit_constructor ()
+edit_constructor (void)
 {
     Widget *w;
 
@@ -1093,7 +1093,7 @@ l_edit_is_utf8 (lua_State * L)
  */
 
 static void
-redraw_editors ()
+redraw_editors (void)
 {
     if (top_dlg)
     {

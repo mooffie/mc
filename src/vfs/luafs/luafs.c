@@ -113,14 +113,14 @@ lua_ref_cell__dispose (lua_State * L, void *cell)
  */
 
 static int
-luafs_failure ()
+luafs_failure (void)
 {
     my_errno = EPERM;
     return -1;
 }
 
 static void *
-luafs_failure__ptr ()
+luafs_failure__ptr (void)
 {
     my_errno = EPERM;
     return NULL;
@@ -164,7 +164,7 @@ luafs_failure__ptr ()
  * Returns 0 on success; -1 on error.
  */
 static int
-handle_returned_pair ()
+handle_returned_pair (void)
 {
     ON_ERROR_RETURN (-1);
 
@@ -178,7 +178,7 @@ handle_returned_pair ()
  * Returns the number on success; -1 on error.
  */
 static lua_Number
-handle_returned_pair__as_number ()
+handle_returned_pair__as_number (void)
 {
     lua_Number result;
 
@@ -250,7 +250,7 @@ handle_returned_pair__as_statbf (struct stat *buf)
  * Handle callbacks that return an arbitrary Lua value.
  */
 static void *
-handle_returned_pair__as_cellref ()
+handle_returned_pair__as_cellref (void)
 {
     ON_ERROR_RETURN (NULL);
 

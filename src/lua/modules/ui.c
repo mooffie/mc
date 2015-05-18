@@ -644,7 +644,7 @@ btn_callback (struct WButton *button, int action)
 }
 
 static Widget *
-button_constructor ()
+button_constructor (void)
 {
     return (Widget *) button_new (5, 5, B_USER /* isn't used */ , NORMAL_BUTTON,
                                   NULL, btn_callback);
@@ -729,7 +729,7 @@ static const struct luaL_Reg ui_button_lib[] = {
  */
 
 static Widget *
-checkbox_constructor ()
+checkbox_constructor (void)
 {
     return (Widget *) check_new (5, 5, 0, NULL);
 }
@@ -865,7 +865,7 @@ static const struct luaL_Reg ui_checkbox_lib[] = {
  */
 
 static Widget *
-label_constructor ()
+label_constructor (void)
 {
     return (Widget *) label_new (0, 0, NULL);
 }
@@ -962,7 +962,7 @@ static const struct luaL_Reg ui_label_lib[] = {
  */
 
 static Widget *
-input_constructor ()
+input_constructor (void)
 {
     return (Widget *) input_new (0, 0, input_colors, 10,
                                  NULL, NULL, INPUT_COMPLETE_NONE);
@@ -1218,7 +1218,7 @@ static const struct luaL_Reg ui_input_lib[] = {
  */
 
 static Widget *
-groupbox_constructor ()
+groupbox_constructor (void)
 {
     return (Widget *) groupbox_new (0, 0, 5, 40, NULL);
 }
@@ -1307,7 +1307,7 @@ static const struct luaL_Reg ui_groupbox_lib[] = {
 */
 
 static Widget *
-listbox_constructor ()
+listbox_constructor (void)
 {
     return (Widget *) listbox_new (0, 0, 6, 12, FALSE, NULL);
 }
@@ -1545,7 +1545,7 @@ static const struct luaL_Reg ui_listbox_lib[] = {
  */
 
 static Widget *
-radios_constructor ()
+radios_constructor (void)
 {
     return (Widget *) radio_new (0, 0, 0, NULL);
 }
@@ -1717,7 +1717,7 @@ static const struct luaL_Reg ui_radios_lib[] = {
  */
 
 static Widget *
-gauge_constructor ()
+gauge_constructor (void)
 {
     return (Widget *) gauge_new (0, 0, 25, TRUE, 100, 0);
 }
@@ -1858,7 +1858,7 @@ static const struct luaL_Reg ui_gauge_lib[] = {
  */
 
 static Widget *
-hline_constructor ()
+hline_constructor (void)
 {
     return (Widget *) hline_new (0, 0, 5);
 }
@@ -2257,7 +2257,7 @@ dlg_title_handler (const WDialog * dlg, size_t len)
 }
 
 static Widget *
-dialog_constructor ()
+dialog_constructor (void)
 {
     /* The '-1' is a sentry value we check for on the Lua side. */
     WDialog *dlg = dlg_create (TRUE, -1, -1, 4, 4,
@@ -2792,7 +2792,7 @@ l_dialog_get_state (lua_State * L)
 {
     WDialog *dlg = LUA_TO_DIALOG (L, 1);
 
-    const char *state = "_invalid_";
+    const char *state;
 
     /* *INDENT-OFF* */
     switch (dlg->state) {
@@ -2800,6 +2800,7 @@ l_dialog_get_state (lua_State * L)
     case DLG_ACTIVE:    state = "active";    break;
     case DLG_SUSPENDED: state = "suspended"; break;
     case DLG_CLOSED:    state = "closed";    break;
+    default:            state = "_invalid_"; break;
     }
     /* *INDENT-ON* */
 

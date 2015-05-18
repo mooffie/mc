@@ -131,7 +131,7 @@ static void handle_error (lua_State * L);
  * written to STDERR and the user may not notice them. So we "replay" them
  * when we have a nice UI where the user is sure to see them. */
 void
-mc_lua_replay_first_error ()
+mc_lua_replay_first_error (void)
 {
     if (first_error)
     {

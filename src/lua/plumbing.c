@@ -53,7 +53,7 @@ mc_lua_engine_name (void)
  * Where system scripts are stored.
  */
 const char *
-mc_lua_system_dir ()
+mc_lua_system_dir (void)
 {
     static const char *dir = NULL;
     if (!dir)
@@ -70,7 +70,7 @@ mc_lua_system_dir ()
  * Where user scripts are stored.
  */
 const char *
-mc_lua_user_dir ()
+mc_lua_user_dir (void)
 {
     static const char *dir = NULL;
     if (!dir)
@@ -118,7 +118,7 @@ ui_is_ready_handler (const gchar * event_group_name, const gchar * event_name,
  * Initializes the Lua VM.
  */
 void
-mc_lua_init ()
+mc_lua_init (void)
 {
     Lg = luaL_newstate ();
     luaL_openlibs (Lg);
@@ -131,7 +131,7 @@ mc_lua_init ()
  * Loads the core, and then the system & user scripts.
  */
 void
-mc_lua_load ()
+mc_lua_load (void)
 {
     /* Load core. */
     lua_core_found = (luaMC_safe_dofile (Lg, mc_lua_system_dir (), BOOTSTRAP_FILE) != LUA_ERRFILE);
@@ -146,26 +146,26 @@ mc_lua_load ()
  * Handles the complexity caused by shutting off the VFS before Lua.
  */
 void
-mc_lua_before_vfs_shutdown ()
+mc_lua_before_vfs_shutdown (void)
 {
     mc_lua_trigger_event ("core::before-vfs-shutdown");
 }
 
 void
-mc_lua_shutdown ()
+mc_lua_shutdown (void)
 {
     lua_close (Lg);
     Lg = NULL;                  /* For easier debugging, in case somebody tries to use Lua after shutdown. */
 }
 
 gboolean
-mc_lua_is_restarting ()
+mc_lua_is_restarting (void)
 {
     return is_restarting;
 }
 
 static void
-restart ()
+restart (void)
 {
     is_restarting = TRUE;
     mc_lua_trigger_event ("core::before-restart");
@@ -184,7 +184,7 @@ restart ()
  * documentation there).
  */
 void
-mc_lua_request_restart ()
+mc_lua_request_restart (void)
 {
     restart_requested = TRUE;
 }
@@ -193,7 +193,7 @@ mc_lua_request_restart ()
  * Restarts Lua, if a script asked us to.
  */
 static void
-check_for_restart ()
+check_for_restart (void)
 {
     if (restart_requested)      /* The script wants us to restart. */
     {
@@ -293,7 +293,7 @@ mc_lua_trigger_event__with_widget (const char *event_name, Widget * w)
 }
 
 gboolean
-mc_lua_ui_is_ready ()
+mc_lua_ui_is_ready (void)
 {
     return ui_is_ready;
 }
