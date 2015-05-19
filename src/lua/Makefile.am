@@ -11,7 +11,7 @@ noinst_LTLIBRARIES = libmc-luasrc.la
 libmc_luasrc_la_SOURCES = \
 	modules.c \
 	modules.h \
-	modules-open.h \
+	pre-init.h \
 	modules/conf.c \
 	modules/fields.c \
 	modules/fields.h \

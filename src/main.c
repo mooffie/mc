@@ -58,7 +58,7 @@
 #include "lib/lua/plumbing.h"
 #endif
 
-#include "src/lua/modules-open.h"       /* mc_lua_open_c_modules() */
+#include "src/lua/pre-init.h"   /* mc_lua_pre_init() */
 
 #include "filemanager/midnight.h"       /* current_panel */
 #include "filemanager/treestore.h"      /* tree_store_save */
@@ -297,12 +297,16 @@ main (int argc, char *argv[])
     }
 
 #ifdef ENABLE_LUA
-    /* We do this before vfs_init() in case LuaFS's initialization code,
-     * in the future, would want to access Lua's VM.
+    /*
+     * We initialize Lua before vfs_init() in case LuaFS's initialization code,
+     * in the future, would want to access Lua's VM (but this is not critical:
+     * there are other solutions to this hypothetical situation).
+     *
      * We also do this before mc_setup_by_args(), which needs the VM
-     * for exporting 'argv' to the Lua side. */
-    mc_lua_init();
-    mc_lua_open_c_modules();
+     * for exporting 'argv' to the Lua side.
+     */
+     mc_lua_pre_init ();
+     mc_lua_init ();
 #endif
 
     vfs_init ();
@@ -345,7 +349,7 @@ main (int argc, char *argv[])
 
 #ifdef ENABLE_LUA
     /* Run system and user startup scripts. */
-    mc_lua_load();
+    mc_lua_load ();
 #endif
 
 #ifdef ENABLE_LUA

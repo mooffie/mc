@@ -121,8 +121,8 @@ mc_lua_init (void)
 {
     Lg = luaL_newstate ();
     luaL_openlibs (Lg);
-    /* We don't call mc_lua_open_c_modules() ourselves, as its in
-     * the 'src' tree, not in 'lib'. We let main() call it. */
+    /* The following line causes code in the 'src' tree to open our C modules. */
+    mc_event_raise (MCEVENT_GROUP_LUA, "init", NULL);
     mc_event_add (MCEVENT_GROUP_DIALOG, "ui_is_ready", ui_is_ready_handler, NULL, NULL);
 }
 

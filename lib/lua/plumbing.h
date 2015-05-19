@@ -21,6 +21,8 @@ void mc_lua_shutdown (void);
 void mc_lua_request_restart (void);
 gboolean mc_lua_is_restarting (void);
 
+#define MCEVENT_GROUP_LUA  "Lua"        /* used for mc_event_add(), mc_event_raise(). */
+
 /* ------------------------------- Runtime -------------------------------- */
 
 /* forward declarations */
