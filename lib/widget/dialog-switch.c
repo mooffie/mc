@@ -40,9 +40,7 @@
 #endif
 #include "lib/widget.h"
 #include "lib/event.h"
-#ifdef ENABLE_LUA
-#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
-#endif
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 
 /*** global variables ****************************************************************************/
 
@@ -111,9 +109,7 @@ dialog_switch_goto (GList * dlg)
             {
                 /* switch to panels */
                 midnight_dlg->state = DLG_ACTIVE;
-#ifdef ENABLE_LUA
-                mc_lua_trigger_event__with_widget ("dialog::activate", WIDGET (midnight_dlg));
-#endif
+                scripting_trigger_widget_event ("Dialog::activate", WIDGET (midnight_dlg));
                 do_refresh ();
             }
         }
@@ -181,9 +177,7 @@ dialog_switch_remove (WDialog * h)
     if (mc_current != NULL)
     {
         DIALOG (mc_current->data)->state = DLG_ACTIVE;
-#ifdef ENABLE_LUA
-        mc_lua_trigger_event__with_widget ("dialog::activate", WIDGET (mc_current->data));
-#endif
+        scripting_trigger_widget_event ("Dialog::activate", WIDGET (mc_current->data));
     }
 }
 

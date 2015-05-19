@@ -55,9 +55,7 @@
 #include "lib/charsets.h"       /* get_codepage_id () */
 #endif
 #include "lib/event.h"
-#ifdef ENABLE_LUA
-#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
-#endif
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 
 #include "src/setup.h"          /* For loading/saving panel options */
 #include "src/execute.h"
@@ -3319,9 +3317,7 @@ _do_panel_cd (WPanel * panel, const vfs_path_t * new_dir_vpath, enum cd_enum cd_
     dir_list_load (&panel->dir, panel->cwd_vpath, panel->sort_field->sort_routine,
                    &panel->sort_info, panel->filter);
     try_to_select (panel, get_parent_dir_name (panel->cwd_vpath, olddir_vpath));
-#ifdef ENABLE_LUA
-    mc_lua_trigger_event__with_widget ("panel::load", WIDGET (panel));
-#endif
+    scripting_trigger_widget_event ("Panel::load", WIDGET (panel));
 
     load_hint (0);
     panel->dirty = 1;
@@ -3679,9 +3675,7 @@ panel_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *d
         mini_info_separator (panel);
         display_mini_info (panel);
         panel->dirty = 0;
-#ifdef ENABLE_LUA
-        mc_lua_trigger_event__with_widget ("panel::draw", WIDGET (panel));
-#endif
+        scripting_trigger_widget_event ("Panel::draw", WIDGET (panel));
         return MSG_HANDLED;
 
     case MSG_FOCUS:
@@ -3703,15 +3697,11 @@ panel_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *d
 
         update_xterm_title_path ();
         select_item (panel);
-#ifdef ENABLE_LUA
-        mc_lua_trigger_event__with_widget ("panel::activate", WIDGET (panel));
-#endif
+        scripting_trigger_widget_event ("Panel::activate", WIDGET (panel));
         show_dir (panel);
         paint_dir (panel);
         panel->dirty = 0;
-#ifdef ENABLE_LUA
-        mc_lua_trigger_event__with_widget ("panel::draw", WIDGET (panel));
-#endif
+        scripting_trigger_widget_event ("Panel::draw", WIDGET (panel));
 
         bb = find_buttonbar (w->owner);
         midnight_set_buttonbar (bb);
@@ -3724,9 +3714,7 @@ panel_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *d
         panel->active = 0;
         show_dir (panel);
         unselect_item (panel);
-#ifdef ENABLE_LUA
-        mc_lua_trigger_event__with_widget ("panel::draw", WIDGET (panel));
-#endif
+        scripting_trigger_widget_event ("Panel::draw", WIDGET (panel));
         return MSG_HANDLED;
 
     case MSG_KEY:
@@ -4038,9 +4026,7 @@ update_one_panel_widget (WPanel * panel, panel_update_flags_t flags, const char 
     {
         panel->is_panelized = FALSE;
         mc_setctl (panel->cwd_vpath, VFS_SETCTL_FLUSH, 0);
-#ifdef ENABLE_LUA
-        mc_lua_trigger_event__with_widget ("panel::flush", WIDGET (panel));
-#endif
+        scripting_trigger_widget_event ("Panel::flush", WIDGET (panel));
         memset (&(panel->dir_stat), 0, sizeof (panel->dir_stat));
     }
 
@@ -4411,9 +4397,7 @@ panel_new_with_dir (const char *panel_name, const vfs_path_t * vpath)
 #endif
     dir_list_load (&panel->dir, panel->cwd_vpath, panel->sort_field->sort_routine,
                    &panel->sort_info, panel->filter);
-#ifdef ENABLE_LUA
-    mc_lua_trigger_event__with_widget ("panel::load", WIDGET (panel));
-#endif
+    scripting_trigger_widget_event ("Panel::load", WIDGET (panel));
 
     /* Restore old right path */
     if (curdir != NULL)
@@ -4462,9 +4446,7 @@ panel_reload (WPanel * panel)
 #endif
     dir_list_reload (&panel->dir, panel->cwd_vpath, panel->sort_field->sort_routine,
                      &panel->sort_info, panel->filter);
-#ifdef ENABLE_LUA
-    mc_lua_trigger_event__with_widget ("panel::load", WIDGET (panel));
-#endif
+    scripting_trigger_widget_event ("Panel::load", WIDGET (panel));
 
     panel->dirty = 1;
     if (panel->selected >= panel->dir.len)
@@ -4594,9 +4576,7 @@ select_item (WPanel * panel)
     panel->dirty = 1;
 
     execute_hooks (select_file_hook);
-#ifdef ENABLE_LUA
-    mc_lua_trigger_event__with_widget ("panel::select-file", WIDGET (panel));
-#endif
+    scripting_trigger_widget_event ("Panel::select-file", WIDGET (panel));
 }
 
 /* --------------------------------------------------------------------------------------------- */

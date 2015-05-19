@@ -49,9 +49,7 @@
 #include "lib/strutil.h"        /* utf string functions */
 #include "lib/util.h"           /* is_printable() */
 #include "lib/widget.h"
-#ifdef ENABLE_LUA
-#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
-#endif
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 #ifdef HAVE_CHARSET
 #include "lib/charsets.h"
 #endif
@@ -1148,9 +1146,7 @@ void
 edit_render_keypress (WEdit * edit)
 {
     edit_render (edit, 0, 0, 0, 0, 0);
-#ifdef ENABLE_LUA
-    mc_lua_trigger_event__with_widget("editbox::draw", WIDGET (edit));
-#endif
+    scripting_trigger_widget_event ("Editbox::draw", WIDGET (edit));
 }
 
 /* --------------------------------------------------------------------------------------------- */

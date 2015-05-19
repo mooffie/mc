@@ -189,7 +189,7 @@ local function bind_key(widget_type, keyseq, callback)
 end
 
 local function bind_event(widget_type, event_name, callback)
-  event.bind(widget_type:lower() .. "::" .. event_name, callback)
+  event.bind(widget_type .. "::" .. event_name, callback)
 end
 
 ------------------------------------------------------------------------------

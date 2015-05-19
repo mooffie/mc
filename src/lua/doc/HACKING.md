@@ -10,20 +10,23 @@ Suppose you're writing code that needs to use some Lua facility.
 
 **LOW-LEVEL**
 
-If your source file uses Lua's API (things like lua_xxx()), you need to
-include src/lua/capi.h. This file pulls-in the Lua engine's header files.
-It also provides some convenience functions.
+If your source file uses Lua's API (things like lua_xxx() or luaX_xxx()),
+you need to include lib/lua/capi.h. This file pulls-in the Lua engine's
+header files. It also provides some convenience functions.
 
 **HI-LEVEL**
 
-You'll notice, however, that most source files outside the src/lua folder
-don't use src/lua/capi.h. They use the higher-level API in src/lua/plumbing.h.
+You'll notice, however, that most source files (except Lua modules)
+don't use lib/lua/capi.h. They use the higher-level APIs in either:
+
+* lib/scripting.h (language neutral)
+* lib/lua/plumbing.h (Lua specific)
 
 Makefile.am's
 -------------
 
-If a makefile's sources include (directly or indirectly) src/lua/capi.h, then
-you need to add LUA_CFLAGS to AM_CPPFLAGS:
+If a makefile's sources #include lib/lua/capi.h, then you need to add
+LUA_CFLAGS to AM_CPPFLAGS:
 
     AM_CPPFLAGS = ... $(LUA_CFLAGS)
 
@@ -35,13 +38,13 @@ where these files are.
 of LUA_CFLAGS: it's pkg-config's fault.)
 
 Otherwise don't bother. For example, the makefiles of lib/widget and
-lib/tty and src/editor don't need LUA_CFLAGS because they include
-src/lua/plumbing.h, which is a high-level interface that doesn't pull-in
-capi.h.
+lib/tty and src/editor **don't** need LUA_CFLAGS because they include
+lib/scripting.h (or lib/lua/plumbing.h), which is a high-level interface
+that doesn't pull-in capi.h.
 
-Another example: src/vfs/luafs/makefile.am *does* need it because it uses the Lua API.
+Another example: src/vfs/luafs/makefile.am *does* need it because the source file there includes capi.h.
 
-Another example: src/makefile.am *does* need it, because textconf.c includes capi.h.
+Another example: src/makefile.am *does* need it because textconf.c includes capi.h.
 
 (Don't bother with LUA_LIBS: it need only appear in lib/Makefile.am.)
 

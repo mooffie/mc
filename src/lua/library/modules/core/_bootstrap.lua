@@ -73,7 +73,7 @@ string.autoload('l_split', {'utils.text', 'split'})
 require('regex').expose()
 
 -- Unfortunately, we have to explicitly load the ui module, as
--- `event.bind("panel::load")` (in contrast to `ui.Panel.bind('<<load>>')`)
+-- `event.bind("Panel::load")` (in contrast to `ui.Panel.bind('<<load>>')`)
 -- won't autoload ui.Panel as it references neither ui nor ui.Panel. Also see
 -- relevant comment in 'ui.lua'.
 require('ui')

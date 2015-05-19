@@ -84,6 +84,7 @@ As a quick reference, here’s a snippet that uses some common features:
 #include "lib/lua/plumbing.h"
 #include "lib/lua/ui-impl.h"    /* luaUI_*() */
 #include "lib/lua/utilx.h"
+#include "lib/scripting.h"        /* scripting_notify_on_widget_destruction() */
 
 #include "../modules.h"
 #include "ui-custom.h"          /* is_custom() */
@@ -254,9 +255,9 @@ l_widget_destroy (lua_State * L)
             luaL_error (L, E_ ("You can't destroy a widget which is already mapped in a dialog."));
         }
 
-        /* @FIXME: MC itself should have destroy_widget()! See another comment in this file mentioning it. */
+        /* @FIXME: MC itself should have widget_destroy()! See another comment in this file mentioning it. */
 
-        mc_lua_notify_on_widget_destruction (w);
+        scripting_notify_on_widget_destruction (w);
         send_message (w, NULL, MSG_DESTROY, 0, NULL);
         g_free (w);
     }
@@ -2523,7 +2524,7 @@ l_dialog_map_widget (lua_State * L)
  * by advanced users.
  *
  * UNFORTUNATELY, MC's 'widget/dialog.c' doesn't have any function that merely *removes*
- * a widget form its dialog. The del_widget() we use here also *destroys* the dialog.
+ * a widget form its dialog. The del_widget() we use here also *destroys* the widget.
  *
  * @FIXME:
  * Once this is fixed in MC we would export this function as dlg:unmap_widget(). In the
@@ -2539,9 +2540,9 @@ l_dialog_del_widget (lua_State * L)
 
     if (w->owner)
     {
-        /* FIXME: Once MC has destroy_widget() we would put mc_lua_notify_...() there
+        /* FIXME: Once MC has widget_destroy() we would put scripting_notify_...() there
            and won't have to call it anywhere else! */
-        mc_lua_notify_on_widget_destruction (w);
+        scripting_notify_on_widget_destruction (w);
         del_widget (w);
     }
 

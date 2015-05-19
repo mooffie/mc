@@ -50,9 +50,7 @@
 #include "lib/strutil.h"
 #include "lib/widget.h"
 #include "lib/event.h"
-#ifdef ENABLE_LUA
-#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
-#endif
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 
 #include "src/consaver/cons.saver.h"
 #include "src/viewer/mcviewer.h"        /* The view widget */
@@ -755,9 +753,7 @@ setup_panels (void)
     else
         widget_set_size (WIDGET (the_hint), 0, 0, 0, 0);
 
-#ifdef ENABLE_LUA
-    mc_lua_trigger_event__with_widget("dialog::layout", WIDGET (midnight_dlg));
-#endif
+    scripting_trigger_widget_event ("Dialog::layout", WIDGET (midnight_dlg));
 
     update_xterm_title_path ();
 }

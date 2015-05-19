@@ -55,9 +55,7 @@
 #include "lib/timefmt.h"        /* time formatting */
 #include "lib/lock.h"
 #include "lib/widget.h"
-#ifdef ENABLE_LUA
-#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
-#endif
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 
 #ifdef HAVE_CHARSET
 #include "lib/charsets.h"       /* get_codepage_id */
@@ -2161,9 +2159,7 @@ edit_init (WEdit * edit, int y, int x, int lines, int cols, const vfs_path_t * f
 
     edit_load_macro_cmd (edit);
 
-#ifdef ENABLE_LUA
-    mc_lua_trigger_event__with_widget ("editbox::load", WIDGET (edit));
-#endif
+    scripting_trigger_widget_event ("Editbox::load", WIDGET (edit));
 
     return edit;
 }
@@ -2177,7 +2173,6 @@ edit_clean (WEdit * edit)
     if (edit == NULL)
         return FALSE;
 
-#ifdef ENABLE_LUA
     /*
      * The widget has been sent MSG_DESTROY already. Since we
      * invalidate Lua wrappers before MSG_DESTROY is sent (see dialog.c:
@@ -2193,8 +2188,7 @@ edit_clean (WEdit * edit)
      * flag to widgets that governs whether notify_lua_on_widget_destruction()
      * is called before or after MSG_DESTROY.
      */
-    mc_lua_trigger_event__with_widget ("editbox::unload", WIDGET (edit));
-#endif
+    scripting_trigger_widget_event ("Editbox::unload", WIDGET (edit));
 
     /* a stale lock, remove it */
     if (edit->locked)

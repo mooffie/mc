@@ -24,7 +24,7 @@ name to the system.
 
 The above code is equivalent to:
 
-    event.bind('panel::load', function(pnl)
+    event.bind('Panel::load', function(pnl)
       devel.log('The ' .. pnl.dir .. ' directory has been read.')
     end)
     -- But please refrain from writing such code. Use ui.Panel.bind() instead.

@@ -50,6 +50,7 @@
 #include "lib/widget.h"
 #include "lib/mcconfig.h"
 #include "lib/event.h"          /* mc_event_raise() */
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 #ifdef HAVE_CHARSET
 #include "lib/charsets.h"
 #endif
@@ -59,9 +60,6 @@
 #include "src/filemanager/cmd.h"        /* view_other_cmd(), save_setup_cmd()  */
 #include "src/learn.h"          /* learn_keys() */
 #include "src/args.h"           /* mcedit_arg_t */
-#ifdef ENABLE_LUA
-#include "lib/lua/plumbing.h"   /* mc_lua_trigger_event__with_widget() */
-#endif
 
 #include "edit-impl.h"
 #include "editwidget.h"
@@ -1020,9 +1018,7 @@ edit_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, v
         widget_set_size (WIDGET (menubar), w->y, w->x, 1, w->cols);
         menubar_arrange (menubar);
         g_list_foreach (h->widgets, (GFunc) edit_dialog_resize_cb, NULL);
-#ifdef ENABLE_LUA
-        mc_lua_trigger_event__with_widget("dialog::layout", w);
-#endif
+        scripting_trigger_widget_event ("Dialog::layout", w);
         return MSG_HANDLED;
 
     case MSG_ACTION:
@@ -1257,9 +1253,7 @@ edit_files (const GList * files)
         ok = ok || f_ok;
     }
 
-#ifdef ENABLE_LUA
-    mc_lua_trigger_event__with_widget("dialog::layout", WIDGET (edit_dlg));
-#endif
+    scripting_trigger_widget_event ("Dialog::layout", WIDGET (edit_dlg));
 
     if (ok)
         dlg_run (edit_dlg);
