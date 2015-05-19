@@ -38,8 +38,15 @@ It does what you think it does.
 
 CAVEAT: the string you type here is remembered and used next time you call
 up this dialog. You may forget this fact and wonder why some files you're
-currently editing don't show up in the list. If you want to turn off this
-feature, install the module this way:
+currently editing don't show up in the list. If this bothers you, there are
+two ways to solve this:
+
+You can either instruct the app to never filter out files that are currently
+being edited:
+
+    require('samples.accessories.recently-visited-files').dont_filter_edited = true
+
+Or you can make the app not remember the string:
 
     keymap.bind('M-pgup', function()
       require('samples.editbox.recently-visited-files').last_filter = nil  -- *** this does the trick! **

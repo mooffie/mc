@@ -57,7 +57,8 @@ M.debug_level = 1
 M.syntax_conversion = {
   cpp = 'c++',                 -- vim
   ['shell-script'] = 'shell',  -- emacs
-  sh = 'shell'                 -- vim
+  sh = 'shell',                -- vim
+  scheme = 'lisp',
   -- Feel free to add more, and please mail your changes to us.
 }
 
@@ -137,7 +138,7 @@ local function process_modeline(edt, mod, is_emacs)
 
   if syntax then
     local canon_syntax = ui.Editbox.search_syntax(
-      M.syntax_conversion[syntax] and M.syntax_conversion[syntax] or syntax
+      M.syntax_conversion[syntax] or syntax
     )
     if not canon_syntax then
       if M.debug_level > 0 then

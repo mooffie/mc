@@ -59,11 +59,11 @@ end)
 -- Lets GNOME Terminal know of the current directory.
 require('samples.accessories.set-gterm-cwd')
 
+-- Displays scrollbars for panels.
+require('samples.accessories.scrollbar').install()
+
 -- Better xterm titles.
 -- require('samples.accessories.set-xterm-title')  -- Disabled by default.
-
--- Displays scrollbars for panels.
---require('samples.accessories.scrollbar').install()  -- Disabled by default.
 
 -- Displays a clock at the top-right corner.
 --require('samples.accessories.clock').install()  -- Disabled by default.

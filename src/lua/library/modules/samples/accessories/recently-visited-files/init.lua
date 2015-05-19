@@ -19,6 +19,10 @@ local db_build, db_delete_record = import_from('samples.accessories.recently-vis
 local M = {
   last_filter = nil,
   last_path = nil,
+
+  -- Setting this to true means that files that are currently edited
+  -- will never be filtered out of the list.
+  dont_filter_edited = false,
 }
 
 function M.run()
@@ -51,7 +55,10 @@ function M.run()
   -- Populates the listbox. It applies the filter to the DB.
   local function rebuild_items()
     local val = lst.value
-    lst.items = db:filter(function(rec) return rec[1]:find(fltr.text, 1, true) end)
+    lst.items = db:filter(function(rec)
+      return rec[1]:find(fltr.text, 1, true) or        -- file's name match; or
+             (M.dont_filter_edited and rec.value.edt)  -- file is being edited.
+    end)
     lst.value = val
   end
 
