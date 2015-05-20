@@ -69,7 +69,7 @@ l_dir (lua_State * L)
     dir = mc_opendir (vpath->vpath);
     destroy_vpath_argument (vpath);
 
-    if (!dir)
+    if (dir == NULL)
         return luaFS_push_error__by_idx (L, 1);
 
     lua_newtable (L);
@@ -77,7 +77,7 @@ l_dir (lua_State * L)
         struct dirent *ent;
         int i = 1;
 
-        while ((ent = mc_readdir (dir)))
+        while ((ent = mc_readdir (dir)) != NULL)
         {
             if (!DIR_IS_DOT (ent->d_name) && !DIR_IS_DOTDOT (ent->d_name))
             {
@@ -94,7 +94,7 @@ l_dir (lua_State * L)
 typedef struct
 {
     DIR *dir;
-    gboolean include_dot_dot;
+    gboolean include_dot_dot;   /* Whether to return the '.' and '..' when traversing. */
 } dir_obj_t;
 
 /**
@@ -150,7 +150,7 @@ l_opendir (lua_State * L)
 
     destroy_vpath_argument (vpath);
 
-    if (!dir_obj->dir)
+    if (dir_obj->dir == NULL)
         return luaFS_push_error__by_idx (L, 1);
     else
         return 1;
@@ -163,7 +163,7 @@ l_dir_close (lua_State * L)
 
     dir_obj = luaMC_checkudata__unsafe (L, 1, "fs.DIR");
 
-    if (dir_obj->dir)
+    if (dir_obj->dir != NULL)
     {
         mc_closedir (dir_obj->dir);
         dir_obj->dir = NULL;
@@ -176,19 +176,20 @@ static int
 l_dir_next (lua_State * L)
 {
     dir_obj_t *dir_obj;
-    struct dirent *ent;
 
     dir_obj = luaMC_checkudata__unsafe (L, 1, "fs.DIR");
 
-    if (dir_obj->dir)
+    if (dir_obj->dir != NULL)
     {
+        struct dirent *ent;
+
         /* Skip '.' and '..' */
         do
             ent = mc_readdir (dir_obj->dir);
-        while (ent && !dir_obj->include_dot_dot
+        while (ent != NULL && !dir_obj->include_dot_dot
                && (DIR_IS_DOT (ent->d_name) || DIR_IS_DOTDOT (ent->d_name)));
 
-        if (ent)
+        if (ent != NULL)
         {
             lua_pushstring (L, ent->d_name);
             lua_pushi (L, ent->d_ino);

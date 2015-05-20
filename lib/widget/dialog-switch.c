@@ -226,10 +226,12 @@ dialog_switch_prev (void)
 /* --------------------------------------------------------------------------------------------- */
 
 /**
- * Like dialog_switch_goto() but accepts a WDialog.
+ * Lets programmers switch to a certain dialog.
+ *
+ * It's like dialog_switch_goto() but accepts a WDialog.
  */
 void
-dialog_switch_dlg (WDialog * h)
+dialog_switch_focus (WDialog * h)
 {
     GList *dlg;
 

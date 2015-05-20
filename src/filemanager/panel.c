@@ -113,7 +113,7 @@ static const char *string_space (file_entry_t *, int);
 static const char *string_dot (file_entry_t *, int);
 
 /* *INDENT-OFF* */
-panel_field_t _panel_fields[] = {
+panel_field_t panel_fields_initializers[] = {
     {
      "unsorted", 12, TRUE, J_LEFT_FIT,
      /* TRANSLATORS: one single character to represent 'unsorted' sort mode  */
@@ -323,24 +323,23 @@ panel_field_t _panel_fields[] = {
  */
 
 GArray *panel_fields__array = NULL;
-#define panel_fields         ((panel_field_t *)panel_fields__array->data)
+#define panel_fields         ((panel_field_t *) panel_fields__array->data)
 
-#define BUILTIN_FIELDS_COUNT (G_N_ELEMENTS(_panel_fields) - 1)
+#define BUILTIN_FIELDS_COUNT (G_N_ELEMENTS (panel_fields_initializers) - 1)
 #define MAX_USER_FIELDS      100
 #define MAX_FIELDS           (BUILTIN_FIELDS_COUNT + MAX_USER_FIELDS)
 
 void
 panel_fields_init (void)
 {
+    /* We allow calling this function again later to clear all user-registered fields. */
 
-    if (!panel_fields__array)
+    if (panel_fields__array == NULL)
         panel_fields__array =
             g_array_sized_new (TRUE, TRUE, sizeof (panel_field_t), MAX_FIELDS + 1);
 
-    /* We allow calling this function again later to clear all user-registered fields: */
-    g_array_set_size (panel_fields__array, 0);
-
-    g_array_append_vals (panel_fields__array, _panel_fields, BUILTIN_FIELDS_COUNT);
+    g_array_set_size (panel_fields__array, 0);  /* @FIXME: Since we're not g_free()ing the fields' title/id/hotkey, there's memory leak here. */
+    g_array_append_vals (panel_fields__array, panel_fields_initializers, BUILTIN_FIELDS_COUNT);
 }
 
 /**
@@ -352,24 +351,29 @@ panel_fields_register (const panel_field_t * field)
     panel_field_t *found;
 
     found = const_cast (panel_field_t *, panel_get_field_by_id (field->id));
-    if (found)
+
+    if (found != NULL)
     {
-        *found = *field;
+        /* Override an existing field. */
+        *found = *field;        /* @FIXME: See note in panel_fields_init() about memory leak. */
     }
     else
     {
-        /*
-         * We don't let the array grow. If it grows (that is, reallocated),
-         * the panel->sort field pointer will become invalid and we'll crash.
-         * That's the reason we pre-allocate MAX_FIELDS in panel_fields_init().
-         * See also the notes in fields.lua.
-         *
-         * We'll remove this limitation once we tackle panel->sort.
-         */
+        /* A new field. */
         if (panel_fields__array->len < MAX_FIELDS)
             g_array_append_val (panel_fields__array, *field);
         else
+        {
+            /*
+             * We don't let the array grow. If it grows (that is, reallocated),
+             * the panel->sort_field pointer will become invalid and we'll crash.
+             * That's the reason we pre-allocate MAX_FIELDS in panel_fields_init().
+             * See also the notes in fields.lua.
+             *
+             * We'll remove this limitation once we tackle panel->sort_field. @FIXME.
+             */
             return FALSE;
+        }
     }
 
     return TRUE;

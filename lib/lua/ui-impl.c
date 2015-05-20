@@ -463,8 +463,8 @@ luaUI_check_widget_ex (lua_State * L, int idx, gboolean allow_destroyed, const c
  * scaffoldings.
  */
 void
-create_widget_metatable (lua_State * L, const char *className, const luaL_Reg * lib,
-                         const luaL_Reg * static_lib, const char *parent)
+create_widget_metatable (lua_State * L, const char *class_name, const luaL_Reg * lib,
+                         const luaL_Reg * static_lib, const char *parent_class_name)
 {
     /*
      * Create the metatable. The code is equal to the following pseudo code
@@ -481,14 +481,20 @@ create_widget_metatable (lua_State * L, const char *className, const luaL_Reg * 
 
     LUAMC_GUARD (L);
 
-    luaMC_register_metatable (L, mc_lua_ui_meta_name (className), lib, TRUE);
+    luaMC_register_metatable (L, mc_lua_ui_meta_name (class_name), lib, TRUE);
 
-    /* The following property is mainly to ease debugging. See its documentation in ui.c */
-    lua_pushstring (L, className);
+    /*
+     * The following property lets users figure out the widget's type. See its
+     * documentation in ui.c (or in the ldoc) to learn of another way.
+     *
+     * (Note: This somewhat duplicates the meta["__name"] property which is
+     * created by Lua 5.3+ (luaL_newmetatable) and which we don't use.)
+     */
+    lua_pushstring (L, class_name);
     lua_setfield (L, -2, "widget_type");
 
-    if (parent)
-        luaL_setmetatable (L, mc_lua_ui_meta_name (parent));
+    if (parent_class_name != NULL)
+        luaL_setmetatable (L, mc_lua_ui_meta_name (parent_class_name)); /* inheritance chain */
 
     lua_pop (L, 1);             /* the metatable */
 
@@ -506,10 +512,10 @@ create_widget_metatable (lua_State * L, const char *className, const luaL_Reg * 
     LUAMC_GUARD (L);
 
     lua_getfield (L, LUA_REGISTRYINDEX, "ui.module");
-    luaL_getsubtable (L, -1, className);
+    luaL_getsubtable (L, -1, class_name);
     if (static_lib)
         luaL_setfuncs (L, static_lib, 0);
-    luaL_getmetatable (L, mc_lua_ui_meta_name (className));
+    luaL_getmetatable (L, mc_lua_ui_meta_name (class_name));
     lua_setfield (L, -2, "meta");
 
     lua_pop (L, 2);

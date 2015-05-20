@@ -236,13 +236,13 @@ end
 
 --------------------------------- Restart-related code -----------------------------------
 
--- A brute-force method to seeing if a field is one of "name", "version", "size", etc.
+-- A brute-force way to find out if a field is one of "name", "version", "size", etc.
 local function is_builtin_sort(id)
   local passed = pcall(function()
     fields.register_field {
       id = "dummy",
       title = "dummy",
-      sort = id,
+      sort = id,  -- Raises exception if not a builtin name.
     }
   end)
   return passed
@@ -251,7 +251,7 @@ end
 event.bind("core::before-restart", function()
 
   -- On the C side, a panel keeps a pointer to the sort field
-  -- (WPanel.sort_info.sort_field). After restarting Lua, this field may no
+  -- (WPanel.sort_field). After restarting Lua, this field may no
   -- longer be defined. Or its memory offset (in the panel.c:panel_fields
   -- array) may change.
   --

@@ -15,8 +15,8 @@ cb_ret_t call_widget_method_ex (Widget * w, const char *method_name, int nargs,
                                 gboolean * lua_widget_found, gboolean * method_found, gboolean pop);
 gboolean widget_method_exists (Widget * w, const char *method_name);
 
-void create_widget_metatable (lua_State * L, const char *className, const luaL_Reg * lib,
-                              const luaL_Reg * static_lib, const char *parent);
+void create_widget_metatable (lua_State * L, const char *class_name, const luaL_Reg * lib,
+                              const luaL_Reg * static_lib, const char *parent_class_name);
 const char *mc_lua_ui_meta_name (const char *widget_type);
 
 #endif /* MC__LUA_UI_IMPL_H */

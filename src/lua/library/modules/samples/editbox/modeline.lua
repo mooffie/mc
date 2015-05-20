@@ -59,6 +59,7 @@ M.syntax_conversion = {
   ['shell-script'] = 'shell',  -- emacs
   sh = 'shell',                -- vim
   scheme = 'lisp',
+  automake = 'm4',
   -- Feel free to add more, and please mail your changes to us.
 }
 

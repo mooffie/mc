@@ -2856,7 +2856,7 @@ l_dialog_set_compact (lua_State * L)
 static int
 l_dialog_focus (lua_State * L)
 {
-    dialog_switch_dlg (LUA_TO_DIALOG (L, 1));
+    dialog_switch_focus (LUA_TO_DIALOG (L, 1));
     return 0;
 }
 
@@ -3095,8 +3095,8 @@ static const luaMC_constReg uilib_constants[] = {
     /*
      * Constants for widget:_send_message().
      *
-     * Not all of these are needed (e.g., one can do w:redraw() instead of
-     * w:_send_message(MSG_DRAW)), and some of these won't make sense, but
+     * Not all of these are needed (e.g., one'd better do w:redraw() instead
+     * of w:_send_message(MSG_DRAW)), and some of these won't make sense, but
      * instead of cherry-picking we provide all of them.
      */
     REGC (MSG_INIT),
