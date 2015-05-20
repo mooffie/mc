@@ -110,6 +110,9 @@ ui_is_ready_handler (const gchar * event_group_name, const gchar * event_name,
                  mc_lua_system_dir ());
     }
 
+    /* Inform scripts that want to know about this. */
+    mc_lua_trigger_event ("ui::ready");
+
     return TRUE;
 }
 
@@ -123,7 +126,7 @@ mc_lua_init (void)
     luaL_openlibs (Lg);
     /* The following line causes code in the 'src' tree to open our C modules. */
     mc_event_raise (MCEVENT_GROUP_LUA, "init", NULL);
-    mc_event_add (MCEVENT_GROUP_DIALOG, "ui_is_ready", ui_is_ready_handler, NULL, NULL);
+    mc_event_add (MCEVENT_GROUP_CORE, "ui_is_ready", ui_is_ready_handler, NULL, NULL);
 }
 
 /**

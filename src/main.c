@@ -465,7 +465,7 @@ main (int argc, char *argv[])
     enable_bracketed_paste ();
 
     /* Inform whoever wants to know that the UI subsystem is ready. */
-    mc_event_raise (MCEVENT_GROUP_DIALOG, "ui_is_ready", NULL);
+    mc_event_raise (MCEVENT_GROUP_CORE, "ui_is_ready", NULL);
 
     /* subshell_prompt is NULL here */
     mc_prompt = (geteuid () == 0) ? "# " : "$ ";

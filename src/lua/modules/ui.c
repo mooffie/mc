@@ -3062,21 +3062,6 @@ static const struct luaL_Reg ui_dialog_lib[] = {
 
 /* ------------------------------------------------------------------------ */
 
-/* "ui ready" event handler */
-static gboolean
-ui_is_ready_handler (const gchar * event_group_name, const gchar * event_name,
-                     gpointer init_data, gpointer data)
-{
-    (void) event_group_name;
-    (void) event_name;
-    (void) init_data;
-    (void) data;
-
-    mc_lua_trigger_event ("ui::ready");
-
-    return TRUE;
-}
-
 /* *INDENT-OFF* */
 static const struct luaL_Reg uilib[] = {
     /* No functions are currently defined under the 'ui' namespace.
@@ -3138,8 +3123,6 @@ static const luaMC_constReg uilib_constants[] = {
 int
 luaopen_ui (lua_State * L)
 {
-    mc_event_add (MCEVENT_GROUP_DIALOG, "ui_is_ready", ui_is_ready_handler, NULL, NULL);
-
     luaL_newlib (L, uilib);
     luaMC_register_constants (L, uilib_constants);
 
