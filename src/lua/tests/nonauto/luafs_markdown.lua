@@ -40,7 +40,13 @@ local function split_sections(text)
 end
 
 
-local MarkdownFS = { prefix = "markdown" }
+local MarkdownFS = {
+  prefix = "markdown",
+
+  -- Convenience: makes pressing ENTER in a panel over MarkDown files
+  -- automatically 'cd' to them.
+  glob = "*.{md,mkd,mdown}",
+}
 
 function MarkdownFS:open_session()
 
@@ -72,9 +78,5 @@ end
 function MarkdownFS:file(path)
   return self.sections[path]
 end
-
--- Convenience: makes pressing ENTER in a panel over MarkDown files
--- automatically 'cd' to them.
-MarkdownFS.glob = "*.{md,mkd,mdown}"
 
 fs.register_filesystem(MarkdownFS)

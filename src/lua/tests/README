@@ -1,32 +1,36 @@
 This directory tree contains tests.
 
-auto/
+Tests that need MC to run have a '.lua' extension (run them by symlinking
+them to your Lua user folder). Otherwise they have a '.mcs' extension
+which means that it's more convenient to run them with mcscript.
+
+sauto/
 
   Tests that don't require the user's intervention. You can run them with
   mcscript.
 
 nonauto/
 
-  Tests that require the user's inspection or interaction. Most of
-  them you can run with mcscript. Some require MC (in which case
-  just symlink them to your Lua user folder). Read their headers
-  to see what they're trying to achieve.
+  Tests that require the user's inspection or interaction. Read their
+  headers to see what they're trying to achieve.
+
+  Most of them you can run with mcscript ('.mcs' extension). Some require
+  MC ('.lua' extension).
 
   [comment]
-  If, upon restarting MC, you see errors similar to "You can not use
-  tty.get_cols() yet, because the UI has not been initialized", this is
-  because you symlinked, to your Lua user folder, tests designed for
-  mcscript that involve the UI module. If you want these tests to be
-  runnable from MC, change the "test()" call (in their source code) to
-  something like "keymap.bind('C-whatever', test)".
+  You can run '.mcs' scripts that test the GUI in MC too. But you'll have
+  to change the "test()" call (in their source code) to something like
+  "keymap.bind('C-whatever', test)". Otherwise you'd see some error
+  message similar to "You can not use tty.get_cols() yet, because the UI
+  has not been initialized".
   [/comment]
 
 snippets/
 
-  These aren't "tests" per se. These are snippets you may actually
-  find useful. They require MC, so symlink them to your Lua user folder.
-  (If it turns out users find a snippet useful, we'd better turn it into
-  a module.)
+  These aren't "tests" per se. These are snippets you may actually find
+  useful. They're intended to be run inside MC, so symlink them to your
+  Lua user folder. (If it turns out users find a snippet useful, we'd
+  better turn it into a module.)
 
 benchmark/
 

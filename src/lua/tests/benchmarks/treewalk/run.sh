@@ -28,13 +28,13 @@ function run {
 }
 
 run "$MCSCRIPT -V"
-run "$MCSCRIPT bench.lua flavor=none        $MCSCRIPT_DEFS $DIR"
-run "$MCSCRIPT bench.lua flavor=posix_files $MCSCRIPT_DEFS $DIR"
-run "$MCSCRIPT bench.lua flavor=posix_dir   $MCSCRIPT_DEFS $DIR"
-run "$MCSCRIPT bench.lua flavor=files       $MCSCRIPT_DEFS $DIR"
-#run "$MCSCRIPT bench.lua flavor=opendir     $MCSCRIPT_DEFS $DIR"
-#run "$MCSCRIPT bench.lua flavor=dir         $MCSCRIPT_DEFS $DIR"
-#run "$MCSCRIPT bench.lua flavor=glob        $MCSCRIPT_DEFS $DIR"
+run "$MCSCRIPT bench.mcs flavor=none        $MCSCRIPT_DEFS $DIR"
+run "$MCSCRIPT bench.mcs flavor=posix_files $MCSCRIPT_DEFS $DIR"
+run "$MCSCRIPT bench.mcs flavor=posix_dir   $MCSCRIPT_DEFS $DIR"
+run "$MCSCRIPT bench.mcs flavor=files       $MCSCRIPT_DEFS $DIR"
+#run "$MCSCRIPT bench.mcs flavor=opendir     $MCSCRIPT_DEFS $DIR"
+#run "$MCSCRIPT bench.mcs flavor=dir         $MCSCRIPT_DEFS $DIR"
+#run "$MCSCRIPT bench.mcs flavor=glob        $MCSCRIPT_DEFS $DIR"
 
 run "$RUBY bench.rb"
 run "$RUBY bench.rb --flavor default        $RUBY_DEFS $DIR"
