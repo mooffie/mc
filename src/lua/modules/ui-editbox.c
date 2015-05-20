@@ -39,7 +39,7 @@ edit_constructor (void)
 {
     Widget *w;
 
-    w = (Widget *) edit_init (NULL, 1, 1, 5, 20, NULL, 1);
+    w = WIDGET (edit_init (NULL, 1, 1, 5, 20, NULL, 1));
     /* FIXME: edit_init() itself should do the following. See comment
      * in editwidget.h. And since we don't bother setting w->mouse here as
      * well, we don't have mouse support. */
@@ -356,13 +356,13 @@ l_edit_get_current_char (lua_State * L)
 #ifdef HAVE_CHARSET
     if (edit->utf8)
     {
-        int cw;
+        int char_length;
         int unicode;
 
-        unicode = edit_buffer_get_utf (&edit->buffer, start, &cw);
-        if (cw > 1)             /* "cw > 0" would be fine. The "> 1" is optimization. */
+        unicode = edit_buffer_get_utf (&edit->buffer, start, &char_length);
+        if (char_length > 1)    /* "char_length > 0" would be fine. The "> 1" is optimization. */
         {
-            luaUI_editbox_pushstring (L, edit, start, start + cw);
+            luaUI_editbox_pushstring (L, edit, start, start + char_length);
             lua_pushinteger (L, unicode);
             return 2;
         }

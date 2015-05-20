@@ -1,11 +1,11 @@
 #
-# LUA Scripting Language syntax highlight
+# Lua syntax highlighting
 #
 # History:
 #
-# - 2015: support for long strings and long comments.
-# - 2011: string-literal fixes by Sergei Trofimovich.
-# - 2005: started by Mike Gorchak <lestat@i.com.ua>
+# - 2015: Support for long strings and long comments.
+# - 2011: String-literal fixes.
+# - 2005: Started by Mike Gorchak <lestat@i.com.ua>
 
 context default lightgray
 

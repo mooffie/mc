@@ -265,7 +265,7 @@ l_current_widget (lua_State * L)
                 w = NULL;
 
             if (!w && dlg == midnight_dlg && command_prompt && STREQ (widget_type, "Input"))
-                w = (Widget *) cmdline;
+                w = WIDGET (cmdline);
         }
     }
 

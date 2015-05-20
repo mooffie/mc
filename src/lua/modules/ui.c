@@ -545,7 +545,7 @@ l_widget_set_pos_flags (lua_State * L)
  */
 
 /* *INDENT-OFF* */
-static const struct luaL_Reg ui_widget_lib[] = {
+static const struct luaL_Reg ui_widget_methods_lib[] = {
     { "init", l_widget_init },
     { "get_x", l_widget_get_x },
     { "set_x", l_widget_set_x },
@@ -647,8 +647,8 @@ btn_callback (struct WButton *button, int action)
 static Widget *
 button_constructor (void)
 {
-    return (Widget *) button_new (5, 5, B_USER /* isn't used */ , NORMAL_BUTTON,
-                                  NULL, btn_callback);
+    return WIDGET (button_new (5, 5, B_USER /* isn't used */ , NORMAL_BUTTON,
+                               NULL, btn_callback));
 }
 
 static int
@@ -712,7 +712,7 @@ static const struct luaL_Reg ui_button_static_lib[] = {
     { NULL, NULL }
 };
 
-static const struct luaL_Reg ui_button_lib[] = {
+static const struct luaL_Reg ui_button_methods_lib[] = {
     { "set_text", l_button_set_text },
     { "get_text", l_button_get_text },
     { "set_type", l_button_set_type },
@@ -722,7 +722,7 @@ static const struct luaL_Reg ui_button_lib[] = {
 
 /* ------------------------------ Checkbox -------------------------------- */
 
-#define LUA_TO_CHECKBOX(L, i) ((WCheck *) luaUI_check_widget (L, i))
+#define LUA_TO_CHECKBOX(L, i) (CHECK (luaUI_check_widget (L, i)))
 
 /**
  * Checkbox widget.
@@ -732,7 +732,7 @@ static const struct luaL_Reg ui_button_lib[] = {
 static Widget *
 checkbox_constructor (void)
 {
-    return (Widget *) check_new (5, 5, 0, NULL);
+    return WIDGET (check_new (5, 5, 0, NULL));
 }
 
 static int
@@ -847,7 +847,7 @@ static const struct luaL_Reg ui_checkbox_static_lib[] = {
     { NULL, NULL }
 };
 
-static const struct luaL_Reg ui_checkbox_lib[] = {
+static const struct luaL_Reg ui_checkbox_methods_lib[] = {
     { "get_checked", l_checkbox_get_checked },
     { "set_checked", l_checkbox_set_checked },
     { "set_text", l_checkbox_set_text },
@@ -868,7 +868,7 @@ static const struct luaL_Reg ui_checkbox_lib[] = {
 static Widget *
 label_constructor (void)
 {
-    return (Widget *) label_new (0, 0, NULL);
+    return WIDGET (label_new (0, 0, NULL));
 }
 
 static int
@@ -945,7 +945,7 @@ static const struct luaL_Reg ui_label_static_lib[] = {
     { NULL, NULL }
 };
 
-static const struct luaL_Reg ui_label_lib[] = {
+static const struct luaL_Reg ui_label_methods_lib[] = {
     { "set_text", l_label_set_text },
     { "get_text", l_label_get_text },
     { "set_auto_size", l_set_auto_size },
@@ -955,7 +955,7 @@ static const struct luaL_Reg ui_label_lib[] = {
 
 /* ------------------------------- Input ---------------------------------- */
 
-#define LUA_TO_INPUT(L, i) ((WInput *) luaUI_check_widget (L, i))
+#define LUA_TO_INPUT(L, i) (INPUT (luaUI_check_widget (L, i)))
 
 /**
  * Input widget.
@@ -965,8 +965,7 @@ static const struct luaL_Reg ui_label_lib[] = {
 static Widget *
 input_constructor (void)
 {
-    return (Widget *) input_new (0, 0, input_colors, 10,
-                                 NULL, NULL, INPUT_COMPLETE_NONE);
+    return WIDGET (input_new (0, 0, input_colors, 10, NULL, NULL, INPUT_COMPLETE_NONE));
 }
 
 static int
@@ -1186,7 +1185,7 @@ static const struct luaL_Reg ui_input_static_lib[] = {
     { NULL, NULL }
 };
 
-static const struct luaL_Reg ui_input_lib[] = {
+static const struct luaL_Reg ui_input_methods_lib[] = {
     { "insert", l_input_insert },
     { "set_cols", l_input_set_cols },
     { "set_text", l_input_set_text },
@@ -1221,7 +1220,7 @@ static const struct luaL_Reg ui_input_lib[] = {
 static Widget *
 groupbox_constructor (void)
 {
-    return (Widget *) groupbox_new (0, 0, 5, 40, NULL);
+    return WIDGET (groupbox_new (0, 0, 5, 40, NULL));
 }
 
 static int
@@ -1260,7 +1259,7 @@ static const struct luaL_Reg ui_groupbox_static_lib[] = {
     { NULL, NULL }
 };
 
-static const struct luaL_Reg ui_groupbox_lib[] = {
+static const struct luaL_Reg ui_groupbox_methods_lib[] = {
     { "set_text", l_groupbox_set_text },
     { "get_text", l_groupbox_get_text },
     { NULL, NULL }
@@ -1269,7 +1268,7 @@ static const struct luaL_Reg ui_groupbox_lib[] = {
 
 /* ------------------------------ Listbox --------------------------------- */
 
-#define LUA_TO_LISTBOX(L, i) ((WListbox *) luaUI_check_widget (L, i))
+#define LUA_TO_LISTBOX(L, i) (LISTBOX (luaUI_check_widget (L, i)))
 
 /**
  * Listbox widget.
@@ -1310,7 +1309,7 @@ static const struct luaL_Reg ui_groupbox_lib[] = {
 static Widget *
 listbox_constructor (void)
 {
-    return (Widget *) listbox_new (0, 0, 6, 12, FALSE, NULL);
+    return WIDGET (listbox_new (0, 0, 6, 12, FALSE, NULL));
 }
 
 static int
@@ -1415,7 +1414,7 @@ process_list (lua_State * L, item_processor f, void *data)
 static void
 add_to_listbox (void *data, const char *label, long keycode)
 {
-    WListbox *lst = (WListbox *) data;
+    WListbox *lst = LISTBOX (data);
 
     listbox_add_item (lst, LISTBOX_APPEND_AT_END, keycode, label, NULL);
 }
@@ -1523,7 +1522,7 @@ static const struct luaL_Reg ui_listbox_static_lib[] = {
     { NULL, NULL }
 };
 
-static const struct luaL_Reg ui_listbox_lib[] = {
+static const struct luaL_Reg ui_listbox_methods_lib[] = {
     { "set_items", l_listbox_set_items },
     { "get_items", l_listbox_get_items },
     { "set_selected_index", l_listbox_set_selected_index },
@@ -1534,7 +1533,7 @@ static const struct luaL_Reg ui_listbox_lib[] = {
 
 /* ------------------------------- Radio ---------------------------------- */
 
-#define LUA_TO_RADIOS(L, i) ((WRadio *) luaUI_check_widget (L, i))
+#define LUA_TO_RADIOS(L, i) (RADIO (luaUI_check_widget (L, i)))
 
 /**
  * Radios widget.
@@ -1548,7 +1547,7 @@ static const struct luaL_Reg ui_listbox_lib[] = {
 static Widget *
 radios_constructor (void)
 {
-    return (Widget *) radio_new (0, 0, 0, NULL);
+    return WIDGET (radio_new (0, 0, 0, NULL));
 }
 
 static int
@@ -1690,7 +1689,7 @@ static const struct luaL_Reg ui_radios_static_lib[] = {
     { NULL, NULL }
 };
 
-static const struct luaL_Reg ui_radios_lib[] = {
+static const struct luaL_Reg ui_radios_methods_lib[] = {
     { "set_items", l_radios_set_items },
     { "get_items", l_radios_get_items },
     { "set_selected_index", l_radios_set_selected_index },
@@ -1701,7 +1700,7 @@ static const struct luaL_Reg ui_radios_lib[] = {
 
 /* ------------------------------ Gauge ----------------------------------- */
 
-#define LUA_TO_GAUGE(L, i) ((WGauge *) luaUI_check_widget (L, i))
+#define LUA_TO_GAUGE(L, i) (GAUGE (luaUI_check_widget (L, i)))
 
 /**
  * Gauge widget.
@@ -1720,7 +1719,7 @@ static const struct luaL_Reg ui_radios_lib[] = {
 static Widget *
 gauge_constructor (void)
 {
-    return (Widget *) gauge_new (0, 0, 25, TRUE, 100, 0);
+    return WIDGET (gauge_new (0, 0, 25, TRUE, 100, 0));
 }
 
 static int
@@ -1831,7 +1830,7 @@ static const struct luaL_Reg ui_gauge_static_lib[] = {
     { NULL, NULL }
 };
 
-static const struct luaL_Reg ui_gauge_lib[] = {
+static const struct luaL_Reg ui_gauge_methods_lib[] = {
     { "set_value", l_gauge_set_value },
     { "get_value", l_gauge_get_value },
     { "set_max", l_gauge_set_max },
@@ -1861,7 +1860,7 @@ static const struct luaL_Reg ui_gauge_lib[] = {
 static Widget *
 hline_constructor (void)
 {
-    return (Widget *) hline_new (0, 0, 5);
+    return WIDGET (hline_new (0, 0, 5));
 }
 
 static int
@@ -1906,7 +1905,7 @@ static const struct luaL_Reg ui_hline_static_lib[] = {
     { NULL, NULL }
 };
 
-static const struct luaL_Reg ui_hline_lib[] = {
+static const struct luaL_Reg ui_hline_methods_lib[] = {
     { "set_through", l_hline_set_through },
     { "set_text", l_hline_set_text },
     { "get_text", l_hline_get_text },
@@ -1916,7 +1915,7 @@ static const struct luaL_Reg ui_hline_lib[] = {
 
 /* ----------------------------- Dialog ----------------------------------- */
 
-#define LUA_TO_DIALOG(L, i) ((WDialog *) luaUI_check_widget (L, i))
+#define LUA_TO_DIALOG(L, i) (DIALOG (luaUI_check_widget (L, i)))
 
 /**
  * Dialog widget.
@@ -2265,7 +2264,7 @@ dialog_constructor (void)
                                dialog_colors, ui_dialog_callback,
                                NULL, NULL, NULL, 0);
     dlg->get_title = dlg_title_handler; /* for modaless dialogs. */
-    return (Widget *) dlg;
+    return WIDGET (dlg);
 }
 
 static int
@@ -3031,7 +3030,7 @@ static const struct luaL_Reg ui_dialog_static_lib[] = {
     { NULL, NULL }
 };
 
-static const struct luaL_Reg ui_dialog_lib[] = {
+static const struct luaL_Reg ui_dialog_methods_lib[] = {
     { "_run", l_dialog_run },
     { "_destroy", l_dialog_destroy },
     { "redraw", l_dialog_redraw },
@@ -3132,17 +3131,17 @@ luaopen_ui (lua_State * L)
     lua_pushvalue (L, -1);
     lua_setfield (L, LUA_REGISTRYINDEX, "ui.module");
 
-    create_widget_metatable (L, "Widget", ui_widget_lib, NULL, NULL);
-    create_widget_metatable (L, "Button", ui_button_lib, ui_button_static_lib, "Widget");
-    create_widget_metatable (L, "Label", ui_label_lib, ui_label_static_lib, "Widget");
-    create_widget_metatable (L, "Input", ui_input_lib, ui_input_static_lib, "Widget");
-    create_widget_metatable (L, "Checkbox", ui_checkbox_lib, ui_checkbox_static_lib, "Widget");
-    create_widget_metatable (L, "Groupbox", ui_groupbox_lib, ui_groupbox_static_lib, "Widget");
-    create_widget_metatable (L, "Listbox", ui_listbox_lib, ui_listbox_static_lib, "Widget");
-    create_widget_metatable (L, "Radios", ui_radios_lib, ui_radios_static_lib, "Widget");
-    create_widget_metatable (L, "Gauge", ui_gauge_lib, ui_gauge_static_lib, "Widget");
-    create_widget_metatable (L, "HLine", ui_hline_lib, ui_hline_static_lib, "Widget");
-    create_widget_metatable (L, "Dialog", ui_dialog_lib, ui_dialog_static_lib, "Widget");
+    create_widget_metatable (L, "Widget", ui_widget_methods_lib, NULL, NULL);
+    create_widget_metatable (L, "Button", ui_button_methods_lib, ui_button_static_lib, "Widget");
+    create_widget_metatable (L, "Label", ui_label_methods_lib, ui_label_static_lib, "Widget");
+    create_widget_metatable (L, "Input", ui_input_methods_lib, ui_input_static_lib, "Widget");
+    create_widget_metatable (L, "Checkbox", ui_checkbox_methods_lib, ui_checkbox_static_lib, "Widget");
+    create_widget_metatable (L, "Groupbox", ui_groupbox_methods_lib, ui_groupbox_static_lib, "Widget");
+    create_widget_metatable (L, "Listbox", ui_listbox_methods_lib, ui_listbox_static_lib, "Widget");
+    create_widget_metatable (L, "Radios", ui_radios_methods_lib, ui_radios_static_lib, "Widget");
+    create_widget_metatable (L, "Gauge", ui_gauge_methods_lib, ui_gauge_static_lib, "Widget");
+    create_widget_metatable (L, "HLine", ui_hline_methods_lib, ui_hline_static_lib, "Widget");
+    create_widget_metatable (L, "Dialog", ui_dialog_methods_lib, ui_dialog_static_lib, "Widget");
 
     luaMC_new_weak_table (L, "v,k");
     lua_setfield (L, LUA_REGISTRYINDEX, "ui.weak");

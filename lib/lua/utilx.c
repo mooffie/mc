@@ -20,7 +20,7 @@ mc_lua_current_widget (WDialog * dlg)
 {
     if (dlg->current)
     {
-        Widget *w = (Widget *) dlg->current->data;
+        Widget *w = WIDGET (dlg->current->data);
 
         if (w->lua_class_name)
             return w;

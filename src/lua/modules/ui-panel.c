@@ -25,7 +25,7 @@
 
 
 /* See comment for LUA_TO_BUTTON, in ui.c */
-#define LUA_TO_PANEL(L, i) ((WPanel *) luaUI_check_widget (L, i))
+#define LUA_TO_PANEL(L, i) (PANEL (luaUI_check_widget (L, i)))
 
 /* Our own flavor of midnight.c:update_dirty_panels(). */
 static void
