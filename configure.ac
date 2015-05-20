@@ -396,9 +396,13 @@ fi
 
 AM_CONDITIONAL(USE_LUA, [test -n "$with_lua"])
 
+dnl The version of *our* API. Change this whenever you break compatibility. It's embedded in directory names.
+AC_SUBST([MC_LUA_API_VERSION], [0.1])
+AC_DEFINE_UNQUOTED([MC_LUA_API_VERSION], ["$MC_LUA_API_VERSION"], [Version string of the Lua API we expose to users.])
+
 dnl Where system Lua scripts are kept:
-AC_SUBST([mcluasystemdir], ['${libexecdir}/${PACKAGE}/lua'])
-dnl (see http://stackoverflow.com/questions/3538705/adding-a-custom-installation-directory-option-to-autoconf-generated-configure-sc )
+AC_SUBST([mcluasystemdir], ['${libexecdir}/${PACKAGE}/lua-${MC_LUA_API_VERSION}'])
+dnl (see http://stackoverflow.com/questions/3538705/adding-a-custom-installation-directory-option-to-autoconf)
 
 dnl ############################################################################
 dnl MC options

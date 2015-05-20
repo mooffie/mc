@@ -75,7 +75,7 @@ mc_lua_user_dir (void)
     if (!dir)
     {
         if (!(dir = g_strdup (g_getenv ("MC_LUA_USER_DIR"))))
-            dir = g_build_filename (mc_config_get_data_path (), "lua", NULL);
+            dir = g_build_filename (mc_config_get_data_path (), "lua-" MC_LUA_API_VERSION, NULL);
     }
     return dir;
 }
