@@ -226,7 +226,7 @@ l_register_field (lua_State * L)
         "size", "mtime", "atime",
         "ctime", "inode", "unsorted", NULL
     };
-    static GCompareFunc sort[] = {
+    static GCompareFunc sort_values[] = {
         (GCompareFunc) sort_name, (GCompareFunc) sort_vers, (GCompareFunc) sort_ext,
         (GCompareFunc) sort_size, (GCompareFunc) sort_time, (GCompareFunc) sort_atime,
         (GCompareFunc) sort_ctime, (GCompareFunc) sort_inode, (GCompareFunc) unsorted
@@ -264,7 +264,7 @@ l_register_field (lua_State * L)
     {
         if (lua_type (L, 8) == LUA_TSTRING)
             /* It's a name of a built-in sort function. */
-            field.sort_routine = sort[luaL_checkoption (L, 8, NULL, sort_names)];
+            field.sort_routine = luaMC_checkoption (L, 8, NULL, sort_names, sort_values);
         else
             field.sort_routine = (GCompareFunc) sort_multiplex;
         field.is_user_choice = TRUE;

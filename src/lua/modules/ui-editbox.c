@@ -1001,7 +1001,7 @@ l_edit_add_keyword (lua_State * L)
 {
     static const char *const range_names[] =
         { "default", "all", "spellcheck", "!spellcheck", NULL };
-    static int ranges[] =
+    static int range_values[] =
         { RANGE_TYPE_DEFAULT, RANGE_TYPE_ANY, RANGE_TYPE_SPELLCHECK, RANGE_TYPE_NOT_SPELLCHECK };
 
     WEdit *edit;
@@ -1015,7 +1015,7 @@ l_edit_add_keyword (lua_State * L)
     s = luaL_checkstring (L, 2);
     left = luaL_optstring (L, 3, NULL);
     right = luaL_optstring (L, 4, NULL);
-    range = ranges[luaL_checkoption (L, 5, NULL, range_names)];
+    range = luaMC_checkoption (L, 5, NULL, range_names, range_values);
     style = luaL_checkint (L, 6);
 
     lua_pushboolean (L, edit_add_syntax_keyword (edit, s, left, right, range, style));

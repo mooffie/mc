@@ -896,12 +896,12 @@ luaTTY_check_align (lua_State * L, int idx)
         "left", "right", "center", "center or left",
         "left~", "right~", "center~", "center or left~", NULL
     };
-    static const align_crt_t just[] = {
+    static const align_crt_t just_values[] = {
         J_LEFT, J_RIGHT, J_CENTER, J_CENTER_LEFT,
         J_LEFT_FIT, J_RIGHT_FIT, J_CENTER_FIT, J_CENTER_LEFT_FIT
     };
 
-    return just[luaL_checkoption (L, idx, NULL, just_names)];
+    return luaMC_checkoption (L, idx, NULL, just_names, just_values);
 }
 
 /**

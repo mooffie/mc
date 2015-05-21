@@ -127,23 +127,23 @@ gboolean luaMC_pcall (lua_State * L, int nargs, int nresults);
 #endif
 
 #if !defined(HAVE_LUAL_CHECKUNSIGNED) && !defined(luaL_checkunsigned)
-#define luaL_checkunsigned(L, i) ((guint32)luaL_checkinteger(L, i))
+#define luaL_checkunsigned(L, i) ((guint32) luaL_checkinteger (L, i))
 #endif
 
 #if !defined(HAVE_LUAL_CHECKINT) && !defined(luaL_checkint)
-#define luaL_checkint(L, n) ((int)luaL_checkinteger(L, n))
+#define luaL_checkint(L, n) ((int) luaL_checkinteger (L, n))
 #endif
 
 #if !defined(HAVE_LUAL_CHECKLONG) && !defined(luaL_checklong)
-#define luaL_checklong(L, n) ((long)luaL_checkinteger(L, n))
+#define luaL_checklong(L, n) ((long) luaL_checkinteger (L, n))
 #endif
 
 #if !defined(HAVE_LUAL_OPTINT) && !defined(luaL_optint)
-#define luaL_optint(L, n, d) ((int)luaL_optinteger(L, n, d))
+#define luaL_optint(L, n, d) ((int) luaL_optinteger (L, n, d))
 #endif
 
 #if !defined(HAVE_LUAL_OPTLONG) && !defined(luaL_optlong)
-#define luaL_optlong(L, n, d) ((long)luaL_optinteger(L, n, d))
+#define luaL_optlong(L, n, d) ((long) luaL_optinteger (L, n, d))
 #endif
 
 /* ---------------------- Stuff missing from Lua 5.1 ---------------------- */
@@ -174,7 +174,7 @@ void luaL_newlib (lua_State * L, const luaL_Reg * l);
 #endif
 
 #ifndef HAVE_LUAL_SETFUNCS
-#define luaL_setfuncs(L, l, n) luaL_register(L, NULL, l)
+#define luaL_setfuncs(L, l, n) (luaL_register (L, NULL, l))
 #endif
 
 /* --------------------- Borrowings from Lua 5.1 -------------------------- */
@@ -198,6 +198,8 @@ void luaMC_register_metatable (lua_State * L, const char *tname, const luaL_Reg 
 void luaMC_requiref (lua_State * L, const char *modname, lua_CFunction openf);
 
 /* -------------------------- Programming aids ---------------------------- */
+
+#define luaMC_checkoption(L, n, def, names, values) values[ luaL_checkoption (L, n, def, names) ]
 
 off_t mc_lua_fixup_idx (off_t idx, off_t len, gboolean endpoint);
 void luaMC_checkargcount (lua_State * L, int count, gboolean is_method);

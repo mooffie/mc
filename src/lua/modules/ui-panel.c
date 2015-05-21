@@ -403,14 +403,18 @@ l_set_custom_mini_status_format (lua_State * L)
 static int
 l_set_list_type (lua_State * L)
 {
-    static const char *const lt_names[] = { "full", "brief", "long", "custom", NULL };
-    static const int lt_types[] = { list_full, list_brief, list_long, list_user };
+    static const char *const lt_names[] = {
+        "full", "brief", "long", "custom", NULL
+    };
+    static const int lt_values[] = {
+        list_full, list_brief, list_long, list_user
+    };
 
     WPanel *panel;
     int list_type;
 
     panel = LUA_TO_PANEL (L, 1);
-    list_type = lt_types[luaL_checkoption (L, 2, NULL, lt_names)];
+    list_type = luaMC_checkoption (L, 2, NULL, lt_names, lt_values);
 
     /* Taken from configure_panel_listing(). */
     panel->list_type = list_type;

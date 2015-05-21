@@ -110,7 +110,7 @@ l_hash (lua_State * L)
     static const char *const algo_names[] = {
         "md5", "sha1", "sha256", "sha512", NULL
     };
-    static GChecksumType algo_vals[] = {
+    static GChecksumType algo_values[] = {
         G_CHECKSUM_MD5, G_CHECKSUM_SHA1, G_CHECKSUM_SHA256, G_CHECKSUM_SHA512
     };
 
@@ -118,7 +118,7 @@ l_hash (lua_State * L)
     const char *data;
     size_t len;
 
-    algo = algo_vals[luaL_checkoption (L, 1, NULL, algo_names)];
+    algo = luaMC_checkoption (L, 1, NULL, algo_names, algo_values);
     data = luaL_checklstring (L, 2, &len);
 
     luaMC_pushstring_and_free (L, g_compute_checksum_for_data (algo, (const guchar *) data, len));

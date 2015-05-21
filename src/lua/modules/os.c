@@ -67,7 +67,7 @@ l_getpid (lua_State * L)
  *
  * __signal__ is either an integer or a signal name (such as "SIGKILL",
  * "SIGSTOP", etc.). Zero means to check for `pid` existance. If missing,
- * defaults to SIGTERM.
+ * defaults to "SIGTERM".
  *
  * __Returns:__
  *
@@ -79,11 +79,11 @@ l_getpid (lua_State * L)
 static int
 l_kill (lua_State * L)
 {
-    static const char *const signames[] = {
+    static const char *const sig_names[] = {
         "SIGHUP", "SIGINT", "SIGKILL", "SIGUSR1", "SIGUSR2",
         "SIGTERM", "SIGCONT", "SIGSTOP", "SIGWINCH", NULL
     };
-    static int sigvals[] = {
+    static int sig_values[] = {
         SIGHUP, SIGINT, SIGKILL, SIGUSR1, SIGUSR2,
         SIGTERM, SIGCONT, SIGSTOP, SIGWINCH
     };
@@ -92,10 +92,10 @@ l_kill (lua_State * L)
     int sig;
 
     pid = luaL_checki (L, 1);
-    sig =
-        lua_isnumber (L, 2) ? luaL_checki (L,
-                                           2) : sigvals[luaL_checkoption (L, 2, "SIGTERM",
-                                                                          signames)];
+    if (lua_isnumber (L, 2))
+        sig = luaL_checki (L, 2);
+    else
+        sig = luaMC_checkoption (L, 2, "SIGTERM", sig_names, sig_values);
 
     lua_pushboolean (L, kill (pid, sig) == 0);
 

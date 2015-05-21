@@ -689,14 +689,18 @@ l_button_get_text (lua_State * L)
 static int
 l_button_set_type (lua_State * L)
 {
-    static const char *const opts[] = { "hidden", "narrow", "normal", "default", NULL };
-    static const int optsnum[] = { HIDDEN_BUTTON, NARROW_BUTTON, NORMAL_BUTTON, DEFPUSH_BUTTON };
+    static const char *const type_names[] = {
+        "hidden", "narrow", "normal", "default", NULL
+    };
+    static const int type_values[] = {
+        HIDDEN_BUTTON, NARROW_BUTTON, NORMAL_BUTTON, DEFPUSH_BUTTON
+    };
 
     WButton *btn;
 
     btn = LUA_TO_BUTTON (L, 1);
 
-    btn->flags = optsnum[luaL_checkoption (L, 2, NULL, opts)];
+    btn->flags = luaMC_checkoption (L, 2, NULL, type_names, type_values);
 
     /* We re-set the label so the button's size gets calculated anew. */
     lua_settop (L, 1);
@@ -2383,14 +2387,18 @@ l_dialog_get_on_idle (lua_State * L)
 static int
 l_dialog_set_colorset (lua_State * L)
 {
-    static const char *const colorset_names[] = { "normal", "alarm", "pmenu", NULL };
-    static const int *colorsets[] = { dialog_colors, alarm_colors, listbox_colors };
+    static const char *const colorset_names[] = {
+        "normal", "alarm", "pmenu", NULL
+    };
+    static const int *colorset_values[] = {
+        dialog_colors, alarm_colors, listbox_colors
+    };
 
     WDialog *dlg;
 
     dlg = LUA_TO_DIALOG (L, 1);
 
-    dlg->color = colorsets[luaL_checkoption (L, 2, NULL, colorset_names)];
+    dlg->color = luaMC_checkoption (L, 2, NULL, colorset_names, colorset_values);
 
     dlg_redraw (dlg);           /* In case the user changes the colorset of an active dialog. */
 

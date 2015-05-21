@@ -598,7 +598,7 @@ static int
 l_nonvfs_access (lua_State * L)
 {
     static const char *const mode_names[] = { "r", "w", "x", "", NULL };
-    static int modes[] = { R_OK, W_OK, X_OK, F_OK };
+    static int mode_values[] = { R_OK, W_OK, X_OK, F_OK };
 
     vpath_argument *vpath;
     int mode;
@@ -607,7 +607,7 @@ l_nonvfs_access (lua_State * L)
     int result;
 
     vpath = get_vpath_argument (L, 1);
-    mode = modes[luaL_checkoption (L, 2, NULL, mode_names)];
+    mode = luaMC_checkoption (L, 2, NULL, mode_names, mode_values);
     result =
         vfs_file_is_local (vpath->vpath) ? access (vpath->vpath->str, mode) : mc_stat (vpath->vpath,
                                                                                        &sb);
