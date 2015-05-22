@@ -356,7 +356,7 @@ main (int argc, char *argv[])
     if (mc_global.mc_run_mode == MC_RUN_SCRIPT)
     {
         /* Standalone mode: we're to run the script given on the command line. */
-        int result;
+        mc_lua_script_result_t result;
 
         result = mc_lua_run_script ((char *) mc_run_param0);
 

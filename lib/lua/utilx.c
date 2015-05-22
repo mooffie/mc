@@ -13,7 +13,7 @@
  * Returns a dialog's current widget.
  *
  * Since it's intended for use by Lua, we only care about widgets that
- * can be represented in Lua (that is, have lua_class_name).
+ * can be represented in Lua (that is, have scripting_class_name).
  */
 Widget *
 mc_lua_current_widget (WDialog * dlg)
@@ -22,7 +22,7 @@ mc_lua_current_widget (WDialog * dlg)
     {
         Widget *w = WIDGET (dlg->current->data);
 
-        if (w->lua_class_name)
+        if (w->scripting_class_name)
             return w;
     }
 

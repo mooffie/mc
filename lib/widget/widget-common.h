@@ -105,7 +105,23 @@ struct Widget
     mouse_h mouse;
     void (*set_options) (Widget * w, widget_options_t options, gboolean enable);
     struct WDialog *owner;
-    const char *lua_class_name;
+
+    /*
+     * To be able to convert a Widget to a scriptable object, we have to
+     * know its type (aka "class"). This member serves this purpose.
+     *
+     * We currently use a string, for simplicity.
+     *
+     * In the future we'll probably change this to a numeric ID. This will
+     * make the code a tad more complex, which is why we postpone this task,
+     * because we currently want the simplest code, for the benefit of
+     * reviewers.
+     *
+     * (Using strings has a flaw: we have to settle on the names used in one
+     * scripting engine (Lua). Somebody designing, say, a Python support may
+     * want to name his classes differently.)
+     */
+    const char *scripting_class_name;
 };
 
 /* structure for label (caption) with hotkey, if original text does not contain

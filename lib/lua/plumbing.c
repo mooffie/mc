@@ -326,7 +326,7 @@ mc_lua_ui_is_ready (void)
  * calling mc_lua_run_script() again with a NULL filename) when the UI is
  * ready.
  */
-int
+mc_lua_script_result_t
 mc_lua_run_script (const char *pathname)
 {
     if (luaMC_get_system_callback (Lg, "mcscript::run_script"))

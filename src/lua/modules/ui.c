@@ -580,9 +580,9 @@ static const struct luaL_Reg ui_widget_methods_lib[] = {
  * macro to read 'self' and it can be the wrong type only if the user
  * consciously tries to be a wise guy. It's his own responsibility then.
  *
- * EDIT: Well, there's no real performance penalty to use
+ * EDIT: Well, there's no real performance penalty when using
  * luaUI_check_widget_ex(). We probably ought to make
- * widget->lua_class_name an integer anyway.
+ * widget->scripting_class_name an integer anyway.
  */
 #define LUA_TO_BUTTON(L, i) (BUTTON (luaUI_check_widget (L, i)))
 

@@ -41,10 +41,14 @@ gboolean mc_lua_ui_is_ready (void);
 
 /* --------------------------- mcscript-related --------------------------- */
 
-#define MC_LUA_SCRIPT_RESULT_CONTINUE     0
-#define MC_LUA_SCRIPT_RESULT_FINISH       1
-#define MC_LUA_SCRIPT_RESULT_ERROR        2
-int mc_lua_run_script (const char *filename);
+typedef enum
+{
+    MC_LUA_SCRIPT_RESULT_CONTINUE,
+    MC_LUA_SCRIPT_RESULT_FINISH,
+    MC_LUA_SCRIPT_RESULT_ERROR
+} mc_lua_script_result_t;
+
+mc_lua_script_result_t mc_lua_run_script (const char *filename);
 void mc_lua_create_argv (const char *script_path, int argc, char **argv, int offs);
 
 #endif /* MC__LUA_PLUMBING_H */

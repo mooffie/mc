@@ -261,7 +261,7 @@ l_current_widget (lua_State * L)
 
         if (widget_type)
         {
-            if (w && !STREQ (widget_type, w->lua_class_name))
+            if (w && !STREQ (widget_type, w->scripting_class_name))
                 w = NULL;
 
             if (!w && dlg == midnight_dlg && command_prompt && STREQ (widget_type, "Input"))
