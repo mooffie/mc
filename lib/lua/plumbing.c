@@ -55,13 +55,15 @@ const char *
 mc_lua_system_dir (void)
 {
     static const char *dir = NULL;
-    if (!dir)
+
+    if (dir == NULL)
     {
         /* getenv()'s returned pointer may be overwritten (by next getenv) or
          * invalidated (by putenv), so we make a copy with strdup(). */
-        if (!(dir = g_strdup (g_getenv ("MC_LUA_SYSTEM_DIR"))))
-            dir = MC_LUA_SYSTEM_DIR;
+        if ((dir = g_strdup (g_getenv (MC_LUA_SYSTEM_DIR__ENVAR))) == NULL)
+            dir = MC_LUA_SYSTEM_DIR;    /* Defined in Makefile.am. */
     }
+
     return dir;
 }
 
@@ -72,11 +74,13 @@ const char *
 mc_lua_user_dir (void)
 {
     static const char *dir = NULL;
-    if (!dir)
+
+    if (dir == NULL)
     {
-        if (!(dir = g_strdup (g_getenv ("MC_LUA_USER_DIR"))))
+        if ((dir = g_strdup (g_getenv (MC_LUA_USER_DIR__ENVAR))) == NULL)
             dir = g_build_filename (mc_config_get_data_path (), "lua-" MC_LUA_API_VERSION, NULL);
     }
+
     return dir;
 }
 
@@ -106,8 +110,8 @@ ui_is_ready_handler (const gchar * event_group_name, const gchar * event_name,
                    "%s and populate it with some scripts.\n"
                    "\n"
                    "Alternatively, if you don't wish to install MC, you may point me\n"
-                   "to the Lua folder by the MC_LUA_SYSTEM_DIR environment variable."),
-                 mc_lua_system_dir ());
+                   "to the Lua folder by the %s environment variable."),
+                 mc_lua_system_dir (), MC_LUA_SYSTEM_DIR__ENVAR);
     }
 
     /* Inform scripts that want to know about this. */
@@ -173,6 +177,8 @@ restart (void)
     mc_lua_trigger_event ("core::before-restart");
     mc_lua_shutdown ();
 
+    /* and back on: */
+
     mc_lua_init ();
     mc_lua_load ();
     mc_lua_trigger_event ("core::after-restart");
@@ -203,7 +209,7 @@ check_for_restart (void)
 
         /*
          * It's only safe for us to restart Lua when the stack is
-         * empty. Why? Imagine any of the following:
+         * empty. Why? Imagine either of the following:
          *
          *    keymap.bind('C-y', function()
          *      ui.Dialog():run()

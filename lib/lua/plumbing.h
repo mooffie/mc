@@ -7,11 +7,17 @@
 
 /* -------------------------- Meta information ---------------------------- */
 
+/* Names of environment variables with which user can override directory paths. */
+#define MC_LUA_SYSTEM_DIR__ENVAR "MC_LUA_SYSTEM_DIR"
+#define MC_LUA_USER_DIR__ENVAR "MC_LUA_USER_DIR"
+
 const char *mc_lua_engine_name (void);
 const char *mc_lua_system_dir (void);
 const char *mc_lua_user_dir (void);
 
 /* ----------------------------- Start/stop ------------------------------- */
+
+#define MCEVENT_GROUP_LUA "Lua" /* used for mc_event_add(), mc_event_raise(). */
 
 void mc_lua_init (void);
 void mc_lua_load (void);
@@ -20,8 +26,6 @@ void mc_lua_shutdown (void);
 
 void mc_lua_request_restart (void);
 gboolean mc_lua_is_restarting (void);
-
-#define MCEVENT_GROUP_LUA  "Lua"        /* used for mc_event_add(), mc_event_raise(). */
 
 /* ------------------------------- Runtime -------------------------------- */
 

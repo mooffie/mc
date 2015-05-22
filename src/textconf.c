@@ -242,7 +242,7 @@ show_datadirs_extended (void)
 #ifdef ENABLE_LUA
     printf ("\n");
     printf (_("(You may override Lua's default script directories with the\n"
-              "environment variables %s and %s.)\n"), "MC_LUA_SYSTEM_DIR", "MC_LUA_USER_DIR");
+              "environment variables %s and %s.)\n"), MC_LUA_SYSTEM_DIR__ENVAR, MC_LUA_USER_DIR__ENVAR);
 #endif
 }
 
