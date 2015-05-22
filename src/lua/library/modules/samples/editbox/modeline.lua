@@ -54,12 +54,13 @@ local M = {}
 M.debug_level = 1
 
 -- A table converting emacs/vim syntax names to that of MC.
+-- The keys must be in lowercase.
 M.syntax_conversion = {
   cpp = 'c++',                 -- vim
   ['shell-script'] = 'shell',  -- emacs
   sh = 'shell',                -- vim
   scheme = 'lisp',
-  automake = 'm4',
+  autoconf = 'm4',
   -- Feel free to add more, and please mail your changes to us.
 }
 
@@ -139,7 +140,7 @@ local function process_modeline(edt, mod, is_emacs)
 
   if syntax then
     local canon_syntax = ui.Editbox.search_syntax(
-      M.syntax_conversion[syntax] or syntax
+      M.syntax_conversion[syntax:lower()] or syntax
     )
     if not canon_syntax then
       if M.debug_level > 0 then

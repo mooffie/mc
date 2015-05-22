@@ -27,7 +27,7 @@ local M = {
 local function drop_shadow(dlg)
 
   -- Don't waste time on full or half-screen dialogs.
-  if dlg.x == 0 then
+  if dlg.cols == tty.get_cols() then
     return
   end
 

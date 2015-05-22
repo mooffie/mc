@@ -13,10 +13,13 @@ ui.Editbox.bind('<<load>>', function(edt)
   local styles = {
     typename = tty.style 'yellow',
     api      = tty.style 'magenta,,bold',
+    special  = tty.style 'white',
   }
 
-  local function typ(name)  edt:add_keyword(name, styles.typename)   end
-  local function api(name)  edt:add_keyword(name, styles.api)        end
+  local function typename(name)  edt:add_keyword(name, styles.typename)   end
+  local function api(name)       edt:add_keyword(name, styles.api)        end
+  local function special(name)   edt:add_keyword(name, styles.special)    end
+  local typ = typename
 
   typ 'gboolean'
   typ 'gchar'
@@ -25,5 +28,8 @@ ui.Editbox.bind('<<load>>', function(edt)
   api 'g_new'
   api 'g_new0'
   api 'g_free'
+
+  special 'TRUE'
+  special 'FALSE'
 
 end)
