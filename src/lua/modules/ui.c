@@ -930,7 +930,7 @@ l_label_get_text (lua_State * L)
  *      ui.Dialog():add(ui.Groupbox():add(lst), lbl):run()
  *    end
  *
- * See another example in @{git:ui_filechooser.lua}.
+ * See another example in @{git:ui_filechooser.mcs}.
  *
  * @attr label.auto_size
  * @property w
@@ -1216,7 +1216,7 @@ static const struct luaL_Reg ui_input_methods_lib[] = {
  * child widgets. You add widgets to it using its @{add|:add()} method. You
  * can even add child groupboxes to it.
  *
- * See example in @{git:ui_groupboxes.lua}.
+ * See example in @{git:ui_groupboxes.mcs}.
  *
  * @section groupbox
  */
@@ -1513,7 +1513,7 @@ l_listbox_get_items (lua_State * L)
  *
  * Called when the user changes the selection in the listbox.
  *
- * See example in @{git:ui_filechooser.lua}.
+ * See example in @{git:ui_filechooser.mcs}.
  *
  * @method listbox:on_change
  * @args (self)

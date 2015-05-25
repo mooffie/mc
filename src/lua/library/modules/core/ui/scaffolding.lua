@@ -106,7 +106,7 @@ This `meta` table is very similar to JavaScript's `prototype` property:
 [/info]
 
 Tip-short: For more examples, see @{git:samples/ui/extlabel.lua} and
-@{git:tests/nonauto/ui_subclass.lua}.
+@{git:tests/nonauto/ui_subclass.mcs}.
 
 @function subclass
 @args (new_class_name)

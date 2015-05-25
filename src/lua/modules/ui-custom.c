@@ -8,7 +8,7 @@ your own custom widget.
 You yourself decide how to draw it on the screen and how it will respond
 to keyboard and mouse events.
 
-For a sample script that uses a custom widget, see @{git:ui_canvas.lua}.
+For a sample script that uses a custom widget, see @{git:ui_canvas.mcs}.
 
 Tip: There are two ways to use ui.Custom. You can instantiate it and use
 it outright, as shown on these pages, or you can @{ui.subclass|subclass}
@@ -185,7 +185,7 @@ More examples for handling keys:
   @{git:apps/visren/dialog.lua}.
 
 - A canvas's on_key or on_hotkey --
-  @{git:tests/nonauto/ui_canvas.lua|tests/ui_canvas.lua},
+  @{git:tests/nonauto/ui_canvas.mcs|tests/ui_canvas.mcs},
   @{git:screensavers/simplest.lua}, @{git:games/blocks/dialog.lua}.
 
 [/info]
@@ -326,7 +326,7 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
 /**
  * Mouse event handlers.
  *
- * For a sample script that uses mouse events, see @{git:ui_canvas_mouse.lua}.
+ * For a sample script that uses mouse events, see @{git:ui_canvas_mouse.mcs}.
  *
  * @section mouse
  */

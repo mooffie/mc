@@ -153,7 +153,7 @@ require('internal').register_system_callback("timer::execute_ready_timeouts", ex
 -- - stopped - a read-only property telling us whether it's ticking.
 -- - toggle() - calls either stop() or resume().
 --
--- See a complete example in @{git:ui_setinterval.lua}.
+-- See a complete example in @{git:ui_setinterval.mcs}.
 --
 -- @param fn The function to schedule.
 -- @param delay How many milliseconds to wait between invocations.

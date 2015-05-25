@@ -840,7 +840,7 @@ local InputMeta = ui.Input.meta
 --
 -- Called when the user modifies the input box' text.
 --
--- See example in @{git:ui_inputchange.lua}.
+-- See example in @{git:ui_inputchange.mcs}.
 --
 -- @method input:on_change
 -- @args (self)
@@ -885,7 +885,7 @@ InputMeta.__allowed_properties = {
 -- but you can create one yourself. Note, however, that since it was not
 -- foreseen by the core developers that this widget would be used outside
 -- the editor, it has a few problems when used in that fashion. See
--- @{git:editbox_instance.lua}.
+-- @{git:editbox_instance.mcs}.
 --
 -- @function Editbox
 -- @args (...)

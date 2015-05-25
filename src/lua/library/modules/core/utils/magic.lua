@@ -129,7 +129,7 @@ end
 --
 -- This facility is used for @{ui|widgets}. We don't want to encourage its
 -- use outside that realm because it's not very conventional. Therefore we
--- don't provide a usage example here (but see @{git:tests/auto/magic_vbfy.lua}
+-- don't provide a usage example here (but see @{git:tests/auto/magic_vbfy.mcs}
 -- if you want to).
 --
 -- @param meta The meta table.
