@@ -71,3 +71,5 @@ move it outside the dialog; it's not a bug.]]))
 end
 
 test()
+
+-- vim: set ft=lua:

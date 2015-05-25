@@ -145,16 +145,16 @@ Environment variables editor?
    this output is not compatible with earlier versions of bash (or with
    many other shells, probably)."
 
-General
-  A ruler to measure distance (useful in the editor, but also elsewhere).
-
 
 ===== Misc =====
 
-The screenshots currently in ldoc are huge. Here are some to prove there are
-small and pleasant fonts:
+- luaposix ( /usr/share/lua/5.1/posix.lua ) does some arithmetic with timestamps.
+  Perhaps there's some idea there that can help us get rid of timer.c's division?
 
-  http://www.midnight-commander.org/attachment/ticket/122/15480-mcbug.png   (BTW, it shows a panel scrollbar!)
-  http://www.midnight-commander.org/attachment/ticket/3413/mc-info-overflow.png
-  http://www.midnight-commander.org/ticket/1511   (DosNavigator shots. Oh, the nostalgy!)
+- The screenshots currently in ldoc are huge. Here are some to prove there are
+  small and pleasant fonts:
+
+    http://www.midnight-commander.org/attachment/ticket/122/15480-mcbug.png   (BTW, it shows a panel scrollbar!)
+    http://www.midnight-commander.org/attachment/ticket/3413/mc-info-overflow.png
+    http://www.midnight-commander.org/ticket/1511   (DosNavigator shots. Oh, the nostalgy!)
 

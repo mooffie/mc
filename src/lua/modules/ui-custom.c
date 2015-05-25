@@ -446,9 +446,9 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
 /**
  * Mouse move handler.
  *
- * Note: Terminals by default don't trigger the "move" event. Therefore
- * this handler will seem not to work on most systems. Don't lean on this
- * handler in portable code.
+ * Note: MC doesn't currently support this event (see
+ * [here](http://stackoverflow.com/a/5970472/1560821) for a start). Only
+ * mouse @{on_mouse_drag|dragging} is supported.
  *
  * @method on_mouse_move
  * @args (self, x, y, buttons, count)

@@ -17,7 +17,7 @@ trimmed down recipe:
     $ sudo apt-get build-dep mc
     $ git clone https://github.com/mooffie/mc.git
     $ cd mc
-    $ git co lua-4.8.10
+    $ git co lua-4.8.14-port
     $ ./autogen.sh
     $ ./configure --prefix=$HOME/local --with-lua
     $ make

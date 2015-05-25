@@ -36,7 +36,7 @@ Switch to the Lua branch:
 
     @plain
     $ cd mc
-    $ git co lua-4.8.10
+    $ git co lua-4.8.14-port
 
 Run './autogen.sh' to create the configuration script:
 
