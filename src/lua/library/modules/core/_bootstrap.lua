@@ -104,7 +104,12 @@ local function load_all_scripts(dir)
   -- Note: in the future, if we want to support luac files, it could be done in
   -- package.path alone, for modules. Non-module files don't need this feature.
 
-  local files = fs.dir(dir) or {}
+  local files, failure_reason = fs.dir(dir)
+
+  if not files then
+    devel.log(E"I cannot read scripts in this directory: %s":format(failure_reason))
+    return
+  end
 
   -- We sort the files alphabetically.
   --
@@ -120,7 +125,9 @@ local function load_all_scripts(dir)
 
   for _, base in ipairs(files) do
     if base:find "^[^.].*%.lua$" then  -- Exclude files beginning with dot.
-      dofile(dir .. "/" .. base)
+      local path = dir .. "/" .. base
+      devel.log(E"Loading %s":format(path))
+      dofile(path)
     end
   end
 
@@ -129,9 +136,11 @@ end
 -- We're loading the rest of the site in a later stage so that possible
 -- exceptions there don't halt the rest of this script.
 event.bind('core::loaded', function()
-  devel.log(":: Loading user scripts ::")
+  devel.log(":: Loading distro scripts ::")
   load_all_scripts(lua_system_dir)
+  devel.log((":: Loading user scripts (%s) ::"):format(lua_user_dir))
   load_all_scripts(lua_user_dir)
+  devel.log(":: System loaded ::")
 end)
 
 --------------------------- Let users restart Lua ----------------------------

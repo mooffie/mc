@@ -117,6 +117,36 @@ This will bind the `C-q` key (Control q) to a function that popups a
 "Hello World!" message. Restart MC, or, better,
 @{~general#restart|restart Lua only}, and press `C-q`.
 
+[info]
+
+__If something goes wrong...__
+
+- If you have a syntax error in your code, an alert box will appear
+  telling you the number of the offending line. Fix it.
+
+- If nothing seems to happen, make sure you're indeed using the
+  Lua-enabled MC. Run it with `mc -F` or `mc -V` to verify that it's indeed
+  the case.
+
+- If still nothing seems to happen, examine the log:
+
+[indent]
+
+    @plain
+
+    # in one terminal window:
+    $ export MC_LUA_LOG_FILE=~/log.txt
+    $ mc
+
+    # in another terminal window:
+    $ tail -F ~/log.txt
+
+Specifically, look for a line telling you that your script has been loaded.
+
+[/indent]
+
+[/info]
+
 ## What next?
 
 * You can play with the @{~sample|sample applications}.
