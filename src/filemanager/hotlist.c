@@ -856,8 +856,9 @@ hotlist_done (void)
 {
     dlg_destroy (hotlist_dlg);
     l_hotlist = NULL;
-    if (FALSE)
-        update_panels (UP_OPTIMIZE, UP_KEEPSEL);
+#if 0
+    update_panels (UP_OPTIMIZE, UP_KEEPSEL);
+#endif
     repaint_screen ();
 }
 
@@ -1472,7 +1473,7 @@ load_hotlist (void)
         if (!mc_config_save_file (mc_main_config, &mcerror))
             setup_save_config_show_error (mc_main_config->ini_path, &mcerror);
 
-        mc_error_message (&mcerror);
+        mc_error_message (&mcerror, NULL);
     }
 
     stat (hotlist_file_name, &stat_buf);

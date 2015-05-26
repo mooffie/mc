@@ -1378,6 +1378,8 @@ panel_load_setup (WPanel * panel, const char *section)
         }
     g_free (buffer);
 
+    panel->brief_cols = mc_config_get_int (mc_panels_config, section, "brief_cols", 2);
+
     /* User formats */
     g_free (panel->user_format);
     panel->user_format =
@@ -1410,11 +1412,13 @@ panel_save_setup (WPanel * panel, const char *section)
     mc_config_set_string (mc_panels_config, section, "sort_order", panel->sort_field->id);
 
     for (i = 0; list_types[i].key != NULL; i++)
-        if (list_types[i].list_type == panel->list_type)
+        if (list_types[i].list_type == (int) panel->list_type)
         {
             mc_config_set_string (mc_panels_config, section, "list_mode", list_types[i].key);
             break;
         }
+
+    mc_config_set_int (mc_panels_config, section, "brief_cols", panel->brief_cols);
 
     mc_config_set_string (mc_panels_config, section, "user_format", panel->user_format);
 

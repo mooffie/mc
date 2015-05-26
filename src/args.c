@@ -49,9 +49,6 @@
 
 /*** global variables ****************************************************************************/
 
-/* If true, show version info and exit */
-gboolean mc_args__show_version = FALSE;
-
 /* If true, assume we are running on an xterm terminal */
 gboolean mc_args__force_xterm = FALSE;
 
@@ -82,6 +79,9 @@ char *mc_run_param1 = NULL;
 /*** file scope type declarations ****************************************************************/
 
 /*** file scope variables ************************************************************************/
+
+/* If true, show version info and exit */
+static gboolean mc_args__show_version = FALSE;
 
 /* forward declarations */
 static gboolean parse_mc_e_argument (const gchar * option_name, const gchar * value,
@@ -179,15 +179,16 @@ static const GOptionEntry argument_main_table[] = {
     },
 #endif /* ENABLE_VFS_SMB */
 
-    /* single file operations */
     {
-     "view", 'v', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_CALLBACK,
+     /* handle arguments manually */
+     "view", 'v', G_OPTION_FLAG_IN_MAIN | G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
      parse_mc_v_argument,
      N_("Launches the file viewer on a file"),
      "<file>"
     },
 
     {
+     /* handle arguments manually */
      "edit", 'e', G_OPTION_FLAG_IN_MAIN | G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
      parse_mc_e_argument,
      N_("Edit files"),
@@ -195,7 +196,8 @@ static const GOptionEntry argument_main_table[] = {
 
 #ifdef ENABLE_LUA
     {
-     "script", 'L', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_CALLBACK,
+     /* handle arguments manually */
+     "script", 'L', G_OPTION_FLAG_IN_MAIN | G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
      parse_mc_script_argument,
      N_("Run a Lua script"),
      "<file>"
@@ -208,7 +210,7 @@ static const GOptionEntry argument_main_table[] = {
     /* *INDENT-ON* */
 };
 
-GOptionGroup *terminal_group;
+static GOptionGroup *terminal_group;
 #define ARGS_TERM_OPTIONS 0
 static const GOptionEntry argument_terminal_table[] = {
     /* *INDENT-OFF* */
@@ -295,7 +297,7 @@ static const GOptionEntry argument_terminal_table[] = {
 
 #undef ARGS_TERM_OPTIONS
 
-GOptionGroup *color_group;
+static GOptionGroup *color_group;
 #define ARGS_COLOR_OPTIONS 0
 /* #define ARGS_COLOR_OPTIONS G_OPTION_FLAG_IN_MAIN */
 static const GOptionEntry argument_color_table[] = {
@@ -472,12 +474,12 @@ parse_mc_v_argument (const gchar * option_name, const gchar * value, gpointer da
                      GError ** mcerror)
 {
     (void) option_name;
+    (void) value;
     (void) data;
 
     mc_return_val_if_error (mcerror, FALSE);
 
     mc_global.mc_run_mode = MC_RUN_VIEWER;
-    mc_run_param0 = g_strdup (value);
 
     return TRUE;
 }
@@ -489,11 +491,12 @@ static gboolean
 parse_mc_script_argument (const gchar * option_name, const gchar * value, gpointer data, GError ** mcerror)
 {
     (void) option_name;
+    (void) value;
     (void) data;
-    (void) mcerror;
+
+    mc_return_val_if_error (mcerror, FALSE);
 
     mc_global.mc_run_mode = MC_RUN_SCRIPT;
-    mc_run_param0 = g_strdup (value);
 
     return TRUE;
 }
@@ -649,7 +652,6 @@ mc_args_parse (int *argc, char ***argv, const char *translation_domain, GError *
 
     if (!g_option_context_parse (context, argc, argv, mcerror))
     {
-
         if (*mcerror == NULL)
             mc_propagate_error (mcerror, 0, "%s\n", _("Arguments parse error!"));
         else
@@ -765,37 +767,17 @@ mc_setup_by_args (int argc, char **argv, GError ** mcerror)
     if (strncmp (base, "mce", 3) == 0 || strcmp (base, "vi") == 0)
     {
         /* mce* or vi is link to mc */
-
-        mc_run_param0 = parse_mcedit_arguments (argc - 1, &argv[1]);
         mc_global.mc_run_mode = MC_RUN_EDITOR;
     }
     else if (strncmp (base, "mcv", 3) == 0 || strcmp (base, "view") == 0)
     {
         /* mcv* or view is link to mc */
-
-        if (tmp != NULL)
-            mc_run_param0 = g_strdup (tmp);
-        else
-        {
-            mc_propagate_error (mcerror, 0, "%s\n", _("No arguments given to the viewer."));
-            return FALSE;
-        }
         mc_global.mc_run_mode = MC_RUN_VIEWER;
     }
 #ifdef ENABLE_LUA
     else if (strncmp (base, "mcs", 3) == 0)
     {
-        /* mcs* is link to mc */
-
-        if (tmp != NULL)
-            mc_run_param0 = g_strdup (tmp);
-        else
-        {
-            mc_propagate_error (mcerror, 0, "%s\n", _("No pathname of a script to execute was given."));
-            return FALSE;
-        }
-        /* Arguments start at index 2 (as at index 1 is the script name). */
-        mc_lua_create_argv (mc_run_param0, argc, argv, 2);
+        /* mcs* is link to mcscript */
         mc_global.mc_run_mode = MC_RUN_SCRIPT;
     }
 #endif /* ENABLE_LUA */
@@ -803,62 +785,63 @@ mc_setup_by_args (int argc, char **argv, GError ** mcerror)
     else if (strncmp (base, "mcd", 3) == 0 || strcmp (base, "diff") == 0)
     {
         /* mcd* or diff is link to mc */
+        mc_global.mc_run_mode = MC_RUN_DIFFVIEWER;
+    }
+#endif /* USE_DIFF_VIEW */
 
-        if (argc < 3)
+    switch (mc_global.mc_run_mode)
+    {
+    case MC_RUN_EDITOR:
+        mc_run_param0 = parse_mcedit_arguments (argc - 1, &argv[1]);
+        break;
+
+    case MC_RUN_VIEWER:
+        if (tmp == NULL)
         {
-            mc_propagate_error (mcerror, 0, "%s\n",
-                                _("Two files are required to evoke the diffviewer."));
+            mc_propagate_error (mcerror, 0, "%s\n", _("No arguments given to the viewer."));
             return FALSE;
         }
 
+        mc_run_param0 = g_strdup (tmp);
+        break;
+
+#ifdef ENABLE_LUA
+    case MC_RUN_SCRIPT:
+        if (tmp == NULL)
+        {
+            mc_propagate_error (mcerror, 0, "%s\n", _("No pathname of a script to run was given."));
+            return FALSE;
+        }
+
+        mc_run_param0 = g_strdup (tmp);
+        /* Arguments start at index 2 (as at index 1 is the script name). */
+        mc_lua_create_argv (mc_run_param0, argc, argv, 2);
+        break;
+#endif /* ENABLE_LUA */
+
+#ifdef USE_DIFF_VIEW
+    case MC_RUN_DIFFVIEWER:
+        if (argc < 3)
+        {
+            mc_propagate_error (mcerror, 0, "%s\n",
+                                _("Two files are required to envoke the diffviewer."));
+            return FALSE;
+        }
+        /* fallthrough */
+#endif /* USE_DIFF_VIEW */
+
+    case MC_RUN_FULL:
+    default:
+        /* set the current dir and the other dir for filemanager,
+           or two files for diff viewer */
         if (tmp != NULL)
         {
             mc_run_param0 = g_strdup (tmp);
             tmp = (argc > 1) ? argv[2] : NULL;
             if (tmp != NULL)
                 mc_run_param1 = g_strdup (tmp);
-            mc_global.mc_run_mode = MC_RUN_DIFFVIEWER;
         }
-    }
-#endif /* USE_DIFF_VIEW */
-    else
-    {
-        /* MC is run as mc */
-
-        switch (mc_global.mc_run_mode)
-        {
-        case MC_RUN_EDITOR:
-            mc_run_param0 = parse_mcedit_arguments (argc - 1, &argv[1]);
-            break;
-
-        case MC_RUN_VIEWER:
-            /* mc_run_param0 is set up in parse_mc_v_argument() */
-            break;
-
-#ifdef ENABLE_LUA
-        case MC_RUN_SCRIPT:
-            mc_lua_create_argv (mc_run_param0, argc, argv, 1);
-            /* mc_run_param0 is set up in parse_mc_script_argument() */
-            break;
-#endif /* ENABLE_LUA */
-
-        case MC_RUN_DIFFVIEWER:
-            /* not implemented yet */
-            break;
-
-        case MC_RUN_FULL:
-        default:
-            /* sets the current dir and the other dir */
-            if (tmp != NULL)
-            {
-                mc_run_param0 = g_strdup (tmp);
-                tmp = (argc > 1) ? argv[2] : NULL;
-                if (tmp != NULL)
-                    mc_run_param1 = g_strdup (tmp);
-            }
-            mc_global.mc_run_mode = MC_RUN_FULL;
-            break;
-        }
+        break;
     }
 
     return TRUE;

@@ -789,7 +789,7 @@ l_panel_get_metrics (lua_State * L)
 
     lua_pushinteger (L, panel->top_file + 1);
     lua_pushinteger (L, llines (panel));
-    lua_pushinteger (L, panel->split ? 2 : 1);
+    lua_pushinteger (L, panel->list_cols);
 
     return 3;
 }

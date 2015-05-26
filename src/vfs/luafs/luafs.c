@@ -370,7 +370,6 @@ luafs_readdir (void *data)
                 d_ino = lua_tointeger (Lg, -2);
 
                 g_strlcpy (dent->d_name, d_name, MC_MAXPATHLEN);
-                compute_namelen (dent);
                 dent->d_ino = d_ino;    /* MC doesn't use this, and VFSs seem not to provide it, but it won't hurt. */
 
                 lua_pop (Lg, 3);
