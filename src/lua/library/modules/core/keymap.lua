@@ -55,9 +55,9 @@ The first argument to `bind()` is a key sequence: it's one or more
 - "C-M-x"
 - "C-f any"
 
-A special key name is "any", which stands for any key. It can be used to
-implement a @{git:screensavers|screensaver} or an abbreviations utility
-for the editor.
+Info: A special key name is "any", which stands for any key. It can be
+used to implement a @{git:screensavers|screensaver} or an abbreviations
+utility for the editor.
 
 <a name="binding-chain"></a>
 
@@ -177,6 +177,11 @@ end
 -- - fn: the function to run.
 -- - condition: the condition to satisfy in order to run,
 -- - arg: a function returning an argument to pass to **fn**.
+--
+-- Indent: In addition to this argument the function will receive another, second
+-- argument which is the keycode pressed (this is especially useful when using
+-- the [any](#key-sequences) key).
+--
 -- - description: an optional string describing the action. Isn't currently used. May
 --   be used in the future to produce friendly keybinding listings.
 --
@@ -241,7 +246,7 @@ local function keymap_eat(kcode)
         if (not callback.condition) or callback.condition() then
           -- If the callback returns an *explicit* 'false', we
           -- continue to the previous callbacks. Otherwise we terminate.
-          if callback.fn(callback.arg and callback.arg()) ~= false then
+          if callback.fn(callback.arg and callback.arg(), kcode) ~= false then
             return true
           end
         end
