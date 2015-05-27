@@ -2377,10 +2377,6 @@ l_dialog_get_on_idle (lua_State * L)
  *      end
  *    end
  *
- * Note: The @{~#groupbox|groupbox} widget, and disabled widgets, don't respect
- * the dialog's colorset, unless it's `"normal"`. These are MC @{3468|bugs}
- * that should be fixed.
- *
  * @attr dialog.colorset
  * @property w
  */

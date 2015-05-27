@@ -193,7 +193,6 @@ l_panel_set_panelized (lua_State * L)
     return 0;
 }
 
-
 /**
  * External panelize.
  *
@@ -455,9 +454,9 @@ l_get_list_type (lua_State * L)
  *    end)
  *
  * The syntax of the format string is:
- * 
+ *
  *    all              := panel_format? format
- *    panel_format     := [full|half] [1|2]
+ *    panel_format     := [full|half] [1-9]
  *    format           := one_format | format , one_format
  *
  *    one_format       := align FIELD_ID [opt_width]
@@ -497,6 +496,57 @@ l_get_custom_format (lua_State * L)
 }
 
 /**
+ * Number of columns for the "brief" @{list_type|list type}.
+ *
+ * Valid values are 1 to 9 (if you provide a value outside this range it
+ * will be clamped to fit the range).
+ *
+ * Setting this property does not automatically set the
+ * @{list_type|list type} to "brief" (You'll have to do this yourself, as
+ * shown in the example).
+ *
+ * Example:
+ *
+ *    -- Quickly change the number of columns with the +/- keys.
+ *
+ *    ui.Panel.bind('C-y plus', function(pnl)
+ *      pnl.list_type = 'brief'
+ *      pnl.num_brief_cols = pnl.num_brief_cols + 1
+ *    end)
+ *
+ *    ui.Panel.bind('C-y minus', function(pnl)
+ *      pnl.list_type = 'brief'
+ *      pnl.num_brief_cols = pnl.num_brief_cols - 1
+ *    end)
+ *
+ * @attr num_brief_cols
+ * @property rw
+ */
+static int
+l_set_num_brief_cols (lua_State * L)
+{
+    WPanel *panel;
+    int cols;
+
+    panel = LUA_TO_PANEL (L, 1);
+    cols = luaL_checkint (L, 2);
+
+    panel->brief_cols = CLAMP (cols, 1, 9);     /* GLib macro. */
+
+    if (panel->list_type == list_brief) /* don't waste CPU cycles otherwise. */
+        update_view (panel);
+
+    return 0;
+}
+
+static int
+l_get_num_brief_cols (lua_State * L)
+{
+    lua_pushinteger (L, LUA_TO_PANEL (L, 1)->brief_cols);
+    return 1;
+}
+
+/**
  * The field by which to sort.
  *
  *    -- Toggle between two sorts.
@@ -510,7 +560,6 @@ l_get_custom_format (lua_State * L)
  * @attr sort_field
  * @property rw
  */
-
 static int
 l_get_sort_field (lua_State * L)
 {
@@ -552,7 +601,6 @@ l_set_sort_field (lua_State * L)
  * @attr sort_reverse
  * @property rw
  */
-
 static int
 l_get_sort_reverse (lua_State * L)
 {
@@ -1014,6 +1062,8 @@ static const struct luaL_Reg ui_panel_lib[] = {
     { "set_custom_mini_status", l_set_custom_mini_status },
     { "get_custom_mini_status_format", l_get_custom_mini_status_format },
     { "set_custom_mini_status_format", l_set_custom_mini_status_format },
+    { "get_num_brief_cols", l_get_num_brief_cols },
+    { "set_num_brief_cols", l_set_num_brief_cols },
     { "set_sort_field", l_set_sort_field },
     { "get_sort_field", l_get_sort_field },
     { "get_sort_reverse", l_get_sort_reverse },
