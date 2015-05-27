@@ -20,3 +20,5 @@ local function test()
 end
 
 test()
+
+-- vim: set ft=lua:

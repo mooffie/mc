@@ -46,3 +46,5 @@ provided".
 end
 
 test()
+
+-- vim: set ft=lua:

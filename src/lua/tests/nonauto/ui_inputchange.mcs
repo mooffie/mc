@@ -29,3 +29,5 @@ Type something here and see it updated in the label.]]
 end
 
 test()
+
+-- vim: set ft=lua:

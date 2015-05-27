@@ -43,3 +43,5 @@ in every iteration, and why does the hint line gets updated.
 
 test()
 --keymap.bind('C-y', test)
+
+-- vim: set ft=lua:

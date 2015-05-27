@@ -62,3 +62,5 @@ local function test_gc()
 end
 
 test_gc()
+
+-- vim: set ft=lua:

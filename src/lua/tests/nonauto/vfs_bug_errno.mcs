@@ -24,3 +24,5 @@ Another bug: chdir() to an invalid filesystem reports the previous errno.
 assert(io.popen("ls -l"), "pipes aren't supported on this sys"):seek("end")  -- set the errno to "Illegal seek"
 
 print( fs.chdir("/invalidfs://") )  -- chdir() reports "Illegal seek"!
+
+-- vim: set ft=lua:

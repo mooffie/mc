@@ -13,3 +13,5 @@ posix.close(fd)  -- crashes MC !!
 local f = assert(fs.open("/etc/issue"))
 f:close()
 f:close()  -- No crash. An exception will be raised.
+
+-- vim: set ft=lua:

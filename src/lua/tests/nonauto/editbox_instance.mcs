@@ -24,3 +24,5 @@ to it because here it isn't associated with a file.]]))
 end
 
 test()
+
+-- vim: set ft=lua:

@@ -91,3 +91,5 @@ keymap.bind('f5', function()
   devel.view( debug.getregistry()['ui.weak']  )
 end)
 ]]
+
+-- vim: set ft=lua:

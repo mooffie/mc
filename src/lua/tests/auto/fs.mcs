@@ -170,4 +170,5 @@ test_basic()
 test_dir_behavior()
 test_vpath()
 test_statbuf()
---os.exit()
+
+-- vim: set ft=lua:

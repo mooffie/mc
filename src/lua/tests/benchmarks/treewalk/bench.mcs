@@ -177,3 +177,5 @@ for _ = 1, args.times do
   flavors[args.flavor](args.dir)
   show_progress_end()
 end
+
+-- vim: set ft=lua:
