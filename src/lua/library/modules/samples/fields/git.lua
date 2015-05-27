@@ -26,6 +26,15 @@ The provided fields:
 
 Performance issues:
 
+As for the gitstatus field:
+
+This field is generally fast. You can make it even faster by asking the
+module not to report ignored files (with "!!"). You do this thus:
+
+    require('samples.fields.git').mark_ignored = false
+
+As for the "slow" fields:
+
 One you use a single "slow" field you can use all of them without incurring
 further loss of performance.
 
@@ -52,6 +61,7 @@ using panel::<<flush>> or <<ui::restored>> instead of panel::<<load>>).
 That's something we should certainly do if it turns out people are
 using these fields.
 
+
 ---------------------------------------------------------------------
 
 Tip:
@@ -67,7 +77,14 @@ local git = require('samples.libs.git')
 local is_installed = git.is_installed()
 
 local M = {
-  enabled = true,  -- Whether to enable the "slow" fields.
+
+  -- Whether to enable the "slow" fields.
+  enabled = true,
+
+  -- Whether to mark ignored files (with "!!"). Turn this off for
+  -- better performance.
+  mark_ignored = true,
+
 }
 
 local features = nil
@@ -76,7 +93,7 @@ local function detect_features(dir)
   if not features then
     features = {
       -- Check if '--ignored' is supported (purportedly a git 1.7.x+ feature. See SO #466764)
-      ignored_option = git.try_command(dir, 'git status -z --ignored -- .')
+      ignored_option = M.mark_ignored and git.try_command(dir, 'git status -z --ignored -- .')
     }
   end
 end
