@@ -1175,12 +1175,13 @@ function DlgMeta:_find(wtype, pred, start_i, start_w, callback)
         if seen then
           if not callback(w) then return end
         end
-        if w == start_w then
-          seen = true
-        end
       else
         if not callback(w) then return end
       end
+    end
+
+    if w == start_w then
+      seen = true
     end
 
   end
