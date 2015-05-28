@@ -421,23 +421,30 @@ You're not limited to math formulas: any Lua expression works.
 
 <!-- --------------------------------------------------------------------- -->
 
-## Find-as-you-type; clock
+## Find-as-you-type; hotkeys; clock
 
 [figure]
 
-[ss:screenshots/find-as-you-type.png]
+[ss:screenshots/find-as-you-type-and-hotkeys.png]
 
 [split]
 
-This image shows two accessories:
+This image shows three accessories:
 
-- You can @{git:find-as-you-type.lua|search in any listbox} widget. Here
-we demonstrate this with the Directory Hotlist dialog, but it works
+- As the purple arrows shows, you can
+@{git:find-as-you-type.lua|search in any listbox}. Here we
+demonstrate this with the Directory Hotlist dialog, but it works
 anywhere.
 
 Indent: ("broo" matches "Brooks" because the search is case insensitive
 unless you type an uppercase letter. If the search string isn't found,
 the "Search" box is painted in alert colors (typically red).)
+
+- The yellow arrows demonstrate the @{git:hotlist-keys.lua|hotlist-keys}
+module, which lets you associate keys with directories (or groups). You
+embed key names in square brackets and then you can activate items by
+pressing these keys. (The "Raw" button is a convenience button that opens
+~/.config/mc/hotlist in the editor.)
 
 - You also see a @{git:clock.lua|clock} at the top-right corner.
 

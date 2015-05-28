@@ -20,6 +20,10 @@ A "sol" link points to a solution, or to a way of solving.
 - @{1483} "Panel scrollbar" @{git:accessories/scrollbar.lua|sol}
 - @{1761} "Clock display"  @{git:clock.lua|sol} @{git:ticker.lua|sol}
 - @{1756} "Automatic update of the file list"
+- [FC](http://unix.findincity.net/view/635395087004115229213514/midnight-commander-shortcut-keys-for-entries-in-directory-hotlist)
+  Hotkeys for the directory hotlist dialog. @{git:hotlist-keys.lua|sol}
+- [ML](https://mail.gnome.org/archives/mc-devel/2015-May/msg00055.html)
+  @{3469} listboxes and digits. @{git:listbox_AZ.lua|sol}
 
 ** EDITOR **
 

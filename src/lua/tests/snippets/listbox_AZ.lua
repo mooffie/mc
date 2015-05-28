@@ -10,6 +10,7 @@ This snippet changes this by letting you type "1" to "9" and "A" to "Z".
 Idea taken from:
 
     https://mail.gnome.org/archives/mc-devel/2015-May/msg00055.html
+    https://www.midnight-commander.org/ticket/3469
 
 ]]
 

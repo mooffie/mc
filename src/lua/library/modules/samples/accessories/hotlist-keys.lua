@@ -33,7 +33,7 @@ Known issues:
 
 - The keys are in effect only when the focus is in the listbox.
 
-Tips
+Tips:
 
 - [a] and [A] are two different keys.
 
