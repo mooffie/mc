@@ -11,8 +11,8 @@ Some modules here are commented out. That's because not everybody may
 like them, or because they may have some "side effect". Feel free to
 uncomment them.
 
-All modules have a comment at their top explaining their purpose and
-how to enable them.
+All modules have a comment at their top explaining their purpose, how
+to use them, and how to enable them.
 
 ]]
 
@@ -55,6 +55,9 @@ end)
 ui.Panel.bind('M-pgdn', function()
   require('samples.accessories.snapshots').run()
 end)
+
+-- "hotkeys" support in the directory hotlist dialog.
+require('samples.accessories.hotlist-keys')
 
 -- Lets GNOME Terminal know of the current directory.
 require('samples.accessories.set-gterm-cwd')
