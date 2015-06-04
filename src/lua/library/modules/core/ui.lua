@@ -809,6 +809,28 @@ function ui.HLine.meta:init()
   self.expandx = true
 end
 
+function ui.HLine.meta:preferred_cols()
+  if self:get_through() then
+    --
+    -- We don't let ZLine affect the preferred_cols() of its containers.
+    -- That's because it resizes itself to the dialog's width (see MSG_RESIZE in
+    -- lib/widgets/hline.c), which means that every call to Dialog:set_dimensions()
+    -- (e.g., when resizing the terminal) would enlarge the dialog. You can see
+    -- the problem if you remove this method and do:
+    --
+    --    keymap.bind('C-y', function()
+    --      local dlg = ui.Dialog()
+    --      dlg:add(ui.ZLine())
+    --      dlg:add(ui.Button{'call set_dimensions', on_click=function() dlg:set_dimensions() end})
+    --      dlg:run()
+    --    end)
+    --
+    return 0
+  else
+    return self:get_cols()
+  end
+end
+
 ----------------------------------- ZLine ------------------------------------
 
 --- Creates a ZLine widget.

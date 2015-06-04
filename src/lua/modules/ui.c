@@ -1881,6 +1881,13 @@ l_hline_set_through (lua_State * L)
     return 0;
 }
 
+static int
+l_hline_get_through (lua_State * L)
+{
+    lua_pushboolean (L, LUA_TO_HLINE (L, 1)->auto_adjust_cols);
+    return 1;
+}
+
 /**
  * Optional caption.
  *
@@ -1911,6 +1918,7 @@ static const struct luaL_Reg ui_hline_static_lib[] = {
 
 static const struct luaL_Reg ui_hline_methods_lib[] = {
     { "set_through", l_hline_set_through },
+    { "get_through", l_hline_get_through },
     { "set_text", l_hline_set_text },
     { "get_text", l_hline_get_text },
     { NULL, NULL }
