@@ -138,7 +138,7 @@ ui.Dialog.bind('<<open>>', function(dlg)
 
       btn_raw = ui.Button{T'Ra&w', pos_flags = utils.bit32.bor(ui.WPOS_KEEP_RIGHT, ui.WPOS_KEEP_BOTTOM)}
 
-      -- We position it to the right of the "Cancel" button.
+      -- We position it to the left of the "Cancel" button.
       btn_raw.x = btn_cancel.x - btn_raw.cols - 1
       btn_raw.y = btn_cancel.y
 

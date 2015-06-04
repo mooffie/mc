@@ -120,8 +120,8 @@ residing inside your home folder, as demonstrated above.)
 ## Configuring without pkg-config
 
 Using `--with-lua` alone only works if your Lua engine is registered with
-pkg-config. This may not be the case. For example, this may not be the
-case when you compile Lua yourself from the official tarball.
+pkg-config. This may not be the case. For example, this isn't the case
+when you compile Lua yourself from the official tarball.
 
 In such cases you need to explicitly tell configure the location
 of Lua's header files and library. This is done using two variables:

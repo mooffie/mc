@@ -152,7 +152,7 @@ end
 function M.has_dir_only(shot)
   return not (
     (shot.single and shot.single.sort_field) or
-    (shot.left and shot.left.sort_field)  -- shot.right is identical.
+    (shot.left and shot.left.sort_field)  -- shot.right is the same.
   )
 end
 

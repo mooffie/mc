@@ -29,7 +29,7 @@ This will install mc in your $HOME/local folder (because we don't want
 to overwrite the system's MC, although you're free to do that if you
 wish).
 
-(If anything went wrong, see the full @{~installation|installation document}.)
+(If anything goes wrong, see the full @{~installation|installation document}.)
 
 ## Writing your first Lua script
 
@@ -88,7 +88,7 @@ In the above example the user folder is ~/.local/share/mc/lua-0.1/.
 
 [tip]
 
-The number embedded in the folder name, "0.1" in this case, makes it
+The version number embedded in the folder name, "0.1" in this case, makes it
 possible to install different major versions of MC exposing different
 major versions of API: each would have a different number.
 

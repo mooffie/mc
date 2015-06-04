@@ -1,7 +1,7 @@
 
 # Standalone mode
 
-Sometimes you wish to run code "outside" of MC. (or "independently")
+Sometimes you wish to run code "outside" MC. (or: "independently" of MC)
 
 In other words, you want to be able run your scripts from the
 command-line, just like you do with your Ruby/Perl/Python/whatever

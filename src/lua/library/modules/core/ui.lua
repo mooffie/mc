@@ -275,6 +275,7 @@ function ListboxMeta:set_value(value)
     end
   end
 
+  -- If no such value exists, select the first item.
   self:set_selected_index(1)
 end
 
@@ -1325,7 +1326,7 @@ into several lines if there are many of them.
 
 Tip: This container has a method, `repack()`, which you can use to
 re-layout the buttons after changing the text of one of them (and
-hence its size).
+hence its size) during runtime.
 
 @function Buttons
 
@@ -1370,7 +1371,15 @@ end
 --
 -- [/info]
 --
+-- You can use the optional `props` argument to change the default label:
+--
+--    ui.Buttons():add(
+--      ui.OkButton(T"G&o!"),
+--      ui.CancelButton()
+--    )
+--
 -- @function OkButton
+-- @args ([props])
 
 function ui.OkButton(props)
   return ui.Button { T"&OK", result = "ok", type = "default" }:assign_properties(props)
@@ -1385,13 +1394,14 @@ end
 --
 -- This function is implemented thus:
 --
---    function ui.OkButton(props)
+--    function ui.CancelButton(props)
 --      return ui.Button { T"&Cancel", result = false }:assign_properties(props)
 --    end
 --
 -- [/info]
 --
 -- @function CancelButton
+-- @args ([props])
 
 function ui.CancelButton(props)
   return ui.Button { T"&Cancel", result = false }:assign_properties(props)

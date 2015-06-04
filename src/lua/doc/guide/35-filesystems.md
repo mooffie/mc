@@ -56,7 +56,7 @@ of this with a friendly error message. This way you don't need to
 memorize much.
 
 Let's start with a minimal working filesystem. Put the following in a
-file in your user's Lua folder and restart MC:
+file in your user's Lua folder and @{~general#restart|restart Lua}:
 
     local myfs = {
 

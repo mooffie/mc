@@ -20,6 +20,10 @@ misc
   - Do we really need the '$(PCRE_CPPFLAGS)' in our makefiles?
   - Ask MC's maintainers to add '--leave-preprocessor-space' (short: '-lps') to
     indent's invocation in doc/HACKING (for our capi.h).
+  - Use of GINT_TO_POINTER, in luafs*.c, now generates warning because of -Wbad-function-cast:
+
+      "warning: cast from function call of type 'int' to non-matching type 'void *' [-Wbad-function-cast]
+        #define GINT_TO_POINTER(i) ((gpointer) (gint) (i))"
 
 
 ldoc
@@ -27,4 +31,5 @@ ldoc
     (see http://google-code-prettify.googlecode.com/svn/trunk/styles/index.html
      and http://swfoo.com/?p=632 )
   - mc.css: have a different style for notes/tips? Firefox doesn't manage the rounded
-    corners well.
+    corners well. Trac's site "solves" this by using shadow instead (
+    http://trac.edgewall.org/wiki/TracGuide )

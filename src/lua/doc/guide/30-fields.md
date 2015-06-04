@@ -165,8 +165,8 @@ built-in field. You do this by assigning to the **sort** key the name
 You can give your fields the same **id** as that of built-in fields.
 This way you can tweak (or altogether replace) the behavior of these fields.
 
-For example, MC doesn't print commas in files' sizes, which sometimes make
-them hard to figure out a file size. Here we re-define the `size`
+For example, MC doesn't print commas in files' sizes, which sometimes
+makes it awkward to read such numbers. Here we re-define the `size`
 field to fix this usability problem (with the help of
 @{utils.text.format_size|format_size}:
 
