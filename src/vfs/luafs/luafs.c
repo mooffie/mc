@@ -38,25 +38,24 @@
 
 #include "lib/global.h"
 #include "lib/vfs/vfs.h"
-#include "lib/vfs/gc.h"         /* vfs_rmstamp() etc., debug__vfs_get_stamps() */
 #include "lib/event.h"          /* mc_event_add() */
-
 #include "lib/lua/capi.h"
 #include "lib/lua/capi-safecall.h"
-#include "src/lua/modules.h"
+
 #include "src/lua/modules/fs.h"
 
 #include "luafs.h"
+#include "internal.h"
 
 /*** global variables ****************************************************************************/
+
+struct vfs_class vfs_luafs_ops; /* global because luafs-gc.c needs it. */
 
 /*** file scope macro definitions ****************************************************************/
 
 /*** file scope type declarations ****************************************************************/
 
 /*** file scope variables ************************************************************************/
-
-static struct vfs_class vfs_luafs_ops;
 
 static int my_errno;
 
@@ -833,110 +832,6 @@ luafs_free (vfsid id)
 
         luaMC_safe_call (Lg, 1, 0);
     }
-}
-
-/* --------------------------------------------------------------------------------------------- */
-
-/*
- * The Lua 'luafs.gc' module. It is used in the Lua portion to communicate
- * with the VFS's GC mechanism.
- *
- * (Should we move this into a separate file, say 'luafs-gc.c'? But we need
- * access to vfs_luafs_ops.)
- */
-
-static int
-l_stamp (lua_State * L)
-{
-    int id;
-
-    id = luaL_checkint (L, 1);
-    vfs_stamp (&vfs_luafs_ops, GINT_TO_POINTER (id));
-
-    return 0;
-}
-
-static int
-l_rmstamp (lua_State * L)
-{
-    int id;
-
-    id = luaL_checkint (L, 1);
-    vfs_rmstamp (&vfs_luafs_ops, GINT_TO_POINTER (id));
-
-    return 0;
-}
-
-static int
-l_stamp_create (lua_State * L)
-{
-    int id;
-
-    id = luaL_checkint (L, 1);
-    vfs_stamp_create (&vfs_luafs_ops, GINT_TO_POINTER (id));
-
-    return 0;
-}
-
-/**
- * Show the VFS' stamps.
- *
- * This function is a **debugging aid only**, for programmers working on MC's
- * VFS implementation. It shows the VFS' "stamps". Background information
- * can be found in a comment in 'lib/vfs/gc.c'.
- *
- * Usage example:
- *
- * Enter a TAR archive in a panel. Exit the archive. `require("luafs.gc").get_vfs_stamps()`
- * would now show a "stamp" for this archive. Wait a minute (or do "Free VFSs now"),
- * and the "stamp" would disappear.
- *
- * @function get_vfs_stamps
- */
-static int
-l_get_vfs_stamps (lua_State * L)
-{
-    struct vfs_stamping *stamp = debug__vfs_get_stamps ();
-    time_t now = time (NULL);
-    int i = 1;
-
-    lua_newtable (L);
-
-    while (stamp)
-    {
-        lua_newtable (L);
-
-        lua_pushstring (L, stamp->v->name);
-        lua_setfield (L, -2, "vfs_class_name");
-
-        lua_pushi (L, (long) stamp->id);
-        lua_setfield (L, -2, "vfs_id");
-
-        lua_pushi (L, now - stamp->time.tv_sec);
-        lua_setfield (L, -2, "seconds_ago");
-
-        lua_rawseti (L, -2, i++);
-        stamp = stamp->next;
-    }
-
-    return 1;
-}
-
-/* *INDENT-OFF* */
-static const struct luaL_Reg luafs_gc_lib[] = {
-    { "stamp", l_stamp },
-    { "rmstamp", l_rmstamp },
-    { "stamp_create", l_stamp_create },
-    { "get_vfs_stamps", l_get_vfs_stamps },
-    { NULL, NULL }
-};
-/* *INDENT-ON* */
-
-int
-luaopen_luafs_gc (lua_State * L)
-{
-    luaL_newlib (L, luafs_gc_lib);
-    return 1;
 }
 
 /* --------------------------------------------------------------------------------------------- */
