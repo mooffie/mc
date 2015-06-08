@@ -26,6 +26,7 @@ misc/bin/calc \
 misc/bin/clock \
 misc/bin/game-blocks \
 misc/bin/htmlize \
+misc/bin/mcscanimage \
 tests/README \
 tests/auto/bit32.mcs \
 tests/auto/fs.mcs \
@@ -80,6 +81,7 @@ tests/snippets/cfunc.lua \
 tests/snippets/complete_word.lua \
 tests/snippets/dialog_mover.lua \
 tests/snippets/edit_max.lua \
+tests/snippets/find_title.lua \
 tests/snippets/fop_move_basename.lua \
 tests/snippets/fop_move_jump.lua \
 tests/snippets/fop_move_tail.lua \
@@ -87,6 +89,8 @@ tests/snippets/glib.lua \
 tests/snippets/goto_line_col.lua \
 tests/snippets/hotlist_right_as_enter.lua \
 tests/snippets/input_sanitize.lua \
+tests/snippets/listbox_AZ.lua \
+tests/snippets/listbox_digits.lua \
 tests/snippets/mark_files_by_contents.lua \
 tests/snippets/mark_wordstar.lua \
 tests/snippets/mkss.lua \

@@ -53,6 +53,7 @@ modules/samples/accessories/filter-as-you-type.lua \
 modules/samples/accessories/find-as-you-type.lua \
 modules/samples/accessories/follow.lua \
 modules/samples/accessories/git-branch.lua \
+modules/samples/accessories/hotlist-keys.lua \
 modules/samples/accessories/preserve-attributes.lua \
 modules/samples/accessories/recently-visited-files/README.md \
 modules/samples/accessories/recently-visited-files/db.lua \
@@ -106,6 +107,7 @@ modules/samples/fields/mplayer.lua \
 modules/samples/filesystems/mht.lua \
 modules/samples/filesystems/mysql.lua \
 modules/samples/filesystems/sqlite.lua \
+modules/samples/frontends/scanimage.lua \
 modules/samples/games/blocks/board.lua \
 modules/samples/games/blocks/dialog.lua \
 modules/samples/games/blocks/init.lua \
