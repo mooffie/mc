@@ -465,8 +465,8 @@ l_get_list_type (lua_State * L)
  *    width            := [0-9]+
  *    opt_expand       := +
  *
- * (Let us all give thanks to the anonymous programmer, blessed be he, who put
- * this comment in @{git:src/filemanager/panel.c}.)
+ * (This syntax description was copied, with some minor modifications, from
+ * a comment in @{git:src/filemanager/panel.c}.)
  *
  * @attr custom_format
  * @property rw
@@ -648,10 +648,10 @@ l_set_sort_reverse (lua_State * L)
 /**
  * Gets the index of the current ("selected") file.
  *
- * @method _get_current_file_index
+ * @method _get_current_index
  */
 static int
-l_panel_get_current_file_index (lua_State * L)
+l_panel_get_current_index (lua_State * L)
 {
     lua_pushinteger (L, LUA_TO_PANEL (L, 1)->selected + 1);
     return 1;
@@ -660,11 +660,11 @@ l_panel_get_current_file_index (lua_State * L)
 /**
  * Sets the the current ("selected") file, by index.
  *
- * @method _set_current_file_index
+ * @method _set_current_index
  * @args (i)
  */
 static int
-l_panel_set_current_file_index (lua_State * L)
+l_panel_set_current_index (lua_State * L)
 {
     WPanel *panel;
     int i;
@@ -760,7 +760,7 @@ l_panel_mark_file_by_index (lua_State * L)
 }
 
 /*
- * Removes an entry from the panel. used by pnl:_remove().
+ * Removes an entry from the panel. Used by l_panel_remove().
  */
 static void
 panel_remove_entry (WPanel * panel, int i)
@@ -1068,8 +1068,8 @@ static const struct luaL_Reg ui_panel_lib[] = {
     { "get_sort_field", l_get_sort_field },
     { "get_sort_reverse", l_get_sort_reverse },
     { "set_sort_reverse", l_set_sort_reverse },
-    { "_get_current_file_index", l_panel_get_current_file_index },
-    { "_set_current_file_index", l_panel_set_current_file_index },
+    { "_get_current_index", l_panel_get_current_index },
+    { "_set_current_index", l_panel_set_current_index },
     { "_get_file_by_index", l_panel_get_file_by_index },
     { "_mark_file_by_index", l_panel_mark_file_by_index },
     { "_get_max_index", l_panel_get_max_index },

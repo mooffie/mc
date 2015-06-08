@@ -18,14 +18,14 @@ That's because file indexes is something we've chosen to regard as
 local start = nil
 
 ui.Panel.bind("C-k b", function(pnl)  -- "Block Beginning"
-  start = pnl:_get_current_file_index()
+  start = pnl:_get_current_index()
 end)
 
 ui.Panel.bind("C-k k", function(pnl)  -- "Block End"
   if not start then
     return
   end
-  local to = pnl:_get_current_file_index()
+  local to = pnl:_get_current_index()
   for i = math.min(start, to), math.max(start, to) do
     pnl:_mark_file_by_index(i, true)
   end

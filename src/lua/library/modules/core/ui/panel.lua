@@ -91,13 +91,13 @@ end
 -- @return boolean: whether this is a broken symlink.
 -- @return boolean: whether it's a directory whose size has been computed (this size is recorded in the StatBuf).
 function ui.Panel.meta:get_current()
-  return self:_get_file_by_index(self:_get_current_file_index())
+  return self:_get_file_by_index(self:_get_current_index())
 end
 
 function ui.Panel.meta:set_current(fname)
   for i = 1, self:_get_max_index() do
     if self:_get_file_by_index(i, true) == fname then
-      self:_set_current_file_index(i)
+      self:_set_current_index(i)
       break
     end
   end
