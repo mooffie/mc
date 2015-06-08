@@ -1,7 +1,10 @@
+--[[
 
--- Mark C functions.
---
--- Stand in its body and hit C-c b.
+Marks C functions.
+
+Stand in its body and hit C-c b.
+
+]]
 
 ui.Editbox.bind('C-c b', function(edt)
 

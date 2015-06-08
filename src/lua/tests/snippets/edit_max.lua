@@ -1,3 +1,8 @@
+--[[
+
+Warns you before you try to edit huge files.
+
+]]
 
 local max_size = 5e6  -- That's 5 megabytes.
 
@@ -7,4 +12,3 @@ ui.Panel.bind("f4", function(pnl)
     return false
   end
 end)
-

@@ -112,25 +112,22 @@ build_dirs_table (lua_State * L)
  * Returns the full path of some "configuration file".
  *
  * Note: This is an interface to C's @{git:mcconfig/paths.c|mc_config_get_full_path()}.
- * It is a temporary (and unsatisfying?) solution to the problem of finding
- * pathnames in MC's zoo.
+ * It is a temporary(?) solution to the problem of finding pathnames in MC's zoo.
+ *
+ * Example:
+ *
+ *    -- Opens the "Directory hotlist" textual database in the editor.
+ *    keymap.bind('M-pgdn', function()
+ *      mc.edit(conf.path 'hotlist')
+ *    end)
  *
  * @function path
- * @param name The short file name (see @{git:mcconfig/paths.c|mc_config_files_reference[]}).
+ * @param name The short file name (see @{git:mcconfig/paths.c|mc_config_files_reference[]};
+ *   note that the PATH_SEP_STR used there is always "/").
  */
 static int
 l_conf_path (lua_State * L)
 {
-    /*
-     * @todo:
-     *
-     * Some names, like EDIT_BLOCK_FILE, have 'PATH_SEP' in them. We should
-     * convert '/', in names, to PATH_SEP so that users can hardcode
-     * their '/'s. The last thing we need is people bothering with '/' vs '\\'
-     * in their Lua code. The point of scripting is to make their life easy.
-     *
-     * ( @todo: add strtr() to utilx.c ? )
-     */
     lua_pushstring (L, mc_config_get_full_path (luaL_checkstring (L, 1)));
     return 1;
 }

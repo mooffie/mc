@@ -78,18 +78,22 @@ the word.
 -- As a more elaborate example, here's a very simple implementation of
 -- "word completion" for the editor:
 --
---    -- Word Completion
---    --
---    -- Stand on a word and hit C-y. You'll be shown a list of
---    -- all the words in the buffer sharing that prefix.
---    --
+--    --[[
+--
+--    Word-completion for the editor.
+--
+--    Stand on a word and hit C-y. You'll be shown a list of
+--    all the words in the buffer sharing that prefix.
+--
+--    ]]
+--
 --    ui.Editbox.bind('C-y', function(edt)
 --      local whole, part = edt:get_current_word()
 --
---      if not whole      -- cursor is away from a word.
---          or part == "" -- cursor on start of a word.
+--      if not whole      -- cursor is not on a word.
+--          or part == "" -- cursor is on start of a word.
 --      then
---        abort "stand on a word (and past its beginning letter), will ya?"
+--        abort(T"Please stand on a word (past its first letter).")
 --      end
 --
 --      local words = utils.table.new {}

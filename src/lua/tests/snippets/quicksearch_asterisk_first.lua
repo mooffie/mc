@@ -5,6 +5,8 @@ filenames.
 
 This snippet puts the "*" there automatically for you.
 
+Criticism:
+
 IT TURNS OUT THAT THIS "FEATURE" CAUSES MORE HEADACHE THAN BENEFIT!
 
 ]]

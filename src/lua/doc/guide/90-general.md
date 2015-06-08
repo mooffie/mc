@@ -1,5 +1,5 @@
 
-# General Lua usage
+# General Lua tips
 
 Here are general tips about programming in Lua.
 

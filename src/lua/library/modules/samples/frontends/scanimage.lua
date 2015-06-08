@@ -50,8 +50,8 @@ local M = {
 
   defaults = {
     filename = "noname",
-    additional_scan = "",
-    additional_convert = "",
+    additional_scan = "",     -- useful for "-d DEVICE" and such.
+    additional_convert = "",  -- useful for "-rotate 90" and such.
     res = 100,
   },
 

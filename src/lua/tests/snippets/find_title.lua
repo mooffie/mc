@@ -1,7 +1,7 @@
 --[[
 
-A user wants to make the Find File result/progress dialog show
-the glob pattern and the search string in the title:
+A user asked about making the Find File result/progress dialog show
+the glob pattern and the search string in its title:
 
     http://www.midnight-commander.org/ticket/3453
 
@@ -16,9 +16,10 @@ function ui.Dialog.meta:find_label(text)
 end
 
 --
--- We have a glitch here: we can read the search data only if the user
--- presses Enter, not if he uses the mouse or the "Ok"'s hotkey.
--- We can solve this by having a <<close>> dialog event.
+-- We have a glitch here: we read the search data only if the user
+-- presses Enter, not if he uses the mouse or the "Ok"'s hotkey. We
+-- can solve this by having a <<close>> (or <<submit>>/<<cancel>>)
+-- dialog event.
 --
 keymap.bind('enter', function()
   local dlg = ui.Dialog.top

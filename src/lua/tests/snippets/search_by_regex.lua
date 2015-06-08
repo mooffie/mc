@@ -1,18 +1,19 @@
+-- This snippet is based on the code example given in the documentation for ui.Editbox.cursor_offs.
+
+--[[
+
+Searches in the text.
+
+Incidentally, we have one nice advantage here over the standard search:
+we can search for things that sprawl over multiple lines. E.g.,
+searching for \n\n\n finds two or more consecutive blank lines.
+
+See also http://www.midnight-commander.org/ticket/400
+
+]]
 
 local last_pattern = nil
 
---
--- Search in the text.
---
--- (Code mostly taken from the example code for the ui.Editbox.cursor_offs
--- property.)
---
--- We have one nice advantage here over the standard search:
--- we can search for things that sprawl over multiple lines. E.g.,
--- searching for \n\n\n finds two or more consecutive blank lines.
---
--- See also http://www.midnight-commander.org/ticket/400
---
 ui.Editbox.bind("C-d", function(edt)
   local pattern = prompts.input(T"Search by regex:", last_pattern, nil, 'editbox-regex-search')
   if pattern then

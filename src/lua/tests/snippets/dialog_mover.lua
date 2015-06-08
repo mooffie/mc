@@ -4,11 +4,12 @@ Lets you move a dialog on the screen with shift + arrow keys.
 
 It was originally written as an aid for creating better screenshots, but it
 turns out it's useful in itself: sometimes dialogs (e.g., the editor's
-"replace" dialog, copy/move progress dialog) obscure important data and we
+"replace" dialog, copy/move progress dialogs) obscure important data and we
 want them out of the way.
 
 NOTE: It also works on top-level dialogs. E.g., the filemanager and the
-editor. You'll see "garbage" underneath when you move them, but it's not a bug.
+editor. You'll see "garbage" underneath when you move them, but this is not
+a bug.
 
 ]]
 

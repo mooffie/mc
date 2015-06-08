@@ -28,7 +28,7 @@ Idea based on:
 local K = utils.magic.memoize(tty.keyname_to_keycode)
 
 local M = {
-  window = 800,  -- How many milliseconds to wait between keys for them to be considered a number.
+  window = 800,  -- How many milliseconds to wait between keys for them to be considered part of a single number.
 }
 
 local previous = { digit = nil, timestamp = 0 }

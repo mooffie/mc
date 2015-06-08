@@ -4,7 +4,7 @@ Git utilities.
 
 ]]
 
--------------------------- utils ---------------------------
+------------------------------- Internal utils -------------------------------
 
 local function zlines(s)
   return s:gmatch("([^%z]+)%z")
@@ -28,7 +28,7 @@ local function read_command(...)
   return s
 end
 
----------------- wrappers for git commands -----------------
+------------------------- Wrappers for git commands --------------------------
 
 local function _ls_tree(dir)
   local s = read_command(dir, "git ls-tree -z HEAD")
@@ -37,7 +37,7 @@ local function _ls_tree(dir)
   end
 end
 
--- iterator
+-- iterator.
 local function ls_tree(dir)
   return coroutine.wrap(function()
     _ls_tree(dir)
@@ -63,7 +63,7 @@ local function _status(dir, extra_args)
   end
 end
 
--- iterator
+-- iterator.
 local function status(dir, extra_args)
   return coroutine.wrap(function()
     _status(dir, extra_args)
@@ -73,7 +73,9 @@ end
 ------------------------------------------------------------------------------
 -- Returns an "overview" of a folder. Similar to the one you see on Github.
 --
--- Idea taken from this Perl script: https://github.com/thomasf/dotfiles-thomasf-base/blob/master/.bin/git-ls-dir
+-- Idea taken from this Perl script:
+--
+--    https://github.com/thomasf/dotfiles-thomasf-base/blob/master/.bin/git-ls-dir
 --
 local function dir_overview(dir, extra_args)
 
