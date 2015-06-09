@@ -337,6 +337,25 @@ Also note the @{git:editbox/scrollbar.lua|scrollbar} at the left.
 
 <!-- --------------------------------------------------------------------- -->
 
+## Creating frontends for command-line tools
+
+[figure]
+
+[ss:screenshots/frontend-scanimage.png]
+
+[split]
+
+While the command-line is gods' gift to mankind, it's sometimes a drag
+having to revisit the manual pages to refresh your memory on how to run
+some programs.
+
+Dread no more! You can now create your own UI frontends. Here is one used
+to @{git:scanimage.lua|scan images}.
+
+[/figure]
+
+<!-- --------------------------------------------------------------------- -->
+
 ## Recently Visited Files; xterm titles
 
 [figure]
