@@ -405,6 +405,8 @@ l_set_list_type (lua_State * L)
     static const char *const lt_names[] = {
         "full", "brief", "long", "custom", NULL
     };
+    /* @FIXME: src/filemanager/panel.h should define a list_type_t typedef and
+       we (and it) should use it. See commit fb474bc1c1571 */
     static const int lt_values[] = {
         list_full, list_brief, list_long, list_user
     };

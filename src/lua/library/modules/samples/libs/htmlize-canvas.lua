@@ -1,14 +1,21 @@
--- Augments the Canvas class with few methods that enable it to work with the 'htmlize' library
+--[[
 
+Augments the Canvas class with a few methods that enable it to work with
+the 'htmlize' module.
+
+(You don't need to require() this file yourself. This is done by 'htmlize'.)
+
+]]
+
+-- Like string.len()
 function ui.Canvas.meta:len()
   return self:get_cols() * self:get_rows()
 end
 
 -- Converts an offset into (x,y) coordinates.
 function ui.Canvas.meta:flat_to_xy(pos)
-  -- We do "- 1" because the offset is 1-based.
-  local x = math.fmod (pos - 1, self:get_cols())
-  local y = math.floor ((pos - 1) / self:get_cols())
+  local x = math.fmod(pos - 1, self:get_cols())  -- "- 1" because the offset is 1-based.
+  local y = math.floor((pos - 1) / self:get_cols())
   return x, y
 end
 

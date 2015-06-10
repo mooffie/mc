@@ -26,3 +26,13 @@ ui.Editbox.bind("C-d", function(edt)
     end
   end
 end)
+
+--[[
+
+An alternative version which uses less memory:
+
+    local pos = edt:sub(edt.cursor_offs + 1):p_find(pattern)
+    if pos then
+      edt.cursor_offs = edt.cursor_offs + pos
+
+]]

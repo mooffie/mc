@@ -52,7 +52,7 @@ local COLOR_DEFAULT = -1   -- Default color of the terminal.
 
 M.bold_range = { min = 8, max = 15 } -- Make colors 8..15 bold, 0..7 normal. You may change that.
 
---------------------------------------- 16 colors palettes -------------------------------
+----------------------------------- 16 colors palettes -----------------------------------
 
 --[[
 The following color palettes were copied from GNOME Terminal using:
@@ -61,7 +61,6 @@ The following color palettes were copied from GNOME Terminal using:
 
 (Note: the command no longer works for me. google: "Terminal now uses GSettings and DConf instead of GConf.")
 ]]
-
 
 M.palettes = {
   tango = '#000000000000:#CCCC00000000:#4E4E9A9A0606:#C4C4A0A00000:#34346565A4A4:#757550507B7B:#060698209A9A:#D3D3D7D7CFCF:#555557575353:#EFEF29292929:#8A8AE2E23434:#FCFCE9E94F4F:#72729F9FCFCF:#ADAD7F7FA8A8:#3434E2E2E2E2:#EEEEEEEEECEC',
@@ -82,7 +81,6 @@ M.palette = M.palettes.rxvt  -- 'rxvt' seems to be the least awful of the bluish
 -- The parsed palette.
 local palette_tbl = nil
 
-
 -- Parses the palette string.
 local function parse_palette()
 
@@ -97,26 +95,29 @@ local function parse_palette()
   --devel.view(palette_tbl)
 end
 
---------------------------------------- Terminal-color to HTML-color conversion -------------------------------
+------------------------ Terminal-color to HTML-color conversion -------------------------
 
--- Converts a terminal color (a number from 0 to 255, or -1) to an HTML hex color (e.g., "#FF0000").
-
-
+--
 -- Two charts explaining the 256 colors scheme of the terminal:
 --
 --   http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
 --   http://en.wikipedia.org/wiki/File:Xterm_256color_chart.svg
 --
 -- The first is easier to grok (but errs in colors #241 and #242).
+--
 
 -- The values of a single dimension in the RGB 6x6x6 cube.
 local rgb_val = { [0] = "00", "5F", "87", "AF", "D7", "FF" }
 
+--
+-- Converts a terminal color (a number from 0 to 255, or -1) to
+-- an HTML hex color (e.g., "#FF0000").
+--
 local function html_color(idx)
 
   if idx == COLOR_DEFAULT then
 
-    return "inherit"    -- That's a CSS value.
+    return "inherit"  -- That's a CSS value.
 
   elseif idx > 255 or idx < 0 then
 
@@ -153,9 +154,7 @@ local function html_color(idx)
   end
 end
 
-
---------------------------------------- Terminal-style to CSS conversion -------------------------------
-
+---------------------------- Terminal-style to CSS conversion ----------------------------
 
 -- A few special styles used for monochrome (do 'mc -b').
 local special_styles = {
@@ -169,7 +168,9 @@ local function canonize(style)
   return special_styles[style.fg] or style
 end
 
+--
 -- Converts a "curses" style to CSS declarations.
+--
 local function style_to_css(style, page_style, skip_attrs)
   local s = ""
 
@@ -210,11 +211,11 @@ local function style_idx_to_css(style_idx, page_style, skip_attrs)
   return style_to_css(tty.destruct_style(style_idx), page_style, skip_attrs)
 end
 
--------------------------------------------------------------------
+------------------------------------------------------------------------------------------
 
-
-
+--
 -- Breaks the whole text into segments each belonging to a single style.
+--
 local function segmentize(edt)
 
   local segs = {}
@@ -242,9 +243,7 @@ local function segmentize(edt)
         -- Start a new segment
         seg = {}
         seg.start = pos
-        --seg.style = tty.destruct_style(style)
         seg.style = destruct_style(style)
-        --seg.idx = style
       end
       last_style = style
     end
@@ -274,7 +273,7 @@ do.
 local function gen_css_class_name(s)
   return
     s
-      :gsub('background%-color', 'background'):gsub('font%-weight', '')  -- Just to shorten the name.
+      :gsub('background%-color', 'background'):gsub('font%-weight', '')  -- Makes the names shorter.
       :gsub('[^%w]+', '_')  -- Does the actual work.
 end
 
@@ -284,7 +283,13 @@ local function html_escape(s)
 end
 
 ---
--- htmlize an Editbox or a Canvas.
+-- Htmlizes an Editbox or a Canvas.
+--
+-- The object htmlized has to support the following methods:
+--
+--  * get_style_at
+--  * len
+--  * sub
 --
 -- Returns two strings: the CSS, and the HTML.
 --
@@ -332,11 +337,12 @@ function M.htmlize(edt)
 end
 
 ---
--- htmlize into a file.
+-- Htmlizes into a file.
 --
 -- The input may be an Editbox, a Canvas, or a string denoting a path
 -- to some source file (which will be loaded into a non-visible Editbox
 -- and htmlized).
+--
 function M.htmlize_to_file(input, output_filename)
 
   if type(input) == "string" then
@@ -348,11 +354,12 @@ function M.htmlize_to_file(input, output_filename)
 
   local css, source = M.htmlize(input)
 
-  local f = assert(fs.open(output_filename, 'w'))
+  local f = assert(fs.open(output_filename, "w"))
   assert(f:write(M.template:format(css, source)))
   assert(f:close())
 
 end
 
-return M
+------------------------------------------------------------------------------------------
 
+return M

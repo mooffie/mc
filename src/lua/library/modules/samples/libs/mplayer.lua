@@ -1,6 +1,6 @@
 --[[
 
-Returns statistics about movie/song files (duration, width, height, bitrate).
+Returns statistics about video/audio files (duration, width, height, bitrate).
 
 Usage:
 

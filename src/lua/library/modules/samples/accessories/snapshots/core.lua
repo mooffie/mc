@@ -21,6 +21,7 @@ local shots_path = M.dir .. '/snapshots.lua'
 
 -- Settings to save.
 local fields = {
+  -- Note: The order is important. See comment in set_panel_settings().
   'dir', 'current', 'sort_field', 'sort_reverse', 'list_type',
   'custom_format', 'custom_mini_status', 'custom_mini_status_format',
 }
@@ -101,7 +102,8 @@ local function set_panel_settings(pnl, settings, domain)
       pnl.dir = settings.dir
     end
   else
-    -- Note: the order in which we set the fields is important: We can't set 'current' before 'dir'...
+    -- Note: the order in which we set the fields is important: We can't set
+    -- 'current' before 'dir', or 'custom_mini_status_format' before 'list_type'.
     for _, name in ipairs(fields) do
       if settings[name] ~= nil then  -- The user may have edited some settings out.
         pnl[name] = settings[name]
