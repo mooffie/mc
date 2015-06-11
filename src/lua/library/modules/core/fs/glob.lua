@@ -47,9 +47,15 @@ Drawbacks
 --- @module fs
 
 local glob_compile = require('utils.glob').compile
+local tty_is_utf8 = require('tty').is_utf8()
 
 local function compile_pat(gpat, opts)
-  return glob_compile(gpat, opts.nocase and "i")
+  return glob_compile(gpat,
+    (opts.nocase and "i" or "") ..
+    (opts.utf8 == nil  -- logic explained in glob().
+      and (tty_is_utf8 and "u" or "")
+      or  (opts.utf8   and "u" or ""))
+  )
 end
 
 --------------------------------- do_glob() ----------------------------------
@@ -232,6 +238,10 @@ end
 -- The optional **opts** table holds various customization options and flags.
 --
 -- - opts.nocase - If *true*, ignores case when matching filenames. "*.c" would match both "file.c" and "file.C".
+-- - opts.utf8 -- If *true*, filenames are assumed to be UTF-8 encoded
+--   ("?" matches a character, not byte, and *ops.nocase* works). If *false*,
+--   this handling is turned off. If missing (*nil*), decision is based on
+--   @{tty.is_utf8} (as MC @{2743|itself does}).
 -- - opts.fail - If *true*, an exception is raised in case of error (e.g., directory with no read permission, etc.); otherwise, errors are silently ignored.
 -- - opts.conditions - a list of functions to filter the results by. Each function ("predicate") gets
 --   the following arguments: the full path, a @{fs.StatBuf}, and the basename. It should
@@ -317,7 +327,8 @@ end
 --      alert("It's an image!")
 --    end
 --
--- The optional **opts** argument is described in @{glob} (only *nocase* is relevant).
+-- The optional **opts** argument is described in @{glob} (only *nocase* and
+-- *utf8* are relevant).
 --
 -- @function fnmatch
 -- @args (pattern, filename[, opts])
