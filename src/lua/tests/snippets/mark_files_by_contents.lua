@@ -13,7 +13,7 @@ is a huge time saver.
 ui.Panel.bind("C-x plus c", function(pnl)
 
   local needle = prompts.input(T"Mark MHT files containing the following string in their first 1024 bytes:",
-    nil, nil, "mark-by-contents")
+    -1, nil, "mark-by-contents")
 
   if not needle then
     return

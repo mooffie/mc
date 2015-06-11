@@ -10,9 +10,10 @@ local prompts = require("c.prompts")
 --
 --    local age = prompts.input(T"What's your age?")
 --    local lang = prompts.input(T"What's you mother tongue?", "English")
---    local food = prompts.input(T"What did you eat today?", nil, nil, "foods")
+--    local food = prompts.input(T"What did you eat today?", -1, nil, "foods")
 --
--- You may provide a **default** value to initialize the input with.
+-- You may provide a **default** value to initialize the input with. The special
+-- value `-1` initializes the input with the last value from the history.
 --
 -- The strings typed are kept in a shared history. If you wish your dialog to
 -- have a private history, provide some unique **history** string.

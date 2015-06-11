@@ -12,12 +12,9 @@ See also http://www.midnight-commander.org/ticket/400
 
 ]]
 
-local last_pattern = nil
-
 ui.Editbox.bind("C-d", function(edt)
-  local pattern = prompts.input(T"Search by regex:", last_pattern, nil, 'editbox-regex-search')
+  local pattern = prompts.input(T"Search by regex:", -1, nil, 'editbox-regex-search')
   if pattern then
-    last_pattern = pattern
     local pos = edt:sub(1):p_find(pattern, edt.cursor_offs + 1)
     if pos then
       edt.cursor_offs = pos

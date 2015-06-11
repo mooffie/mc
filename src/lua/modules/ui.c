@@ -981,6 +981,15 @@ l_input_new (lua_State * L)
 
 /**
  * The text being edited.
+ *
+ * [info]
+ *
+ * Setting this property to `-1` sets the text to the last value stored in the history:
+ *
+ *    local filename = ui.Input{text=-1, history='scanimage-output'}
+ *
+ * [/info]
+ *
  * @attr input.text
  * @property rw
  */
@@ -1007,10 +1016,30 @@ l_input_get_text (lua_State * L)
 static int
 l_input_set_text (lua_State * L)
 {
-    WInput *ipt = LUA_TO_INPUT (L, 1);
-    const char *text = luaL_checkstring (L, 2);
+    WInput *ipt;
+    const char *text;
 
     gboolean first;
+
+    ipt = LUA_TO_INPUT (L, 1);
+
+    /* '-1' means: load the text from history. */
+    if (luaMC_is_int_eq (L, 2, -1))
+    {
+        if (WIDGET (ipt)->owner)
+        {
+            /* 'init_from_history' is handled in dlg_init() */
+            luaL_error (L, "%s",
+                        E_
+                        ("You can only set the text property to '-1' *before* adding the widget to a dialog."));
+        }
+        text = "";
+        ipt->init_from_history = TRUE;
+    }
+    else
+    {
+        text = luaL_checkstring (L, 2);
+    }
 
     first = ipt->first;
 
@@ -1174,7 +1203,7 @@ l_input_set_history (lua_State * L)
     {
         /* The history is loaded in dlg_init() */
         luaL_error (L, "%s",
-                    E_ ("You must set the history *before* adding the widget to a dialog"));
+                    E_ ("You must set the history *before* adding the widget to a dialog."));
     }
 
     if ((histname != NULL) && (*histname != '\0'))

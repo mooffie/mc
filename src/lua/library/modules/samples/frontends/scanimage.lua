@@ -49,7 +49,7 @@ local M = {
   },
 
   defaults = {
-    filename = "noname",
+    filename = -1,  -- use last history value.
     additional_scan = "",     -- useful for "-d DEVICE" and such.
     additional_convert = "",  -- useful for "-rotate 90" and such.
     res = 100,

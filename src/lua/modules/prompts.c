@@ -35,17 +35,23 @@ l_input (lua_State * L)
      * is called on them later). */
     /* *INDENT-OFF* */
     question    = luaL_optstring(L, 1, "");
-    def_text    = luaL_optstring(L, 2, "");
+    def_text    = luaMC_is_int_eq (L, 2, -1) ? INPUT_LAST_TEXT : luaL_optstring(L, 2, "");
     title       = luaL_optstring(L, 3, "");
     history     = luaL_optstring(L, 4, MC_HISTORY_LUA_DEFAULT);
     is_password = lua_toboolean(L, 5);
     /* *INDENT-ON* */
 
 #ifdef ENABLE_BACKGROUND
-    /* @FIXME: MC bug: INPUT_PASSWORD isn't background safe, because it means
-     * doing strlen(-1)! */
-    if (mc_global.we_are_background && is_password)
+    if (mc_global.we_are_background)
+    {
+        /* @FIXME: MC bug: INPUT_PASSWORD and INPUT_LAST_TEXT aren't background
+           safe because they can't be marshaled. They aren't real strings and
+           input_dialog_help() attempts to pass them to strlen(). */
         is_password = FALSE;
+
+        if (def_text == INPUT_LAST_TEXT)
+            def_text = "";
+    }
 #endif
 
     answer =

@@ -77,6 +77,15 @@ luaMC_get_sign (lua_State * L, int idx)
     }
 }
 
+/**
+ * Whether an element is a number equal to some integer.
+ */
+gboolean
+luaMC_is_int_eq (lua_State * L, int idx, int val)
+{
+    return (lua_type (L, idx) == LUA_TNUMBER && lua_tointeger (L, idx) == val);
+}
+
 /* ------------------------------- Strings -------------------------------- */
 
 /**
