@@ -86,6 +86,15 @@ luaMC_is_int_eq (lua_State * L, int idx, int val)
     return (lua_type (L, idx) == LUA_TNUMBER && lua_tointeger (L, idx) == val);
 }
 
+/**
+ * Used seldom, when 'nil' doesn't mean 'false' but really a missing value.
+ */
+gboolean
+luaMC_optboolean (lua_State * L, int idx, gboolean def_val)
+{
+    return lua_isnoneornil (L, idx) ? def_val : lua_toboolean (L, idx);
+}
+
 /* ------------------------------- Strings -------------------------------- */
 
 /**
