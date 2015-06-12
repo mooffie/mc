@@ -204,7 +204,6 @@ void luaMC_requiref (lua_State * L, const char *modname, lua_CFunction openf);
 
 off_t mc_lua_fixup_idx (off_t idx, off_t len, gboolean endpoint);
 void luaMC_checkargcount (lua_State * L, int count, gboolean is_method);
-void luaMC_print_stack (lua_State * L, const char *label);
 
 /*
  * Use LUAMC_GUARD() and LUAMC_UNGUARD() to make sure your code's pushes and

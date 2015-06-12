@@ -761,30 +761,3 @@ luaMC_checkargcount (lua_State * L, int count, gboolean is_method)
             luaL_error (L, E_ ("Too many arguments for function; only %d expected"), count);
     }
 }
-
-/**
- * For debugging.
- *
- * We use it nowhere. Should we delete it?
- */
-void
-luaMC_print_stack (lua_State * L, const char *label)
-{
-    int i;
-    int top = lua_gettop (L);
-
-    if (label)
-        printf ("\n%s:\n", label);
-    if (top == 0)
-        puts ("Stack is empty.\n");
-    else
-    {
-        for (i = top; i >= 1; i--)
-        {
-            int type = lua_type (L, i);
-            const char *typename = lua_typename (L, type);
-            printf ("#%d: %10s: %-80.80s\n", i, typename,
-                    (type == LUA_TSTRING) ? lua_tostring (L, i) : "*");
-        }
-    }
-}
