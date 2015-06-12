@@ -64,9 +64,36 @@ build_features_table (lua_State * L)
 }
 
 /**
+ * Lua API features.
+ *
+ * This table is similar to the @{features} table except that it deals with Lua
+ * API features. This is actually a versioning mechanism: if MC's developers
+ * introduce some feature, during the lifetime of one major version, they can
+ * declare it in this table and your module can check for it thus:
+ *
+ *    assert(conf.features.api.a_fabulous_feature_i_need, E"I need this fabulous feature you don't have!")
+ *
+ * It is expected that this mechanism be used by internal MC code only. User
+ * code can rely on the version number embedded in Lua directories. All
+ * features declared in this table should be removed once the version number
+ * increments.
+ *
+ * @table features.api
+ */
+static void
+build_features_api_table (lua_State * L)
+{
+    lua_newtable (L);
+
+    /* Just for demonstration: */
+    lua_pushboolean (L, TRUE);
+    lua_setfield (L, -2, "a_fabulous_feature_i_need");
+}
+
+/**
  * Directories.
  *
- * This table contains paths of directries where MC-related configuration
+ * This table contains paths of directories where MC-related configuration
  * and data are stored.
  *
  * @field user_config Location of user configuration.
@@ -147,6 +174,10 @@ luaopen_conf (lua_State * L)
     luaL_newlib (L, conf_lib);
 
     build_features_table (L);
+    {
+        build_features_api_table (L);
+        lua_setfield (L, -2, "api");
+    }
     lua_setfield (L, -2, "features");
 
     build_dirs_table (L);
