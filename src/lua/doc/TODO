@@ -12,6 +12,9 @@ ui
     See comments in _bootstrap.lua and ui.lua.
   - Use a nicer dialog for alert()? I.e., use C's query_dialog() instead of message()?
     Should we name the button "OK" or "Dismiss"?
+  - Dialogs appear higher (that is, their 'y' coordinate) than they should. The logic
+    of TRY_UP was mimicked in ui.Dialog:set_dimensions() but something is certainly
+    amiss. Perhaps commit 5ae9521760 can shed light on this.
 
 
 misc

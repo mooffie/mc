@@ -162,7 +162,7 @@ do_view_cmd (gboolean normal)
 
 /* --------------------------------------------------------------------------------------------- */
 
-/*static inline*/ void   /* @FIXME: this should be public: lua/modules/mc.c wants this */
+static inline void
 do_edit (const vfs_path_t * what_vpath)
 {
     edit_file_at_line (what_vpath, use_internal_edit != 0, 0);

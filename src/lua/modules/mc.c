@@ -45,7 +45,7 @@
  *
  * @function view
  * @param path
- * @param[opt] line -- Scroll to this line. Leave empty to load saved place.
+ * @param[opt] line -- Scroll to this line. Leave empty (or zero) to load saved position.
  * @param[opt] internal -- Boolean. Whether to force using the internal
  *   viewer. Leave empty for user preference.
  * @param[opt] raw -- Boolean.  If set, does not do any fancy pre-processing
@@ -63,16 +63,12 @@ l_view (lua_State * L)
 
     /* *INDENT-OFF* */
     vpath      = luaFS_check_vpath(L, 1);
-    line       = lua_isnoneornil(L, 2) ? -1 : luaL_checklong(L, 2);
+    line       = luaL_optlong(L, 2, 0);  /* 0 = load saved position */
     internal   = lua_isnoneornil(L, 3) ? use_internal_view : lua_toboolean(L, 3);
     plain_view = lua_isnoneornil(L, 4) ? FALSE : lua_toboolean(L, 4);
     /* *INDENT-ON* */
 
-    if (line == -1)
-        /* @FIXME: it seems there's a bug in view_file(): it calls load_file_position() if !internal. */
-        view_file (vpath, plain_view, internal);
-    else
-        view_file_at_line (vpath, plain_view, internal, line);
+    view_file_at_line (vpath, plain_view, internal, line);
 
     return 0;
 }
@@ -103,7 +99,7 @@ l_view_command (lua_State * L)
     luaTTY_assert_ui_is_ready (L);
 
     command = luaL_checkstring (L, 1);
-    line = lua_isnoneornil (L, 2) ? 0 : luaL_checklong (L, 2);
+    line = luaL_optlong (L, 2, 0);
 
     mcview_viewer (command, NULL, line);
 
@@ -120,27 +116,11 @@ l_view_command (lua_State * L)
  *
  *    mc.edit('/etc/issue')
  *
- * [note]
- *
- * There are two "bugs", or "deficiencies", in MC:
- *
- * - If you don't provide a line number, the __internal__ argument will be
- * ignored (that is, the user preference will always be used).
- *
- * - If you do provide a line number, then when you exit the editor the file
- * will vanish from `$HOME/.local/share/mc/filepos` (when you have "Save file
- * position" enabled) if the cursor is at the file's beginning and there are
- * no bookmarks.
- *
- * (These issues are explained further in the C code of this Lua function.)
- *
- * [/note]
- *
  * @function edit
  *
  * @param path
  * @param[opt] line -- Start with the cursor positioned on this line. Leave
- *   empty to load saved place.
+ *   empty (or zero) to load saved position.
  * @param[opt] internal -- Boolean. Whether to force using the internal
  *   editor. Leave empty for user preference.
  */
@@ -154,40 +134,26 @@ l_edit (lua_State * L)
     luaTTY_assert_ui_is_ready (L);
 
     /* *INDENT-OFF* */
-    vpath      = luaFS_check_vpath(L, 1);
-    line       = lua_isnoneornil(L, 2) ? -1 : luaL_checklong(L, 2);
-    internal   = lua_isnoneornil(L, 3) ? use_internal_edit : lua_toboolean(L, 3);
+    vpath    = luaFS_check_vpath(L, 1);
+    line     = luaL_optlong(L, 2, 0);  /* 0 = load saved position */
+    internal = lua_isnoneornil(L, 3) ? use_internal_edit : lua_toboolean(L, 3);
     /* *INDENT-ON* */
 
-    if (line == -1)
-    {
-        /*
-         * do_edit() eventually loads the line using load_file_position().
-         *
-         * @FIXME:
-         *
-         *  - it doesn't accept 'internal' (unlike view_file()/edit_file_at_line()).
-         *  - should be renamed to 'edit_file'.
-         */
-        do_edit (vpath);
-    }
-    else
-    {
-        /*
-         * @FIXME:
-         *
-         * File will vanish from `$HOME/.local/share/mc/filepos` upon exist, if
-         * cursor at beginning and no bookmarks.
-         *
-         * Some would suggest that this is the correct behavior, but this
-         * does *not* happen when editing via <F4>. Besides, this could be a
-         * nice feature on which the following feature request is based:
-         *
-         *   http://www.midnight-commander.org/ticket/280
-         *   http://www.midnight-commander.org/ticket/2733
-         */
-        edit_file_at_line (vpath, internal, line);
-    }
+    /*
+     * @FIXME:
+     *
+     * If line != 0, then file will vanish from `$HOME/.local/share/mc/filepos`
+     * (when "Save file position" is enabled) upon existing the editor, if
+     * cursor is at beginning of buffer and no bookmarks.
+     *
+     * Some would suggest that this is the correct behavior, but this
+     * does *not* happen when editing via <F4>. Besides, this could be a
+     * nice feature on which the following feature request is based:
+     *
+     *   http://www.midnight-commander.org/ticket/280
+     *   http://www.midnight-commander.org/ticket/2733
+     */
+    edit_file_at_line (vpath, internal, line);
 
     return 0;
 }
