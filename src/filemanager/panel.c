@@ -113,7 +113,7 @@ static const char *string_space (file_entry_t *, int);
 static const char *string_dot (file_entry_t *, int);
 
 /* *INDENT-OFF* */
-panel_field_t panel_fields_initializers[] = {
+static panel_field_t panel_fields_initializers[] = {
     {
      "unsorted", 12, TRUE, J_LEFT_FIT,
      /* TRANSLATORS: one single character to represent 'unsorted' sort mode  */
