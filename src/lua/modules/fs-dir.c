@@ -19,6 +19,15 @@
 static int l_dir_next (lua_State * L);
 static int l_opendir (lua_State * L);
 
+/*
+ * The Lua userdata.
+ */
+typedef struct
+{
+    DIR *dir;
+    gboolean include_dot_dot;   /* Whether to return the '.' and '..' when traversing. */
+} dir_obj_t;
+
 /**
  * Iterates over files in a directory.
  *
@@ -90,12 +99,6 @@ l_dir (lua_State * L)
     mc_closedir (dir);
     return 1;
 }
-
-typedef struct
-{
-    DIR *dir;
-    gboolean include_dot_dot;   /* Whether to return the '.' and '..' when traversing. */
-} dir_obj_t;
 
 /**
  * Opens a directory for reading.

@@ -110,7 +110,9 @@ directly.
  * Note: MC, starting with 4.8.14, requires GLib 2.14+, so we do know we have regex support.
  */
 
-/* The Lua userdata. */
+/*
+ * The Lua userdata.
+ */
 typedef struct
 {
     GRegex *handle;

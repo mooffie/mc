@@ -813,17 +813,20 @@ l_checkbox_set_text (lua_State * L)
 }
 
 /**
- * Convert a hotkey back to a string.
+ * Converts a hotkey back to a string.
  *
- * @FIXME: this should be moved to lib/widget/widget-common.c.
+ * Code copied from button_get_text().
+ *
+ * @FIXME: this should be moved to lib/widget/widget-common.c,
+ * button_get_text() should be made to use it, and we should have
+ * checkbox_get_text() as well.
  */
 static char *
 unparse_hotkey (const hotkey_t hotkey)
 {
-    return g_strdup_printf ("%s%s%s%s",
-                            hotkey.start,
-                            hotkey.hotkey ? "&" : "",
-                            hotkey.hotkey ? hotkey.hotkey : "", hotkey.end ? hotkey.end : "");
+    if (hotkey.hotkey != NULL)
+        return g_strconcat (hotkey.start, "&", hotkey.hotkey, hotkey.end, (char *) NULL);
+    return g_strdup (hotkey.start);
 }
 
 static int

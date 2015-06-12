@@ -17,18 +17,23 @@ ui
     amiss. Perhaps commit 5ae9521760 can shed light on this.
 
 
+build
+  - Do we really need the '$(PCRE_CPPFLAGS)' in our makefiles?
+  - gnuplot uses "thousands' grouping separator" (according to /doc/gnuplot-doc/htmldocs/External_005flibraries.html).
+    See if their 'configure' detects this in a way better than ours.
+  - Use of GINT_TO_POINTER, in luafs*.c, now generates warning because of -Wbad-function-cast:
+
+      "warning: cast from function call of type 'int' to non-matching type 'void *' [-Wbad-function-cast]
+        #define GINT_TO_POINTER(i) ((gpointer) (gint) (i))"
+
+
 misc
   - See if http://getmoai.com/forums/luajit-traceback-in-coroutine-t2662/
     anyhow applies to us (LuaJIT "debug mode").
   - git-related features (fields, etc.) cause error message printed (stderr) when
     the repository is not valid (right after "git init").
-  - Do we really need the '$(PCRE_CPPFLAGS)' in our makefiles?
   - Ask MC's maintainers to add '--leave-preprocessor-space' (short: '-lps') to
     indent's invocation in doc/HACKING (for our capi.h).
-  - Use of GINT_TO_POINTER, in luafs*.c, now generates warning because of -Wbad-function-cast:
-
-      "warning: cast from function call of type 'int' to non-matching type 'void *' [-Wbad-function-cast]
-        #define GINT_TO_POINTER(i) ((gpointer) (gint) (i))"
 
 
 ldoc

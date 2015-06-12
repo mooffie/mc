@@ -289,24 +289,31 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
         return call_widget_method (w, "on_unfocus", 0, NULL);
 
     case MSG_CURSOR:
-        call_widget_method (w, "on_cursor", 0, &method_found);
-        return method_found ? MSG_HANDLED : MSG_NOT_HANDLED;
+        {
+            call_widget_method (w, "on_cursor", 0, &method_found);
+            return method_found ? MSG_HANDLED : MSG_NOT_HANDLED;
+        }
 
     case MSG_KEY:
         {
             lua_pushinteger (Lg, parm);
             return call_widget_method (w, "on_key", 1, NULL);
         }
+
     case MSG_HOTKEY:
         {
             lua_pushinteger (Lg, parm);
             return call_widget_method (w, "on_hotkey", 1, NULL);
         }
+
     case MSG_DRAW:
         {
             /* Color and cursor position are arbitrary at this point,
              * so we reset them to something sane: */
-            if (w->owner->color != NULL)        /* in case this widget is injected into the editor/viewer, which have NULL here. */
+
+            /* This widget may have been injected into the editor/viewer, whose
+             * 'color' pointer is NULL, so we have to guard against this. */
+            if (w->owner->color != NULL)
                 tty_setcolor (w->owner->color[DLG_COLOR_NORMAL]);
             else
                 tty_setcolor (dialog_colors[DLG_COLOR_NORMAL]);

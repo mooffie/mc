@@ -97,6 +97,9 @@ aware of this fact.
 
 #define DEBUG_CANVAS 1
 
+/*
+ * The Lua userdata.
+ */
 typedef struct
 {
     int x, y;

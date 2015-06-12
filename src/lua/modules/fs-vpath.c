@@ -110,21 +110,27 @@ can do either `fs.chdir("/")` or `fs.chdir(fs.VPath("/"))`.
 #include "fs.h"
 
 
+/*
+ * The Lua userdata.
+ */
 typedef struct
 {
     gboolean has_stash;
     vfs_path_t *vpath;
-} vfs_path__lua_userdata;
+} lua_vpath_t;
+
+/* ------------------------- Pushing a vpath ------------------------------ */
 
 /**
- * It doesn't clone the vpath, so make sure you know why you're calling it.
+ * This function doesn't clone the vpath, so pass it only vpaths you
+ * yourself have allocated.
  */
 static void
 luaFS_push_vpath__without_cloning (lua_State * L, vfs_path_t * vpath)
 {
-    vfs_path__lua_userdata *userdata;
+    lua_vpath_t *userdata;
 
-    userdata = luaMC_newuserdata (L, sizeof (vfs_path__lua_userdata), "fs.VPath");
+    userdata = luaMC_newuserdata (L, sizeof (lua_vpath_t), "fs.VPath");
     userdata->has_stash = FALSE;
     userdata->vpath = vpath;
 }
@@ -135,10 +141,12 @@ luaFS_push_vpath (lua_State * L, const vfs_path_t * vpath)
     luaFS_push_vpath__without_cloning (L, vfs_path_clone (vpath));
 }
 
+/* ---------------------- Checking out a vpath ---------------------------- */
+
 vfs_path_t *
 luaFS_check_vpath_ex (lua_State * L, int index, gboolean relative)
 {
-    vfs_path__lua_userdata *userdata;
+    lua_vpath_t *userdata;
 
     index = lua_absindex (L, index);
 
@@ -182,6 +190,8 @@ luaFS_check_vpath (lua_State * L, int index)
 {
     return luaFS_check_vpath_ex (L, index, FALSE);
 }
+
+/* ------------------------------------------------------------------------ */
 
 /**
  * An array of path elements.
@@ -546,7 +556,7 @@ vpath_argument *
 get_vpath_argument (lua_State * L, int index)
 {
     vpath_argument *arg = NULL;
-    vfs_path__lua_userdata *userdata;
+    lua_vpath_t *userdata;
 
     /* If the item is already a VPath, return it. */
     if ((userdata = luaL_testudata (L, index, "fs.VPath")))
