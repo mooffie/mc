@@ -10,9 +10,9 @@ local function test()
   local updates = 0
 
   ipt.on_change = function()
+    updates = updates + 1
     lbl.text = ipt.text
     grp.text = ("Number of updates: %d"):format(updates)
-    updates = updates + 1
   end
 
   dlg:add(

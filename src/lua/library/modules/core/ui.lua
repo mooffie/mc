@@ -871,22 +871,29 @@ local InputMeta = ui.Input.meta
 function InputMeta:set_on_change(action)
   -- Unless we use rawset() we'll end up calling this function again,
   -- due to our VB magic.
-  rawset(self, 'on_change', action) 
+  rawset(self, 'on_change', action)
 
   -- The underlying C library doesn't fire an event for us, so we simulate
   -- this event using on_post_key.
-  self.on_post_key = function(self)
-    if self:get_text() ~= rawget(self, "previous_text") then
-      if self.on_change then
-        self:on_change()
-      end
-      rawset(self, "previous_text", self:get_text())
+  self.on_post_key = action and function(self)
+    if self:get_text() ~= self.previous_text then
+      self:on_change()
+      self.previous_text = self:get_text()
     end
+  end
+end
+
+function InputMeta:on_init()
+  if self.on_change then
+    -- This prevents the first keypress triggering spurious on_change even
+    -- when the text hasn't changed; e.g., when using arrow keys.
+    self.previous_text = self:get_text()
   end
 end
 
 InputMeta.__allowed_properties = {
   on_change = true,
+  previous_text = true,
 }
 
 ---
