@@ -224,6 +224,10 @@ end
 -- effect on the text. For performance reasons this is _not_ done automatically after
 -- each :add_keyword().
 --
+-- Of course, if you're doing your stuff in `<<load>>`, as in one example above, you
+-- don't need to call @{ui.redraw|:redraw()} because the text is drawn afterwards in
+-- any case.
+--
 -- [/info]
 --
 -- [note]

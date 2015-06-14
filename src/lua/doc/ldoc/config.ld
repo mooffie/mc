@@ -655,7 +655,7 @@ postprocess_html = function(s, item)
   -- This is an ugly ad hoc thing. The proper solution is to include a JS script. We're
   -- certainly not going to win a prize for this code.
 
-  s = s:gsub('<p>%[expand%]</p>(.-)<p>%[/expand%]</p>', function(inside)
+  s = s:gsub('<p>%s*%[expand%]</p>(.-)<p>%s*%[/expand%]</p>', function(inside)
 
     local id = 'hidden' .. __html_id
     local getter = 'document.getElementById("' .. id .. '")'

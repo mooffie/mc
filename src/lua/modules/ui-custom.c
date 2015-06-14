@@ -358,6 +358,8 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  *
  * There are a few subtle implementation differences between GPM and xterm:
  *
+ * [expand]
+ *
  * - Several buttons may be pressed simultaneously, but when using xterm
  * (as opposed to GPM) only one button will be indicated (in **buttons**)
  * as pressed.
@@ -369,6 +371,8 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  * of this issue.)
  *
  * - "triple" is supported only on GPM, not xterm.
+ *
+ * [/expand]
  *
  * [/info]
  *

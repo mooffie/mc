@@ -948,7 +948,7 @@ function DlgMeta:init()
   self.padding = 1
 end
 
-function ui.__assert_dialog(obj)
+function ui.__assert_dialog(obj)  -- This isn't a 'local' function because we call it in gc.lua too.
   if type(obj) ~= "table" or obj.widget_type ~= "Dialog" then
     error(E"You must call this method on a Dialog widget only (perhaps you used '.' instead of ':' ?)", 3)
   end
@@ -1135,7 +1135,8 @@ Finds a widget among the children.
 
 This is a convenience interface for @{mapped_children}.
 
-There are three criteria to search by. Each is optional, and the order doesn't matter:
+There are three criteria to search by. Each is optional, and the order
+doesn't matter:
 
 - _wtype_ - the widget type (a string).
 
@@ -1378,7 +1379,7 @@ function ui.Buttons(skip_zline)
   return this
 end
 
---- Creates an "Ok" button.
+--- Creates an "OK" button.
 --
 -- Typically you'd use this function only if @{DefaultButtons} doesn't suit
 -- your needs.
@@ -1583,13 +1584,13 @@ end
 
 -- The following was a failed attempt at autoloading. See next comment.
 
-ui.Hidden = {}
+ui.hidden = {}
 
 local function autoload_widget(klass_name, module)
-  ui.Hidden[klass_name] = ui[klass_name]
+  ui.hidden[klass_name] = ui[klass_name]
   ui[klass_name] = nil
   ui.autoload(klass_name, function()
-    ui[klass_name] = ui.Hidden[klass_name]
+    ui[klass_name] = ui.hidden[klass_name]
     require(module)
     return ui[klass_name]
   end)
@@ -1604,8 +1605,9 @@ autoload_widget('Panel', 'ui.panel')
 
 -- Unfortunately, autoloading won't work for us. We have to explicitly load
 -- these modules because code like `pnl = ui.current_widget()` or
--- `c = wgt:to_canvas()` doesn't reference ui.Panel, ui.Canvas etc. See comment
--- in the TODO file.
+-- `c = wgt:to_canvas()` or `event.bind("Panel::load")` doesn't reference
+-- ui.Panel, ui.Canvas etc. See comment in _bootstrap.lua too.
+
 require('ui.canvas')
 require('ui.panel')
 if conf.features.editbox then

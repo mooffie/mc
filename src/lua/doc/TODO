@@ -4,12 +4,10 @@ vpath
     'utils.path' are ad-hoc.
   - Have an fs.mkdir_p() which does support the VFS (in contrast to fs.nonvfs_mkdir_p()).
   - i18n: do we need ui.Panel:to_tty (a la ui.Editbox:to_tty)? Where are filenames and/or
-    directory get encoded? (M-e)
+    directories get encoded? (M-e)
 
 
 ui
-  - Autoloading widgets? Currently, we unconditionally require 'ui.lua' and 'ui/*.lua'.
-    See comments in _bootstrap.lua and ui.lua.
   - Use a nicer dialog for alert()? I.e., use C's query_dialog() instead of message()?
     Should we name the button "OK" or "Dismiss"?
   - Dialogs appear higher (that is, their 'y' coordinate) than they should. The logic

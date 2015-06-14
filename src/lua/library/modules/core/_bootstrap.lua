@@ -133,8 +133,10 @@ local function load_all_scripts(dir)
 
 end
 
--- We're loading the rest of the site in a later stage so that possible
--- exceptions there don't halt the rest of this script.
+-- Load the rest of the site.
+--
+-- We're doing it at a later stage so that possible exceptions there don't
+-- halt the rest of this script.
 event.bind('core::loaded', function()
   devel.log(":: Loading distro scripts ::")
   load_all_scripts(lua_system_dir)
