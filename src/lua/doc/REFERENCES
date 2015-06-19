@@ -108,12 +108,22 @@ Misc
       and many other GTK applications do now) plugins can be written in
       practically any scripting language."
 
+- man 8 udisks:
+
+  "a library, libudisks2 is also provided. This library can be used from
+  C/C++ and any high-level language with GObjectIntrospection support such
+  as Javascript and Python."
+
 
 ======= Ideas for samples ==========
 
 Fields
   index: show running number (nah! better to print "5/728" at bottom!)
   bm: show "B"/"*" if there are bookmarks/position saved.
+  package: show the package a file belongs to (via 'dpkg --search path'(?) or wiki.archlinux.org/index.php/Pkgfile)
+    (No, perhaps we should do that in "Quick view" (see "quickview" in TICKETS-SOLVED.md for
+    related ideas. On the other hand, it would be best to allow users to extent "Quick view" via
+    a shell script (@todo: open a ticket); no need for Lua).)
 
 Panel
   trash ("safe delete")
@@ -122,6 +132,9 @@ Panel
       http://forums.bodhilinux.com/index.php?/topic/1098-the-trash-can-command-line-style/
   Warn, using a docked lanel, if the shell has something typed into
     it (see #2110, #213).
+  Mounting/listing devices.
+    'man 8 udisks' says "for desktop applications it is a much better idea to
+    use something like GVolumeMonitor". See also wiki.archlinux.org/index.php/Udisks .
 
 Games
   http://www.inn.co.il/Children/Flash.aspx/g/36  (mountains in the BG)

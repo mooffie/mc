@@ -885,8 +885,8 @@ end
 
 function InputMeta:on_init()
   if self.on_change then
-    -- This prevents the first keypress triggering spurious on_change even
-    -- when the text hasn't changed; e.g., when using arrow keys.
+    -- This prevents the first keypress from triggering a spurious on_change
+    -- event when the text hasn't changed; e.g., when using an arrow key.
     self.previous_text = self:get_text()
   end
 end

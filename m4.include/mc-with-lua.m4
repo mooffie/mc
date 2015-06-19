@@ -45,9 +45,9 @@ AC_DEFUN([MC_WITH_LUA], [
                     dnl The decision to put LuaJIT first is arbitrary. We may want to
                     dnl revisit this ordering issue in the future.
                     dnl
-                    dnl The trailing "lua" might be Lua 5.0, which is why it's the last try. If
-                    dnl it's indeed 5.0, which we don't support, we'll detect this in the
-                    dnl tests that are to follow.
+                    dnl The trailing "lua" (below) might be Lua 5.0, which is why it's
+                    dnl the last try. If it's indeed 5.0, which we don't support, we'll
+                    dnl detect this in the tests that are to follow.
                     tries="$triesjit $tries53 $tries52 $tries51 lua" ;;
             *)
                     dnl Search for a package named explicitly.

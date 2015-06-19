@@ -17,8 +17,6 @@ ui
 
 build
   - Do we really need the '$(PCRE_CPPFLAGS)' in our makefiles?
-  - gnuplot uses "thousands' grouping separator" (according to /doc/gnuplot-doc/htmldocs/External_005flibraries.html).
-    See if their 'configure' detects this in a way better than ours.
   - Use of GINT_TO_POINTER, in luafs*.c, now generates warning because of -Wbad-function-cast:
 
       "warning: cast from function call of type 'int' to non-matching type 'void *' [-Wbad-function-cast]

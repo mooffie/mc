@@ -1,5 +1,5 @@
 dnl
-dnl This code is called after the Lua engine had been found and pulled in.
+dnl This code is called after the Lua engine had been found.
 dnl It checks the system's consistency and engine's features.
 dnl
 dnl @author Mooffie

@@ -142,7 +142,7 @@ M.checkers = {
 local checkers = M.checkers  -- So we can type two characters less.
 
 checkers['C/C++ Program'] = checkers['C Program']
-checkers['LUA Program'] = checkers['Lua Program']  -- "LUA" is the current, *wrong* spelling used by MC. Future-compatibility.
+checkers['LUA Program'] = checkers['Lua Program']  -- Backward-compatibility: old 'mcedit/Syntax' files may still incorrectly call the language "LUA".
 
 ------------------------------- Lint selector --------------------------------
 
@@ -257,7 +257,7 @@ function M.run()
     return
   end
 
-  -- Highlight (bookmark) all problematic lines.
+  -- Highlight (bookmark) all the problematic lines.
   for _, problen in ipairs(problems) do
     ed:bookmark_set(problen.value, style.problem)
   end
@@ -275,8 +275,8 @@ function M.run()
   list:on_change()
 
   dlg:add(list)
-   :set_dimensions(0, tty.get_rows() - dlg:preferred_rows() - 1, tty.get_cols())
-   :run()
+    :set_dimensions(0, tty.get_rows() - dlg:preferred_rows() - 1, tty.get_cols())
+    :run()
 
 end
 

@@ -102,8 +102,9 @@ vfs_plugins_init (void)
     init_localfs ();
 
 #ifdef ENABLE_VFS_LUAFS
-    /* We put LuaFS early so it can override paths of the the other filesystems.
-     * I.e., a Lua filesystem handling uzip:// will override ExtFS's uzip://. */
+    /* By placing LuaFS early we make it possible for it to override paths
+     * of the other filesystems. E.g., a Lua filesystem handling uzip:// will
+     * override ExtFS's uzip://. */
     init_luafs ();
 #endif /* ENABLE_VFS_LUAFS */
 #ifdef ENABLE_VFS_CPIO
