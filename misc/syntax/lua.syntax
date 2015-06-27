@@ -32,12 +32,12 @@ context default lightgray
     keyword whole until white
     keyword whole while white
 
-# Comments
+# Comment and string delimiters
     keyword -- brown
     keyword ]\[=\]] brown
-
-    # The following is needed only for highlighting the start delimiter of "long" strings.
-    # It isn't actually used for the "long" comment delimiter (gods know why).
+    # The following colorizes the start delimiter of "long" strings.
+    # The start delimiter of "long" comments isn't affected by the following
+    # directive but gets its color from the "--" above (gods know why).
     keyword [\[=\][ brown
 
 # Operators
@@ -223,7 +223,7 @@ context default lightgray
 #
 
 context exclusive --[[ ]] brown
-    # hightlight "@todo", "@param", "@function" etc. ldoc tags.
+    # hightlights ldoc tags: "@todo", "@param", "@function" etc.
     keyword @\[abcdefghijklmnopqrstuvwxyz\] brightred base
     spellcheck
 context exclusive --[=[ ]=] brown
@@ -235,7 +235,7 @@ context exclusive --[==[ ]==] brown
 context exclusive --[===[ ]===] brown
     keyword @\[abcdefghijklmnopqrstuvwxyz\] brightred base
     spellcheck
-# 4 equals and up (the number of ='s don't have to match, but that's the best we can do):
+# 4 equals and up (the number of ='s doesn't have to match, but that's the best we can do):
 context exclusive --[====\[=\][ ]====\[=\]] brown
     keyword @\[abcdefghijklmnopqrstuvwxyz\] brightred base
     spellcheck
@@ -252,16 +252,17 @@ context exclusive [==[ ]==] brightmagenta
     spellcheck
 context exclusive [===[ ]===] brightmagenta
     spellcheck
-# 4 equals and up (the number of ='s don't have to match, but that's the best we can do):
+# 4 equals and up (the number of ='s doesn't have to match, but that's the best we can do):
 context exclusive [====\[=\][ ]====\[=\]] brightmagenta
     spellcheck
 
 
+# Simple comments
 context exclusive -- \n brown
     keyword @\[abcdefghijklmnopqrstuvwxyz\] brightred base
     spellcheck
 
-# shebang line
+# Shebang line
 context linestart #! \n brown
 
 # Strings
