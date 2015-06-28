@@ -172,6 +172,7 @@ function M.run()
   )
 
   if dlg:run() then
+    abortive(filename.text ~= "", T"You must type the output filename.")
     local opts = {
       filename = filename.text,
       additional_scan = additional_scan.text,
