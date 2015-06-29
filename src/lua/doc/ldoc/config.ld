@@ -867,6 +867,7 @@ custom_display_name_handler = function(item, default_handler)
                      :gsub('::', '!!')
                      :gsub('.*[.:]', '')     -- remove the possible qualifier.
                      :gsub('__event$', '')   -- you may append '__event' if the name is the same as a method's.
+                     :gsub('^zzz_', '')      -- you may prepend 'zzz_' to make it sort at the bottom. A temporary kludge till we figure out something better.
                      :gsub('!!', '::')
     return '&lt;&lt;' .. evname .. '&gt;&gt;'
   elseif item.type == 'function' and item.tags.callback then

@@ -2905,7 +2905,7 @@ l_dialog_focus (lua_State * L)
 }
 
 /**
- * Triggered after a dialog has been painted.
+ * Triggered after a dialog had been painted.
  *
  * You may use this event to add decoration to the dialog, like a
  * @{git:drop-shadow.lua|drop shadow}.
@@ -2934,7 +2934,7 @@ l_dialog_focus (lua_State * L)
  */
 
 /**
- * Triggered when a dialog has been opened.
+ * Triggered when a dialog is opened.
  *
  * You may use this event to notify the user with sound on alert boxes,
  * text-to-speech the title, etc.
@@ -2951,7 +2951,7 @@ l_dialog_focus (lua_State * L)
  *
  *    -- Make 'xsel' the default command of 'Paste output of...'.
  *    --
- *    -- (This technique isn't very robust becaue dialog titles may
+ *    -- (This technique isn't very robust because dialog titles may
  *    -- change between MC releases.)
  *
  *    ui.Dialog.bind('<<open>>', function(dlg)
@@ -2961,6 +2961,37 @@ l_dialog_focus (lua_State * L)
  *    end)
  *
  * @moniker open__event
+ * @event
+ */
+
+/**
+ * Triggered when a dialog is about to be closed.
+ *
+ * @moniker zzz_close__event
+ * @event
+ */
+
+/**
+ * Triggered when a dialog is about to be closed "successfully".
+ *
+ * When a dialog is closed by hitting Enter, or by clicking a positive
+ * button (that is, anything except the "Cancel" button), this event is
+ * triggered.
+ *
+ * This event is not triggered for dialogs that are canceled (e.g.,
+ * by pressing ESC).
+ *
+ * You may use this event to read data from the widgets. E.g., the
+ * @{git:find_title.lua} snippet uses this event to read the search
+ * parameters from the "Find File" dialog and put them in the title
+ * of the progress dialog that follows.
+ *
+ * Info-short: Right after this event is triggered, the @{zzz_close__event|<<close>>}
+ * event too is triggered.
+ *
+ * Info-short: The name of this event was borrowed from the JavaScript world.
+ *
+ * @moniker submit__event
  * @event
  */
 

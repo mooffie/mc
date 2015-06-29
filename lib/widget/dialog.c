@@ -1259,6 +1259,10 @@ dlg_run_done (WDialog * h)
 
     if (h->state == DLG_CLOSED)
     {
+        if (h->ret_value != B_CANCEL && h->ret_value != B_EXIT)
+            scripting_trigger_widget_event ("Dialog::submit", WIDGET (h));
+        scripting_trigger_widget_event ("Dialog::close", WIDGET (h));
+
         send_message (h, h->current->data, MSG_END, 0, NULL);
         if (!h->modal)
             dialog_switch_remove (h);

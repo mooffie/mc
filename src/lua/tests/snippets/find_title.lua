@@ -15,14 +15,7 @@ function ui.Dialog.meta:find_label(text)
   return self:find('Label', function(l) return l.text == text end)
 end
 
---
--- We have a glitch here: we read the search data only if the user
--- presses Enter, not if he uses the mouse or the "Ok"'s hotkey. We
--- can solve this by having a <<close>> (or <<submit>>/<<cancel>>)
--- dialog event.
---
-keymap.bind('enter', function()
-  local dlg = ui.Dialog.top
+ui.Dialog.bind('<<submit>>', function(dlg)
 
   if dlg.text == T'Find File' then
     local lbl = dlg:find_label(T'Content:')
@@ -33,7 +26,6 @@ keymap.bind('enter', function()
     end
   end
 
-  return false
 end)
 
 ui.Dialog.bind('<<open>>', function(dlg)
