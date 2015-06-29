@@ -2612,6 +2612,8 @@ l_dialog_set_text (lua_State * L)
     else
         dlg->title = NULL;
 
+    dlg_redraw (dlg);           /* In case the user changes the title of an active dialog. */
+
     return 0;
 }
 

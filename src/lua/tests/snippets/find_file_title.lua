@@ -35,7 +35,6 @@ ui.Dialog.bind('<<open>>', function(dlg)
       else
         dlg.text = T"Find File: '%s'":format(search_data.glob)
       end
-      dlg:refresh(true)  -- @todo: make Dialog:set_text redraw the dialog.
     end
   end
 
