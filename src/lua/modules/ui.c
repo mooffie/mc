@@ -2982,7 +2982,7 @@ l_dialog_focus (lua_State * L)
  * by pressing ESC).
  *
  * You may use this event to read data from the widgets. E.g., the
- * @{git:find_title.lua} snippet uses this event to read the search
+ * @{git:find_file_title.lua} snippet uses this event to read the search
  * parameters from the "Find File" dialog and put them in the title
  * of the progress dialog that follows.
  *
