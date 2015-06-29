@@ -45,15 +45,17 @@
  */
 
 /**
- * Users are probably more accustomed to keynames in the prevalent Emacs-style.
- * We therefore support this style. This function translates Emacs-style to the
- * style MC recognizes:
+ * Converts Emacs-style keynames to MC style.
  *
- *   "C-M-x"   ->  "ctrl-meta-x"
- *   "c-m-X"   ->  "ctrl-meta-X"
- *   "S-F1"    ->  "shift-F1"
- *   "S-<F1>"  ->  "shift-F1"
- *   "<Up>"    ->  "Up"
+ * Users are probably more accustomed to keynames in the prevalent Emacs-style,
+ * which is why we deem it important to support this style. This function
+ * translates Emacs-style to the style MC recognizes. For example:
+ *
+ *    "C-M-x"   ->  "ctrl-meta-x"
+ *    "c-m-X"   ->  "ctrl-meta-X"
+ *    "S-F1"    ->  "shift-F1"
+ *    "S-<F1>"  ->  "shift-F1"
+ *    "<Up>"    ->  "Up"
  *
  * @FIXME: move this functionality to MC itself.
  */
@@ -111,7 +113,6 @@ emacs_to_mc (const char *name)
                 break;
             }
         }
-
     }
 
     return g_string_free (mc, FALSE);
@@ -387,36 +388,40 @@ When our timer function returns, MC still sits there waiting
 isn't arrived at, and hence the screen isn't refreshed. That's
 why we need to refresh the screen explicitly from our timer function.
 
-@section drawing
+[info]
 
-*/
+The previous paragraph gave a "schema" of MC's event loop. Here's an
+overview of the actual C code, for interested programmers:
 
-/**
-
-The previous section gave a "schema" of the event loop. Here's a more
-detailed one, for C programmers:
+[expand]
 
     dlg_run() {
       dlg_init() {
-        dlg_redraw() {
-          update_cursor(dlg)
-        }
+        dlg_redraw()
       }
       frontend_dlg_run() {
-        while (h->state == DLG_ACTIVE) {
+        while (dlg->state == DLG_ACTIVE) {
           update_cursor(dlg)
           event = tty_get_event() {
             mc_refresh()
-            loop {
-              wait for keyboard event
-                execute pending timeouts
+            while (no keyboard or mouse event) {
+              execute pending timeouts
             }
             read event
           }
-          process event.
+          dlg_process_event(dlg, event)
         }
       }
     }
+
+(You'll notice that, in the `while` loop, steps **(D)** and **(E)**
+actually are the first to happen, but that's insignificant.)
+
+[/expand]
+
+[/info]
+
+@section drawing
 
 */
 

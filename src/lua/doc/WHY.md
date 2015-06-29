@@ -38,11 +38,6 @@ By implementing features in Lua we keep the C core lean.
 With this we unburden the core maintainers of swamps of work and free
 up their time to work on the important issues.
 
-
-Features that could previously only be created by gurus (in C and MC's
-internals) can now be created by novice programmers with but a
-tiny fraction of the effort.
-
 <!-- --------------------------------------------------------------------- -->
 
 ## No need for "gurus"
@@ -50,9 +45,9 @@ tiny fraction of the effort.
 Because programming in Lua is @{~#easier|easy}, the "average Joe"
 himself can customize and develop his MC.
 
-Features that could previously only be created by gurus (in C and MC's
-internals) can now be created by novice programmers with but a
-tiny fraction of the effort.
+Features that previously could only be created by gurus (proficient in
+both C and MC's internals) can now be created by novice programmers with
+but a tiny fraction of the effort.
 
 <!-- --------------------------------------------------------------------- -->
 

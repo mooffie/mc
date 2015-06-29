@@ -133,7 +133,7 @@ Frontend for archivers:
 - @{3221} "In 'Directory Hotlist' make right button work"      @{git:hotlist_right_as_enter.lua|sol}
 - @{2397} "Auto replace wrong symbols when makes a new dir"    @{git:input_sanitize.lua|sol}
 - @{2156} "Run editor from viewer"  @{git:viewer_edit.lua|sol}
-- @{3453} Show search criteria in Find File result/progress dialog.  @{git:find_title.lua|sol}
+- @{3453} Show search criteria in Find File result/progress dialog.  @{git:find_file_title.lua|sol}
 
 ** VFS **
 

@@ -2399,7 +2399,6 @@ l_dialog_get_on_idle (lua_State * L)
  *   - `"alarm"` (typically red dominated, for error boxes.)
  *   - `"pmenu"` (colors of popup menus, like the "User menu".)
  *
- *
  * You'd usually set this property in the constructor call:
  *
  *    dlg = ui.Dialog{T"A frightening dialog", colorset="alarm"}
@@ -2535,7 +2534,7 @@ l_dialog_run (lua_State * L)
      * the result ourselves, form the Lua side; this gives us the advantage of
      * not being limited to 'int' results), but there's one case we have
      * to be aware of: if no widget in the dialog handles the ENTER key, the
-     * dialog itself handle it to mean "successful exit" (see dlg_handle_key()).
+     * dialog itself handles it to mean "successful exit" (see dlg_handle_key()).
      * See also the Lua source for Dialog:run(). */
     lua_pushboolean (L, result != B_CANCEL);
 
@@ -2780,12 +2779,10 @@ static int
 l_dialog_set_dimensions (lua_State * L)
 {
     WDialog *dlg;
-    Widget *w;
     int x, y, cols, rows;
     gboolean send_msg_resize;
 
     dlg = LUA_TO_DIALOG (L, 1);
-
     x = luaL_checkint (L, 2);
     y = luaL_checkint (L, 3);
     cols = luaL_checkint (L, 4);
@@ -2810,8 +2807,10 @@ l_dialog_set_dimensions (lua_State * L)
      * we need to duplicate this code here. Solution: MC should
      * set it in dialog.c:dlg_set_position().
      */
-    w = WIDGET (dlg);
-    dlg->fullscreen = (w->x == 0 && w->y == 0 && w->cols == COLS && w->lines == LINES);
+    {
+        Widget *w = WIDGET (dlg);
+        dlg->fullscreen = (w->x == 0 && w->y == 0 && w->cols == COLS && w->lines == LINES);
+    }
 
     return 0;
 }
