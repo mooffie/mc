@@ -1056,6 +1056,7 @@ function DlgMeta:set_dimensions(x_, y_, cols_, rows_, send_msg_resize)
   rows_ = rows_ or self:preferred_rows()
 
   -- The following duplicates (not with great fidelity) the logic in dialog.c:dlg_set_size().
+  -- See ui_dialog_tryup.lua for more information.
   x_ = x_ or math.floor((tty.get_cols() - cols_) / 2)
   y_ = y_ or math.floor(math.max((tty.get_rows() - rows_) / 2 - 2, 1))
 
