@@ -134,6 +134,8 @@ Frontend for archivers:
 - @{2397} "Auto replace wrong symbols when makes a new dir"    @{git:input_sanitize.lua|sol}
 - @{2156} "Run editor from viewer"  @{git:viewer_edit.lua|sol}
 - @{3453} Show search criteria in Find File result/progress dialog.  @{git:find_file_title.lua|sol}
+- @{3493} "Switch 'Local'/'User' buttons on menu selector"     @{git:menu_user_button_focus.lua|sol}
+- @{3495} Tweaking widgets default values  @{ui.open__event|sol}
 
 ** VFS **
 
