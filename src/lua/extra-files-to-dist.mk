@@ -64,6 +64,7 @@ tests/nonauto/ui1.mcs \
 tests/nonauto/ui2.mcs \
 tests/nonauto/ui_canvas.mcs \
 tests/nonauto/ui_canvas_mouse.mcs \
+tests/nonauto/ui_dialog_tryup.lua \
 tests/nonauto/ui_filechooser.mcs \
 tests/nonauto/ui_gc.lua \
 tests/nonauto/ui_gc2.mcs \
@@ -81,7 +82,7 @@ tests/snippets/cfunc.lua \
 tests/snippets/complete_word.lua \
 tests/snippets/dialog_mover.lua \
 tests/snippets/edit_max.lua \
-tests/snippets/find_title.lua \
+tests/snippets/find_file_title.lua \
 tests/snippets/fop_move_basename.lua \
 tests/snippets/fop_move_jump.lua \
 tests/snippets/fop_move_tail.lua \
@@ -93,6 +94,7 @@ tests/snippets/listbox_AZ.lua \
 tests/snippets/listbox_digits.lua \
 tests/snippets/mark_files_by_contents.lua \
 tests/snippets/mark_wordstar.lua \
+tests/snippets/menu_user_button_focus.lua \
 tests/snippets/mkss.lua \
 tests/snippets/quicksearch_asterisk_first.lua \
 tests/snippets/search_by_regex.lua \
