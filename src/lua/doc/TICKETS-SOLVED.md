@@ -136,6 +136,7 @@ Frontend for archivers:
 - @{3453} Show search criteria in Find File result/progress dialog.  @{git:find_file_title.lua|sol}
 - @{3493} "Switch 'Local'/'User' buttons on menu selector"     @{git:menu_user_button_focus.lua|sol}
 - @{3495} Tweaking widgets default values  @{ui.open__event|sol}
+- @{2928} "Indicate read only mode for directories"
 
 ** VFS **
 

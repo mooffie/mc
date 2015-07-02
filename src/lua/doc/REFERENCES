@@ -133,6 +133,7 @@ Panel
   Warn, using a docked lanel, if the shell has something typed into
     it (see #2110, #213).
   Mounting/listing devices.
+    see #1488.
     'man 8 udisks' says "for desktop applications it is a much better idea to
     use something like GVolumeMonitor". See also wiki.archlinux.org/index.php/Udisks .
 

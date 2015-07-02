@@ -65,7 +65,7 @@ l_view (lua_State * L)
     vpath      = luaFS_check_vpath (L, 1);
     line       = luaL_optlong (L, 2, 0);  /* 0 = load saved position */
     internal   = luaMC_optboolean (L, 3, use_internal_view);
-    plain_view = luaMC_optboolean (L, 4, FALSE);
+    plain_view = lua_toboolean (L, 4);
     /* *INDENT-ON* */
 
     view_file_at_line (vpath, plain_view, internal, line);

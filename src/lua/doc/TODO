@@ -5,6 +5,9 @@ vpath
   - Have an fs.mkdir_p() which does support the VFS (in contrast to fs.nonvfs_mkdir_p()).
   - i18n: do we need ui.Panel:to_tty (a la ui.Editbox:to_tty)? Where are filenames and/or
     directories get encoded? (M-e)
+  - Some file_slup module (used at http://lua-users.org/wiki/GotoStatement) has
+    a useful readfile('shell command', 'p') function. We should have something similar
+    instead of the read_command() we improvise in several of our sample modules.
 
 
 ui
