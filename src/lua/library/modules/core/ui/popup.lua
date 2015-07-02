@@ -7,7 +7,7 @@ local M = {}
 
 --[[-
 
-Runs a dialog.
+Runs the dialog.
 
 This is like @{run} except that the dialog is shown near the cursor,
 which is where users typically expect "popup" boxes to appear.

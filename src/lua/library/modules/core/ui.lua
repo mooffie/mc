@@ -397,7 +397,7 @@ DimensionbaleMeta.assign_properties = WdgtMeta.assign_properties
 --
 -- Together with the @{expandx} and @{expandy} properties it can also be used
 -- to flush other widgets to the right/bottom/center. (See discussion in the
--- @{~interface|user manual}.)
+-- @{~interface|user guide}.)
 --
 -- @function Space
 -- @args([cols[, rows])

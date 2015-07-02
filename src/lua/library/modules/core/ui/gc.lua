@@ -189,7 +189,7 @@ do
   local keep_alive = {}
 
   ---
-  -- Runs a dialog.
+  -- Runs the dialog.
   --
   -- The dialog is displayed. An "event loop" starts which lets the user
   -- interact with the dialog till it's dismissed.

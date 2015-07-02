@@ -376,7 +376,8 @@ end
 ---
 -- Registers a field.
 --
--- The subject of creating fields is extensively covered in the @{fields|reference} and user manual.
+-- The subject of creating fields is covered extensively in the
+-- @{fields|reference} and user guide.
 --
 -- @function ui.Panel.register_field
 -- @args (info)

@@ -3,7 +3,7 @@
 User Interface.
 
 The ui module lets you create user interfaces. This subject is covered
-in the @{~interface|user manual}.
+in the @{~interface|user guide}.
 
 At the basis of the architecture are widgets. You can create widgets, and
 you can also access existing widgets created by MC itself.  This ability
@@ -227,7 +227,7 @@ l_widget_get_enabled (lua_State * L)
 }
 
 /**
- * Destroys a widget.
+ * Destroys the widget.
  *
  * Destroys the C widget associated with this Lua object. The :is_alive()
  * method will then return false. Using any method that accesses the underlying
@@ -420,7 +420,7 @@ l_widget_is_alive (lua_State * L)
 }
 
 /**
- * Redraws a widget.
+ * Redraws the widget.
  *
  * Draws ("paints", if you will) the widget.
  *
@@ -447,7 +447,7 @@ l_widget_redraw (lua_State * L)
 }
 
 /**
- * Focuses a widget.
+ * Focuses the widget.
  *
  * That is, moves the keyboard focus (the cursor) to it.
  *
@@ -2077,7 +2077,7 @@ init_child (void *data, void *user_data)
 /**
  * Initialization handler.
  *
- * Called just before a dialog becomes @{state|active}.
+ * Called just before the dialog becomes @{state|active}.
  *
  * See usage example at @{widget:focus}.
  *
@@ -2173,7 +2173,7 @@ ui_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, voi
             {
                 /* Undocumented feature: normal widgets get on_post_key()
                  * event too. Currently the only place we use it is to
-                 * simulate an on_change event for Input widget. */
+                 * simulate an on_change event for the Input widget. */
                 call_widget_method (current, "on_post_key", 0, NULL);
             }
 
@@ -2683,7 +2683,7 @@ l_dialog_get_modal (lua_State * L)
 }
 
 /**
- * Destroys a dialog (and all its child widgets).
+ * Destroys the dialog (and all its child widgets).
  *
  * Overrides l_widget_destroy.
  *
@@ -2715,7 +2715,7 @@ l_dialog_destroy (lua_State * L)
 }
 
 /**
- * Redraws a dialog.
+ * Redraws the dialog.
  *
  * You won't normally need to call this method.
  *
@@ -2752,7 +2752,7 @@ l_dialog_redraw_cursor (lua_State * L)
 }
 
 /**
- * Closes a dialog. Normally you'd use this method from click handlers of
+ * Closes the dialog. Normally you'd use this method from click handlers of
  * buttons.
  *
  *    dlg = ui.Dialog()
@@ -2908,7 +2908,7 @@ l_dialog_focus (lua_State * L)
 /**
  * Triggered after a dialog had been painted.
  *
- * You may use this event to add decoration to the dialog, like a
+ * You may use this event to add decoration to a dialog, like a
  * @{git:drop-shadow.lua|drop shadow}.
  *
  *    ui.Dialog.bind('<<draw>>', function(dlg)
@@ -2922,9 +2922,9 @@ l_dialog_focus (lua_State * L)
  *
  * The differences between this event and @{on_draw} are:
  *
- * - This event is global: it's triggered for *every* dialog box in the
- *   application, whereas @{on_draw} is attached to a single dialog you
- *   yourself created.
+ * - This event is @{~interface#global events|global}: it's triggered for *every*
+ *   dialog box in the application, whereas @{on_draw} is attached to a
+ *   single dialog you yourself created.
  * - This event is triggered after the child widgets had painted themselves,
  *   whereas @{on_draw} is triggered before that.
  *
@@ -2961,12 +2961,16 @@ l_dialog_focus (lua_State * L)
  *      end
  *    end)
  *
+ * See @{~interface#global events} in the user guide.
+ *
  * @moniker open__event
  * @event
  */
 
 /**
  * Triggered when a dialog is about to be closed.
+ *
+ * See @{~interface#global events} in the user guide.
  *
  * @moniker zzz_close__event
  * @event
@@ -2992,6 +2996,8 @@ l_dialog_focus (lua_State * L)
  *
  * Info-short: The name of this event was borrowed from the JavaScript world.
  *
+ * See @{~interface#global events} in the user guide.
+ *
  * @moniker submit__event
  * @event
  */
@@ -3000,7 +3006,7 @@ l_dialog_focus (lua_State * L)
  * Triggered after a dialog layouts itself.
  *
  * Triggered after the placement of child widgets has been set.
- * You may use this event to inject your own widgets into the dialog.
+ * You may use this event to inject your own widgets into a dialog.
  *
  * [note]
  *
@@ -3011,6 +3017,8 @@ l_dialog_focus (lua_State * L)
  * (In the future we may replace this event with `<<resize>>`.)
  *
  * [/note]
+ *
+ * See @{~interface#global events} in the user guide.
  *
  * @moniker layout__event
  * @event
