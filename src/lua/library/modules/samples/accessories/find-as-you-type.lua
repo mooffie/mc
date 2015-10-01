@@ -41,6 +41,8 @@ local function find(items, needle, from)
 
 end
 
+local last_searched_string = ""
+
 local function run()
 
   local lst = assert(ui.current_widget("Listbox"), E"I can work on listboxes only.") -- The API is compatible with radios too, but who cares...
@@ -71,6 +73,12 @@ local function run()
   dlg.on_key = function(self, key)
     if key == tty.keyname_to_keycode('C-s') then
       -- Find the next item.
+
+      -- But first: if nothing was typed in, recall the last
+      -- searched string.
+      if ipt.text == "" then
+        ipt.text = last_searched_string
+      end
       if find(lst.items, ipt.text, lst.selected_index + 1) then
         lst.selected_index = lst.selected_index + 1
         ipt:on_change()
@@ -80,6 +88,8 @@ local function run()
   end
 
   dlg:run()
+
+  last_searched_string = ipt.text
 
 end
 
