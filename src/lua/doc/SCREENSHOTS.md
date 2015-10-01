@@ -214,6 +214,18 @@ highlighted.
 
 [/figure]
 
+
+[figure]
+
+[ss:screenshots/linter-disassembly.png]
+
+[split]
+
+... you can also use it to conveniently browse a disassembler's output (or
+whatever other tool that's of interest to you).
+
+[/figure]
+
 <!-- --------------------------------------------------------------------- -->
 
 ## Visual Replace

@@ -22,10 +22,20 @@ flushes only those set with 'M-k').
 
 You may register your own lint programs:
 
-    require('samples.editbox.linter').checkers['FooBar Program'] = {
+    require('samples.editbox.linter').primary_checkers['FooBar Program'] = {
       prog = 'foobar -c "%s" 2>&1',
       pattern = ':(%d+):'
     }
+
+--
+
+You can define alternative registries. Linter already comes with
+one alternative called 'secondary_checkers', used for disassemblers:
+
+    ui.Editbox.bind('C-x f12', function()
+      local mod = require('samples.editbox.linter')
+      mod.run(mod.secondary_checkers)
+    end)
 
 ]]
 
@@ -40,7 +50,7 @@ local M = {
 
 -------------------------------- The registry --------------------------------
 
-M.checkers = {
+M.primary_checkers = {
 
   ['XML document'] = {
     prog = 'xmllint --noout "%s" 2>&1',
@@ -82,7 +92,7 @@ M.checkers = {
     pattern = ':(%d+):'
     -- ERROR example:  youtube-dl.py:592: local variable 'err' is assigned to but never used
 
-    -- @todo: Have a look at flake8. Anybody: try it out and let us know!
+    -- @todo: Have a look at flake8.
   },
 
   ['PHP Program'] = {
@@ -139,10 +149,50 @@ M.checkers = {
 
 }
 
-local checkers = M.checkers  -- So we can type two characters less.
+--
+-- An alternative registry used for disassemblers.
+--
 
-checkers['C/C++ Program'] = checkers['C Program']
-checkers['LUA Program'] = checkers['Lua Program']  -- Backward-compatibility: old 'mcedit/Syntax' files may still incorrectly call the language "LUA".
+M.secondary_checkers = {
+
+  -- We want to show all of a disassembler's output, as it may contain comments,
+  -- so we use the 'show_all_lines' flag.
+
+  ['Lua Program'] = {
+    alternatives = {
+      {
+        test = 'luacexplain /dev/null && luac -v',
+        prog = 'luac -l -l -p "%s" 2>&1 | luacexplain | expand',
+        pattern = '%[(%d+)%]',
+      },
+      {
+        test = 'luac -v',
+        prog = 'luac -l -l -p "%s" 2>&1 | expand',  -- '-p' prevents it from writing 'luac.out'.
+        pattern = '%[(%d+)%]',
+        -- Line example:  "  90   [156]   SETTABLE    6 -16 -51"
+      },
+    },
+    show_all_lines = true,
+    jump_to_current_line = true,
+  },
+
+  ['Python Program'] = {
+    -- This is mainly for demonstration. What we're doing here isn't quite
+    -- practical: it disassembles the top-level only; it doesn't descend into
+    -- functions and classes.
+    prog = 'python -m dis "%s" 2>&1',
+    pattern = '^%s?%s?(%d+)',
+    -- Line example: "  35    98 LOAD_NAME     8 (...)"
+    show_all_lines = true,
+    jump_to_current_line = true,
+  },
+
+}
+
+M.aliases = {
+  ['C/C++ Program'] = 'C Program',
+  ['LUA Program'] = 'Lua Program',  -- Backward-compatibility: old 'mcedit/Syntax' files may still incorrectly call the language "LUA".
+}
 
 ------------------------------- Lint selector --------------------------------
 
@@ -180,32 +230,39 @@ end
 --
 -- Returns the pair (nil, errmsg) on error.
 --
-function M.lint(filename, syntax)
+function M.lint(filename, checkers, syntax)
 
   local problems = {}
   local successful_exit = false
 
-  if not checkers[syntax] then
+  local checker = checkers[syntax] or checkers[M.aliases[syntax]]
+
+  if not checker then
     return nil, T"Lint: I don't know how to handle '%s'":format(syntax)
   end
 
-  if not select_program(checkers[syntax]) then
-    return select_program(checkers[syntax])  -- Returns (nil, errmsg)
+  if not select_program(checker) then
+    return select_program(checker)  -- Returns (nil, errmsg)
   end
 
-  -- Note: Lua 5.2's file:close() can tell us if the program popen()'ed existed
+  -- Note: Lua 5.2+'s file:close() can tell us if the program popen()'ed existed
   -- successfully. But since we have to support Lau 5.1, we resort to planting in
   -- the command a sentinel string which we'll be watching for.
-  local cmd = checkers[syntax].prog:format(filename) .. " && echo Successful Exit"
-  local pattern = assert(checkers[syntax].pattern)
+  local cmd = checker.prog:format(filename) .. " && echo Successful Exit"
+  local pattern = assert(checker.pattern)
 
   local f = io.popen(cmd, "r")
   for line in f:lines() do
     local line_no = line:match(pattern)
-    if line_no then
-      append(problems, { line:gsub(filename:gsub('%W', '%%%0'), '<file>'), value = line_no })
-    elseif line:find("Successful Exit") then
-      successful_exit = true
+    if line_no or checker.show_all_lines then
+      append(problems, { line:gsub(filename:gsub('%W', '%%%0'), '<file>'), value = {
+        line_no = tonumber(line_no)  -- We can't store nils in tables, so we don't assign directly to 'value'.
+      }})
+    end
+    if not line_no then
+      if line:find("Successful Exit") then
+        successful_exit = true
+      end
     end
   end
   f:close()
@@ -214,13 +271,15 @@ function M.lint(filename, syntax)
     return nil, T"Lint: I couldn't run the command: \n\n %s \n\nPerhaps the program isn't installed?":format(cmd)
   end
 
-  return problems
+  return problems, nil, checker
 
 end
 
 ----------------------------------- The UI -----------------------------------
 
-function M.run()
+function M.run(checkers)
+
+  checkers = checkers or M.primary_checkers
 
   local ed = assert(ui.current_widget("Editbox"))
 
@@ -245,7 +304,7 @@ function M.run()
 
   -- We have to use fs.getlocalcopy() as the file may reside in a zip archive, for example.
   local local_pathname = fs.getlocalcopy(ed.filename)
-  local problems, errmsg = require('prompts').please_wait(T"Executing the appropriate lint program for this file.", M.lint, local_pathname, ed.syntax)
+  local problems, errmsg, checker = require('prompts').please_wait(T"Executing the appropriate lint program for this file.", M.lint, local_pathname, checkers, ed.syntax)
   fs.ungetlocalcopy("<unneeded>", local_pathname, false)
 
   if errmsg then
@@ -258,8 +317,10 @@ function M.run()
   end
 
   -- Highlight (bookmark) all the problematic lines.
-  for _, problen in ipairs(problems) do
-    ed:bookmark_set(problen.value, style.problem)
+  if not checker.show_all_lines then
+    for _, problem in ipairs(problems) do
+      ed:bookmark_set(problem.value.line_no, style.problem)
+    end
   end
 
   local dlg = ui.Dialog{T"Problems for %s":format(ed.filename), compact = true}
@@ -267,11 +328,24 @@ function M.run()
   local list = ui.Listbox()
   list.items = problems
   list.on_change = function(self)
-    ed.cursor_line = self.value
     ed:bookmark_flush(style.current_problem)
-    ed:bookmark_set(self.value, style.current_problem)
+    if self.value.line_no then  -- can be nil if checker has 'show_all_lines'.
+      ed.cursor_line = self.value.line_no
+      ed:bookmark_set(self.value.line_no, style.current_problem)
+    end
     dlg:refresh(true)  -- redraw the dialog on top of the editor.
   end
+
+  -- Jump to the "problem" for the line we're standing on. Useful for disassemblers.
+  if checker.jump_to_current_line then
+    for i = 1, #problems do
+      if problems[i].value.line_no == ed.cursor_line then
+        list.selected_index = i
+        break
+      end
+    end
+  end
+
   list:on_change()
 
   dlg:add(list)
