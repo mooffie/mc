@@ -86,7 +86,6 @@ tests/snippets/find_file_title.lua \
 tests/snippets/fop_move_basename.lua \
 tests/snippets/fop_move_jump.lua \
 tests/snippets/fop_move_tail.lua \
-tests/snippets/glib.lua \
 tests/snippets/goto_line_col.lua \
 tests/snippets/hotlist_right_as_enter.lua \
 tests/snippets/input_sanitize.lua \
@@ -100,6 +99,9 @@ tests/snippets/quicksearch_asterisk_first.lua \
 tests/snippets/search_by_regex.lua \
 tests/snippets/superhome.lua \
 tests/snippets/supertab.lua \
+tests/snippets/syntax-c-glib.lua \
+tests/snippets/syntax-php.lua \
+tests/snippets/syntax-vala.lua \
 tests/snippets/upload_documentation \
 tests/snippets/viewer_edit.lua \
 tests/snippets/viewer_smooth_scrolling.lua
