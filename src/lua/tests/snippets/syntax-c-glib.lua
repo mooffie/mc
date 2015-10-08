@@ -1,6 +1,8 @@
 --[[
 
-Colors up some GLib identifiers.
+Improved syntax highlighting for C.
+
+It colors up some GLib identifiers.
 
 ]]
 
@@ -19,11 +21,10 @@ ui.Editbox.bind('<<load>>', function(edt)
   local function typename(name)  edt:add_keyword(name, styles.typename)   end
   local function api(name)       edt:add_keyword(name, styles.api)        end
   local function special(name)   edt:add_keyword(name, styles.special)    end
-  local typ = typename
 
-  typ 'gboolean'
-  typ 'gchar'
-  typ 'gpointer'
+  typename 'gboolean'
+  typename 'gchar'
+  typename 'gpointer'
 
   api 'g_new'
   api 'g_new0'
