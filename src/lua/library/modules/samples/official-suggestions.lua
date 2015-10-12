@@ -56,6 +56,12 @@ ui.Panel.bind('M-pgdn', function()
   require('samples.accessories.snapshots').run()
 end)
 
+-- Show files size in various units.
+-- Note: it's an upper S, not lower s. Lower s triggers "Symbolic link".
+ui.Panel.bind('C-x S', function(pnl)
+  require('samples.accessories.size-calculator').run(pnl)
+end)
+
 -- "hotkeys" support in the directory hotlist dialog.
 require('samples.accessories.hotlist-keys')
 

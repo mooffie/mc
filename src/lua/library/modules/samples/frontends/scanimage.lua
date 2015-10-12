@@ -7,13 +7,12 @@ its job.
 
 Installation:
 
-    ui.Panel.bind('C-x S', require('samples.frontends.scanimage').run)
-    -- Note: it's an upper S, not lower s. Lower s triggers "Symbolic link".
+    ui.Panel.bind('C-x M-s', require('samples.frontends.scanimage').run)
 
 Or, if you want to customize things:
 
     local scanner = require('samples.frontends.scanimage')
-    ui.Panel.bind('C-x S', scanner.run)
+    ui.Panel.bind('C-x M-s', scanner.run)
     scanner.command = ...
     scanner.defaults.res = 300
     scanner.defaults.additional_convert = '-rotate 90'
