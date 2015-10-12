@@ -129,7 +129,7 @@ Frontend for archivers:
 
 - @{2011} "Warning at the entrance to the archive"
 - @{2007} "insert name of the current file prefixed by ./"
-- @{2374} "show exact files and free space sizes"
+- @{2374} "show exact files and free space sizes"              @{git:size-calculator.lua|sol}
 - @{3221} "In 'Directory Hotlist' make right button work"      @{git:hotlist_right_as_enter.lua|sol}
 - @{2397} "Auto replace wrong symbols when makes a new dir"    @{git:input_sanitize.lua|sol}
 - @{2156} "Run editor from viewer"  @{git:viewer_edit.lua|sol}
