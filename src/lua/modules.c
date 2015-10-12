@@ -91,7 +91,7 @@ void
 mc_lua_pre_init (void)
 {
     mc_event_add (MCEVENT_GROUP_LUA, "init", (mc_event_callback_func_t) mc_lua_open_c_modules, NULL, NULL);
-    /* Note: It's OK that mc_lua_open_c_modules() doesn't declare all the
-     * parameters mc_event_raise() sends it: we have this scenario when we
-     * pass g_free (and others) to g_list_foreach(). */
+    /* Note: It's OK that mc_lua_open_c_modules() doesn't declare in its
+     * signature all the parameters mc_event_raise() sends it: we have this
+     * scenario when we pass g_free (and others) to g_list_foreach(). */
 }

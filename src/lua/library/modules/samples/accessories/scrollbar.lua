@@ -43,9 +43,9 @@ local function calculate_panel_sb(pnl)
 
   local top_file, body_lines, cols = pnl:_get_metrics()
   local total_items = pnl:_get_max_index()
-  local items_visible = body_lines * cols
+  local visible_items = body_lines * cols
 
-  return scrollbar_utils.calculate(total_items, items_visible, top_file, body_lines)
+  return scrollbar_utils.calculate(total_items, visible_items, top_file, body_lines)
 
 end
 

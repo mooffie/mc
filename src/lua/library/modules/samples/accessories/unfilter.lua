@@ -32,6 +32,7 @@ function M.run(pnl)
 end
 
 -- We can instead return the function itself. But we don't want to confuse
--- users (or programmers) so we stick to the norm.
+-- users (or programmers) so we stick to the established practice of returning
+-- a module.
 
 return M

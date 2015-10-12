@@ -25,8 +25,8 @@ end
 -- Ensure we don't trash the screen on incompatible terminals.
 -- (See discussion at the URL above.)
 if tonumber(os.getenv("VTE_VERSION") or 0) >= 3405 then
-  ui.Panel.bind("<<load>>", set_gterm_cwd)        -- When the user navigates between directories.
-  ui.Panel.bind("<<activate>>", set_gterm_cwd)    -- When the user switches between panels.
+  ui.Panel.bind("<<load>>", set_gterm_cwd)      -- When the user navigates between directories.
+  ui.Panel.bind("<<activate>>", set_gterm_cwd)  -- When the user switches between panels.
 else
   devel.log(E"set-gterm-cwd.lua: Either you're not using GNOME Terminal, or yours is too old.")
 end

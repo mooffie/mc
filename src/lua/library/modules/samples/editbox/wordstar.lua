@@ -7,7 +7,7 @@ Installation:
     require('samples.editbox.wordstar')
 
 It doesn't behave exactly as WordStar, but it's the best we can do
-without enhancing the C code.
+without enhancing the editor's C code.
 
 Idea taken from:
 

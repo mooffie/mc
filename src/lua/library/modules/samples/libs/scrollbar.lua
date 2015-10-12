@@ -14,25 +14,25 @@ local M = {}
 --
 -- Returns the two values, or nothing if no scrollbar should be displayed.
 --
--- Note: top_item is 1-based !
+-- Note: 'top_item' is expected to be 1-based !
 --
-function M.calculate(total_items, items_visible, top_item, sb_size)
+function M.calculate(total_items, visible_items, top_item, sb_size)
 
   top_item = top_item - 1
 
-  if total_items <= items_visible then
+  if total_items <= visible_items then
     return
   end
 
-  local ht = math.floor((items_visible / total_items) * sb_size)  -- range: [0..sb_size)   (Guaranteed to be smaller than 'sb_size', which is good.)
+  local height = math.floor((visible_items / total_items) * sb_size)  -- range: [0..sb_size)   (Guaranteed to be smaller than 'sb_size', which is good.)
 
-  if ht == 0 then  -- When there are gazillion items.
-    ht = 1
+  if height == 0 then  -- When there are gazillion items.
+    height = 1
   end
 
   local top = math.floor((top_item / total_items) * sb_size)  -- range: [0..sb_size)
 
-  local at_bottom = (top_item >= total_items - items_visible)
+  local at_bottom = (top_item >= total_items - visible_items)
 
   if at_bottom then
     -- If the last item is visible, we flush the bar down to
@@ -40,10 +40,10 @@ function M.calculate(total_items, items_visible, top_item, sb_size)
     --
     -- On a common terminal (40 lines), this is the only case when
     -- the bar is fully down, unless you have more than 1500 items.
-    top = sb_size - ht
+    top = sb_size - height
   end
 
-  return top, ht
+  return top, height
 
 end
 

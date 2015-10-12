@@ -128,8 +128,8 @@ end
 --
 -- The optional boolean **comma** parameter tells the function whether to
 -- include thousands separators in the result (while still not exceeding
--- **len**). Different locales may cause @{locale.format_number|something
--- other than comma} to actually be used.
+-- **len**). Different locales may cause
+-- @{locale.format_number|something other than comma} to actually be used.
 --
 --    local format_size = utils.text.format_size
 --
@@ -139,6 +139,8 @@ end
 --
 -- Whether powers of 1000 or 1024 are used depends on your "Use SI size units"
 -- configuration setting.
+--
+-- See also @{locale.format_number}.
 --
 -- @function format_size
 -- @args (n, len[, comma])
@@ -180,8 +182,8 @@ local function round(num, idp)
   if not idp or idp == 0 then
     return math.floor(num + 0.5)
   else
-    -- The following too works work for idp==0, but it returns a float
-    -- in Lua 5.3 (instead of a desired(?) integer), which is why we
+    -- The following too works for idp==0, but it returns a float in Lua 5.3
+    -- (instead of a desired(?) integer, in the idp==0 case), which is why we
     -- have the seemingly unnecessary branch above.
     local mult = 10^idp
     return math.floor(num * mult + 0.5) / mult
