@@ -62,6 +62,7 @@ modules/samples/accessories/ruler.lua \
 modules/samples/accessories/scrollbar.lua \
 modules/samples/accessories/set-gterm-cwd.lua \
 modules/samples/accessories/set-xterm-title.lua \
+modules/samples/accessories/size-calculator.lua \
 modules/samples/accessories/snapshots/README.md \
 modules/samples/accessories/snapshots/core.lua \
 modules/samples/accessories/snapshots/init.lua \
