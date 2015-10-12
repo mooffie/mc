@@ -163,22 +163,18 @@ function M.format_size(n, len, comma)
   return s
 end
 
-local units = {
-  { amount = 31536000, title = "Y", round = true }, -- year
-  { amount = 2592000,  title = "M", round = true }, -- month
-  { amount = 86400,    title = "d", round = true }, -- day
-  { amount = 3600,     title = "h", minimum = 5940 }, -- hour; The 'minimum' (99 minutes) makes us get "73 minutes" instead of "1.2 hour".
-  { amount = 60,       title = "m", round = true }, -- minute
-  { amount = 1,        title = "s", round = true }, -- second
-  { amount = 0,        title = "s", round = true }, -- second
-}
+---
+-- Rounds a number.
+--
+-- Rounds a number **n** to **precision** digits after the point.
+-- if **precision** is missing, it's assumed to be 0 (zero).
+--
+-- @function round
+-- @args (n[, precision])
 
--- Rounds a number 'num' to 'idp' digits after the point.
---
--- Taken from http://lua-users.org/wiki/SimpleRound
+-- Code taken from http://lua-users.org/wiki/SimpleRound
 -- But modified to accommodate Lua 5.3.
---
-local function round(num, idp)
+function M.round(num, idp)
   if not idp or idp == 0 then
     return math.floor(num + 0.5)
   else
@@ -189,6 +185,16 @@ local function round(num, idp)
     return math.floor(num * mult + 0.5) / mult
   end
 end
+
+local units = {
+  { amount = 31536000, title = "Y", round = true }, -- year
+  { amount = 2592000,  title = "M", round = true }, -- month
+  { amount = 86400,    title = "d", round = true }, -- day
+  { amount = 3600,     title = "h", minimum = 5940 }, -- hour; The 'minimum' (99 minutes) makes us get "73 minutes" instead of "1.2 hour".
+  { amount = 60,       title = "m", round = true }, -- minute
+  { amount = 1,        title = "s", round = true }, -- second
+  { amount = 0,        title = "s", round = true }, -- second
+}
 
 ---
 -- Formats a time interval in a compact way.
@@ -220,7 +226,7 @@ function M.format_interval_tiny(interval, skip_rounding)
     if math.abs(interval) >= (info.minimum or info.amount) then
 
       local idp = (info.round or not skip_rounding) and 0 or 1   -- how many fractional digit.
-      local count = (info.amount == 0) and 0 or round(interval / info.amount, idp)
+      local count = (info.amount == 0) and 0 or M.round(interval / info.amount, idp)
 
       return (in_the_future and "+" or "") .. count .. info.title
     end
