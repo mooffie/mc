@@ -204,7 +204,7 @@ luaFS_check_vpath (lua_State * L, int index)
  * - path: The substring of the full path belonging to this filesystem (this
  *   field, unfortunately, has the same name as that of the array
  *   itself; don't let this confuse you).
- * - vfs_prefix: The @{luafs.prefix|prefix} of the filesystem.
+ * - vfs_prefix: The @{luafs.prefix|prefix} of the filesystem (**nil** for the @{is_local|local} filesystem).
  * - vfs_class_name: The name of the module implementing the filesystem.
  * - user, password, host, port: The components of paths like
  *   `ftp://joe:password@hostname.net:8192/`.

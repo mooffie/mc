@@ -131,7 +131,7 @@ end
 -- access the file `text/chapter1.txt` within the ZIP archive `book.7z`.
 --
 -- Tip: For filesystems that represent archives, the `prefix` doesn't have to
--- equal the archive's suffix. We could just the same have chosen the prefix
+-- equal the archive's suffix. We could just as well have chosen the prefix
 -- "doodle" for our ZipFS filesystem.
 --
 -- As another example, given a filesystem that displays your MySQL databases,

@@ -54,7 +54,8 @@ redraw_dirty_panel (WPanel * panel)
  *    -- This is a better version of the above, which works for
  *    -- any input line.
  *    ui.Input.bind("f16", function(ipt)
- *      -- When using mcedit there are no panels, hence the "and" check below.
+ *      -- When using /usr/bin/mcedit there are no panels, hence
+ *      -- the "and" check below.
  *      ipt:insert(ui.Panel.current and ui.Panel.current.dir or "")
  *    end)
  *
@@ -81,7 +82,7 @@ l_panel_get_dir (lua_State * L)
 }
 
 /**
- * The panels directory (as vpath).
+ * The panel's directory (as a @{~mod:fs.VPath|vpath}).
  *
  * @attr vdir
  * @property rw
@@ -550,6 +551,10 @@ l_get_num_brief_cols (lua_State * L)
 
 /**
  * The field by which to sort.
+ *
+ * It is a string identifying a built-in field, like `"name"`, `"size"`,
+ * `"mtime"`, `"extension"`, a custom field @{~fields|you yourself created},
+ * or `"unsorted"` for the disk's raw order.
  *
  *    -- Toggle between two sorts.
  *    ui.Panel.bind('C-y', function(pnl)
