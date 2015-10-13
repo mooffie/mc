@@ -45,7 +45,7 @@ A "sol" link points to a solution, or to a way of solving.
 - @{2720} "hotkey to toggle between sort orders"
 - @{3031} "Implement natural sort order" @{~fields#overriding|sol}
 - @{2698} "sort hotkey"
-- @{2719} "Conditional sort"
+- @{2719} "Conditional sort" and @{3497} "auto turn off sorting"  @{git:sort_by_filesystem.lua|sol}
 - @{2717} "Sort order"  @{~fields#sort|sol}
 
 ** MARKING FILES **
