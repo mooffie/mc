@@ -972,6 +972,27 @@ l_get_other (lua_State * L)
  *      ....
  *    end)
  *
+ * [note]
+ *
+ * Sometimes code you wish to run in this event may trigger `<<load>>`
+ * again. For example, setting @{sort_field} to "unsorted" causes the
+ * directory to be re-read. In such cases you'll cause an infinite
+ * recursion, which may bring about a program crash.
+ *
+ * You can solve the problem by wrapping the offending code in
+ * @{timer.set_timeout} (with 0 delay) or wrapping the whole event
+ * handler (or just the offending code) in @{utils.magic.once}:
+ *
+ *    ui.Panel.bind("<<load>>", utils.magic.once(function(pnl)
+ *      if pnl.dir:find 'audio' then
+ *        pnl.sort_field = 'unsorted'
+ *      else
+ *        pnl.sort_field = 'name'
+ *      end
+ *    end))
+ *
+ * [/note]
+ *
  * @moniker load
  * @event
  */

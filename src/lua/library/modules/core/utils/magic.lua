@@ -344,6 +344,36 @@ end
 ------------------------------------------------------------------------------
 
 ---
+-- Protects a function against being called recursively.
+--
+-- It wraps the function **fn** inside a function that uses locking to
+-- ensure that the function is invoked only once in the calling stack.
+--
+-- See example at @{ui.Panel.load|<<load>>}.
+--
+-- @function once
+-- @args ([lock_name,] fn)
+
+local active_locks = {}
+
+function M.once(lock_name, fn)
+  if type(lock_name) == 'function' then
+    fn = lock_name
+  end
+  return function(...)
+    if not active_locks[lock_name] then
+      active_locks[lock_name] = true
+      -- Unless somebody demonstrates that it could be useful, we don't bother
+      -- about multiple return values. We return nothing when locked, so there's
+      -- no point in being pedantic about the other case.
+      local result = fn(...)
+      active_locks[lock_name] = nil
+      return result
+    end
+  end
+end
+
+---
 -- Make __gc for tables work for old Lua engines too.
 --
 -- Lua 5.2+ supports __gc for table. Older Lua engines don't. To make older
