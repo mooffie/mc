@@ -16,7 +16,7 @@ A "sol" link points to a solution, or to a way of solving.
 - @{3088} "Tell current directory to gnome-terminal"  @{git:set-gterm-cwd.lua|sol}
 - @{1364} "overly verbose xterm title" @{git:set-xterm-title.lua|sol}
 - @{2654} 'history-search-backward'
-- @{1636} "hotlist: fast filter"
+- @{1636} "hotlist: fast filter"  @{~shots#hotkeys|sol}
 - @{1483} "Panel scrollbar" @{git:accessories/scrollbar.lua|sol}
 - @{1761} "Clock display"  @{git:clock.lua|sol} @{git:ticker.lua|sol}
 - @{1756} "Automatic update of the file list"
