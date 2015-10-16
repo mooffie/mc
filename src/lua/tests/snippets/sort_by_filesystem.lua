@@ -16,7 +16,7 @@ Exercises for the reader:
     This would make it useful for:
 
       http://www.midnight-commander.org/ticket/2719
-      "Conditional sort"
+      "Conditional sort [based on directories]"
 
 (2) Make this script set a complete bunch of attributes, not just 'sort_field'.
     Don't hard-code the names: let them be anything.

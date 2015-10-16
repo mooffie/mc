@@ -16,8 +16,8 @@ Why is it useful?
 
 Imagine you have a bunch of files you want to copy to a media that has
 1,819 MiB free space. So you mark all the files you want to copy and MC
-tells you "1,857,302K bytes in 12 files". Will it fit in 1,819 MiB? You
-don't know. Thankfully, Size Calculator will tell you that your 12 files
+tells you "1,857,302K bytes in 4 files". Will it fit in 1,819 MiB? You
+don't know. Thankfully, Size Calculator will tell you that your 4 files
 are "1,813.77 MiB". Hurrey! They will fit!
 
 Related ticket:
@@ -67,7 +67,7 @@ local function show_dialog(total, use_comma)
     )
   ))
 
-  local use_comma_chk = ui.Checkbox{T"Use &comma separator", checked = use_comma}
+  local use_comma_chk = ui.Checkbox{T"Use digits &separator", checked = use_comma}
   local again = false
 
   use_comma_chk.on_change = function()

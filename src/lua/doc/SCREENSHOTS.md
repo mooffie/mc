@@ -561,6 +561,25 @@ among other things, it can filter directories).
 
 <!-- --------------------------------------------------------------------- -->
 
+## Various accessories
+
+<a name="size-calculator"></a>
+
+[figure]
+
+[ss:screenshots/size-calculator.png]
+
+[split]
+
+Will the four files on the left, weighting "1,857,302K bytes" fit in the
+"1,819" MiB free space on the right? You're not sure. Thankfully,
+@{git:size-calculator.lua|Size calculator} says your files consume just
+"1,813.77 MiB". Hurrey! They will fit!
+
+[/figure]
+
+<!-- --------------------------------------------------------------------- -->
+
 ## Screensavers
 
 [figure]

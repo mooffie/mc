@@ -320,10 +320,10 @@ Now, to test our filesystem we need to locate some markdown file. If you don't h
 
 [info]
 
-As a convenience, you can tell MC to automatically "cd" to an archive,
-when the user presses ENTER over it, by using any of the properties
-@{luafs.glob|glob}, @{luafs.iglob|iglob}, @{luafs.regex|regex} and
-@{luafs.iregex|iregex}:
+As a convenience, you can tell MC to automatically "cd" to an archive
+when the user presses ENTER over it. You do this by using any of the
+properties @{luafs.glob|glob}, @{luafs.iglob|iglob}, @{luafs.regex|regex}
+and @{luafs.iregex|iregex}:
 
     local MarkdownFS = {
       prefix = "markdown",
