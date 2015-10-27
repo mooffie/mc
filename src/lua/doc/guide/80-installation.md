@@ -38,12 +38,26 @@ Switch to the Lua branch:
     $ cd mc
     $ git co lua-4.8.14-port
 
-Run './autogen.sh' to create the configuration script:
+Run './autogen.sh' to create the `configure` script:
 
     @plain
     $ ./autogen.sh
 
 Everything is now ready for compilation!
+
+[info]
+
+An alternative to the instructions above (of "Step 3") is to download MC as a
+source "tarball", which already includes the `configure` script. You can
+download the tarball from:
+
+  [http://www.typo.co.il/~mooffie/mc-lua/tarballs/](http://www.typo.co.il/~mooffie/mc-lua/tarballs/)
+
+(If there are several files there, pick the one with the latest date.)
+Then extract it with the command `tar zxvf <tarball-file-name>`, enter
+the new directory it has just created and continue as usual.
+
+[/info]
 
 ## Step 4: Enabling MC's Lua support
 

@@ -11,9 +11,14 @@ This is a collection of various random links. Most are just "food for thought".
 
 File system
   http://www.boost.org/doc/libs/1_53_0/libs/filesystem/doc/index.htm
-  Watching for changes
-    http://stevedonovan.github.io/winapi/api.html#watch_for_file_changes
-  https://github.com/moteus/lua-path
+  FUSE
+    ruby: rubyfuse, rfuse, fusefs
+  Lua
+    Watching for changes
+      http://stevedonovan.github.io/winapi/api.html#watch_for_file_changes
+    https://github.com/moteus/lua-path
+    https://keplerproject.github.io/luafilesystem/
+    http://luaposix.github.io/luaposix/
 
 TTY/Style
   https://github.com/leafo/moonscript/blob/master/extra/scintillua/lexers/themes/moon.lua    **
@@ -22,7 +27,10 @@ Thread
   Roblox (google: "lua scheduler wait" )
 
 Regex/split
-  http://tech.3scale.net/2013/01/09/augment-your-api-without-touching-it/
+  http://www.valadoc.org/#!api=glib-2.0/GLib.Regex  (Vala's binding to GLib's regexp)
+  Lua
+    http://tech.3scale.net/2013/01/09/augment-your-api-without-touching-it/
+    Lrexlib
 
 APIs to make shell-related work easy?
   read: http://stackoverflow.com/questions/3637668/why-are-scripting-languages-e-g-perl-python-ruby-not-suitable-as-shell-lang
@@ -40,6 +48,7 @@ Editor
 Misc
   http://docs.wxwidgets.org/3.0/overview_events.html ?
   https://github.com/stevedonovan/winapi/blob/master/examples/
+  http://bitop.luajit.org/ (its C code may interest us if we decide to expand our utils.bit32 module).
 
 
 ====== Lua topics =========
@@ -56,12 +65,33 @@ Misc
 - images in console
   http://ranger.nongnu.org/
 
-- other "commanders":
-  - https://github.com/corporateshark/WalCommander **
-  - http://www.webupd8.org/2010/02/3-linux-console-file-managers-you.html (LFM has tabs)
-  - UnixTree ( http://unixtree.org , http://linmagazine.co.il/book/view/6554 )
-  - http://emacswiki.org/emacs/Sunrise_Commander **
-  - https://wiki.archlinux.org/index.php/List_of_applications#File_managers
+
+===== Interesting: history =====
+
+- Old versions of MC sometimes shed light on some decisions and strange
+  variable names. The oldest the git repo has is MC 4.1.27, which is
+  certainly an interesting reading.
+
+- The VFS in MC is based on AVFS:
+
+    http://sourceforge.net/projects/avf/
+
+  It's interesting to see its evolution. You can even download
+  version 0.2 (avfs-0.2.tar.gz).
+
+
+===== Interesting: other "commanders" =====
+
+- https://github.com/corporateshark/WalCommander **
+- http://www.webupd8.org/2010/02/3-linux-console-file-managers-you.html (LFM has tabs)
+- UnixTree ( http://unixtree.org , http://linmagazine.co.il/book/view/6554 )
+- http://emacswiki.org/emacs/Sunrise_Commander **
+- https://wiki.archlinux.org/index.php/List_of_applications#File_managers
+- https://redmine.bloodycactus.com/projects/alfc  (supports Lua) *
+- Dos Navigator
+    http://www.midnight-commander.org/ticket/1511  (screenshots)
+    Necromancer's Dos Navigator
+      http://ndn.muxe.com/  (from http://www.midnight-commander.org/ticket/280)
 
 
 ===== References =======
@@ -76,6 +106,10 @@ Misc
 - VLC
 
 - Ipe
+
+- "Links with Lua extensions" (a text www browser)
+
+- WeeChat (supports several language engines; it could be interesting to compare the bindings)
 
 = C =
 
@@ -173,5 +207,5 @@ Environment variables editor?
 
     http://www.midnight-commander.org/attachment/ticket/122/15480-mcbug.png   (BTW, it shows a panel scrollbar!)
     http://www.midnight-commander.org/attachment/ticket/3413/mc-info-overflow.png
-    http://www.midnight-commander.org/ticket/1511   (DosNavigator shots)
+    http://www.midnight-commander.org/ticket/1511   (DosNavigator screenshots)
 

@@ -140,10 +140,15 @@ function SearchContextMeta:parts()
     -- solution" mentioned in that article.
     --
     -- When we encounter a ZLM we make the next find() start one character
-    -- later (otherwise we loop forever). Unfortunately, it's one *byte* really,
+    -- later (otherwise we'd loop forever). Unfortunately, it's one *byte* really,
     -- not *character*. So we may land in the middle of a UTF-8 char. If our
     -- search-plugin is UTF-8-aware it will throw an exception. This issue (ZLM
     -- + middle of UTF-8) isn't common, so it's not worth losing sleep over.
+    --
+    -- (UPDATE: or *is* it worth losing sleep over? See https://www.midnight-commander.org/ticket/3449
+    -- The "throw an exception" mentioned talks about Lrexlib probably, not our
+    -- GLib binding. @todo: see how they (Lrexlib) handle invalid UTF-8 in
+    -- their C code.)
     --
     -- Note:
     -- =====

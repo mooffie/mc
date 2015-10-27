@@ -1,0 +1,67 @@
+This document contains 'todo' items whose explanation is too long to fit
+in the TODO file.
+
+OVERRIDING COMMANDS (AKA "ACTIONS")
+===================================
+
+Currently, we're able to override keys:
+
+    ui.Editbox.bind('f2', function(edt)
+      if edt.data.read_only then
+        alert('Sorry, you may not save this buffer')
+      else
+        return false
+      end
+    end)
+
+We should also be able to override commands:
+
+    ui.Editbox.bind_command('save', function(edt)
+      if edt.data.read_only then
+        alert('Sorry, you may not save this buffer')
+      else
+        return false
+      end
+    end)
+
+We can't yet easily do this because a widget's code is typically as
+follows ("WIDGET" in this code stands for the actual widget name):
+
+    cb_ret_t WIDGET_callback (Widget * w, widget_msg_t msg, int parm)
+    {
+      switch (msg)
+      {
+        case MSG_KEY:
+        {
+          long command;
+          command = keybind_lookup_keymap_command (WIDGET_map, parm);
+
+          if (command == CK_IgnoreKey) {
+            ....
+            return whatever;
+          }
+          else {
+            return WIDGET_execute_cmd (w, command);
+          }
+        }
+
+        case MSG_ACTION:
+          return WIDGET_execute_cmd (w, parm);
+      }
+    }
+
+    WIDGET_execute_cmd (WIDGET *w, long command)
+    {
+      switch (command)
+      {
+        case CK_MarkLeft:
+          ...
+        case ...:
+          ...
+      }
+    }
+
+In other words, instead of MSG_KEY sending a MSG_ACTION, thus letting us
+trigger our magic at one entry point, each MSG_KEY is effectively
+executing the command directly, leaving us no single entry point at which
+to override the action.
