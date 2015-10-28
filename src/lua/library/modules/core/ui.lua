@@ -96,22 +96,43 @@ end
 
 --- Custom user data.
 --
--- A place where you can store your own data.
---
--- Info: There's nothing really special in this property. You can store your
--- data in however-named property, but then you'd have to use @{rawset} to
--- bypass the @{utils.magic.vbfy|typo protection}.
+-- A table in which you can store your own data.
 --
 -- See example at @{dialog:on_validate}.
 --
+-- [info]
+--
+-- There's nothing really special in this property. You can store your
+-- data in however-named property, but then you'd have to use @{rawset} to
+-- bypass the @{utils.magic.vbfy|typo protection}. In other words, this
+-- property is just an aid letting you do:
+--
+--    wgt.data.help_text = "whatever"
+--
+-- instead of:
+--
+--    rawset(wgt, "help_text", "whatever")
+--
+-- [/info]
+--
 -- @attr widget.data
 -- @property rw
+
+function WdgtMeta:set_data(data)
+  assert(type(data) == "table" , E"The 'data' property must be a table.")
+  rawset(self, "data", data)
+end
+
+function WdgtMeta:get_data()
+  local data = {}
+  rawset(self, "data", data)
+  return data
+end
 
 WdgtMeta.__allowed_properties = {
   on_destroy = true,
   expandx = true,
   expandy = true,
-  data = true,
   on_init = true,
   on_post_key = true, -- Officially available to Dialog only, but the Input widget uses it to simulate on_change.
 }

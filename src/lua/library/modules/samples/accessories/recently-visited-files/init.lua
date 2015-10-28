@@ -31,7 +31,7 @@ function M.run()
     abort(E"Sorry, you can't use this app with mcedit. See discussion about MC bug in the source code.")
   end
 
-  if ui.Dialog.top.data and ui.Dialog.top.data.is_recently_visited_dialog then
+  if ui.Dialog.top.data.is_recently_visited_dialog then
     return  -- The dialog is already open.
   end
 
@@ -134,7 +134,7 @@ function M.run()
 
   ----------------------------- Run and respond ------------------------------
 
-  dlg.data = { is_recently_visited_dialog = true }
+  dlg.data.is_recently_visited_dialog = true
 
   local rslt = dlg:run()
 

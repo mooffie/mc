@@ -2025,6 +2025,7 @@ init_child (void *data, void *user_data)
  *
  *      local name = ui.Input()
  *      local age = ui.Input()
+ *      local occupation = ui.Input()
  *
  *      name.data = {
  *        required = true,
@@ -2041,9 +2042,7 @@ init_child (void *data, void *user_data)
  *                            -- user pressed some positive button.
  *                            -- This excludes ESC and "Cancel".
  *          for widget in dlg:gmatch() do
- *            if widget.data and widget.data.required
- *                and widget.text == ""
- *            then
+ *            if widget.data.required and widget.text == "" then
  *              alert(widget.data.errmsg)
  *              widget:focus()  -- Move user to the rogue widget.
  *              return false    -- Don't let user close the dialog.
@@ -2056,6 +2055,7 @@ init_child (void *data, void *user_data)
  *      dlg:add(
  *        ui.HBox():add(ui.Label(T"Name:"), name),
  *        ui.HBox():add(ui.Label(T"Age:"), age),
+ *        ui.HBox():add(ui.Label(T"Occupation (optional):"), occupation),
  *        ui.DefaultButtons()
  *      )
  *

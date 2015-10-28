@@ -51,9 +51,13 @@ local M = {
 local style = nil
 
 --
--- Note: We have to use rawset/get in several places because, by default, the
--- "properties" mechanism of widgets protects againt typos by raising exceptions
--- when setting/getting unknown properties.
+-- Note: We use rawset/get in several places because, by default, the
+-- "properties" mechanism of widgets protects againt typos by raising
+-- exceptions when setting/getting unknown properties.
+--
+-- (Alternavitely, we could store 'scrollbar' as a field in the 'data'
+-- property, and subclass ui.Custom and define the update() method in
+-- the conventional way. This is left as an exercise for the reader.)
 --
 
 local function scrollbar_constructor(dlg)
