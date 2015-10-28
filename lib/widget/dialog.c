@@ -960,7 +960,7 @@ del_widget (void *w)
         h->current = dlg_widget_next (h, d);
 
     h->widgets = g_list_remove_link (h->widgets, d);
-    send_message (d->data, NULL, MSG_DESTROY, 0, NULL);
+    widget_destroy (WIDGET (d->data));
     g_free (d->data);
     g_list_free_1 (d);
 
@@ -1295,7 +1295,7 @@ dlg_destroy (WDialog * h)
     dlg_save_history (h);
     {
         /* Inform script engines of dead widgets. */
-        g_list_foreach (h->widgets, (GFunc) scripting_notify_on_widget_destruction, NULL);
+        dlg_broadcast_msg (h, MSG_BEFORE_DESTROY);
         scripting_notify_on_widget_destruction (WIDGET (h));
     }
     dlg_broadcast_msg (h, MSG_DESTROY);

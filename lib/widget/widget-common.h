@@ -41,7 +41,8 @@ typedef enum
     MSG_RESIZE,                 /* Screen size has changed */
     MSG_VALIDATE,               /* Dialog is to be closed */
     MSG_END,                    /* Shut down dialog */
-    MSG_DESTROY                 /* Sent to widget at destruction time */
+    MSG_DESTROY,                /* Sent to widget at destruction time */
+    MSG_BEFORE_DESTROY          /* Sent before MSG_DESTROY */
 } widget_msg_t;
 
 /* Widgets are expected to answer to the following messages:
@@ -164,6 +165,7 @@ void widget_erase (Widget * w);
 gboolean widget_is_active (const void *w);
 gboolean widget_overlapped (const Widget * a, const Widget * b);
 void widget_replace (Widget * old, Widget * new);
+void widget_destroy (Widget * w);
 
 /* get mouse pointer location within widget */
 Gpm_Event mouse_get_local (const Gpm_Event * global, const Widget * w);

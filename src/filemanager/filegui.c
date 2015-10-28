@@ -828,7 +828,7 @@ file_op_context_create_ui (file_op_context_t * ctx, gboolean with_eta,
                                                     progress_buttons[2].text,
                                                     progress_button_callback));
         progress_buttons[2].len = button_get_len (BUTTON (progress_buttons[2].w));
-        send_message (progress_buttons[2].w, NULL, MSG_DESTROY, 0, NULL);
+        widget_destroy (progress_buttons[2].w);
         g_free (progress_buttons[2].w);
     }
     progress_buttons[2].w = progress_buttons[1].w;

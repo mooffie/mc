@@ -84,7 +84,6 @@ As a quick reference, here’s a snippet that uses some common features:
 #include "lib/lua/plumbing.h"
 #include "lib/lua/ui-impl.h"    /* luaUI_*() */
 #include "lib/lua/utilx.h"
-#include "lib/scripting.h"        /* scripting_notify_on_widget_destruction() */
 
 #include "../modules.h"
 #include "ui-custom.h"          /* is_custom() */
@@ -254,11 +253,7 @@ l_widget_destroy (lua_State * L)
              * The way to destroy a child widget is to destroy its dialog. */
             luaL_error (L, E_ ("You can't destroy a widget which is already mapped in a dialog."));
         }
-
-        /* @FIXME: MC itself should have widget_destroy()! See another comment in this file mentioning it. */
-
-        scripting_notify_on_widget_destruction (w);
-        send_message (w, NULL, MSG_DESTROY, 0, NULL);
+        widget_destroy (w);
         g_free (w);
     }
 
@@ -805,6 +800,8 @@ l_checkbox_set_text (lua_State * L)
 
         dummy_chk = check_new (0, 0, chk->state, text);
         dummy_chk->state = chk->state;
+        /* Note: We don't call widget_destroy() as this would kill the Lua wrapper.
+         * Again: this is just a temporary hack. */
         send_message (chk, NULL, MSG_DESTROY, 0, NULL);
         *chk = *dummy_chk;
     }
@@ -1602,15 +1599,15 @@ l_radios_new (lua_State * L)
  * @attr radios.items
  * @property rw
  */
-
-/**
- * @FIXME: A radios widget, unlike a listbox widget, doesn't have a function
- * for setting its items. Until this is fixed we resort to a dirty hack.
- */
 static void
 set_radios_items (WRadio * rad, const char **items, int items_count)
 {
     WRadio *rad_dummy;
+
+    /**
+     * @FIXME: A radios widget, unlike a listbox widget, doesn't have a function
+     * for setting its items. Until this is fixed we resort to a dirty hack.
+     */
 
     rad_dummy = radio_new (0, 0, items_count, items);
 
@@ -1621,6 +1618,8 @@ set_radios_items (WRadio * rad, const char **items, int items_count)
     *WIDGET (rad_dummy) = *WIDGET (rad);
 
     /* Free the old items. */
+    /* Note: We don't call widget_destroy() as this would kill the Lua wrapper.
+     * Again: this is just a temporary hack. */
     send_message (rad, NULL, MSG_DESTROY, 0, NULL);
 
     *rad = *rad_dummy;
@@ -2581,12 +2580,7 @@ l_dialog_del_widget (lua_State * L)
     (void) dlg;
 
     if (w->owner)
-    {
-        /* FIXME: Once MC has widget_destroy() we would put scripting_notify_...() there
-           and won't have to call it anywhere else! */
-        scripting_notify_on_widget_destruction (w);
         del_widget (w);
-    }
 
     return 0;
 }
