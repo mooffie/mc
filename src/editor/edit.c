@@ -2159,6 +2159,8 @@ edit_init (WEdit * edit, int y, int x, int lines, int cols, const vfs_path_t * f
 
     edit_load_macro_cmd (edit);
 
+    /* Alternatively we can put this in MSG_INIT, but then it won't get
+     * triggered for editboxes that aren't inserted into dialogs. */
     scripting_trigger_widget_event ("Editbox::load", WIDGET (edit));
 
     return edit;
@@ -2172,23 +2174,6 @@ edit_clean (WEdit * edit)
 {
     if (edit == NULL)
         return FALSE;
-
-    /*
-     * The widget has been sent MSG_DESTROY already. Since we
-     * invalidate Lua wrappers before MSG_DESTROY is sent (see dialog.c:
-     * notify_lua_on_widget_destruction() is called before MSG_DESTROY is
-     * broadcasted), the Lua wrapper seen in the <<unload>> handler would
-     * be a new one, different than the one seen in earlier event
-     * handlers (e.g., in <<load>>).
-     *
-     * The implication is that you can't store data on the Lua wrapper
-     * in <<load>> and expect to see it in <<unload>>.
-     *
-     * It would be nice to "fix" this for Editboxes. Maybe we should add a
-     * flag to widgets that governs whether notify_lua_on_widget_destruction()
-     * is called before or after MSG_DESTROY.
-     */
-    scripting_trigger_widget_event ("Editbox::unload", WIDGET (edit));
 
     /* a stale lock, remove it */
     if (edit->locked)

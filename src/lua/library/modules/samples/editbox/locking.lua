@@ -64,10 +64,7 @@ ui.Editbox.bind("<<load>>", function(edt)
   if edt.filename then
     if locker.is_locked(edt.filename) then
       if ask(locker.get_lock_info(edt.filename)) == "ignore" then
-        -- Unfortunately we can't do `ignoring[edt] = true`. That's because
-        -- the 'edt' that will be seen in <<unload>> is different than the
-        -- one we see here. Why? It's explained in edit.c:edit_clean().
-        ignoring[edt.__cwidget__] = true
+        ignoring[edt] = true
       else
         locker.lock(edt.filename)
       end
@@ -79,11 +76,11 @@ end)
 
 ui.Editbox.bind("<<unload>>", function(edt)
   if edt.filename then
-    if not ignoring[edt.__cwidget__] then
+    if not ignoring[edt] then
       locker.unlock(edt.filename)
     end
   end
-  ignoring[edt.__cwidget__] = nil
+  ignoring[edt] = nil
 end)
 
 return M

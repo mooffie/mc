@@ -1169,6 +1169,14 @@ edit_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *da
         edit_clean (e);
         return MSG_HANDLED;
 
+    case MSG_BEFORE_DESTROY:
+        /* Note: We shouldn't put this at MSG_DESTROY. At MSG_DESTROY the Lua
+         * wrapper has been invalidated already and the event would then re-create
+         * a new Lua wrapper, causing the one seen at <<unload>> to be different
+         * than the one seen at <<load>>. */
+        scripting_trigger_widget_event ("Editbox::unload", w);
+        /* fall through */
+
     default:
         return widget_default_callback (w, sender, msg, parm, data);
     }
