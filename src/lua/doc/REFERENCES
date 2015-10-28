@@ -24,7 +24,7 @@ TTY/Style
   https://github.com/leafo/moonscript/blob/master/extra/scintillua/lexers/themes/moon.lua    **
 
 Thread
-  Roblox (google: "lua scheduler wait" )
+  Roblox (google: "lua scheduler wait")
 
 Regex/split
   http://www.valadoc.org/#!api=glib-2.0/GLib.Regex  (Vala's binding to GLib's regexp)
@@ -44,6 +44,11 @@ Editor
   http://docs.wxwidgets.org/3.0/classwx_styled_text_ctrl.html
   http://www.tecgraf.puc-rio.br/iup/en/ctrl/iup_scintilla.html  (+ ui widgets)
   file://localhost/usr/share/doc/python-fltk-doc/CH4_Editor.html (code at bottom has syntax parser?)
+
+Lua patterns
+  "[As a result of these ideas,] LuaSocket implementation [was] simplified [made] more powerful [...] size cut in half"
+    http://lua-users.org/wiki/FinalizedExceptions *
+    http://lua-users.org/wiki/FiltersSourcesAndSinks
 
 Misc
   http://docs.wxwidgets.org/3.0/overview_events.html ?
@@ -97,6 +102,10 @@ Misc
 ===== References =======
 
 - http://www.c-for-dummies.com/ncurses/ ?
+
+- S-Lang
+    http://www.jedsoft.org/slang/doc/html/cslang.html  (guide)
+    http://www.jedsoft.org/slang/doc/html/cref.html  (ref)
 
 
 ==== Learn Lua integration from others ========
@@ -180,6 +189,9 @@ Games
   http://www.classicdosgames.com/game/MasterMind.html
   http://dwarffortresswiki.org/index.php/Main_Page *
   http://www.dosgames.com/
+  Kroz / Rogue
+    https://en.wikipedia.org/wiki/Kroz_series
+    http://talk.maemo.org/showthread.php?t=5938
 
 Apps
   some alarm program or a time tracker (gtimer *, osmo, pal)

@@ -1,6 +1,7 @@
 This document contains 'todo' items whose explanation is too long to fit
 in the TODO file.
 
+
 OVERRIDING COMMANDS (AKA "ACTIONS")
 ===================================
 
@@ -65,3 +66,15 @@ In other words, instead of MSG_KEY sending a MSG_ACTION, thus letting us
 trigger our magic at one entry point, each MSG_KEY is effectively
 executing the command directly, leaving us no single entry point at which
 to override the action.
+
+
+THE EVENT LOOP
+==============
+
+MC's event loop can be replaced by that of GLib. Or we could let it watch
+additional file descriptors. This can let us add support for watching for
+filesystem events (i.e. Linux' inotify) like directory changes (ticket
+#1756), socket programming etc. Refs:
+
+  - https://en.wikipedia.org/wiki/Event_loop
+  - select.c of LuaSocket
