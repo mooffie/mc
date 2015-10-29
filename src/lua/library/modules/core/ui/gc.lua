@@ -280,4 +280,95 @@ do
     keep_alive[self] = nil
   end
 
+--- Widget methods and properties.
+-- @section widget
+
+--[[-
+
+Fixates a widget.
+
+Info: This section describes a convenience method that can be used in
+some special situations. It is seldom needed. Feel free to ignore this
+section unless you're an advanced user.
+
+__Introduction__
+
+The widgets you interact with in Lua are wrappers around "real" C
+widgets.
+
+In some situations it can happen that you no longer have a Lua variable
+referencing a widget you're interested in. In such cases the Lua wrapper
+gets garbage collected. Usually there's no problem in that: it's the
+expected behavior. A problem may arise, however, when you store some data
+in the Lua wrapper: this data will be lost too.
+
+The `fixate` method prevents the Lua wrapper from being garbage collected
+as long as the underlying C widget is still alive. This means that the
+next time you get your hands on a wrapper for this widget you'll get the
+same old wrapper -- with your precious data on it.
+
+__Example__
+
+Let's have an example. Suppose you want to implement a "read only"
+feature for the editor. As a first step you make `C-n` mark an editbox as
+read only:
+
+    ui.Editbox.bind('C-n', function(edt)
+      alert(T'This editbox is now read-only!')
+      edt.data.is_read_only = true
+    end)
+
+As the next step you reject keys that occur in such marked editboxes:
+
+    local ESC = tty.keyname_to_keycode 'esc'
+
+    ui.Editbox.bind('any', function(edt, kcode)
+      if edt.data.is_read_only and (kcode < 256 and kcode ~= ESC) then
+        tty.beep()
+      else
+        return false  -- Let MC handle this key.
+      end
+    end)
+
+Will this work? Not quite. The read-only protection will last for a few
+seconds only: The Lua wrapper carrying `data.is_read_only` will get
+garbage collected at some point, and the `edt` wrapper seen at the
+keyboard handler code will be a new one, which doesn't carry
+`data.is_read_only`.
+
+To fix our code we need to fixate the wrapper:
+
+    ui.Editbox.bind('C-n', function(edt)
+      alert(T'This editbox is now read-only!')
+      edt.data.is_read_only = true
+      edt:fixate()
+    end)
+
+Info: It's trivial to change our system to make widgets "fixated" by
+default. Should we? Maybe. Maybe not. In the meantime we should observe
+our users to learn what they expect of the system.
+
+@method widget:fixate
+
+]]
+
+  -- Note: we reuse the 'keep_alive' table from above, but we may as
+  -- well use a dedicated table.
+
+  function ui.Widget.meta:fixate()
+    keep_alive[self] = true
+    DEBUG_HEADER(self, 'fixating: ' .. tostring(self) .. ':')
+  end
+  function ui.Widget.meta:on_destroy()
+    -- (Interestingly, while in Lua 5.1 this code gets executed for
+    -- all widgets, in Lua 5.2+ it gets executed for fixated ones
+    -- only. It happens to be what we want anyway, but it wont hurt to
+    -- figure out the cause.)
+    --DBG('%%% I was called.')
+    if keep_alive[self] then
+      DEBUG_HEADER(self, 'un-fixating: ' .. tostring(self) .. ':')
+    end
+    keep_alive[self] = nil
+  end
+
 end

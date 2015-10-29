@@ -532,13 +532,16 @@ create_widget_metatable (lua_State * L, const char *class_name, const luaL_Reg *
 void
 mc_lua_notify_on_widget_destruction (Widget * w)
 {
+    LUAMC_GUARD (Lg);
+
     /* Note the TRUE below, which means "search hard in ui.weak". */
     if (luaUI_push_registered_widget (Lg, w, TRUE))
     {
         lua_pushboolean (Lg, FALSE);
         luaMC_rawsetfield (Lg, -2, "__cwidget__");
 
-        luaMC_pingmeta (Lg, -1, "on_destroy");
+        /* Note: we don't use luaMC_pingmeta() as it doesn't support inheritance. */
+        call_widget_method (w, "on_destroy", 0, NULL);
 
         lua_pop (Lg, 1);        /* the lua object */
 
@@ -560,4 +563,6 @@ mc_lua_notify_on_widget_destruction (Widget * w)
     {
         /* No corresponding Lua object. */
     }
+
+    LUAMC_UNGUARD (Lg);
 }
