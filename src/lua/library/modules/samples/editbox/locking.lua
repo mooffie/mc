@@ -57,14 +57,12 @@ local function ask(lock_info)
   return dlg:run() or "ignore"
 end
 
-
-local ignoring = {}  -- Editboxes ignoring locks.
-
 ui.Editbox.bind("<<load>>", function(edt)
   if edt.filename then
     if locker.is_locked(edt.filename) then
       if ask(locker.get_lock_info(edt.filename)) == "ignore" then
-        ignoring[edt] = true
+        edt.data.ignore_lock = true
+        edt:fixate()  -- See its documentation.
       else
         locker.lock(edt.filename)
       end
@@ -76,11 +74,10 @@ end)
 
 ui.Editbox.bind("<<unload>>", function(edt)
   if edt.filename then
-    if not ignoring[edt] then
+    if not edt.data.ignore_lock then
       locker.unlock(edt.filename)
     end
   end
-  ignoring[edt] = nil
 end)
 
 return M

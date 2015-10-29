@@ -117,17 +117,6 @@ end)
 -- Adds a "Raw" button to the dialog.
 --
 
---
--- When injecting a button to a dialog created in C we need to keep a
--- reference in a long living variable because otherwise the object,
--- together with its on_click handler (which is our button's raison d'être),
--- gets garbage collected (as it's referenced nowhere).
---
--- (It won't lead to segfault it we don't do this. It's just that nothing will
--- happen when we click the button.)
---
-local btn_raw
-
 ui.Dialog.bind('<<open>>', function(dlg)
 
   if is_hotlist_dialog(dlg) then
@@ -136,7 +125,18 @@ ui.Dialog.bind('<<open>>', function(dlg)
 
     if btn_cancel then
 
-      btn_raw = ui.Button{T'Ra&w', pos_flags = utils.bit32.bor(ui.WPOS_KEEP_RIGHT, ui.WPOS_KEEP_BOTTOM)}
+      local btn_raw = ui.Button{T'Ra&w', pos_flags = utils.bit32.bor(ui.WPOS_KEEP_RIGHT, ui.WPOS_KEEP_BOTTOM)}
+
+      -- When injecting a button to a dialog created in C we need to keep a
+      -- reference to the button in a long living variable because otherwise
+      -- the object, together with its on_click handler (which is our button's
+      -- raison d'être), gets garbage collected (as it's referenced nowhere).
+      --
+      -- (It won't lead to segfault it we don't do this. It's just that nothing
+      -- will happen when we click the button.)
+      --
+      -- As an alternative to a long living variable, we use :fixate().
+      btn_raw:fixate()
 
       -- We position it to the left of the "Cancel" button.
       btn_raw.x = btn_cancel.x - btn_raw.cols - 1
