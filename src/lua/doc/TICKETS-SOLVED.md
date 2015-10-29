@@ -37,6 +37,8 @@ A "sol" link points to a solution, or to a way of solving.
 - @{1688} "Warn if no write permission" (also @{3163}) @{~shots#warning|sol}
 - @{1480} "Home key behavior" @{git:superhome.lua|sol}
 - @{400} "multiline search in mcedit"  @{git:search_by_regex.lua|sol}
+- @{83} "editor needs read-only mode"  @{git:edit_read_only.lua|sol}
+
 
 ** SORTING **
 

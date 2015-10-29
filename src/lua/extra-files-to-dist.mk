@@ -8,6 +8,7 @@ doc/REVIEWERS.md \
 doc/SCREENSHOTS.md \
 doc/TICKETS-SOLVED.md \
 doc/TODO \
+doc/TODO-long \
 doc/WHY.md \
 doc/guide/10-getting-started.md \
 doc/guide/15-samples.md \
@@ -82,6 +83,7 @@ tests/snippets/cfunc.lua \
 tests/snippets/complete_word.lua \
 tests/snippets/dialog_mover.lua \
 tests/snippets/edit_max.lua \
+tests/snippets/edit_read_only.lua \
 tests/snippets/find_file_title.lua \
 tests/snippets/fop_move_basename.lua \
 tests/snippets/fop_move_jump.lua \
