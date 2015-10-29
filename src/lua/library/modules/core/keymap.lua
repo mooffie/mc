@@ -86,20 +86,20 @@ local M = {}
 
 local CTRL_X = tty.keyname_to_keycode('C-x')
 
-local function is_keymap(o)
-  return type(o) == 'table' and o.type == 'keymap'
-end
-
 local function new_keymap()
   return { type = 'keymap' }
 end
 
-local function is_actions(o)
-  return type(o) == 'table' and o.type == 'actions'
+local function is_keymap(o)
+  return type(o) == 'table' and o.type == 'keymap'
 end
 
 local function new_actions()
   return { type = 'actions' }
+end
+
+local function is_actions(o)
+  return type(o) == 'table' and o.type == 'actions'
 end
 
 ------------------------------------------------------------------------------
@@ -226,8 +226,8 @@ end
 -- ignore it).
 --
 local function keymap_eat(kcode)
-  local o = bindings.active_map[kcode] or bindings.active_map["any"]
-  if o then
+
+  local function process(o)  -- Processes keymap or actions.
     if is_keymap(o) then
       bindings.active_map = o
       local is_mc_prefix = (kcode == CTRL_X and ui.current_widget("Panel"))
@@ -239,7 +239,7 @@ local function keymap_eat(kcode)
         return true
       end
     else
-      -- Execute the bound action.
+      -- Execute the bound action(s).
       -- Note: we update active_map before calling 'fn' to be re-entrant.
       bindings.active_map = bindings.root
       for _, callback in ipairs(o) do
@@ -251,12 +251,30 @@ local function keymap_eat(kcode)
           end
         end
       end
-      -- No function returned 'false'. So we implicitly return false to the caller.
+      -- No action consumed the key (E.g., all of them returned 'false'). We
+      -- implicitly return false.
     end
-  else
-    -- Key breaks sequence. Reset to root.
+  end
+
+  -- If the key is registered:
+  local active_map_kcode = bindings.active_map[kcode]
+  if active_map_kcode and process(active_map_kcode) then
+    return true
+  end
+
+  -- If the key was not consumed, try "any" too:
+  local active_map_any = bindings.active_map["any"]
+  if active_map_any and process(active_map_any) then
+    return true
+  end
+
+  -- If the key breaks sequence, reset to root.
+  if not active_map_kcode and not active_map_any then
     bindings.active_map = bindings.root
   end
+
+  -- Implicitly return false.
+
 end
 
 require('internal').register_system_callback("keymap::eat", keymap_eat)
