@@ -103,6 +103,7 @@ tests/snippets/sort_by_filesystem.lua \
 tests/snippets/superhome.lua \
 tests/snippets/supertab.lua \
 tests/snippets/syntax-c-glib.lua \
+tests/snippets/syntax-lua.lua \
 tests/snippets/syntax-php.lua \
 tests/snippets/syntax-vala.lua \
 tests/snippets/upload_documentation \
