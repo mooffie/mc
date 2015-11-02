@@ -23,7 +23,7 @@ function OutputBuffer.New(fd, blksize)
 end
 
 function OutputBuffer:return_error()
-  return table.unpack(self.error)
+  return table.unpackn(self.error)
 end
 
 function OutputBuffer:setvbuf(mode, size)

@@ -167,13 +167,21 @@ local function is_simple_table(t)
   return true
 end
 
+local function render_values(values, pp)
+  local elts = {}
+  for i = 1, values.n do
+    append(elts, pp(values[i]))
+  end
+  return (#elts == 0 and T"<none>" or table.concat(elts, ", "))
+end
+
 local function noop(a) return a end
 
 local function display_result(output, values, use_digits_separator)
 
   output.style = style.normal
 
-  if #values == 1 and type(values[1]) == "number" then
+  if values.n == 1 and type(values[1]) == "number" then
 
     local f = values[1]        -- float
     local i = tointeger(f)     -- integer (if available)
@@ -189,7 +197,7 @@ local function display_result(output, values, use_digits_separator)
       end
     end)
 
-  elseif #values == 1 and type(values[1]) == "string" then
+  elseif values.n == 1 and type(values[1]) == "string" then
 
     local s = values[1]
 
@@ -204,19 +212,16 @@ local function display_result(output, values, use_digits_separator)
 
   else
 
-    local elts = {}
-
-    for i = 1, #values do  -- Using `for ... ipairs()` would fail for `{nil,1,2}`.
-      local v = values[i]
+    local function pp(v)
       if type(v) == "table" and not is_simple_table(v) then
-        append(elts, T'Complex table (expand to see)')
+        return T'Complex table (expand to see)'
       else
-        append(elts, devel.pp(v))
+        return devel.pp(v)
       end
     end
 
     output.align = "left~"
-    output.text = (#elts == 0 and T"<none>" or table.concat(elts, ", "))
+    output.text = render_values(values, pp)
 
   end
 end
@@ -226,11 +231,6 @@ local function display_error(output, errmsg)
   output.align = "center~"
   output.text = errmsg
 end
-
-local function expand_result(values)
-  devel.view(#values == 1 and values[1] or values)
-end
-
 
 function M.run()
 
@@ -248,7 +248,7 @@ function M.run()
       display_error(output, errmsg)
     else
       if do_expand then
-        expand_result(values)
+        devel.view(render_values(values, devel.pp), tostring)
       else
         display_result(output, values, use_digits_separator)
       end

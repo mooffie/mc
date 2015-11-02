@@ -68,7 +68,7 @@ function InputBuffer:read_more(count)
 end
 
 function InputBuffer:return_error()
-  return table.unpack(self.error)
+  return table.unpackn(self.error)
 end
 
 function InputBuffer:find(needle)

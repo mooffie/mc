@@ -224,12 +224,12 @@ function timer.debounce(fn, delay)
   -- it, it proves that it's not a critical feature. The less, the better.
   -- So we implement a workaround here instead. Maybe we'll revisit this
   -- decision in the future.
-  local args = {}
+  local args
   local wrapper = function()
-    fn(table.unpack(args))
+    fn(table.unpack(args, 1, args.n))
   end
   return function(...)
-    args = {...}
+    args = table.pack(...)
     timer.clear_timeout(wrapper)
     timer.set_timeout(wrapper, delay)
   end

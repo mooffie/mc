@@ -388,9 +388,9 @@ function File:close()
   self.obuffer.fd = posix.CLOSED_FD
 
   if not flush_result[1] then
-    return table.unpack(flush_result)
+    return table.unpackn(flush_result)
   else
-    return table.unpack(close_result)
+    return table.unpackn(close_result)
   end
 end
 

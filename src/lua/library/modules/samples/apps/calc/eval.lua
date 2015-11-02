@@ -31,6 +31,12 @@ local function pretty_error(errmsg)
   return gist
 end
 
+--
+-- Evaluates a string in the context of some environment.
+--
+-- On success, returns a table with the values (as a Lua expression may
+-- return multiple values). An "n" field denotes the number of values.
+--
 function M.eval(s, env)
   local fn, errmsg
 
@@ -44,9 +50,9 @@ function M.eval(s, env)
     -- Compilation error.
     return nil, pretty_error(errmsg)
   else
-    local success, results = pcall(function() return {fn()} end, env)
+    local success, results = pcall(function() return table.pack(fn()) end, env)
     if success then
-      return results, nil
+      return results
     else
       -- Run-time error.
       --

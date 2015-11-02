@@ -55,10 +55,11 @@ devel.autoload('pp', { 'devel.pp', 'pp' })
 --
 -- Note-short: If the UI is not ready, the output will be written to stdout.
 --
-function devel.view(v)
+-- @args (v)
+function devel.view(v, pp)
   if tty.is_ui_ready() then
     local f, tempname = fs.temporary_file{prefix="devel"}
-    f:write(devel.pp(v))
+    f:write((pp or devel.pp)(v))
     f:close()
     mc.view(tempname)
     fs.unlink(tempname)

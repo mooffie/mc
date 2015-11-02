@@ -196,7 +196,7 @@ function prompts.please_wait(message, callback, ...)
     dlg.on_validate = nil
 
     tty.refresh()
-    results = { callback(table.unpack(args)) }
+    results = { callback(table.unpackn(args)) }
     dlg:close()
   end
 
@@ -208,7 +208,7 @@ function prompts.please_wait(message, callback, ...)
 
   if not results then return end  -- 'results' is nil if an exception is raised inside 'callback'.
 
-  return table.unpack(results)
+  return table.unpackn(results)
 end
 
 ---

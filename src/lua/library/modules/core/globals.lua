@@ -7,13 +7,6 @@
 -- @pseudo
 -- @module globals
 
-
--- Lua 5.2 compatibility.
-if not table.unpack then
-  table.unpack = unpack
-  unpack = nil
-end
-
 ----------------------------- defined elsewhere ------------------------------
 
 ---
@@ -241,7 +234,51 @@ arg = argv
 -- @moniker core::before-vfs-shutdown
 -- @event
 
+------------------------------------------------------------------------------
+-- Lua compatibility.
+--
+-- These are functions that were either removed or added in Lua 5.2+. We
+-- implement them so they're always available.
+--
+-- @section compat
+
 ---
--- @section end
+-- @function table.unpack
+if not table.unpack then
+  table.unpack = unpack
+  unpack = nil
+end
+
+---
+-- @function table.pack
+if not table.pack then
+  function table.pack(...)
+    return { n = select('#', ...), ... }
+  end
+end
+
+---
+-- @function table.maxn
+if not table.maxn then
+  function table.maxn(t)
+    local max = 0
+    for k in pairs(t) do
+      if type(k) == 'number' and k > max then
+        max = k
+      end
+    end
+    return max
+  end
+end
+
+---
+-- This function is our own's extension to the API. It's equivalent to
+-- `table.unpack(t, 1, t.n or table.maxn(t))`. It's a version of
+-- `table.unpack` which is tolerant to `nil`s.
+--
+-- @function table.unpackn
+function table.unpackn(t)
+  return table.unpack(t, 1, t.n or table.maxn(t))
+end
 
 ------------------------------------------------------------------------------
