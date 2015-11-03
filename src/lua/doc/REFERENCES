@@ -58,8 +58,9 @@ Misc
 
 ====== Lua topics =========
 
-- http://loop.luaforge.net/
-  Object-oriented framework.
+OOP
+  - http://loop.luaforge.net/
+  - MoonScript's OOP.
 
 
 ===== Interesting =====
@@ -93,6 +94,7 @@ Misc
 - http://emacswiki.org/emacs/Sunrise_Commander **
 - https://wiki.archlinux.org/index.php/List_of_applications#File_managers
 - https://redmine.bloodycactus.com/projects/alfc  (supports Lua) *
+- http://mc.linuxinside.com  (old MC fork; referred, for example, from #1488, #1761, #2389)
 - Dos Navigator
     http://www.midnight-commander.org/ticket/1511  (screenshots)
     Necromancer's Dos Navigator
@@ -173,25 +175,34 @@ Panel
     http://www.midnight-commander.org/ticket/3072
       http://linmagazine.co.il/node/view/50738 (mentions node.js compat wrapper)
       http://forums.bodhilinux.com/index.php?/topic/1098-the-trash-can-command-line-style/
-  Warn, using a docked lanel, if the shell has something typed into
+  Warn, using a docked panel, if the shell has something typed into
     it (see #2110, #213).
   Mounting/listing devices.
-    see #1488.
+    See #1488, #2506.
     'man 8 udisks' says "for desktop applications it is a much better idea to
     use something like GVolumeMonitor". See also wiki.archlinux.org/index.php/Udisks .
 
 Games
-  http://www.inn.co.il/Children/Flash.aspx/g/36  (mountains in the BG)
-  http://linmagazine.co.il/node/view/50648  "2048" ?
-  http://motris.livejournal.com/141491.html ***
-  http://en.wikipedia.org/wiki/Pac-Man
-  http://www.mobygames.com/game/dos/showtext-included-games/screenshots *
-  http://www.classicdosgames.com/game/MasterMind.html
-  http://dwarffortresswiki.org/index.php/Main_Page *
-  http://www.dosgames.com/
+  Squares puzzles
+    http://motris.livejournal.com/141491.html *
+    http://linmagazine.co.il/node/view/50648  "2048"
+  Arcade
+    Pac-Man (Wikipedia), Arkanoid
+  DOS archives
+    http://www.mobygames.com/game/dos/showtext-included-games/screenshots (text *)
+    http://www.classicdosgames.com/game/MasterMind.html
+    http://www.dosgames.com/
+    http://www.old-games.com/ *
+  Arithmetic
+    google: multiplication puzzle
+      arithmagon, emacs
+  Interesting
+    http://www.inn.co.il/Children/Games/Item/36  (mountains in the BG)
+    path finding
   Kroz / Rogue
-    https://en.wikipedia.org/wiki/Kroz_series
-    http://talk.maemo.org/showthread.php?t=5938
+    Kroz, roguebasin.com, Dwarf Fortress, TOME ncurses.
+  Lua
+    http://luaaio.luaforge.net/screenshots.html
 
 Apps
   some alarm program or a time tracker (gtimer *, osmo, pal)
@@ -209,15 +220,16 @@ Environment variables editor?
    many other shells, probably)."
 
 
-===== Misc =====
-
-- luaposix ( /usr/share/lua/5.1/posix.lua ) does some arithmetic with timestamps.
-  Perhaps there's some idea there that can help us get rid of timer.c's division?
+===== Documentation system =====
 
 - The screenshots currently in ldoc are huge. Here are some to prove there are
   small and pleasant fonts:
 
     http://www.midnight-commander.org/attachment/ticket/122/15480-mcbug.png   (BTW, it shows a panel scrollbar!)
     http://www.midnight-commander.org/attachment/ticket/3413/mc-info-overflow.png
-    http://www.midnight-commander.org/ticket/1511   (DosNavigator screenshots)
+    http://www.midnight-commander.org/ticket/1511   (Dos Navigator screenshots)
 
+- http://luaaio.luaforge.net/documentation.html (see CHM viewer)
+
+- Can "GNU Global" build HTML pages of our Lua code? It can handle C
+  exceptionally but how about Lua? And can it create "permanent" URLs?

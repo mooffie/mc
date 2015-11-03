@@ -11,9 +11,10 @@
 --
 --## Signaling errors
 --
--- An operator may signal an error by returning a **triad** or a
--- **pair**: first a nil, then an Operating System's error code (a
--- third, optional, return value is ignored).
+-- An operator may signal an error by returning a **pair** or a **triad**:
+-- first a nil, then an Operating System's error code (either in the second
+-- or third place; this "fuzziness" is for compatibility with the standard
+-- Lua OS functions, which by convention return a triad).
 --
 -- You can get by, however, by just returning nothing (or a nil): an
 -- appropriate error code will be deduced for you.

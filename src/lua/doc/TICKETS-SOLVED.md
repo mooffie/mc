@@ -39,7 +39,6 @@ A "sol" link points to a solution, or to a way of solving.
 - @{400} "multiline search in mcedit"  @{git:search_by_regex.lua|sol}
 - @{83} "editor needs read-only mode"  @{git:edit_read_only.lua|sol}
 
-
 ** SORTING **
 
 (In general, see @{~mod:ui.Panel*ui.Panel:sort_field|panel.sort_field}.)
@@ -69,11 +68,12 @@ A "sol" link points to a solution, or to a way of solving.
 - @{114}  "hide dotfiles in home" @{ui.Panel:filter_by_fn|sol}
 - @{2721} "Hotkey to toggle 'Hide none'"
 - @{2697} and @{405} "Filter as you type"  @{git:filter-as-you-type.lua|sol1} @{git:visren/init.lua|sol2}
+- @{3170} Filtering marked files  @{ui.Panel:filter_by_fn|sol}
 
 ** USABILITY OF MOVE/COPY DIALOGS **
 
 - @{1684} "follow renamed file"             @{git:fop_move_jump.lua|sol}
-- @{1907} "append filename to 'to:' input box.  @{git:fop_move_tail.lua|sol}
+- @{1907} "append filename to 'to:' input box"  @{git:fop_move_tail.lua|sol}
 - @{1639} woes with "preserve attributes"        @{git:preserve-attributes.lua|sol}
 - @{2486} "Move cursor to copied/moved file after activating panel"
 - @{2699} "select only name without extension when renaming"   @{git:fop_move_basename.lua|sol}
@@ -114,7 +114,7 @@ quickview:
 - @{2979} "user friendly bookmark management"
 - @{3006} "Unescape, reencode and insert string"
 - @{1516} Browser-like 'about:config' dialog to set options
-- @{2506} "udisks support"
+- @{2506} "udisks support" and @{1488} "Mountpoint selector"
 - @{1577} "CD/DVD burning"
 
 Frontend for archivers:

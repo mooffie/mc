@@ -78,3 +78,14 @@ filesystem events (i.e. Linux' inotify) like directory changes (ticket
 
   - https://en.wikipedia.org/wiki/Event_loop
   - select.c of LuaSocket
+
+
+MISC
+====
+
+- luaposix ( /usr/share/lua/5.1/posix.lua ) does some arithmetic with timestamps.
+  Perhaps there's some idea there that can help us get rid of timer.c's division?
+
+- MoonScript: does it produce, like CoffeScript, a file with mapping between
+  input and output line numbers? If so, we could use it to make traceback
+  messages meaningful.

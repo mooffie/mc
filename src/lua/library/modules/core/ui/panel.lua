@@ -70,7 +70,7 @@ end
 --    end
 --
 -- Besides the filename, several more values are returned. You have to use
--- the method calling syntax (":get_current()") to access them:
+-- the method calling syntax -- `:get_current()` -- to access them:
 --
 --    -- Ask for confirmation before editing a huge file.
 --    ui.Panel.bind("f4", function(pnl)
