@@ -394,29 +394,31 @@ l_set_custom_mini_status_format (lua_State * L)
  * For "custom", the format is specified with @{custom_format}.
  *
  * Info: "custom" is entitled "User defined" in MC's interface. In our API we
- * use the word "custom", rather than "user", because the latter isn't too
- * clear when it appears in names of the other properties.
+ * use the word "custom", rather than "user", because the latter's meaning
+ * isn't clear when embedded in names of other properties.
  *
  * @attr list_type
  * @property rw
  */
+
+static const char *const list_type_names[] = {
+    "full", "brief", "long", "custom", NULL
+};
+/* @FIXME: src/filemanager/panel.h should define this list_type_t typedef
+   (and we should remove ours afterwards). See commit fb474bc1c1571 */
+typedef enum list_types list_type_t;
+static const list_type_t list_type_values[] = {
+    list_full, list_brief, list_long, list_user
+};
+
 static int
 l_set_list_type (lua_State * L)
 {
-    static const char *const lt_names[] = {
-        "full", "brief", "long", "custom", NULL
-    };
-    /* @FIXME: src/filemanager/panel.h should define a list_type_t typedef and
-       we (and it) should use it. See commit fb474bc1c1571 */
-    static const int lt_values[] = {
-        list_full, list_brief, list_long, list_user
-    };
-
     WPanel *panel;
-    int list_type;
+    list_type_t list_type;
 
     panel = LUA_TO_PANEL (L, 1);
-    list_type = luaMC_checkoption (L, 2, NULL, lt_names, lt_values);
+    list_type = luaMC_checkoption (L, 2, NULL, list_type_names, list_type_values);
 
     /* Taken from configure_panel_listing(). */
     panel->list_type = list_type;
@@ -428,20 +430,7 @@ l_set_list_type (lua_State * L)
 static int
 l_get_list_type (lua_State * L)
 {
-    WPanel *panel = LUA_TO_PANEL (L, 1);
-
-    const char *lt;
-    switch (panel->list_type)
-    {
-        /* *INDENT-OFF* */
-        case list_full:  lt = "full";   break;
-        case list_brief: lt = "brief";  break;
-        case list_long:  lt = "long";   break;
-        case list_user:  lt = "custom"; break; /* Not "user". See rationale in ldoc. */
-        default:         lt = "unknown";
-        /* *INDENT-ON* */
-    }
-    lua_pushstring (L, lt);
+    luaMC_push_option (L, LUA_TO_PANEL (L, 1)->list_type, "unknown", list_type_names, list_type_values);
     return 1;
 }
 
