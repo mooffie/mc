@@ -2415,19 +2415,30 @@ l_dialog_get_on_idle (lua_State * L)
  *      end
  *    end
  *
+ * You can also read this property:
+ *
+ *    -- Sound a beep when an error dialog is shown.
+ *
+ *    ui.Dialog.bind("<<open>>", function(dlg)
+ *      if dlg.colorset == "alarm" then
+ *        tty.beep()
+ *      end
+ *    end)
+ *
  * @attr dialog.colorset
- * @property w
+ * @property rw
  */
+
+static const char *const colorset_names[] = {
+    "normal", "alarm", "pmenu", NULL
+};
+static const int *colorset_values[] = {
+    dialog_colors, alarm_colors, listbox_colors
+};
+
 static int
 l_dialog_set_colorset (lua_State * L)
 {
-    static const char *const colorset_names[] = {
-        "normal", "alarm", "pmenu", NULL
-    };
-    static const int *colorset_values[] = {
-        dialog_colors, alarm_colors, listbox_colors
-    };
-
     WDialog *dlg;
 
     dlg = LUA_TO_DIALOG (L, 1);
@@ -2437,6 +2448,13 @@ l_dialog_set_colorset (lua_State * L)
     dlg_redraw (dlg);           /* In case the user changes the colorset of an active dialog. */
 
     return 0;
+}
+
+static int
+l_dialog_get_colorset (lua_State * L)
+{
+    luaMC_push_option (L, LUA_TO_DIALOG (L, 1)->color, NULL, colorset_names, colorset_values);
+    return 1;
 }
 
 static void
@@ -3122,6 +3140,7 @@ static const struct luaL_Reg ui_dialog_methods_lib[] = {
     { "set_modal", l_dialog_set_modal },
     { "get_modal", l_dialog_get_modal },
     { "set_colorset", l_dialog_set_colorset },
+    { "get_colorset", l_dialog_get_colorset },
     { "get_state", l_dialog_get_state },
     { "_set_dimensions", l_dialog_set_dimensions },
     { "set_compact", l_dialog_set_compact },

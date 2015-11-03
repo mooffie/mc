@@ -139,6 +139,7 @@ Frontend for archivers:
 - @{3493} "Switch 'Local'/'User' buttons on menu selector"     @{git:menu_user_button_focus.lua|sol}
 - @{3495} Tweaking widgets default values  @{ui.open__event|sol}
 - @{2928} "Indicate read only mode for directories"
+- @{2389} "beep_when_finished, beep_when_interrupted"  @{ui.zzz_close__event|sol}, @{~mod:ui*dialog.colorset|sol}
 
 ** VFS **
 
@@ -158,4 +159,3 @@ Can be solved by adding some hooks:
 - @{289} "Copy to temp panel"
 - @{1983} "Add btrfs' file clone operation"
 - @{3199} "show long operation progress in xterm window title"
-- @{2389} "beep_when_finished, beep_when_interrupted"

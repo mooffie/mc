@@ -203,6 +203,23 @@ void luaMC_requiref (lua_State * L, const char *modname, lua_CFunction openf);
 
 #define luaMC_checkoption(L, n, def, names, values) values[ luaL_checkoption (L, n, def, names) ]
 
+/**
+ * luaMC_push_option() is the opposite of luaMC_checkoption().
+ *
+ * It's a macro because the type of 'val' and 'values' isn't known.
+ */
+#define luaMC_push_option(L, val, fallback, names, values) \
+    do { \
+        int i; \
+        for (i = 0; names[i] != NULL; i++) \
+            if (values[i] == val) { \
+                lua_pushstring (L, names[i]); \
+                break; \
+            } \
+        if (names[i] == NULL) \
+            lua_pushstring (L, fallback); \
+    } while (0)
+
 off_t mc_lua_fixup_idx (off_t idx, off_t len, gboolean endpoint);
 void luaMC_checkargcount (lua_State * L, int count, gboolean is_method);
 
