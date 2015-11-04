@@ -200,15 +200,14 @@ l_diff (lua_State * L)
 
 
 /**
- * This function is exposed to Lua as "_current_widget".
+ * This function is exposed to Lua as "mc._current_widget".
  *
- * The UI module overrides its own, simpler "current_widget" with this
- * function. The advantage of *this* function is that it recognizes the
- * command input line.
+ * The UI module exposes it as "ui.current_widget". See there for its
+ * documentation.
  *
- * We don't put this code in the UI module because it refers to 'midnight_dlg'
- * and 'command_prompt', which are MC-specific, whereas the UI module should
- * be as MC-independent as possible.
+ * We don't put this code in the UI module because it deals with MC-specific
+ * idiosyncrasies: 'midnight_dlg' and 'command_prompt', whereas we want to keep
+ * the UI module as MC-independent as possible.
  */
 static int
 l_current_widget (lua_State * L)

@@ -2502,6 +2502,27 @@ l_dialog_get_mapped_children (lua_State * L)
 }
 
 /**
+ * The focused widget.
+ *
+ * Tip: Note that this is a read-only property. To set the focused
+ * widget, use `focus` on the desired widget.
+ *
+ * @attr dialog.current
+ * @property r
+ */
+static int
+l_dialog_get_current (lua_State * L)
+{
+    WDialog *dlg = LUA_TO_DIALOG (L, 1);
+
+    /* Note the use of the _ex() version: We also push widgets that don't
+       have Lua counterparts. */
+    luaUI_push_widget_ex (L, dlg->current ? WIDGET (dlg->current->data) : NULL, TRUE, TRUE);
+
+    return 1;
+}
+
+/**
  * A low-level function to run the dialog.
  *
  * We export it to Lua as _run(). We wrap it in a Lua version that does
@@ -3134,6 +3155,7 @@ static const struct luaL_Reg ui_dialog_methods_lib[] = {
     { "close", l_dialog_close },
     { "get_mapped_children", l_dialog_get_mapped_children },
     { "map_widget", l_dialog_map_widget },
+    { "get_current", l_dialog_get_current },
     { "_del_widget", l_dialog_del_widget },
     { "set_text", l_dialog_set_text },
     { "get_text", l_dialog_get_text },
@@ -3160,7 +3182,7 @@ static const struct luaL_Reg ui_dialog_methods_lib[] = {
 
 /* *INDENT-OFF* */
 static const struct luaL_Reg uilib[] = {
-    /* No functions are currently defined under the 'ui' namespace.
+    /* No functions are currently defined under the 'ui' namespace here.
      * (Note: ui.current_widget() is an alias to mc._current_widget().) */
     { NULL, NULL }
 };
