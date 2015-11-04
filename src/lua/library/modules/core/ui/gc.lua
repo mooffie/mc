@@ -350,6 +350,8 @@ our users to learn what they expect of the system.
 
 @method widget:fixate
 
+@return The widget itself.
+
 ]]
 
   -- Note: we reuse the 'keep_alive' table from above, but we may as
@@ -358,6 +360,7 @@ our users to learn what they expect of the system.
   function ui.Widget.meta:fixate()
     keep_alive[self] = true
     DEBUG_HEADER(self, 'fixating: ' .. tostring(self) .. ':')
+    return self
   end
   function ui.Widget.meta:on_destroy()
     -- (Interestingly, while in Lua 5.1 this code gets executed for
