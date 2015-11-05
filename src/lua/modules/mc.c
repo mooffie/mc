@@ -8,6 +8,7 @@
 
 #include "lib/global.h"
 #include "lib/vfs/vfs.h"
+#include "lib/event.h"          /* mc_event_raise() */
 #include "lib/lua/capi.h"
 #include "lib/lua/utilx.h"
 
@@ -198,6 +199,25 @@ l_diff (lua_State * L)
 
 #endif
 
+/**
+ * Opens the help viewer.
+ *
+ * @function help
+ * @param[opt] help_id The name of the section. Leave empty for the main section.
+ * @param[opt] help_file The path to the help file. Leave empty for the builtin help file.
+ */
+static int
+l_help (lua_State * L)
+{
+    ev_help_t event_data = { NULL, NULL };
+
+    event_data.node = luaL_optstring (L, 1, NULL);
+    event_data.filename = luaL_optstring (L, 2, NULL);
+
+    mc_event_raise (MCEVENT_GROUP_CORE, "help", &event_data);
+
+    return 0;
+}
 
 /**
  * This function is exposed to Lua as "mc._current_widget".
@@ -470,6 +490,7 @@ static const struct luaL_Reg mclib[] = {
     { "view_command", l_view_command },
     { "edit", l_edit },
     { "diff", l_diff },
+    { "help", l_help },
     { "execute", l_execute },
     { "expand_format", l_expand_format },
     { "_current_widget", l_current_widget },

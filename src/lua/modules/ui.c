@@ -307,8 +307,8 @@ l_widget_command (lua_State * L)
     /*
      * MC bug:
      *
-     * dialog:command("ScreenNext") and dialog:command("Down") (and
-     * some others) won't work.
+     * dialog:command("ScreenNext"), dialog:command("Help") and
+     * a few others won't work.
      *
      * That's because these specific commands are handled in
      * dlg_execute_cmd(), which is only called in response to keyboard
@@ -2664,6 +2664,25 @@ l_dialog_get_text (lua_State * L)
 }
 
 /**
+ * The help key.
+ *
+ * If the dialog has a section in the user manual, this is the name
+ * of that section.
+ *
+ * @attr dialog.help_id
+ * @property r
+ */
+static int
+l_dialog_get_help_id (lua_State * L)
+{
+    lua_pushstring (L, LUA_TO_DIALOG (L, 1)->help_ctx);
+    return 1;
+
+    /* Writing a setter is possible but will cause a memory leak as we'll
+       have to use strdup() and it free()'d nowhere. */
+}
+
+/**
  * Whether the dialog is modal or modaless.
  *
  * By default dialogs are modal: the user has to finish interacting with
@@ -3159,6 +3178,7 @@ static const struct luaL_Reg ui_dialog_methods_lib[] = {
     { "_del_widget", l_dialog_del_widget },
     { "set_text", l_dialog_set_text },
     { "get_text", l_dialog_get_text },
+    { "get_help_id", l_dialog_get_help_id },
     { "set_modal", l_dialog_set_modal },
     { "get_modal", l_dialog_get_modal },
     { "set_colorset", l_dialog_set_colorset },
