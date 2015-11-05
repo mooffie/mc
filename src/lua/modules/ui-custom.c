@@ -99,8 +99,7 @@ typedef struct
  *    end
  *
  *    -- To make our widget focusable, we must also do:
- *    wdg.on_focus   = function() return true end
- *    wdg.on_unfocus = function() return true end
+ *    wdg.on_focus = function() return true end
  *
  * You'll always want to implement this handler for focusable widgets
  * or else the cursor will remain at its last arbitrary position.
@@ -237,7 +236,7 @@ as the @{prompts.alert|alert}'s title.
  *      return true
  *    end
  *
- * You will most probably also want to implement @{on_unfocus} and @{on_cursor}.
+ * You will most probably also want to implement @{on_cursor}.
  *
  * @method on_focus
  * @args (self)
@@ -247,11 +246,20 @@ as the @{prompts.alert|alert}'s title.
 /**
  * Unfocus handler.
  *
- * Called when a widget is about to lose the @{on_focus|focus}. You *must*
- * return **true** here if you want your widget to lose the focus.
+ * Called when a widget is about to lose the @{on_focus|focus}. If you implement
+ * this handler, you *must* return **true** here if you want your widget to lose
+ * the focus; otherwise the user won't be able to leave the widget.
+ *
+ * If you don't implement this handler, it's as if you returned **true**: the
+ * user will be able to always leave the widget.
  *
  *    wdg.on_unfous = function()
- *      return true
+ *      if some_data_is_missing then
+ *        tty.beep()
+ *        return false
+ *      else
+ *        return true
+ *      end
  *    end
  *
  * @method on_unfocus
@@ -286,7 +294,14 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
         return call_widget_method (w, "on_focus", 0, NULL);
 
     case MSG_UNFOCUS:
-        return call_widget_method (w, "on_unfocus", 0, NULL);
+        {
+            cb_ret_t result = call_widget_method (w, "on_unfocus", 0, &method_found);
+            /* If the method is not implemented, we pretend it returned 'true'
+             * (by return MSG_HANDLED). This way we don't bother our users with
+             * implementing this method as it's only seldom that users would want
+             * to return 'false' (to disallow leaving a widget). */
+            return method_found ? result : MSG_HANDLED;
+        }
 
     case MSG_CURSOR:
         {

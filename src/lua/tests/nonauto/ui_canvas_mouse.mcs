@@ -47,8 +47,7 @@ local function test()
     wgt:get_canvas():goto_xy(point.x, point.y)
   end
 
-  wgt.on_focus   = function() return true end
-  wgt.on_unfocus = function() return true end
+  wgt.on_focus = function() return true end
 
   dlg:add(wgt)
 

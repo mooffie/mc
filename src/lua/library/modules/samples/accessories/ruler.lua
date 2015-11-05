@@ -104,8 +104,7 @@ function M.run()
     tty.get_canvas():goto_xy(orig_x, orig_y)
   end
   -- To make our widget focusable, we must also do:
-  ruler.on_focus   = function() return true end
-  ruler.on_unfocus = function() return true end
+  ruler.on_focus = function() return true end
 
   dlg.on_init = function()
     ruler:focus()

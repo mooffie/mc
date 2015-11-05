@@ -18,10 +18,6 @@ move it outside the dialog; it's not a bug.]]))
     return true
   end
 
-  wgt.on_unfocus = function(self)
-    return true
-  end
-
   wgt.on_cursor = function(self)
     self:get_canvas():goto_xy(pos.x, pos.y)
   end

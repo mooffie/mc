@@ -77,10 +77,3 @@ function ExtLabel:on_draw()
     end
   end
 end
-
--- If this widget somehow got the focus (I encountered this weird situation
--- while working on the docker), at least let the user out. Maybe we should
--- move this to ui.Custom.
-function ExtLabel:on_unfocus()
-  return true
-end
