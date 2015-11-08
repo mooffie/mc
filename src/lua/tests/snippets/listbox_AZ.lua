@@ -18,8 +18,6 @@ local K = utils.magic.memoize(tty.keyname_to_keycode)
 
 ui.Listbox.bind('any', function (lst, kcode)
 
-  abortive(kcode ~= nil, E"Sorry, you seem to be using an ancient version of our Lua API. Please upgrade.")
-
   -- Listboxes sometimes have hotkeys associated with items (as in the
   -- "User menu"). We need to try them first:
   if lst:_send_message(ui.MSG_HOTKEY, kcode) then

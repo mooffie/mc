@@ -62,7 +62,7 @@ end
 
 local function load_shots()
   if fs.nonvfs_access(shots_path, '') then
-    shots = assert(loadfile(shots_path))()
+    shots = dofile(shots_path)
   else
     -- Just so that the "Raw" button can bring up a file. No other reason.
     save_shots()

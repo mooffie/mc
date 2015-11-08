@@ -57,7 +57,8 @@ The first argument to `bind()` is a key sequence: it's one or more
 
 Info: A special key name is "any", which stands for any key. It can be
 used to implement a @{git:screensavers|screensaver} or an abbreviations
-utility for the editor.
+utility for the editor. The keycode is passed as the second argument to
+the function; see example at @{~mod:ui*widget:fixate}.
 
 <a name="binding-chain"></a>
 

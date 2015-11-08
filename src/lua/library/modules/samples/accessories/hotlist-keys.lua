@@ -91,8 +91,6 @@ end
 --
 ui.Listbox.bind('any', function(lst, kcode)
 
-  abortive(kcode ~= nil, E"Sorry, you seem to be using an ancient version of our Lua API. Please upgrade.")
-
   if is_hotlist_dialog(lst.dialog) then
     local i = search_hotkey(lst, kcode)
     if i then

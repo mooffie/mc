@@ -61,7 +61,7 @@ ui.Editbox.bind("<<load>>", function(edt)
   if edt.filename then
     if locker.is_locked(edt.filename) then
       if ask(locker.get_lock_info(edt.filename)) == "ignore" then
-        edt.data.ignore_lock = true
+        edt.data.ignores_lock = true
         edt:fixate()  -- See its documentation.
       else
         locker.lock(edt.filename)
@@ -74,7 +74,7 @@ end)
 
 ui.Editbox.bind("<<unload>>", function(edt)
   if edt.filename then
-    if not edt.data.ignore_lock then
+    if not edt.data.ignores_lock then
       locker.unlock(edt.filename)
     end
   end
