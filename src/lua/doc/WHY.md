@@ -114,9 +114,9 @@ Currently, MC is somewhat like a locked room: nothing can go out and
 little can come in.
 
 MC holds many treasures (VFS, widget library, string utilities, syntax
-highlighting, etc.), but they can't be used by the world
-outside. Conversely, MC can't use the many treasures of the outside world
-(except in a few places, using shell commands).
+highlighting, etc.), but they can't be used by the world outside.
+Conversely, MC can't use the many treasures the world outside has to
+offer (except in a few places, using shell commands).
 
 By exposing MC to scripting we lift these walls.
 
@@ -130,9 +130,10 @@ and is usually easier.
 
 **Regression tests**
 
-Let's have an example using regression tests. These are tests in which
-you compare the current behavior of the program to its previous behavior
-in order to detect undesired effects of your modification to the code.
+Let's have an example demonstrating _regression tests_. These are tests
+in which you compare the current behavior of the program to its previous
+behavior in order to detect undesired effects of your modification to the
+code.
 
 Take for example a [certain family of bugs](https://www.midnight-commander.org/ticket/2142)
 in mcedit's syntax highlighting. Let's say that you've written a patch
@@ -147,7 +148,7 @@ create a corpus of demonstrative source files in different languages
 correct highlighted syntax in HTML form. The task of testing your patch
 would then be simple: you'd run the script that generates the HTML files
 and if they now differ from the old HTML files you'd know that your
-patch had undesired effects. Inspecting the HTML tells you how exactly
+patch had undesired effects. Inspecting the HTML tells you exactly how
 your patch fails.
 
 <!-- --------------------------------------------------------------------- -->
@@ -214,7 +215,7 @@ This creates several problems:
 - Programming: You can't use variables or conditional sections.
 
 An extension language solves these problems because configuration then is
-executable code. Whatever can be done with code applies to
+executable code. Whatever can be done in code applies to
 configuration as well.
 
 <!-- --------------------------------------------------------------------- -->
@@ -280,7 +281,7 @@ on one's situation (an issue addressed in @{~#better}).
 
 ## Implement features immediately
 
-A user desiring some feature is no longer dependent on the will of
+A user desiring some feature is no longer dependent on the willingness of
 MC's maintainers to accept a patch.
 
 <!-- --------------------------------------------------------------------- -->
@@ -308,7 +309,7 @@ no two persons use their software the same way. One person
 cannot necessarily understand another's needs and predicaments.
 
 Scripting solves this problem by empowering the user himself to create
-his very own solution, however wacky it seems to others. He no longer
+his very own solutions, however wacky they seem to others. He no longer
 needs to seek the approval or genius of others.
 
 <!-- --------------------------------------------------------------------- -->

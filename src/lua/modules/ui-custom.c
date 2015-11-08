@@ -465,7 +465,7 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  *    end
  *
  * @method on_mouse_drag
- * @args (self, x, y, buttons, count)
+ * @args (self, x, y, buttons)
  * @callback
  */
 
@@ -477,7 +477,7 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  * mouse @{on_mouse_drag|dragging} is supported.
  *
  * @method on_mouse_move
- * @args (self, x, y, buttons, count)
+ * @args (self, x, y, buttons)
  * @callback
  */
 

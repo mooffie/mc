@@ -26,6 +26,7 @@ local fields = {
   'custom_format', 'custom_mini_status', 'custom_mini_status_format',
 }
 
+-- The database!
 local shots = {
 }
 

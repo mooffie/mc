@@ -51,14 +51,14 @@ often more powerful than what we'd create in C.
 diehard C programmer, but Lua isn't intended just for the end-user.
 We too may use it.
 
-- Users could apply patches (bug fixes, upgrades) without compiling
+- Users can apply patches (bug fixes, upgrades) without compiling
 the MC binary.
 
 - Greater transparency: there's something beautiful in having the
 "average Joe" browse our code and understand how the system works.
 
-- Encouraging the community to participate: more people would feel
-cozy with a high level language.
+- Encouraging the community to participate: more people feel cozy
+with a high level language.
 
 
 No support for the pulldown menu

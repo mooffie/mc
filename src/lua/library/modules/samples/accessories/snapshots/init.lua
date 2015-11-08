@@ -19,7 +19,7 @@ local M = {
   name_width = 12,
 }
 
-------------------------------------------------------------------------------
+------------------------------- Taking a shot --------------------------------
 
 --
 -- Like tty.keyname_to_keycode except that it doesn't throw an exception.
@@ -133,7 +133,7 @@ local function format_title(shot, width)
 
 end
 
-------------------------------------------------------------------------------
+------------------------------ Restoring a shot ------------------------------
 
 local function restore_shot_part(shot)
 

@@ -24,6 +24,8 @@ We should also be able to override commands:
         return false
       end
     end)
+    -- But we also need a way to inject code before/after the command.
+    -- This need is demonstrated in 'snippets/fop_move_jump.lua'.
 
 We can't yet easily do this because a widget's code is typically as
 follows ("WIDGET" in this code stands for the actual widget name):
