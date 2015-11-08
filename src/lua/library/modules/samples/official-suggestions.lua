@@ -35,12 +35,6 @@ end)
 -- Displays the GIT branch name at the bottom of the panel.
 require('samples.accessories.git-branch')
 
--- Eye candy.
-local shadow = require('samples.accessories.eyecandy.drop-shadow')
-shadow.width = 4
-shadow.height = 2
-shadow.install()
-
 -- "Recently visited files" dialog.
 keymap.bind('M-pgup', function()
   require('samples.accessories.recently-visited-files').run()
@@ -76,6 +70,18 @@ require('samples.accessories.scrollbar').install()
 
 -- Displays a clock at the top-right corner.
 --require('samples.accessories.clock').install()  -- Disabled by default.
+
+--------------------- Accessories: spice up dialog boxes ---------------------
+
+require('samples.accessories.dialog-drag').install()
+
+require('samples.accessories.dialog-help-button').install()
+
+-- Eye candy.
+local shadow = require('samples.accessories.eyecandy.drop-shadow')
+shadow.width = 4
+shadow.height = 2
+shadow.install()
 
 -------------------------------- Screensaver ---------------------------------
 
