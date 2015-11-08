@@ -397,7 +397,7 @@ fi
 AM_CONDITIONAL(USE_LUA, [test -n "$with_lua"])
 
 dnl The version of *our* API. Change this whenever you break compatibility. It's embedded in directory names.
-AC_SUBST([MC_LUA_API_VERSION], [0.1])
+AC_SUBST([MC_LUA_API_VERSION], [0.2])
 AC_DEFINE_UNQUOTED([MC_LUA_API_VERSION], ["$MC_LUA_API_VERSION"], [Version string of the Lua API we expose to users.])
 
 dnl Where system Lua scripts are kept:

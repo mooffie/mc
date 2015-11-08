@@ -85,9 +85,9 @@ Modules have to be loaded explicitly. For example, if your module
 consists of the following files:
 
     @plain
-    ~/.local/share/mc/lua-0.1/modules/amusements/foo/init.lua
-    ~/.local/share/mc/lua-0.1/modules/amusements/foo/logic.lua
-    ~/.local/share/mc/lua-0.1/modules/amusements/foo/ui.lua
+    ~/.local/share/mc/lua-0.2/modules/amusements/foo/init.lua
+    ~/.local/share/mc/lua-0.2/modules/amusements/foo/logic.lua
+    ~/.local/share/mc/lua-0.2/modules/amusements/foo/ui.lua
 
 You'd load it by adding
 

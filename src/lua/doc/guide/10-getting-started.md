@@ -61,7 +61,7 @@ Root directory: /home/mooffie
    VFS plugins and scripts: /usr/libexec/mc/
 &nbsp;     extfs.d:        /usr/libexec/mc/extfs.d/
 &nbsp;     fish:           /usr/libexec/mc/fish/
-   <b>Lua scripts:     /usr/libexec/mc/lua-0.1/</b>
+   <b>Lua scripts:     /usr/libexec/mc/lua-0.2/</b>
 
 [User data]
    Config directory: /home/mooffie/.config/mc/
@@ -71,7 +71,7 @@ Root directory: /home/mooffie
 &nbsp;     fish:           /home/mooffie/.local/share/mc/fish/
 &nbsp;     mcedit macros:  /home/mooffie/.local/share/mc/mc.macros
 &nbsp;     mcedit external macros: /home/mooffie/.local/share/mc/mcedit/macros.d/macro.*
-&nbsp;     <b>Lua scripts:   /home/mooffie/.local/share/mc/lua-0.1/</b>
+&nbsp;     <b>Lua scripts:   /home/mooffie/.local/share/mc/lua-0.2/</b>
    Cache directory:  /home/mooffie/.cache/mc/
 </pre>
 
@@ -84,11 +84,11 @@ modules, and you don't normally have write permission there. The other,
 under [User data], is the folder intended for the user, for you, to
 store your own scripts.
 
-In the above example the user folder is ~/.local/share/mc/lua-0.1/.
+In the above example the user folder is ~/.local/share/mc/lua-0.2/.
 
 [tip]
 
-The version number embedded in the folder name, "0.1" in this case, makes it
+The version number embedded in the folder name, "0.2" in this case, makes it
 possible to install different major versions of MC exposing different
 major versions of API: each would have a different number.
 
