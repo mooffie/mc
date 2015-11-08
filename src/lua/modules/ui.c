@@ -307,8 +307,8 @@ l_widget_command (lua_State * L)
     /*
      * MC bug:
      *
-     * dialog:command("ScreenNext"), dialog:command("Help") and
-     * a few others won't work.
+     * dialog:command("Cancel"), dialog:command("Help"),
+     * dialog:command("ScreenNext") and a few others won't work.
      *
      * That's because these specific commands are handled in
      * dlg_execute_cmd(), which is only called in response to keyboard
@@ -2166,16 +2166,13 @@ ui_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, voi
 
     case MSG_POST_KEY:
         {
-            Widget *current = mc_lua_current_widget (DIALOG (w));
+            /* Undocumented feature: normal widgets --the current widget-- get
+             * on_post_key() event too. Currently the only place we use it is
+             * to simulate an on_change event for the Input widget. */
+            g_assert (DIALOG (w)->current != NULL);     /* Guaranteed by dlg_key_event(). */
+            call_widget_method (WIDGET (DIALOG (w)->current->data), "on_post_key", 0, NULL);
 
-            if (current)
-            {
-                /* Undocumented feature: normal widgets get on_post_key()
-                 * event too. Currently the only place we use it is to
-                 * simulate an on_change event for the Input widget. */
-                call_widget_method (current, "on_post_key", 0, NULL);
-            }
-
+            /* And now send it to the dialog itself. */
             lua_pushinteger (Lg, parm);
             return call_widget_method (w, "on_post_key", 1, NULL);
         }

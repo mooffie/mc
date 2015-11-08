@@ -238,13 +238,16 @@ l_current_widget (lua_State * L)
 
     widget_type = lua_tostring (L, 1);
 
-    if (top_dlg)
+    if (top_dlg != NULL)
     {
         WDialog *dlg = DIALOG (top_dlg->data);
 
-        w = mc_lua_current_widget (dlg);
+        w = (dlg->current != NULL) ? WIDGET (dlg->current->data) : NULL;
 
-        if (widget_type)
+        if (w && w->scripting_class_name == NULL)
+            w = NULL;           /* We only care about widgets representable in Lua. */
+
+        if (widget_type != NULL)
         {
             if (w && !STREQ (widget_type, w->scripting_class_name))
                 w = NULL;
