@@ -49,7 +49,7 @@ modules/core/utils/text.lua \
 modules/core/utils/text/transport.lua \
 modules/samples/accessories/clock.lua \
 modules/samples/accessories/dialog-drag.lua \
-modules/samples/accessories/dialog-help-button.lua \
+modules/samples/accessories/dialog-icons.lua \
 modules/samples/accessories/eyecandy/drop-shadow.lua \
 modules/samples/accessories/filter-as-you-type.lua \
 modules/samples/accessories/find-as-you-type.lua \

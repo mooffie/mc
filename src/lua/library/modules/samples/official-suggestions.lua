@@ -75,7 +75,10 @@ require('samples.accessories.scrollbar').install()
 
 require('samples.accessories.dialog-drag').install()
 
-require('samples.accessories.dialog-help-button').install()
+-- Shows a help button, [?], at the top-right corner of help-able dialogs.
+local dicons = require('samples.accessories.dialog-icons')
+dicons.show_close = false  -- Don't show a close button.
+dicons.install()
 
 -- Eye candy.
 local shadow = require('samples.accessories.eyecandy.drop-shadow')

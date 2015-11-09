@@ -96,6 +96,12 @@ function devel.display_error(msg)
   local dlg = ui.Dialog {T"Lua error", colorset = "alarm" }
   local suppress = ui.Checkbox(T"&Don't show this specific error again")
 
+  -- As mentioned above, opening this dialog may trigger a new exception and
+  -- so forth ad infinitum. So we tell modules that decorate dialogs (modules
+  -- which may have bugs in their <<dialog::open>> etc.) to to lay their
+  -- hands off us:
+  dlg.data.skip_pyrotechnics = true
+
   dlg:add(
     ui.Label(T"An error occurred while executing Lua code."),
     ui.ZLine(),
