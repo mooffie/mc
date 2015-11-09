@@ -73,6 +73,13 @@ function M.run()
     select_by_path(ui.current_widget('Editbox').filename)
   end
 
+  ----------------------------------- Help -----------------------------------
+
+  function dlg.on_help()
+    local help = assert(utils.path.module_path('samples.accessories.recently-visited-files', 'README.md'))
+    mc.view(help)
+  end
+
   ---------------------------- Layout and buttons ----------------------------
 
   dlg:add(ui.Groupbox{T'Quick filter'}:add(fltr))
@@ -91,10 +98,7 @@ function M.run()
     end},
     ui.CancelButton(),
     ui.Space(),
-    ui.Button{T'&Help', on_click=function()
-      local help = assert(utils.path.module_path('samples.accessories.recently-visited-files', 'README.md'))
-      mc.view(help)
-    end}
+    ui.Button{T'&Help', on_click=dlg.on_help}
   ))
 
   dlg:set_dimensions(nil, nil, tty.get_cols() - 6, tty.get_rows() - 8)

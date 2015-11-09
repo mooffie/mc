@@ -2125,6 +2125,25 @@ init_child (void *data, void *user_data)
  * @args (self)
  * @callback
  */
+
+/**
+ * Help handler.
+ *
+ * Called up when the user presses the help button (usually F1). Example:
+ *
+ *    dlg.on_help = function()
+ *      local helpfile = assert(utils.path.module_path('mymodule', 'README.md'))
+ *      mc.view(helpfile)
+ *    end
+ *
+ * Info-short: An alternative method for displaying help is to set `help_id`
+ * to some section name in the user manual. But since you cannot normally
+ * add sections there, `on_help` is the only practical way.
+ *
+ * @method dialog:on_help
+ * @args (self)
+ * @callback
+ */
 static cb_ret_t
 ui_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *data)
 {
@@ -2187,6 +2206,14 @@ ui_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, voi
              * callback.)
              */
             call_widget_method (sender, "_action", 0, &action_found);
+            if (action_found)
+                return MSG_HANDLED;
+        }
+        else if (parm == CK_Help)
+        {
+            gboolean action_found;
+
+            call_widget_method (w, "on_help", 0, &action_found);
             if (action_found)
                 return MSG_HANDLED;
         }
@@ -2684,16 +2711,24 @@ l_dialog_get_text (lua_State * L)
  * of that section.
  *
  * @attr dialog.help_id
- * @property r
+ * @property rw
  */
 static int
 l_dialog_get_help_id (lua_State * L)
 {
     lua_pushstring (L, LUA_TO_DIALOG (L, 1)->help_ctx);
     return 1;
+}
 
-    /* Writing a setter is possible but will cause a memory leak as we'll
-       have to use strdup() and it free()'d nowhere. */
+static int
+l_dialog_set_help_id (lua_State * L)
+{
+    LUA_TO_DIALOG (L, 1)->help_ctx = g_strdup (luaL_optstring (L, 2, NULL));
+    return 0;
+
+    /* There's a memory leak here because we don't know whether to free()
+       the previous string. As this setter is unlikely to be used, this
+       is not really a concern. */
 }
 
 /**
@@ -3193,6 +3228,7 @@ static const struct luaL_Reg ui_dialog_methods_lib[] = {
     { "_del_widget", l_dialog_del_widget },
     { "set_text", l_dialog_set_text },
     { "get_text", l_dialog_get_text },
+    { "set_help_id", l_dialog_set_help_id },
     { "get_help_id", l_dialog_get_help_id },
     { "set_modal", l_dialog_set_modal },
     { "get_modal", l_dialog_get_modal },

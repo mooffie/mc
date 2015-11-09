@@ -266,14 +266,14 @@ function M.run()
     input:on_change(true)
   end
 
-  local function show_help()
-    local help = assert(require "utils.path".module_path("samples.apps.calc", "README.md"))
-    mc.view(help)
-  end
-
   init_styles()
 
   local dlg = ui.Dialog(T"Calculator")
+
+  dlg.on_help = function()
+    local help = assert(require "utils.path".module_path("samples.apps.calc", "README.md"))
+    mc.view(help)
+  end
 
   dlg:add(
     ui.Groupbox(T"Expression"):add(input),
@@ -284,7 +284,7 @@ function M.run()
       btn_expand
     ),
     ui.Buttons():add(
-      ui.Button{T"H&elp",on_click=show_help},
+      ui.Button{T"H&elp", on_click=dlg.on_help},
       ui.OkButton()
     )
   )

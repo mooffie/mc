@@ -124,7 +124,7 @@ function M.install()
 
     local MARGIN = dlg.compact and 0 or 1
 
-    if M.show_help and (dlg.help_id and not bogus_help[dlg.help_id]) then
+    if M.show_help and ((dlg.help_id and not bogus_help[dlg.help_id]) or dlg.on_help) then
 
       dlg:map_widget(ui.FrameIcon {
         symbol = M.style.char.help or '?',

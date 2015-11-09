@@ -1324,6 +1324,7 @@ DlgMeta.__allowed_properties = {
   on_resize = true,
   on_title = true,
   on_draw = true,
+  on_help = true,
 }
 
 ------------------------------- Stock buttons --------------------------------

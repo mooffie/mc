@@ -206,6 +206,11 @@ function M.run()
     populate_listbox()
   end
 
+  function dlg.on_help()
+    local help = assert(utils.path.module_path('samples.accessories.snapshots', 'README.md'))
+    mc.view(help)
+  end
+
   local function delete()
     if lst.value then
       local pos = lst.selected_index
@@ -225,10 +230,7 @@ function M.run()
     ),
     ui.Buttons(true):add(
       ui.Button{T"Ra&w", result="raw"},
-      ui.Button{T'&Help', on_click=function()
-        local help = assert(utils.path.module_path('samples.accessories.snapshots', 'README.md'))
-        mc.view(help)
-      end},
+      ui.Button{T'&Help', on_click=dlg.on_help},
       ui.CancelButton()
     )
   )

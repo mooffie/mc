@@ -109,12 +109,16 @@ local function run_dialog(world, opts)
     end
   end
 
-  ------------------------------ Misc buttons ------------------------------
+  --------------------------------- Help -----------------------------------
 
-  local btn_help = ui.Button{T"H&elp", on_click = function()
+  dlg.on_help = function()
     local help = assert(require "utils.path".module_path("samples.apps.visren", "README.md"))
     mc.view(help)
-  end}
+  end
+
+  local btn_help = ui.Button{T"H&elp", on_click = dlg.on_help}
+
+  ------------------------------ Misc buttons ------------------------------
 
   local btn_side_by_side = ui.Checkbox{T"Si&de by side", on_change = function(self)
     diffview.side_by_side = self.checked
