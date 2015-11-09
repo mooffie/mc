@@ -159,6 +159,8 @@ void dlg_redraw (WDialog * h);
 
 void dlg_broadcast_msg (WDialog * h, widget_msg_t message);
 
+cb_ret_t dlg_execute_cmd (WDialog * h, unsigned long command);
+
 /* Default callback for dialogs */
 cb_ret_t dlg_default_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *data);
 

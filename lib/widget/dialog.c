@@ -275,7 +275,7 @@ refresh_cmd (void)
 
 /* --------------------------------------------------------------------------------------------- */
 
-static cb_ret_t
+/*static*/ cb_ret_t  /* @FIXME: this should be public: lua/modules/ui.c wants this */
 dlg_execute_cmd (WDialog * h, unsigned long command)
 {
     cb_ret_t ret = MSG_HANDLED;

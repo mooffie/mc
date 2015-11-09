@@ -268,6 +268,8 @@ l_widget_destroy (lua_State * L)
  * 'Undo', 'Redo', 'DeleteLine', etc. Instead of providing a Lua method
  * for every such command, this one method triggers any command by name.
  *
+ * Command names are case insensitive.
+ *
  * To see a list of available commands, check the C source code (e.g.,
  * @{git:keybind-defaults.c}, but that list isn't exhaustive).
  *
@@ -305,20 +307,6 @@ l_widget_command (lua_State * L)
         luaL_error (L, E_ ("Invalid command name '%s'"), cmd_name);
 
     /*
-     * MC bug:
-     *
-     * dialog:command("Cancel"), dialog:command("Help"),
-     * dialog:command("ScreenNext") and a few others won't work.
-     *
-     * That's because these specific commands are handled in
-     * dlg_execute_cmd(), which is only called in response to keyboard
-     * events. dlg_execute_cmd() isn't anywhere in the call chain when
-     * we trigger these command explicitly by send_message().
-     *
-     * (This problem pertains to any dialog, not just to Lua dialogs.)
-     */
-
-    /*
      * MC snafu:
      *
      * Editbox has no proper constructor (see note in ui-editbox.c). We emit
@@ -332,7 +320,7 @@ l_widget_command (lua_State * L)
                     E_
                     ("My oh my! w->callback is NULL. I cannot :command() the widget!\nAre you trying to :command() an Editbox from its <<load>> event?"));
 
-    lua_pushboolean (L, send_message (w, NULL, MSG_ACTION, cmd, NULL) != MSG_NOT_HANDLED);
+    lua_pushboolean (L, send_message (w, NULL, MSG_ACTION, cmd, NULL) == MSG_HANDLED);
     return 1;
 }
 
@@ -363,7 +351,7 @@ l_widget_send_message (lua_State * L)
     widget_msg_t msg = luaL_checkint (L, 2);
     int parm = luaL_optint (L, 3, 0);
 
-    lua_pushboolean (L, send_message (w, NULL, msg, parm, NULL) != MSG_NOT_HANDLED);
+    lua_pushboolean (L, send_message (w, NULL, msg, parm, NULL) == MSG_HANDLED);
     return 1;
 }
 
@@ -2385,6 +2373,35 @@ l_dialog_get_on_idle (lua_State * L)
     return 1;
 }
 
+/*
+ * Overrides widget:command() for dialogs.
+ *
+ * See comment for the reason.
+ */
+static int
+l_dialog_command (lua_State * L)
+{
+    WDialog *dlg = LUA_TO_DIALOG (L, 1);
+    const char *cmd_name = luaL_checkstring (L, 2);
+
+    int cmd;
+
+    cmd = keybind_lookup_action (cmd_name);
+
+    if (cmd == CK_IgnoreKey)
+        luaL_error (L, E_ ("Invalid command name '%s'"), cmd_name);
+
+    /*
+     * The only difference between dialog:command() and widget:command()
+     * is that for dialogs we send the command, as a last resort, to
+     * dlg_execute_cmd(). That function handles some common commands like
+     * "Cancel" and "Help".
+     */
+    lua_pushboolean (L, send_message (dlg, NULL, MSG_ACTION, cmd, NULL) == MSG_HANDLED
+                     || dlg_execute_cmd (dlg, cmd) == MSG_HANDLED);
+    return 1;
+}
+
 /**
  * The colors of the dialog.
  *
@@ -3169,6 +3186,7 @@ static const struct luaL_Reg ui_dialog_methods_lib[] = {
     { "redraw", l_dialog_redraw },
     { "redraw_cursor", l_dialog_redraw_cursor },
     { "close", l_dialog_close },
+    { "command", l_dialog_command },
     { "get_mapped_children", l_dialog_get_mapped_children },
     { "map_widget", l_dialog_map_widget },
     { "get_current", l_dialog_get_current },
