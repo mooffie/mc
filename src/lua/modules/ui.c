@@ -2193,8 +2193,6 @@ ui_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, voi
     case MSG_ACTION:
         if (sender != NULL)
         {
-            gboolean action_found;
-
             /**
              * The value of a checkbox or listbox has been modified.
              *
@@ -2205,6 +2203,8 @@ ui_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, voi
              * (Note: Button widgets aren't handled here: they have their own
              * callback.)
              */
+            gboolean action_found;
+
             call_widget_method (sender, "_action", 0, &action_found);
             if (action_found)
                 return MSG_HANDLED;
@@ -2217,17 +2217,14 @@ ui_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, voi
             if (action_found)
                 return MSG_HANDLED;
         }
-        else
+        else if (parm == CK_Cancel)
         {
-            if (parm == CK_Cancel)
-            {
-                /* We notify the dialog when the user "cancels" it. We ignore the
-                 * returned value: if the programmer wants to abort the closing,
-                 * she can do that using on_validate. Currently, the Lua side of
-                 * the UI module uses this event internally, so we don't document
-                 * it to the end user. */
-                call_widget_method (w, "on_cancel", 0, NULL);
-            }
+            /* We notify the dialog when the user "cancels" it. We ignore the
+             * returned value: if the programmer wants to abort the closing,
+             * she can do that using on_validate. Currently, the Lua side of
+             * the UI module uses this event internally, so we don't document
+             * it to the end user. */
+            call_widget_method (w, "on_cancel", 0, NULL);
         }
         return MSG_NOT_HANDLED;
 
