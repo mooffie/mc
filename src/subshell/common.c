@@ -29,7 +29,7 @@
    Sergei Trofimovich <slyfox@inbox.ru>
    Slava Zanko <slavazanko@gmail.com>, 2013,2015.
    Timur Bakeyev <mc@bat.ru>
-   Vit Rosin <vit_r@list.ru
+   Vit Rosin <vit_r@list.ru>
 
    This file is part of the Midnight Commander.
 
