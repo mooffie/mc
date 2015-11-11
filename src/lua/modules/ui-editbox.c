@@ -278,7 +278,7 @@ l_edit_get_line (lua_State * L)
     off_t start, finish;
 
     edit = LUA_TO_EDITBOX (L, 1);
-    line_no = luaL_optlong (L, 2, edit->buffer.curs_line + 1) - 1; /* on the Lua side we're 1-based. */
+    line_no = luaL_optlong (L, 2, edit->buffer.curs_line + 1) - 1;      /* on the Lua side we're 1-based. */
     keep_eol = lua_toboolean (L, 3);
 
     start = edit_find_line (edit, line_no);

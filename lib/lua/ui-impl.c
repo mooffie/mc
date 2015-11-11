@@ -227,7 +227,8 @@ luaUI_push_widget_ex (lua_State * L, Widget * w, gboolean created_in_c, gboolean
              * And maybe we should have 'allow_abstract' always turned on.
              */
             fprintf (stderr,
-                     E_ ("Internal error: w->scripting_class_name == NULL. Please report this bug.\n"));
+                     E_
+                     ("Internal error: w->scripting_class_name == NULL. Please report this bug.\n"));
             exit (EXIT_FAILURE);
             /* (We can't use g_assert() as it may be "compiled out".) */
         }
@@ -239,7 +240,9 @@ luaUI_push_widget_ex (lua_State * L, Widget * w, gboolean created_in_c, gboolean
 
     /* Create a new table ... */
     lua_newtable (L);
-    luaL_setmetatable (L, mc_lua_ui_meta_name (w->scripting_class_name ? w->scripting_class_name : "Widget"));
+    luaL_setmetatable (L,
+                       mc_lua_ui_meta_name (w->scripting_class_name ? w->
+                                            scripting_class_name : "Widget"));
     luaMC_enable_table_gc (L, -1);
 
     /* Populate it ... */
@@ -409,7 +412,8 @@ luaUI_check_widget (lua_State * L, int idx)
 }
 
 Widget *
-luaUI_check_widget_ex (lua_State * L, int idx, gboolean allow_destroyed, const char *scripting_class_name)
+luaUI_check_widget_ex (lua_State * L, int idx, gboolean allow_destroyed,
+                       const char *scripting_class_name)
 {
     Widget *w;
 

@@ -1,4 +1,4 @@
-(Items that require a lenthy explanation are put in the file 'TODO-long'.)
+(Items that require a lengthy explanation are put in the file 'TODO-long'.)
 
 vpath
   - Have decent dirname(), basename(), join(), which support the VFS. The couple at
@@ -16,6 +16,7 @@ ui
     Should we name the button "OK" or "Dismiss"?
   - Mimicking DLG_TRYUP in Lua: see ui_dialog_tryup.lua. Should we make Lua's calculation
     identical to C's?
+  - Bug: <<Dialog::open>> is called for modaless dialogs whenever they're switched to.
 
 
 build

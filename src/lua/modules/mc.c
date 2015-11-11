@@ -30,7 +30,7 @@
 
 /* The following are needed for l_current_widget() */
 
-#include "lib/lua/ui-impl.h"            /* luaUI_push_widget() */
+#include "lib/lua/ui-impl.h"    /* luaUI_push_widget() */
 #include "lib/widget/dialog-switch.h"   /* midnight_dlg */
 #include "src/filemanager/layout.h"     /* command_prompt */
 #include "src/filemanager/command.h"    /* cmdline */

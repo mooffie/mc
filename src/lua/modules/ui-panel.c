@@ -404,6 +404,7 @@ l_set_custom_mini_status_format (lua_State * L)
 static const char *const list_type_names[] = {
     "full", "brief", "long", "custom", NULL
 };
+
 /* @FIXME: src/filemanager/panel.h should define this list_type_t typedef
    (and we should remove ours afterwards). See commit fb474bc1c1571 */
 typedef enum list_types list_type_t;
@@ -430,7 +431,8 @@ l_set_list_type (lua_State * L)
 static int
 l_get_list_type (lua_State * L)
 {
-    luaMC_push_option (L, LUA_TO_PANEL (L, 1)->list_type, "unknown", list_type_names, list_type_values);
+    luaMC_push_option (L, LUA_TO_PANEL (L, 1)->list_type, "unknown", list_type_names,
+                       list_type_values);
     return 1;
 }
 
@@ -1103,4 +1105,3 @@ luaopen_ui_panel (lua_State * L)
     create_widget_metatable (L, "Panel", ui_panel_lib, ui_panel_static_lib, "Widget");
     return 0;                   /* Nothing to return! */
 }
-

@@ -2470,6 +2470,7 @@ l_dialog_command (lua_State * L)
 static const char *const colorset_names[] = {
     "normal", "alarm", "pmenu", NULL
 };
+
 static const int *colorset_values[] = {
     dialog_colors, alarm_colors, listbox_colors
 };
@@ -3322,8 +3323,10 @@ luaopen_ui (lua_State * L)
     create_widget_metatable (L, "Button", ui_button_methods_lib, ui_button_static_lib, "Widget");
     create_widget_metatable (L, "Label", ui_label_methods_lib, ui_label_static_lib, "Widget");
     create_widget_metatable (L, "Input", ui_input_methods_lib, ui_input_static_lib, "Widget");
-    create_widget_metatable (L, "Checkbox", ui_checkbox_methods_lib, ui_checkbox_static_lib, "Widget");
-    create_widget_metatable (L, "Groupbox", ui_groupbox_methods_lib, ui_groupbox_static_lib, "Widget");
+    create_widget_metatable (L, "Checkbox", ui_checkbox_methods_lib, ui_checkbox_static_lib,
+                             "Widget");
+    create_widget_metatable (L, "Groupbox", ui_groupbox_methods_lib, ui_groupbox_static_lib,
+                             "Widget");
     create_widget_metatable (L, "Listbox", ui_listbox_methods_lib, ui_listbox_static_lib, "Widget");
     create_widget_metatable (L, "Radios", ui_radios_methods_lib, ui_radios_static_lib, "Widget");
     create_widget_metatable (L, "Gauge", ui_gauge_methods_lib, ui_gauge_static_lib, "Widget");

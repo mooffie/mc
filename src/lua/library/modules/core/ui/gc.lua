@@ -63,9 +63,9 @@ will destroy the Lua objects and therefore the callback for the button
 
 So for modaless dialog we keep a reference to them in a table. (We create
 this reference in dialog:run(), by calling :fixate()) This ensures the
-Lua object will be kept alive. When the underlining C dialog is
-destroyed, the Lua dialog is notified (via on_desrroy() and removes
-itself from the aforementioned table.
+Lua object will be kept alive. When the underlying C dialog is destroyed,
+the Lua dialog is notified (via on_desrroy() and removes itself from the
+aforementioned table.
 
 (3) FOR LONG LIVING HANDLES:
 
