@@ -1603,7 +1603,10 @@ ui.autoload('current_widget', {'mc', '_current_widget'})
 require('ui.gc')
 require('ui.scaffolding')
 
-for _, klass_name in ipairs { "Checkbox", "Input", "Listbox", "Radios", "Label", "Button", "Dialog", "Gauge", "HLine", "Groupbox", "Viewer", "Custom" } do
+for _, klass_name in ipairs {
+      "Button", "Checkbox", "Custom", "Dialog", "Gauge", "Groupbox",
+      "HLine", "Input", "Label", "Listbox", "Radios", "Viewer"
+    } do
   ui._setup_widget_class(klass_name)  -- defined in 'ui.scaffolding'
 end
 
@@ -1635,10 +1638,20 @@ else
   end)
 end
 
--- We also VBfy the base class. This makes it possible, in snippets/dialog_mover.lua,
--- to write `wgt.x = wgt.x + 1` (instead of `wgt:set_x(...)`). But for some reason if
--- we do this before require('ui.panel') we get an exception there about invalid
--- property. Check it out. @todo.
+--
+-- Lastly, we VBfy the base class.
+--
+-- This is not mandatory. It just makes it possible (e.g., in
+-- snippets/dialog_mover.lua) to write `wgt.x = wgt.x + 1` instead of
+-- `wgt:set_x(...)`.
+--
+-- We do this after loading 'panel.lua' and 'editbox.lua' because if the
+-- property protection is activated sooner, those two files will generate
+-- exceptions (which we could solve by moving the _setup_widget_class()
+-- calls to the the top of these files as it'd make the protection mechanism
+-- correctly recognize those objects as metatables (see "is_instance" in
+-- 'magic.lua').
+--
 ui._setup_widget_class("Widget")
 
 ------------------------------------------------------------------------------
