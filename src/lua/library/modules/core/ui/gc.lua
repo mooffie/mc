@@ -184,91 +184,91 @@ end)
 --- Dialog widget.
 -- @section dialog
 
+---
+-- Runs the dialog.
+--
+-- The dialog is displayed. An "event loop" starts which lets the user
+-- interact with the dialog till it's dismissed.
+--
+-- **Returns:**
+--
+-- As a convenience, this method returns @{dialog.result}. A **nil** is
+-- returned (and stored in @{dialog.result}) if the user cancels the dialog
+-- (e.g., by pressing ESC).
+--
+-- See examples at @{button.result} (and elsewhere on this page).
+--
+-- [info]
+--
+-- **Modaless dialogs**
+--
+-- For modaless dialogs, @{dialog:run|:run} returns also when the user
+-- switches to another dialog.
+--
+-- The implication is that for such dialogs you need to put your action in
+-- buttons' @{button:on_click|on_click} handlers
+--
+-- [/info]
+--
+-- @method dialog:run
+function ui.Dialog.meta:run(...)
 
-  ---
-  -- Runs the dialog.
-  --
-  -- The dialog is displayed. An "event loop" starts which lets the user
-  -- interact with the dialog till it's dismissed.
-  --
-  -- **Returns:**
-  --
-  -- As a convenience, this method returns @{dialog.result}. A **nil** is
-  -- returned (and stored in @{dialog.result}) if the user cancels the dialog
-  -- (e.g., by pressing ESC).
-  --
-  -- See examples at @{button.result} (and elsewhere on this page).
-  --
-  -- [info]
-  --
-  -- **Modaless dialogs**
-  --
-  -- For modaless dialogs, @{dialog:run|:run} returns also when the user
-  -- switches to another dialog.
-  --
-  -- The implication is that for such dialogs you need to put your action in
-  -- buttons' @{button:on_click|on_click} handlers
-  --
-  -- [/info]
-  --
-  -- @method dialog:run
-  function ui.Dialog.meta:run(...)
+  ui.__assert_dialog(self)
 
-    ui.__assert_dialog(self)
-
-    if not tty.is_ui_ready() then
-      error(E"You can't call dialog:run() when the UI isn't ready.", 2)
-    end
-
-    self:map_all() -- Actually add the widgets to the dialog.
-
-    self.result = nil
-
-    -- call the low-level:
-    local success = self:_run(...) 
-
-    if success and self.result == nil then
-      -- if no widget in the dialog handles the ENTER key, the dialog
-      -- itself handles it to mean "successful exit". We make sure to pass this information through.
-      self.result = true
-    end
-
-    if not self:get_modal() then
-
-      if self:get_state() ~= 'closed' then
-        -- The modaless dialog hasn't been closed. The user has switched to
-        -- some other dialog. We need to keep a reference around to prevent
-        -- the dialog from getting garbage collected and destroyed.
-        self:fixate()
-      end
-
-      -- This is interface to C's dialog_switch_process_pending(). Try the
-      -- following:
-      --
-      -- * Have two modaless dialogs: the file manager and an editor.
-      -- * Switch to the filemanager.
-      -- * Open a Lua modaless dialog.
-      -- * Switch directly to the editor.
-      --
-      -- If we don't call _switch_process_pending(), MC will crash (the
-      -- filemanager's run_dlg loop will terminate. This is not a bug in our
-      -- Lua code but some voodoo in MC's dialog switching.
-      ui.Dialog._switch_process_pending()
-    end
-
-    -- The dialog has been closed (if it was modal). We now need to redraw
-    -- whatever was showing behind the dialog. For this we use tty.redraw().
-    --
-    -- C programmers don't need to do this because they call dlg_destroy(),
-    -- which in its turn redraws the screen. But our Lua toolkit is designed
-    -- such that dlg_destroy is called only in the garbage collection stage
-    -- to make it possible for the programmer to read data from the widgets.
-    -- The implication is that in Lua we put the call for redraw()ing the
-    -- screen right after running the dialog.
-    tty.redraw()
-
-    return self.result
+  if not tty.is_ui_ready() then
+    error(E"You can't call dialog:run() when the UI isn't ready.", 2)
   end
+
+  self:map_all() -- Actually add the widgets to the dialog.
+
+  self.result = nil
+
+  -- call the low-level:
+  local success = self:_run(...) 
+
+  if success and self.result == nil then
+    -- if no widget in the dialog handles the ENTER key, the dialog
+    -- itself handles it to mean "successful exit". We make sure to pass this information through.
+    self.result = true
+  end
+
+  if not self:get_modal() then
+
+    if self:get_state() ~= 'closed' then
+      -- The modaless dialog hasn't been closed. The user has switched to
+      -- some other dialog. We need to keep a reference around to prevent
+      -- the dialog from getting garbage collected and destroyed.
+      self:fixate()
+    end
+
+    -- This is interface to C's dialog_switch_process_pending(). Try the
+    -- following:
+    --
+    -- * Have two modaless dialogs: the file manager and an editor.
+    -- * Switch to the filemanager.
+    -- * Open a Lua modaless dialog.
+    -- * Switch directly to the editor.
+    --
+    -- If we don't call _switch_process_pending(), MC will crash (the
+    -- filemanager's run_dlg loop will terminate. This is not a bug in our
+    -- Lua code but some voodoo in MC's dialog switching.
+    ui.Dialog._switch_process_pending()
+  end
+
+  -- The dialog has been closed (if it was modal). We now need to redraw
+  -- whatever was showing behind the dialog. For this we use tty.redraw().
+  --
+  -- C programmers don't need to do this because they call dlg_destroy(),
+  -- which in its turn redraws the screen. But our Lua toolkit is designed
+  -- such that dlg_destroy is called only in the garbage collection stage
+  -- to make it possible for the programmer to read data from the widgets.
+  -- The implication is that in Lua we put the call for redraw()ing the
+  -- screen right after running the dialog.
+  tty.redraw()
+
+  return self.result
+end
+
 
 --- Widget methods and properties.
 -- @section widget
