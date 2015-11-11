@@ -62,10 +62,10 @@ will destroy the Lua objects and therefore the callback for the button
 (stored in the ui.Button Lua object) won't be found.
 
 So for modaless dialog we keep a reference to them in a table. (We create
-this reference in dialog:run().) This ensures the Lua object will be
-kept alive. When the underlining C dialog is destroyed, the Lua dialog is
-notified (via on_desrroy() and removes itself from the aforementioned
-table.
+this reference in dialog:run(), by calling :fixate()) This ensures the
+Lua object will be kept alive. When the underlining C dialog is
+destroyed, the Lua dialog is notified (via on_desrroy() and removes
+itself from the aforementioned table.
 
 (3) FOR LONG LIVING HANDLES:
 
@@ -184,9 +184,6 @@ end)
 --- Dialog widget.
 -- @section dialog
 
-do
-
-  local keep_alive = {}
 
   ---
   -- Runs the dialog.
@@ -225,10 +222,6 @@ do
 
     self:map_all() -- Actually add the widgets to the dialog.
 
-    if not self:get_modal() then
-      keep_alive[self] = true
-    end
-
     self.result = nil
 
     -- call the low-level:
@@ -241,11 +234,12 @@ do
     end
 
     if not self:get_modal() then
-      if self:get_state() == 'closed' then
-        -- The modaless dialog has been closed outright. The user hasn't switched to some other dialog.
-        -- We don't need to keep a reference around: we want the
-        -- dialog to be garbage collected and destroyed.
-        keep_alive[self] = nil
+
+      if self:get_state() ~= 'closed' then
+        -- The modaless dialog hasn't been closed. The user has switched to
+        -- some other dialog. We need to keep a reference around to prevent
+        -- the dialog from getting garbage collected and destroyed.
+        self:fixate()
       end
 
       -- This is interface to C's dialog_switch_process_pending(). Try the
@@ -274,10 +268,6 @@ do
     tty.redraw()
 
     return self.result
-  end
-
-  function ui.Dialog.meta:on_destroy()
-    keep_alive[self] = nil
   end
 
 --- Widget methods and properties.
@@ -354,14 +344,16 @@ our users to learn what they expect of the system.
 
 ]]
 
-  -- Note: we reuse the 'keep_alive' table from above, but we may as
-  -- well use a dedicated table.
+do
+
+  local keep_alive = {}
 
   function ui.Widget.meta:fixate()
     keep_alive[self] = true
     DEBUG_HEADER(self, 'fixating: ' .. tostring(self) .. ':')
     return self
   end
+
   function ui.Widget.meta:on_destroy()
     -- (Interestingly, while in Lua 5.1 this code gets executed for
     -- all widgets, in Lua 5.2+ it gets executed for fixated ones
