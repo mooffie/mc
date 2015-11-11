@@ -1,15 +1,27 @@
 --[[
 
-Lets you move a dialog on the screen with shift + arrow keys.
+Lets you move dialogs on the screen with shift + arrow keys.
 
-It was originally written as an aid for creating better screenshots, but it
-turns out it's useful in itself: sometimes dialogs (e.g., the editor's
-"replace" dialog, copy/move progress dialogs) obscure important data and we
-want them out of the way.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!                                                                     !
+! There's now a module that lets you move dialogs with the mouse:     !
+!                                                                     !
+!  require('samples.accessories.dialog-drag').install()               !
+!                                                                     !
+! But, for "educational" purposes, we'll still keep this snippet. It  !
+! also lets you use the keyboard, something which isn't supported by  !
+! the aforementioned module.                                          !
+!                                                                     !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+It was originally written as an aid for creating better screenshots, but
+it turns out it's useful in itself: sometimes dialogs (e.g., the editor's
+"replace" dialog, copy/move progress dialogs) obscure important data and
+we want them out of the way.
 
 NOTE: It also works on top-level dialogs. E.g., the filemanager and the
-editor. You'll see "garbage" underneath when you move them, but this is not
-a bug.
+editor. You'll see "garbage" underneath when you move them, but this is
+not a bug.
 
 ]]
 

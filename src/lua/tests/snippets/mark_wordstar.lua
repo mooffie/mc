@@ -7,11 +7,11 @@ Idea taken from:
     http://www.midnight-commander.org/ticket/3450
     "Quickly tag many adjacent files"
 
-Notes:
+Note:
 
 This code uses "low level" methods beginning with an underscore.
 That's because file indexes is something we've chosen to regard as
-"low level", in our panel API.
+"low level" in our panel API.
 
 ]]
 

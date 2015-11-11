@@ -73,7 +73,7 @@ local function is_fullscreen(dlg)
 end
 
 --
--- A few useless help keys set on some common dialogs.
+-- A few useless help IDs set on some common dialogs.
 --
 -- They serve no useful purpose and we don't want to mislead the user by
 -- showing the help icon for them.

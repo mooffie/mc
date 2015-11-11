@@ -2136,7 +2136,7 @@ init_child (void *data, void *user_data)
  *      mc.view(helpfile)
  *    end
  *
- * Info-short: An alternative method for displaying help is to set `help_id`
+ * Info: An alternative method for displaying help is to set `help_id`
  * to some section name in the user manual. But since you cannot normally
  * add sections there, `on_help` is the only practical way.
  *
@@ -2702,7 +2702,7 @@ l_dialog_get_text (lua_State * L)
 }
 
 /**
- * The help key.
+ * The help ID.
  *
  * If the dialog has a section in the user manual, this is the name
  * of that section.
@@ -2725,7 +2725,7 @@ l_dialog_set_help_id (lua_State * L)
 
     /* There's a memory leak here because we don't know whether to free()
        the previous string. As this setter is unlikely to be used, this
-       is not really a concern. */
+       is of very little concern. */
 }
 
 /**

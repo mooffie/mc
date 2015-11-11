@@ -203,7 +203,7 @@ l_diff (lua_State * L)
  * Opens the help viewer.
  *
  * @function help
- * @param[opt] help_id The name of the section. Leave empty for the main section.
+ * @param[opt] help_id The name of the section to display. Leave empty for the main section.
  * @param[opt] help_file The path to the help file. Leave empty for the builtin help file.
  */
 static int

@@ -1026,9 +1026,10 @@ l_get_other (lua_State * L)
 /**
  * Triggered when a file is selected in the panel.
  *
- * Note: When we say that a file is "selected" we mean that it becomes the
- * @{ui.Panel:current|current} file. Don't confuse the current file with
- * the @{marked} files: the current file isn't necessarily marked.
+ * Note: __Terminology:__ When we say that a file is "selected" we mean
+ * that it has become the @{ui.Panel:current|current} file. Don't confuse
+ * the _selected_ file with the @{marked} files: the selected file isn't
+ * necessarily marked.
  *
  *    -- Read aloud the current filename, after the user
  *    -- rests on it for a second.

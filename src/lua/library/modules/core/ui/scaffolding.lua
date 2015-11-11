@@ -9,7 +9,7 @@ E.g., for Input, it creates:
   ui.input.bind()
   ui.input.subclass()
 
-it also vbfy() the metatables.
+it also vbfy()'s the metatables.
 
 All this work is done by ui._setup_widget_class(), defined here.
 

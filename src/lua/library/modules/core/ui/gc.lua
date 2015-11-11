@@ -134,7 +134,7 @@ function ui.Dialog.meta:__gc()
     return
   end
 
-  -- Keep this handler simple: if you try to access child-widgets you
+  -- Please keep this handler simple: if you try to access child-widgets you
   -- may resurrect them.
 
   if self:is_alive() then

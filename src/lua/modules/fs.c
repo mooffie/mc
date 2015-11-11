@@ -582,8 +582,9 @@ l_mkstemps (lua_State * L)
  * it won't work for files in archives, sh://, etc. The prefix "nonvfs_"
  * is there to remind you of this.
  *
- * If you *do* pass it a non local VFS path, it will call @{stat}. I.e.,
- * it will check for path existence only.
+ * If you *do* pass it a non local VFS path, it will work by calling
+ * @{stat}. I.e., it will check for path existence only, ignoring
+ * permission bits.
  *
  * [/info]
  *

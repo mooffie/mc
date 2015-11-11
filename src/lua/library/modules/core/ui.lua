@@ -1607,39 +1607,24 @@ for _, klass_name in ipairs { "Checkbox", "Input", "Listbox", "Radios", "Label",
   ui._setup_widget_class(klass_name)  -- defined in 'ui.scaffolding'
 end
 
-
----------------------------- Load widget modules -----------------------------
-
---[[
-
--- The following was a failed attempt at autoloading. See next comment.
-
-ui.hidden = {}
-
-local function autoload_widget(klass_name, module)
-  ui.hidden[klass_name] = ui[klass_name]
-  ui[klass_name] = nil
-  ui.autoload(klass_name, function()
-    ui[klass_name] = ui.hidden[klass_name]
-    require(module)
-    return ui[klass_name]
-  end)
-end
-
-autoload_widget('Editbox', 'ui.editbox')
-autoload_widget('Canvas', 'ui.canvas')
-autoload_widget('Panel', 'ui.panel')
-
-]]
-
-
--- Unfortunately, autoloading won't work for us. We have to explicitly load
--- these modules because code like `pnl = ui.current_widget()` or
--- `c = wgt:to_canvas()` or `event.bind("Panel::load")` doesn't reference
--- ui.Panel, ui.Canvas etc. See comment in _bootstrap.lua too.
+--
+-- Load widgets defined elsewhere.
+--
+-- Note that we can't autoload these. Nor can we autoload the 'ui' module
+-- itself. Why? Because of code like the following:
+--
+--   * pnl = ui.current_widget()
+--   * c = wgt:to_canvas()
+--   * event.bind("Panel::load")   -- in contrast to `ui.Panel.bind('<<load>>')`
+--
+-- Such code doesn't reference ui.Panel, ui.Canvas, or even 'ui' (the last
+-- case), so we don't have a lever on which the auto-loading mechanism can
+-- hang.
+--
 
 require('ui.canvas')
 require('ui.panel')
+
 if conf.features.editbox then
   require('ui.editbox')
 else
