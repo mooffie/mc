@@ -11,12 +11,14 @@
 
 typedef enum
 {
-    BASH,
-    ASH_BUSYBOX,                /* BusyBox default shell (ash) */
-    DASH,                       /* Debian variant of ash */
-    TCSH,
-    ZSH,
-    FISH
+    SHELL_NONE,
+    SHELL_SH,
+    SHELL_BASH,
+    SHELL_ASH_BUSYBOX,          /* BusyBox default shell (ash) */
+    SHELL_DASH,                 /* Debian variant of ash */
+    SHELL_TCSH,
+    SHELL_ZSH,
+    SHELL_FISH
 } shell_type_t;
 
 
@@ -28,12 +30,17 @@ typedef struct
     const char *name;
     char *path;
     char *real_path;
+
 } mc_shell_t;
 
 
 /*** global variables defined in .c file *********************************************************/
 
 /*** declarations of public functions ************************************************************/
+
+void mc_shell_init (void);
+void mc_shell_deinit (void);
+
 
 /*** inline functions **************************************************/
 
