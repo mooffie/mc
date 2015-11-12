@@ -98,6 +98,7 @@ tests/snippets/mark_wordstar.lua \
 tests/snippets/menu_user_button_focus.lua \
 tests/snippets/mkss.lua \
 tests/snippets/quicksearch_asterisk_first.lua \
+tests/snippets/safer_dir_size.lua \
 tests/snippets/search_by_regex.lua \
 tests/snippets/sort_by_filesystem.lua \
 tests/snippets/superhome.lua \

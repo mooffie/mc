@@ -139,6 +139,7 @@ Frontend for archivers:
 - @{3493} "Switch 'Local'/'User' buttons on menu selector"     @{git:menu_user_button_focus.lua|sol}
 - @{3495} Tweaking widgets default values  @{ui.open__event|sol}
 - @{2928} "Indicate read only mode for directories"
+- @{3551} "Ctrl+Space does not unselect directories: dangerous"  @{git:safer_dir_size.lua|sol}
 - @{2389} "beep_when_finished, beep_when_interrupted"  @{ui.zzz_close__event|sol}, @{~mod:ui*dialog.colorset|sol}
 
 ** VFS **
