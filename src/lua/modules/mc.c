@@ -104,8 +104,9 @@ l_view_command (lua_State * L)
 
     mcview_viewer (command, NULL, line);
 
-    /* @todo: do we need to call dialog_switch_process_pending() ? does l_view() need to?
-       These funcs do: view_filtered_cmd(), exec_extension_view() */
+    /* Any code that calls mcview_viewer(), which may end up leaving a modaless
+       dialog, has to call dialog_switch_process_pending() afterwards. */
+    dialog_switch_process_pending();
 
     return 0;
 }
