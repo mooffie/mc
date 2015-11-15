@@ -44,6 +44,7 @@ magic.setup_strict(_G, true, true)
 
 -- ...and relax it a bit:
 declare('bit32')   -- So people can do 'if bit32' to test availability.
+declare('jit')     -- ditto.
 declare('setfenv') -- ditto.
 declare('argv')    -- So people can reference argv even when not using mcscript.
 declare('arg')     -- ditto.
