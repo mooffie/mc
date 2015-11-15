@@ -61,6 +61,7 @@ M.syntax_conversion = {
   sh = 'shell',                -- vim
   scheme = 'lisp',
   autoconf = 'm4',
+  troff = 'NROFF Source',
   -- Feel free to add more, and please mail your changes to us.
 }
 
