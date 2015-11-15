@@ -241,8 +241,10 @@ function ui.Dialog.meta:run(...)
       self:fixate()
     end
 
-    -- This is interface to C's dialog_switch_process_pending(). Try the
-    -- following:
+    -- This is interface to C's dialog_switch_process_pending(). It needs
+    -- to be called after running a modaless dialog.
+    --
+    -- Try the following:
     --
     -- * Have two modaless dialogs: the file manager and an editor.
     -- * Switch to the filemanager.
@@ -253,6 +255,16 @@ function ui.Dialog.meta:run(...)
     -- filemanager's run_dlg loop will terminate. This is not a bug in our
     -- Lua code but some voodoo in MC's dialog switching.
     ui.Dialog._switch_process_pending()
+
+  else
+
+    -- If somehow this dialog got fixate()'ed (as when using dialog-drag.lua),
+    -- we cancel this. There's no reason to fixate modal Lua dialogs as you
+    -- always have a variable pointing to them. Fixating will cause a memory
+    -- leak because they won't get GC and therefore C's dlg_destroy() won't
+    -- be called.
+    self:unfixate()
+
   end
 
   -- The dialog has been closed (if it was modal). We now need to redraw
@@ -262,8 +274,7 @@ function ui.Dialog.meta:run(...)
   -- which in its turn redraws the screen. But our Lua toolkit is designed
   -- such that dlg_destroy is called only in the garbage collection stage
   -- to make it possible for the programmer to read data from the widgets.
-  -- The implication is that in Lua we put the call for redraw()ing the
-  -- screen right after running the dialog.
+  -- The implication is that in Lua we need to call redraw() ourselves.
   tty.redraw()
 
   return self.result
@@ -354,16 +365,21 @@ do
     return self
   end
 
-  function ui.Widget.meta:on_destroy()
-    -- (Interestingly, while in Lua 5.1 this code gets executed for
-    -- all widgets, in Lua 5.2+ it gets executed for fixated ones
-    -- only. It happens to be what we want anyway, but it wont hurt to
-    -- figure out the cause.)
-    --DBG('%%% I was called.')
+  -- We don't document this. End users won't need to use it.
+  function ui.Widget.meta:unfixate()
     if keep_alive[self] then
       DEBUG_HEADER(self, 'un-fixating: ' .. tostring(self) .. ':')
     end
     keep_alive[self] = nil
+  end
+
+  function ui.Widget.meta:on_destroy()
+    -- (Interestingly, while in Lua 5.1 this code gets executed for
+    -- all widgets, in Lua 5.2+ it gets executed for fixated ones
+    -- only. It happens to be what we want anyway, but it won't hurt
+    -- to figure out the cause.)
+    --DBG('%%% I was called.')
+    self:unfixate()
   end
 
 end

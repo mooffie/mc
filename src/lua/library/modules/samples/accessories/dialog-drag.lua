@@ -76,7 +76,6 @@ local Mover = ui.Custom.subclass("Mover")
 
 Mover.__allowed_properties = {
   _dbg_id = true,
-  previously_focused = true,
   drag_start = true,
 }
 
@@ -94,9 +93,9 @@ end
 
 function Mover:on_mouse_down(x, y, ...)
   self.dialog.data.is_dragging = true
+  self.dialog.data.previously_focused = self.dialog.current
   self.dialog:fixate()
 
-  self.previously_focused = self.dialog.current
   -- The following is not mandatory, but by focusing the widget
   -- we prevent mouse events from landing in other widgets (e.g. listboxes)
   -- when the mouse is moved fast.
@@ -107,10 +106,10 @@ function Mover:on_mouse_down(x, y, ...)
 end
 
 function Mover:on_mouse_up(x, y, ...)
-  if self.previously_focused then
-    self.previously_focused:focus()
+  if self.dialog.data.previously_focused then
+    -- Move focus back to the original widget.
+    self.dialog.data.previously_focused:focus()
   end
-
   self.dialog.data.is_dragging = false
   tty.redraw()  -- Update the dialog's frame.
 end
