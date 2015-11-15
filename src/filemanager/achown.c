@@ -79,7 +79,8 @@ static struct WDialog *ch_dlg;
 static struct
 {
     unsigned long id;
-    int ret_cmd, flags, x, len;
+    int ret_cmd, x, len;
+    button_flags_t flags;
     const char *text;
 } chown_advanced_but[BUTTONS] =
 {
@@ -475,7 +476,7 @@ advanced_chown_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm
     WDialog *h = DIALOG (w);
     int i;
     int f_pos;
-    unsigned int id;
+    unsigned long id;
 
     id = dlg_get_current_widget_id (h);
 
