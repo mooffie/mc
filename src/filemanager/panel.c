@@ -3314,6 +3314,8 @@ _do_panel_cd (WPanel * panel, const vfs_path_t * new_dir_vpath, enum cd_enum cd_
 {
     vfs_path_t *olddir_vpath;
 
+    scripting_trigger_widget_event ("Panel::before-chdir", WIDGET (panel));
+
     /* Convert *new_path to a suitable pathname, handle ~user */
     if (cd_type == cd_parse_command)
     {

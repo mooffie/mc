@@ -1051,6 +1051,34 @@ l_get_other (lua_State * L)
  */
 
 /**
+ * Triggered before the directory is changed.
+ *
+ * In other words, it is triggered before the user navigates to another
+ * directory (e.g., by pressing ENTER on a directory).
+ *
+ * Compare this with @{load|<<load>>}, which is triggered **after** the
+ * directory has changed.
+ *
+ * Example:
+ *
+ *    -- This simple code makes the selection (the marked files)
+ *    -- persistent.
+ *
+ *    local selections = {}
+ *
+ *    ui.Panel.bind("<<before-chdir>>", function(pnl)
+ *      selections[pnl.dir] = pnl.marked
+ *    end)
+ *
+ *    ui.Panel.bind("<<load>>", function(pnl)
+ *       pnl.marked = selections[pnl.dir]
+ *    end)
+ *
+ * @moniker before-chdir
+ * @event
+ */
+
+/**
  * @section end
  */
 
