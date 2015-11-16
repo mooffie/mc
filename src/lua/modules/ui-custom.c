@@ -80,8 +80,8 @@ typedef struct
  * See more examples in the page on @{ui.Canvas}.
  *
  * Right before this handler is called the current style is set to MC's
- * "normal dialog color" and the cursor is positioned at the widget's
- * top-left corner.
+ * normal dialog color (appropriate for the active @{ui.colorset|colorset})
+ * and the cursor is positioned at the widget's top-left corner.
  *
  * @method on_draw
  * @args (self)

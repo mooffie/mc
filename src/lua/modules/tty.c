@@ -933,7 +933,7 @@ luaTTY_check_align (lua_State * L, int idx)
  *    assert(tty.text_align("Alice in Wonderland", 10, "left") == "Alice in W")
  *    assert(tty.text_align("Alice in Wonderland", 10, "left~") == "Alice~land")
  *    assert(tty.text_align("Alice in Wonderland", 10, "center") == "")
- *    -- "center of left" means to center if there's enough room, and align
+ *    -- "center or left" means to center if there's enough room, and align
  *    -- to left otherwise.
  *    assert(tty.text_align("Alice in Wonderland", 10, "center or left")
  *            == "Alice in W")
@@ -955,6 +955,10 @@ l_text_align (lua_State * L)
     width = luaL_checkint (L, 2);
     align = luaTTY_check_align (L, 3);
 
+    /* @FIXME:
+     * str_*_term_trim() crashes on long strings (as pointed out
+     * in 'samples/ui/extlabel.lua'). In the meantime:
+     */
     if (width > BUF_MEDIUM - 1)
         /* That's the size of the buffer used by str_*_fit_to_term(). */
         luaL_error (L, E_ ("The width may not exceed %d."), BUF_MEDIUM - 1);
@@ -963,11 +967,6 @@ l_text_align (lua_State * L)
      * MC bug: tty.text_align('abcdefg',5,'center') gives 'abcdefg'.
      * But 'center' really is a weird creature that perhaps shouldn't exist: What's the
      * point in tty.text_align('long long long',5,'center') giving '' ?!
-     */
-
-    /* @FIXME:
-     * As pointed out in 'samples/ui/extlabel.lua', str_*_term_trim() crashes
-     * on long strings :-(
      */
 
     lua_pushstring (L, str_fit_to_term (s, width, align));

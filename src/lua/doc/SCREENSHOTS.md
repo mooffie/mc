@@ -87,11 +87,11 @@ Arabic, character shaping is performed.
 
 [/figure]
 
-Tip: Note the @{git:drop-shadow.lua|drop-shadow} effect for dialogs, and
-how the _Sort order_ dialog was @{git:dialog_mover.lua|moved} away from
-the center to make the screenshot more useful. This "pyrotechnic" is
-implemented with just a few lines of Lua code. No "code bloat" is
-involved here.
+Tip: Note the @{git:drop-shadow.lua|drop-shadow} effect for dialogs, the
+@{git:dialog-icons.lua|frame icons}, and how the _Sort order_ dialog was
+@{git:dialog_mover.lua|moved} away from the center to make the screenshot
+more useful. This "pyrotechnic" is implemented with just a few lines of
+Lua code. No "code bloat" is involved here.
 
 <!-- --------------------------------------------------------------------- -->
 
@@ -556,6 +556,23 @@ __this__ scrollbar is
 - A @{git:filter-as-you-type.lua|filter-as-you-type}
 box. But you may find the panelize mode of _Visual Rename_ superior (as,
 among other things, it can filter directories).
+
+[/figure]
+
+<!-- --------------------------------------------------------------------- -->
+
+## Restore selection
+
+[figure]
+
+[ss:screenshots/restore-selection.png]
+
+[split]
+
+You find out that the USB stick you copied a few files to was
+accidentally formatted. So you use the
+@{git:restore-selection.lua|restore selection} feature to go back in time
+and re-select those files.
 
 [/figure]
 

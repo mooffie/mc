@@ -57,7 +57,6 @@ A "sol" link points to a solution, or to a way of solving.
 - @{2718} "select files by modification date"
 - @{2916} "Select / filter by file size"
 - @{1879} "restore previous selection"  @{git:restore-selection.lua|sol}
-- @{2387} "Persistent file mark"
 - @{2727} "Mark files to begin/end"
 - @{3166} "Selection of Multiple Adjacent Files/Directories"
 - @{2492} "select by grep"  @{git:mark_files_by_contents.lua|sol}
@@ -151,6 +150,7 @@ No problem for LuaFS:
 - @{3186} "Base64 and Quoted-Printable decode"  @{utils.text.transport|sol}
 - @{3193} "mtp plugin"
 - @{2392} "IMAP FS (MC + IMAP folders)"
+- @{2387} "Persistent file mark" (nice!)
 
 Can be solved by adding some hooks:
 

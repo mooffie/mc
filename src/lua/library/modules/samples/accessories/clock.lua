@@ -23,6 +23,13 @@ Instead of 'format' you can provide a function to generate the text:
     clock.install()
     -- See dev_clock.lua if you're interested in such debug info.
 
+If you're conscious about CPU usage, you can make the clock tick less
+frequently:
+
+    ...
+    clock.interval = 5000  -- Tick every five seconds instead of 1 second.
+    clock.install()
+
 ]]
 
 
