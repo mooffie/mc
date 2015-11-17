@@ -17,6 +17,7 @@ Or, with customization:
     if tty.is_utf8() then
       dicons.style.char.close = '⚫'  -- Other nice possibilities: ●, ◾
       dicons.style.char.brackets = '╮ ╰'
+      dicons.style.icons_margins = 0
     end
     dicons.show_close = false  -- Don't show a close icon.
     dicons.install()
@@ -56,7 +57,8 @@ local M = {
       help = nil,
       close = nil,
       brackets = '[ ]',
-    }
+    },
+    icons_margins = 1,  -- How horizontally far icons are from the corners.
   },
 
   -- Which icons to show?
@@ -94,17 +96,25 @@ FrameIcon.__allowed_properties = {
 
 function FrameIcon:init()
   self.symbol = '*'
-  self.cols = 3
 end
 
 function FrameIcon:on_draw()
+  local compact = (self.cols == 1)
   local c = self:get_canvas()
-  c:erase()
-  c:set_style(get_color(self.dialog, 'brackets'))
-  c:draw_string(M.style.char.brackets)  -- "[ ]"
-  c:set_style(get_color(self.dialog, 'symbol'))
-  c:goto_xy(1, 0)
-  c:draw_string(self.symbol)
+
+  local function draw_symbol()
+    c:set_style(get_color(self.dialog, 'symbol'))
+    c:draw_string(self.symbol)
+  end
+
+  if compact then
+    draw_symbol()
+  else
+    c:set_style(get_color(self.dialog, 'brackets'))
+    c:draw_string(M.style.char.brackets)  -- "[ ]"
+    c:goto_xy(1, 0)
+    draw_symbol()
+  end
 end
 
 ------------------------------------------------------------------------------
@@ -124,12 +134,17 @@ function M.install()
 
     local MARGIN = dlg.compact and 0 or 1
 
+    local icons_are_compact = (dlg.cols - dlg.text:len() < 12)
+    local icons_width = icons_are_compact and 1 or 3  -- Icons' width in columns.
+    local icons_margins = icons_are_compact and 0 or M.style.icons_margins  -- Distance from corners.
+
     if M.show_help and ((dlg.help_id and not bogus_help[dlg.help_id]) or dlg.on_help) then
 
       dlg:map_widget(ui.FrameIcon {
         symbol = M.style.char.help or '?',
-        x = dlg.cols - MARGIN - 1 - 1 - 3,
+        x = dlg.cols - MARGIN - 1 - icons_margins - icons_width,
         y = MARGIN,
+        cols = icons_width,
         pos_flags = bor(ui.WPOS_KEEP_RIGHT, ui.WPOS_KEEP_TOP),
         on_click = function(self)
           self.dialog:command "help"
@@ -142,8 +157,9 @@ function M.install()
 
       dlg:map_widget(ui.FrameIcon {
         symbol = M.style.char.close or (tty.is_utf8() and '×' or tty.skin_get('editor.window-close-char', 'x')),
-        x = MARGIN + 1 + 1,
+        x = MARGIN + 1 + icons_margins,
         y = MARGIN,
+        cols = icons_width,
         on_click = function(self)
           --
           -- Note: we don't use :close(). Our :close() doesn't do
