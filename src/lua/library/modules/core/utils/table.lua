@@ -169,6 +169,19 @@ local function sub(t, first, last)
 end
 
 ---
+-- Count the number of elements.
+--
+-- Useful for non-sequences only (use `#t` otherwise!).
+--
+-- @function count
+-- @args (t)
+local function count(t)
+  local i = 0
+  for _ in pairs(t) do i = i + 1 end
+  return i
+end
+
+---
 -- Iterates over a sequence values.
 --
 -- Note-short: This is simply an alternative to @{ipairs} in which the
@@ -213,8 +226,9 @@ local mt = {  -- the metatable
   keys = wrap(keys),
   sub = wrap(sub),
 
-  -- Non-wrappers:
+  -- Non-wrappers (they aren't to return the table):
   iterate = iterate,
+  count = count,
 
   -- Provide a few of Lua's builtins:
   sort = tap(table.sort),
@@ -255,6 +269,7 @@ return {
   makeset = makeset,
   keys = keys,
   sub = sub,
+  count = count,
   iterate = iterate,
 
   new = new,
