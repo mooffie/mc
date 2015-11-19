@@ -56,7 +56,7 @@ A "sol" link points to a solution, or to a way of solving.
 - @{3450} Quickly tag many adjacent files   @{git:mark_wordstar.lua|sol}
 - @{2718} "select files by modification date"
 - @{2916} "Select / filter by file size"
-- @{1879} "restore previous selection"
+- @{1879} "restore previous selection"  @{git:restore-selection.lua|sol}
 - @{2387} "Persistent file mark"
 - @{2727} "Mark files to begin/end"
 - @{3166} "Selection of Multiple Adjacent Files/Directories"

@@ -60,6 +60,7 @@ modules/samples/accessories/preserve-attributes.lua \
 modules/samples/accessories/recently-visited-files/README.md \
 modules/samples/accessories/recently-visited-files/db.lua \
 modules/samples/accessories/recently-visited-files/init.lua \
+modules/samples/accessories/restore-selection.lua \
 modules/samples/accessories/ruler.lua \
 modules/samples/accessories/scrollbar.lua \
 modules/samples/accessories/set-gterm-cwd.lua \

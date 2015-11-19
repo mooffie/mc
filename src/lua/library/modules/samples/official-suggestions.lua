@@ -56,6 +56,16 @@ ui.Panel.bind('C-x S', function(pnl)
   require('samples.accessories.size-calculator').run(pnl)
 end)
 
+-- "Restore selection" feature.
+require('samples.accessories.restore-selection')
+ui.Panel.bind('&', function(pnl)
+  if ui.current_widget('Input') and ui.current_widget('Input').text == "" then
+    require('samples.accessories.restore-selection').run(pnl)
+  else
+    return false
+  end
+end)
+
 -- "hotkeys" support in the directory hotlist dialog.
 require('samples.accessories.hotlist-keys')
 
