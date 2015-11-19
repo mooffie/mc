@@ -142,6 +142,33 @@ local function keys(t)
 end
 
 ---
+-- Extracts a part of a table.
+--
+-- Behaves just like Lua's `string.sub` except that it operates on a
+-- sequence. Negative indexes count from the end of the sequence.
+--
+-- @function sub
+-- @args (t, first[, last])
+local function sub(t, first, last)
+
+  last = last or #t
+
+  if first < 0 then
+    first = #t + first + 1
+  end
+  if last < 0 then
+    last = #t + last + 1
+  end
+
+  local result = {}
+  for i = first, last do
+    result[#result + 1] = t[i]
+  end
+  return result
+
+end
+
+---
 -- Iterates over a sequence values.
 --
 -- Note-short: This is simply an alternative to @{ipairs} in which the
@@ -164,10 +191,17 @@ end
 
 local new  -- forward declaration
 
-local function wrap(f)
+local function wrap(fn)
   return function(...)
-    local t = f(...)
+    local t = fn(...)
     return new(t)
+  end
+end
+
+local function tap(fn)
+  return function(t, ...)
+    fn(t, ...)
+    return t
   end
 end
 
@@ -177,14 +211,15 @@ local mt = {  -- the metatable
   imap = wrap(imap),
   makeset = wrap(makeset),
   keys = wrap(keys),
+  sub = wrap(sub),
 
   -- Non-wrappers:
   iterate = iterate,
+
   -- Provide a few of Lua's builtins:
-  sort = function(t)
-    table.sort(t)
-    return t
-  end,
+  sort = tap(table.sort),
+  insert = tap(table.insert),
+  remove = tap(table.remove),
   concat = table.concat,
 }
 mt.__index = mt
@@ -219,6 +254,7 @@ return {
   imap = imap,
   makeset = makeset,
   keys = keys,
+  sub = sub,
   iterate = iterate,
 
   new = new,
