@@ -231,7 +231,7 @@ function M.run(pnl)
     rows=5
   }
 
-  local description = ui.ExtLabel{align="left~", cols=20, expandy=true}
+  local description = ui.ExtLabel{align="left~", expandx=true, expandy=true}
 
   function lstbx:on_change()
     local selection = self.value
@@ -271,7 +271,12 @@ function M.run(pnl)
   end
 
   -- Make the box 25 rows shy from a whole screen. But show at least 17 rows.
-  dlg:set_dimensions(math.floor(x), nil, nil, math.min(math.max(17, tty.get_rows() - 25), tty.get_rows()))
+  dlg:set_dimensions(
+    math.floor(x),
+    nil,  -- Center vertically.
+    math.max(23, dlg:preferred_cols()),  -- Optional: Make more room for the frame icons.
+    math.min(math.max(17, tty.get_rows() - 25), tty.get_rows())
+  )
 
   ----------------------------------------------------------------------------
 
