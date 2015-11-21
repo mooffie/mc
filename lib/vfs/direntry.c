@@ -697,12 +697,12 @@ vfs_s_print_stats (const char *fs_name, const char *action,
                    const char *file_name, off_t have, off_t need)
 {
     if (need)
-        vfs_print_message (_("%s: %s: %s %3d%% %" PRIuMAX " %s"), fs_name, action,
-                           file_name, (int) ((double) have * 100 / need), (uintmax_t) have,
+        vfs_print_message (_("%s: %s: %s %3d%% %lld %s"), fs_name, action,
+                           file_name, (int) ((double) have * 100 / need), (long long) have,
                            _("bytes transferred"));
     else
-        vfs_print_message (_("%s: %s: %s %" PRIuMAX " %s"), fs_name, action, file_name,
-                           (uintmax_t) have, _("bytes transferred"));
+        vfs_print_message (_("%s: %s: %s %lld %s"), fs_name, action, file_name, (long long) have,
+                           _("bytes transferred"));
 }
 
 /* --------------------------------------------------------------------------------------------- */
