@@ -50,9 +50,10 @@ and "Canvas" respectively. Other toolkits name them differently:
 typedef struct
 {
     Widget widget;
-
-    gboolean mouse_capture;
-    int last_mouse_down_buttons;
+    struct {
+      gboolean capture;
+      int last_buttons_down;
+    } mouse;
 } WCustom;
 
 #define WCUSTOM(x) ((WCustom *) (x))
@@ -363,11 +364,13 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  *    end
  *
  * The **buttons** table reports which buttons are pressed after the event.
- * Valid button names are "left", "middle", "right", "up", "down" (the last
- * two are for the mouse wheel).
+ * Valid button names are "left", "middle", "right".
  *
  * **count** indicates whether this is part of a double-click or
  * triple-click. It is either "single", "double", or "triple".
+ *
+ * Note: This handler is blind to the mouse wheel. If you're interested in
+ * the wheel, see @{on_mouse_scroll_up} and @{on_mouse_scroll_down}.
  *
  * [info]
  *
@@ -417,11 +420,6 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  *      else
  *    end
  *
- * Note: this handler is blind to the mouse wheel. That's because a button
- * release event isn't triggered for the mouse wheel (that is, for the
- * buttons named "up" and "down"). If you want to handle the mouse wheel,
- * do that in @{on_mouse_down}.
- *
  * Info: The system first tries to call "on_mouse_click" and if it's
  * missing only then it calls "on_click". This way the widget's author can
  * reserve "on_click" for end-user supplied actions (this stems from our
@@ -429,6 +427,36 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  *
  * @method on_click
  * @args (self, x, y, buttons, count)
+ * @callback
+ */
+
+/**
+ * Mouse scroll down handler.
+ *
+ * Called when the mouse wheel is rotated towards the user.
+ *
+ *    wgt.on_mouse_scroll_down = function()
+ *      wgt.top_line = wgt.top_line + 1
+ *      wgt:redraw()
+ *    end
+ *
+ * @method on_mouse_scroll_down
+ * @args (self, x, y)
+ * @callback
+ */
+
+/**
+ * Mouse scroll up handler.
+ *
+ * Called when the mouse wheel is rotated away from the user.
+ *
+ *    wgt.on_mouse_scroll_up = function()
+ *      wgt.top_line = wgt.top_line - 1
+ *      wgt:redraw()
+ *    end
+ *
+ * @method on_mouse_scroll_up
+ * @args (self, x, y)
  * @callback
  */
 
@@ -477,7 +505,7 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  * mouse @{on_mouse_drag|dragging} is supported.
  *
  * @method on_mouse_move
- * @args (self, x, y, buttons)
+ * @args (self, x, y)
  * @callback
  */
 
@@ -488,8 +516,6 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  * is now released (either inside or outside the widget).
  *
  * **buttons** reports the button that was released.
- *
- * (See note about the mouse wheel in @{on_click}.)
  *
  * @method on_mouse_up
  * @args (self, x, y, buttons, count)
@@ -580,25 +606,33 @@ custom_mouse_event (Gpm_Event * event, void *data)
     in_widget = mouse_global_in_widget (event, w);
 
     /*
-     * The checks commented with "forced" show places where mouse_capture is
+     * Checks commented with "* forced *" show places where mouse.capture is
      * normally FALSE unless the programmer explicitly turned it on (via
-     * "wgt.mouse_capture = true"). If we ever remove this feature, we can
+     * "wgt.mouse.capture = true"). If we ever remove this feature, we can
      * also remove these checks.
      */
 
     if (event->type & GPM_DOWN)
     {
-        if (in_widget || cust->mouse_capture /* forced */ )
+        if (in_widget || cust->mouse.capture /* forced */ )
         {
-            /* We turn on capturing unless it's the mouse wheel buttons
-             * because they don't generate a mouse_up event, which means
-             * we'll never get uncaptured. */
-            if (!(event->buttons & (GPM_B_UP | GPM_B_DOWN)))
+            if (event->buttons & GPM_B_UP)
+                method = "on_mouse_scroll_up";
+            else if (event->buttons & GPM_B_DOWN)
+                method = "on_mouse_scroll_down";
+            else
             {
-                cust->mouse_capture = TRUE;
+                /* Handle normal buttons: anything but the mouse wheel's.
+                 *
+                 * (Note that turning on capturing for the mouse wheel
+                 * buttons doesn't make sense as they don't generate a
+                 * mouse_up event, which means we'd never get uncaptured.)
+                 */
+                cust->mouse.capture = TRUE;
+
+                cust->mouse.last_buttons_down = event->buttons;
+                method = "on_mouse_down";
             }
-            cust->last_mouse_down_buttons = event->buttons;
-            method = "on_mouse_down";
         }
     }
     else if (event->type & GPM_UP)
@@ -606,9 +640,9 @@ custom_mouse_event (Gpm_Event * event, void *data)
         /* We trigger the on_mouse_up event even when !in_widget. That's
          * because, for example, a paint application should stop drawing
          * lines when the button is released even outside the canvas. */
-        if (cust->mouse_capture)
+        if (cust->mouse.capture)
         {
-            cust->mouse_capture = FALSE;
+            cust->mouse.capture = FALSE;
             method = "on_mouse_up";
             if (in_widget)
                 run_click = TRUE;
@@ -622,17 +656,17 @@ custom_mouse_event (Gpm_Event * event, void *data)
              * The following makes xterm behave effectively like GPM:
              */
             if (!event->buttons)
-                event->buttons = cust->last_mouse_down_buttons;
+                event->buttons = cust->mouse.last_buttons_down;
         }
     }
     else if (event->type & GPM_DRAG)
     {
-        if (cust->mouse_capture)
+        if (cust->mouse.capture)
             method = "on_mouse_drag";
     }
     else if (event->type & GPM_MOVE)
     {
-        if (in_widget || cust->mouse_capture /* forced */ )
+        if (in_widget || cust->mouse.capture /* forced */ )
             method = "on_mouse_move";
     }
 
@@ -684,7 +718,7 @@ l_custom_set_mouse_capture (lua_State * L)
     WCustom *cust;
 
     cust = LUA_TO_CUSTOM (L, 1);
-    cust->mouse_capture = lua_toboolean (L, 2);
+    cust->mouse.capture = lua_toboolean (L, 2);
 
     return 0;
 }
