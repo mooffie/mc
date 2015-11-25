@@ -79,8 +79,9 @@ static struct WDialog *ch_dlg;
 static struct
 {
     unsigned long id;
-    int ret_cmd, x, len;
+    int ret_cmd;
     button_flags_t flags;
+    int x, len;
     const char *text;
 } chown_advanced_but[BUTTONS] =
 {
