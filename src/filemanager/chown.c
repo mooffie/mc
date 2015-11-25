@@ -81,8 +81,9 @@ static WListbox *l_user, *l_group;
 /* *INDENT-OFF* */
 static struct
 {
-    int ret_cmd, y, len;
+    int ret_cmd;
     button_flags_t flags;
+    int y, len;
     const char *text;
 } chown_but[BUTTONS] = {
     { B_SETALL, NORMAL_BUTTON,  5, 0, N_("Set &all") },
