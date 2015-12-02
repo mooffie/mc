@@ -46,7 +46,7 @@ function M.get_target(pnl)
   local fname, stat, _, _, is_broken_symlink = pnl:get_current()
 
   if pnl.panelized then
-    -- Nothing to do. We already have the fname.
+    -- Nothing to do: we've already got the fname.
   elseif stat.type == 'link' and not is_broken_symlink then
     fname = fs.readlink(fname)
   else
@@ -89,6 +89,7 @@ function M.follow(pnl_dest)
     pnl_dest.dir = dir
   end
   pnl_dest.current = base
+  pnl_dest:focus()  -- When targeting the "other" panel, user probably wants to also go there.
 
 end
 
