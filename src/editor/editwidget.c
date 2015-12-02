@@ -226,7 +226,7 @@ edit_restore_size (WEdit * edit)
  */
 
 static void
-edit_window_move (WEdit * edit, unsigned long command)
+edit_window_move (WEdit * edit, long command)
 {
     Widget *w = WIDGET (edit);
     Widget *wh = WIDGET (w->owner);
@@ -266,7 +266,7 @@ edit_window_move (WEdit * edit, unsigned long command)
  */
 
 static void
-edit_window_resize (WEdit * edit, unsigned long command)
+edit_window_resize (WEdit * edit, long command)
 {
     Widget *w = WIDGET (edit);
     Widget *wh = WIDGET (w->owner);
@@ -343,7 +343,7 @@ edit_window_list (const WDialog * h)
                                      vfs_path_as_str (e->filename_vpath));
 
             listbox_add_item (listbox->list, LISTBOX_APPEND_AT_END, get_hotkey (i++),
-                              str_term_trim (fname, WIDGET (listbox->list)->cols - 2), NULL);
+                              str_term_trim (fname, WIDGET (listbox->list)->cols - 2), NULL, FALSE);
             g_free (fname);
         }
 
@@ -360,7 +360,7 @@ edit_window_list (const WDialog * h)
 /* --------------------------------------------------------------------------------------------- */
 
 static char *
-edit_get_shortcut (unsigned long command)
+edit_get_shortcut (long command)
 {
     const char *ext_map;
     const char *shortcut = NULL;
@@ -709,7 +709,7 @@ edit_dialog_event (Gpm_Event * event, void *data)
 /* --------------------------------------------------------------------------------------------- */
 
 static cb_ret_t
-edit_dialog_command_execute (WDialog * h, unsigned long command)
+edit_dialog_command_execute (WDialog * h, long command)
 {
     Widget *wh = WIDGET (h);
     gboolean ret = MSG_HANDLED;
@@ -818,7 +818,7 @@ edit_dialog_command_execute (WDialog * h, unsigned long command)
 static gboolean
 edit_translate_key (WEdit * edit, long x_key, int *cmd, int *ch)
 {
-    unsigned long command = (unsigned long) CK_InsertChar;
+    long command = CK_InsertChar;
     int char_for_insertion = -1;
 
     /* an ordinary insertable character */
@@ -930,7 +930,7 @@ edit_translate_key (WEdit * edit, long x_key, int *cmd, int *ch)
     *cmd = (int) command;       /* FIXME */
     *ch = char_for_insertion;
 
-    return !(command == (unsigned long) CK_InsertChar && char_for_insertion == -1);
+    return !(command == CK_InsertChar && char_for_insertion == -1);
 }
 
 
@@ -1052,7 +1052,7 @@ edit_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, v
             if (edit_widget_is_editor (we))
             {
                 WEdit *e = (WEdit *) we;
-                unsigned long command;
+                long command;
 
                 if (!e->extmod)
                     command = keybind_lookup_keymap_command (editor_map, parm);
@@ -1391,7 +1391,7 @@ edit_add_window (WDialog * h, int y, int x, int lines, int cols, const vfs_path_
  */
 
 gboolean
-edit_handle_move_resize (WEdit * edit, unsigned long command)
+edit_handle_move_resize (WEdit * edit, long command)
 {
     gboolean ret = FALSE;
 

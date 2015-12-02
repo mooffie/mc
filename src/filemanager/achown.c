@@ -79,7 +79,9 @@ static struct WDialog *ch_dlg;
 static struct
 {
     unsigned long id;
-    int ret_cmd, flags, x, len;
+    int ret_cmd;
+    button_flags_t flags;
+    int x, len;
     const char *text;
 } chown_advanced_but[BUTTONS] =
 {
@@ -343,13 +345,14 @@ do_enter_key (WDialog * h, int f_pos)
 
         /* get new listboxes */
         chl_list = listbox_new (1, 1, 11, 15, FALSE, NULL);
-        listbox_add_item (chl_list, LISTBOX_APPEND_AT_END, 0, "<Unknown>", NULL);
+        listbox_add_item (chl_list, LISTBOX_APPEND_AT_END, 0, "<Unknown>", NULL, FALSE);
         if (is_owner)
         {
             /* get and put user names in the listbox */
             setpwent ();
             while ((chl_pass = getpwent ()) != NULL)
-                listbox_add_item (chl_list, LISTBOX_APPEND_SORTED, 0, chl_pass->pw_name, NULL);
+                listbox_add_item (chl_list, LISTBOX_APPEND_SORTED, 0, chl_pass->pw_name, NULL,
+                                  FALSE);
             endpwent ();
             fe = listbox_search_text (chl_list, get_owner (sf_stat->st_uid));
         }
@@ -358,7 +361,8 @@ do_enter_key (WDialog * h, int f_pos)
             /* get and put group names in the listbox */
             setgrent ();
             while ((chl_grp = getgrent ()) != NULL)
-                listbox_add_item (chl_list, LISTBOX_APPEND_SORTED, 0, chl_grp->gr_name, NULL);
+                listbox_add_item (chl_list, LISTBOX_APPEND_SORTED, 0, chl_grp->gr_name, NULL,
+                                  FALSE);
             endgrent ();
             fe = listbox_search_text (chl_list, get_group (sf_stat->st_gid));
         }
@@ -473,7 +477,7 @@ advanced_chown_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm
     WDialog *h = DIALOG (w);
     int i;
     int f_pos;
-    unsigned int id;
+    unsigned long id;
 
     id = dlg_get_current_widget_id (h);
 

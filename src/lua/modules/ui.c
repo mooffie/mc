@@ -656,8 +656,7 @@ l_button_set_text (lua_State * L)
 static int
 l_button_get_text (lua_State * L)
 {
-    /* @FIXME: no reason for button_get_text() to return const! */
-    luaMC_pushstring_and_free (L, const_cast (char *, button_get_text (LUA_TO_BUTTON (L, 1))));
+    luaMC_pushstring_and_free (L, button_get_text (LUA_TO_BUTTON (L, 1)));
     return 1;
 }
 
@@ -1437,7 +1436,7 @@ add_to_listbox (void *data, const char *label, long keycode)
 {
     WListbox *lst = LISTBOX (data);
 
-    listbox_add_item (lst, LISTBOX_APPEND_AT_END, keycode, label, NULL);
+    listbox_add_item (lst, LISTBOX_APPEND_AT_END, keycode, label, NULL, FALSE);
 }
 
 /**

@@ -405,9 +405,6 @@ static const char *const list_type_names[] = {
     "full", "brief", "long", "custom", NULL
 };
 
-/* @FIXME: src/filemanager/panel.h should define this list_type_t typedef
-   (and we should remove ours afterwards). See commit fb474bc1c1571 */
-typedef enum list_types list_type_t;
 static const list_type_t list_type_values[] = {
     list_full, list_brief, list_long, list_user
 };

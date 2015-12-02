@@ -72,7 +72,7 @@
 #include "events_init.h"
 #include "args.h"
 #ifdef ENABLE_SUBSHELL
-#include "subshell.h"
+#include "subshell/subshell.h"
 #endif
 #include "setup.h"              /* load_setup() */
 
@@ -123,31 +123,14 @@ check_codeset (void)
 }
 
 /* --------------------------------------------------------------------------------------------- */
-
 /** POSIX version.  The only version we support.  */
+
 static void
 OS_Setup (void)
 {
-    const char *shell_env;
     const char *datadir_env;
 
-    shell_env = getenv ("SHELL");
-    if ((shell_env == NULL) || (shell_env[0] == '\0'))
-    {
-        struct passwd *pwd;
-
-        pwd = getpwuid (geteuid ());
-        if (pwd != NULL)
-            mc_global.tty.shell = g_strdup (pwd->pw_shell);
-    }
-    else
-        mc_global.tty.shell = g_strdup (shell_env);
-
-    if ((mc_global.tty.shell == NULL) || (mc_global.tty.shell[0] == '\0'))
-    {
-        g_free (mc_global.tty.shell);
-        mc_global.tty.shell = g_strdup ("/bin/sh");
-    }
+    mc_shell_init ();
 
     /* This is the directory, where MC was installed, on Unix this is DATADIR */
     /* and can be overriden by the MC_DATADIR environment variable */
@@ -261,7 +244,8 @@ main (int argc, char *argv[])
       startup_exit_falure:
         fprintf (stderr, _("Failed to run:\n%s\n"), mcerror->message);
         g_error_free (mcerror);
-        g_free (mc_global.tty.shell);
+
+        mc_shell_deinit ();
       startup_exit_ok:
         str_uninit_strings ();
         mc_timer_destroy (mc_global.timer);
@@ -536,20 +520,21 @@ main (int argc, char *argv[])
     }
     g_free (last_wd_string);
 
-    g_free (mc_global.tty.shell);
+    mc_shell_deinit ();
 
     done_key ();
 
     if (macros_list != NULL)
     {
         guint i;
+
         for (i = 0; i < macros_list->len; i++)
         {
             macros_t *macros;
 
             macros = &g_array_index (macros_list, struct macros_t, i);
             if (macros != NULL && macros->macro != NULL)
-                (void) g_array_free (macros->macro, FALSE);
+                (void) g_array_free (macros->macro, TRUE);
         }
         (void) g_array_free (macros_list, TRUE);
     }

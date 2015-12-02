@@ -69,7 +69,7 @@ l_view (lua_State * L)
     plain_view = lua_toboolean (L, 4);
     /* *INDENT-ON* */
 
-    view_file_at_line (vpath, plain_view, internal, line);
+    view_file_at_line (vpath, plain_view, internal, line, 0, 0);
 
     return 0;
 }
@@ -102,7 +102,7 @@ l_view_command (lua_State * L)
     command = luaL_checkstring (L, 1);
     line = luaL_optlong (L, 2, 0);
 
-    mcview_viewer (command, NULL, line);
+    mcview_viewer (command, NULL, line, 0, 0);
 
     /* Any code that calls mcview_viewer(), which may end up leaving a modaless
        dialog, has to call dialog_switch_process_pending() afterwards. */

@@ -79,6 +79,8 @@ mc_global_t mc_global = {
         .is_right = FALSE
     },
 
+    .shell = NULL,
+
     .tty =
     {
         .skin = NULL,
@@ -95,8 +97,6 @@ mc_global_t mc_global = {
 #ifdef ENABLE_SUBSHELL
         .subshell_pty = 0,
 #endif /* !ENABLE_SUBSHELL */
-
-        .shell = NULL,
 
         .xterm_flag = FALSE,
         .disable_x11 = FALSE,

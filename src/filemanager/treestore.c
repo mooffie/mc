@@ -530,7 +530,7 @@ remove_entry (tree_entry * entry)
         ts.tree_last = entry->prev;
 
     /* Free the memory used by the entry */
-    g_free (entry->name);
+    vfs_path_free (entry->name);
     g_free (entry);
 
     return ret;
@@ -772,9 +772,10 @@ tree_store_mark_checked (const char *subname)
     {
         /* Doesn't exist -> add it */
         current = tree_store_add_entry (name);
-        ts.add_queue_vpath = g_list_prepend (ts.add_queue_vpath, vfs_path_clone (name));
+        ts.add_queue_vpath = g_list_prepend (ts.add_queue_vpath, name);
     }
-    g_free (name);
+    else
+        vfs_path_free (name);
 
     /* Clear the deletion mark from the subdirectory and its children */
     base = current;

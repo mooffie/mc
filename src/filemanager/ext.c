@@ -364,9 +364,9 @@ exec_extension_view (void *target, char *cmd, const vfs_path_t * filename_vpath,
         changed_nroff_flag = 1;
 
     if (target == NULL)
-        mcview_viewer (cmd, filename_vpath, start_line);
+        mcview_viewer (cmd, filename_vpath, start_line, 0, 0);
     else
-        mcview_load ((mcview_t *) target, cmd, vfs_path_as_str (filename_vpath), start_line);
+        mcview_load ((WView *) target, cmd, vfs_path_as_str (filename_vpath), start_line, 0, 0);
 
     if (changed_hex_mode && !mcview_altered_hex_mode)
         mcview_default_hex_mode = def_hex_mode;
@@ -723,7 +723,7 @@ regex_check_type (const vfs_path_t * filename_vpath, const char *ptr, gboolean c
     {
         mc_search_t *search;
 
-        search = mc_search_new (ptr, -1, DEFAULT_CHARSET);
+        search = mc_search_new (ptr, DEFAULT_CHARSET);
         if (search != NULL)
         {
             search->search_type = MC_SEARCH_T_REGEX;
@@ -912,7 +912,7 @@ regex_command_for (void *target, const vfs_path_t * filename_vpath, const char *
                 if (case_insense)
                     p += 2;
 
-                search = mc_search_new (p, -1, DEFAULT_CHARSET);
+                search = mc_search_new (p, DEFAULT_CHARSET);
                 if (search != NULL)
                 {
                     search->search_type = MC_SEARCH_T_REGEX;

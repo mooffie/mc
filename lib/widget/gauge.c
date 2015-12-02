@@ -80,8 +80,8 @@ gauge_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *d
         {
             int gauge_len;
             int percentage, columns;
-            long total = g->max;
-            long done = g->current;
+            int total = g->max;
+            int done = g->current;
 
             if (total <= 0 || done < 0)
             {
@@ -104,7 +104,7 @@ gauge_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *d
             if (g->from_left_to_right)
             {
                 tty_setcolor (GAUGE_COLOR);
-                tty_printf ("%*s", (int) columns, "");
+                tty_printf ("%*s", columns, "");
                 tty_setcolor (h->color[DLG_COLOR_NORMAL]);
                 tty_printf ("%*s] %3d%%", gauge_len - columns, "", percentage);
             }
@@ -115,7 +115,7 @@ gauge_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *d
                 tty_setcolor (GAUGE_COLOR);
                 tty_printf ("%*s", columns, "");
                 tty_setcolor (h->color[DLG_COLOR_NORMAL]);
-                tty_printf ("] %3d%%", 100 * columns / gauge_len, percentage);
+                tty_printf ("] %3d%%", percentage);
             }
         }
         return MSG_HANDLED;

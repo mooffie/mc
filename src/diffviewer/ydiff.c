@@ -2913,21 +2913,21 @@ dview_edit (WDiff * dview, diff_place_t ord)
 static void
 dview_goto_cmd (WDiff * dview, diff_place_t ord)
 {
+    static gboolean first_run = TRUE;
+
     /* *INDENT-OFF* */
     static const char *title[2] = {
         N_("Goto line (left)"),
         N_("Goto line (right)")
     };
     /* *INDENT-ON* */
-    static char prev[256];
-    /* XXX some statics here, to be remembered between runs */
 
     int newline;
     char *input;
 
     input =
-        input_dialog (_(title[ord]), _("Enter line:"), MC_HISTORY_YDIFF_GOTO_LINE, prev,
-                      INPUT_COMPLETE_NONE);
+        input_dialog (_(title[ord]), _("Enter line:"), MC_HISTORY_YDIFF_GOTO_LINE,
+                      first_run ? NULL : INPUT_LAST_TEXT, INPUT_COMPLETE_NONE);
     if (input != NULL)
     {
         const char *s = input;
@@ -2948,10 +2948,11 @@ dview_goto_cmd (WDiff * dview, diff_place_t ord)
                 }
             }
             dview->skip_rows = dview->search.last_accessed_num_line = (ssize_t) i;
-            g_snprintf (prev, sizeof (prev), "%d", newline);
         }
         g_free (input);
     }
+
+    first_run = FALSE;
 }
 
 /* --------------------------------------------------------------------------------------------- */
@@ -3144,7 +3145,7 @@ dview_ok_to_exit (WDiff * dview)
 /* --------------------------------------------------------------------------------------------- */
 
 static cb_ret_t
-dview_execute_cmd (WDiff * dview, unsigned long command)
+dview_execute_cmd (WDiff * dview, long command)
 {
     cb_ret_t res = MSG_HANDLED;
 
@@ -3211,7 +3212,7 @@ dview_execute_cmd (WDiff * dview, unsigned long command)
             find_prev_hunk (dview->a[DIFF_LEFT], dview->skip_rows);
         break;
     case CK_Goto:
-        dview_goto_cmd (dview, TRUE);
+        dview_goto_cmd (dview, DIFF_RIGHT);
         break;
     case CK_Edit:
         dview_edit (dview, dview->ord);
@@ -3310,7 +3311,7 @@ dview_execute_cmd (WDiff * dview, unsigned long command)
 static cb_ret_t
 dview_handle_key (WDiff * dview, int key)
 {
-    unsigned long command;
+    long command;
 
 #ifdef HAVE_CHARSET
     key = convert_from_input_c (key);

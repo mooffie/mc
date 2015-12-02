@@ -56,7 +56,7 @@
 #include "src/viewer/mcviewer.h"        /* The view widget */
 #include "src/setup.h"
 #ifdef ENABLE_SUBSHELL
-#include "src/subshell.h"
+#include "src/subshell/subshell.h"
 #endif
 
 #include "command.h"
@@ -1023,7 +1023,7 @@ set_display_type (int num, panel_view_mode_t type)
         else
             file_name = "";
 
-        mcview_load ((struct mcview_struct *) new_widget, 0, file_name, 0);
+        mcview_load ((struct WView *) new_widget, 0, file_name, 0, 0, 0);
         break;
 
     default:

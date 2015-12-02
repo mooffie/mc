@@ -64,7 +64,7 @@
 #endif
 #include "src/keybind-defaults.h"       /* global_keymap_t */
 #ifdef ENABLE_SUBSHELL
-#include "src/subshell.h"       /* do_subshell_chdir() */
+#include "src/subshell/subshell.h"      /* do_subshell_chdir() */
 #endif
 
 #include "dir.h"
@@ -111,6 +111,52 @@ static const char *string_file_group (file_entry_t *, int);
 static const char *string_marked (file_entry_t *, int);
 static const char *string_space (file_entry_t *, int);
 static const char *string_dot (file_entry_t *, int);
+
+mc_fhl_t *mc_filehighlight = NULL;
+
+/*** file scope macro definitions ****************************************************************/
+
+#define NORMAL          0
+#define SELECTED        1
+#define MARKED          2
+#define MARKED_SELECTED 3
+#define STATUS          5
+
+/*** file scope type declarations ****************************************************************/
+
+typedef enum
+{
+    MARK_DONT_MOVE = 0,
+    MARK_DOWN = 1,
+    MARK_FORCE_DOWN = 2,
+    MARK_FORCE_UP = 3
+} mark_act_t;
+
+/*
+ * This describes a format item.  The parse_display_format routine parses
+ * the user specified format and creates a linked list of format_e structures.
+ */
+typedef struct format_e
+{
+    struct format_e *next;
+    int requested_field_len;
+    int field_len;
+    align_crt_t just_mode;
+    gboolean expand;
+    const char *(*string_fn) (file_entry_t *, int len);
+    char *title;
+    const char *id;
+} format_e;
+
+/* File name scroll states */
+typedef enum
+{
+    FILENAME_NOSCROLL = 1,
+    FILENAME_SCROLL_LEFT = 2,
+    FILENAME_SCROLL_RIGHT = 4
+} filename_scroll_flag_t;
+
+/*** file scope variables ************************************************************************/
 
 /* *INDENT-OFF* */
 static panel_field_t panel_fields_initializers[] = {
@@ -380,52 +426,6 @@ panel_fields_register (const panel_field_t * field)
 }
 
 /* --------------------------------------------------------------------------------------------- */
-
-mc_fhl_t *mc_filehighlight = NULL;
-
-/*** file scope macro definitions ****************************************************************/
-
-#define NORMAL          0
-#define SELECTED        1
-#define MARKED          2
-#define MARKED_SELECTED 3
-#define STATUS          5
-
-/*** file scope type declarations ****************************************************************/
-
-typedef enum
-{
-    MARK_DONT_MOVE = 0,
-    MARK_DOWN = 1,
-    MARK_FORCE_DOWN = 2,
-    MARK_FORCE_UP = 3
-} mark_act_t;
-
-/*
- * This describes a format item.  The parse_display_format routine parses
- * the user specified format and creates a linked list of format_e structures.
- */
-typedef struct format_e
-{
-    struct format_e *next;
-    int requested_field_len;
-    int field_len;
-    align_crt_t just_mode;
-    gboolean expand;
-    const char *(*string_fn) (file_entry_t *, int len);
-    char *title;
-    const char *id;
-} format_e;
-
-/* File name scroll states */
-typedef enum
-{
-    FILENAME_NOSCROLL = 1,
-    FILENAME_SCROLL_LEFT = 2,
-    FILENAME_SCROLL_RIGHT = 4
-} filename_scroll_flag_t;
-
-/*** file scope variables ************************************************************************/
 
 static char *panel_sort_up_sign = NULL;
 static char *panel_sort_down_sign = NULL;
@@ -2133,7 +2133,7 @@ panel_select_ext_cmd (void)
 
     g_free (cur_file_ext);
 
-    search = mc_search_new (reg_exp, -1, NULL);
+    search = mc_search_new (reg_exp, NULL);
     search->search_type = MC_SEARCH_T_REGEX;
     search->is_case_sensitive = FALSE;
 
@@ -2601,7 +2601,7 @@ panel_select_unselect_files (WPanel * panel, const char *title, const char *hist
         return;
     }
 
-    search = mc_search_new (reg_exp, -1, NULL);
+    search = mc_search_new (reg_exp, NULL);
     search->search_type = (shell_patterns != 0) ? MC_SEARCH_T_GLOB : MC_SEARCH_T_REGEX;
     search->is_entire_line = TRUE;
     search->is_case_sensitive = case_sens != 0;
@@ -2721,7 +2721,7 @@ do_search (WPanel * panel, int c_code)
 
     reg_exp = g_strdup_printf ("%s*", panel->search_buffer);
     esc_str = strutils_escape (reg_exp, -1, ",|\\{}[]", TRUE);
-    search = mc_search_new (esc_str, -1, NULL);
+    search = mc_search_new (esc_str, NULL);
     search->search_type = MC_SEARCH_T_GLOB;
     search->is_entire_line = TRUE;
 
@@ -3467,7 +3467,7 @@ directory_history_list (WPanel * panel)
 /* --------------------------------------------------------------------------------------------- */
 
 static cb_ret_t
-panel_execute_cmd (WPanel * panel, unsigned long command)
+panel_execute_cmd (WPanel * panel, long command)
 {
     int res = MSG_HANDLED;
 
@@ -4020,10 +4020,10 @@ reload_panelized (WPanel * panel)
     int i, j;
     dir_list *list = &panel->dir;
 
-    if (panel != current_panel)
-        (void) mc_chdir (panel->cwd_vpath);
+    /* refresh current VFS directory required for vfs_path_from_str() */
+    (void) mc_chdir (panel->cwd_vpath);
 
-    for (i = 0, j = 0; i < panel->dir.len; i++)
+    for (i = 0, j = 0; i < list->len; i++)
     {
         vfs_path_t *vpath;
 
@@ -4913,7 +4913,7 @@ remove_encoding_from_path (const vfs_path_t * vpath)
  * If current_file == -1 then it automatically sets current_file and
  * other_file to the currently selected files in the panels.
  *
- * if force_update has the UP_ONLY_CURRENT bit toggled on, then it
+ * If flags has the UP_ONLY_CURRENT bit toggled on, then it
  * will not reload the other panel.
  *
  * @param flags for reload panel
@@ -4923,12 +4923,13 @@ remove_encoding_from_path (const vfs_path_t * vpath)
 void
 update_panels (panel_update_flags_t flags, const char *current_file)
 {
-    gboolean reload_other = (flags & UP_ONLY_CURRENT) == 0;
     WPanel *panel;
 
-    update_one_panel (get_current_index (), flags, current_file);
-    if (reload_other)
+    /* first, update other panel... */
+    if ((flags & UP_ONLY_CURRENT) == 0)
         update_one_panel (get_other_index (), flags, UP_KEEPSEL);
+    /* ...then current one */
+    update_one_panel (get_current_index (), flags, current_file);
 
     if (get_current_type () == view_listing)
         panel = PANEL (get_panel_widget (get_current_index ()));

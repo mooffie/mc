@@ -75,7 +75,10 @@ static void
 listbox_entry_free (void *data)
 {
     WLEntry *e = data;
+
     g_free (e->text);
+    if (e->free_data)
+        g_free (e->data);
     g_free (e);
 }
 
@@ -253,7 +256,7 @@ listbox_back (WListbox * l)
 /* --------------------------------------------------------------------------------------------- */
 
 static cb_ret_t
-listbox_execute_cmd (WListbox * l, unsigned long command)
+listbox_execute_cmd (WListbox * l, long command)
 {
     cb_ret_t ret = MSG_HANDLED;
     int i;
@@ -322,7 +325,7 @@ listbox_execute_cmd (WListbox * l, unsigned long command)
 static cb_ret_t
 listbox_key (WListbox * l, int key)
 {
-    unsigned long command;
+    long command;
 
     if (l->list == NULL)
         return MSG_NOT_HANDLED;
@@ -330,13 +333,7 @@ listbox_key (WListbox * l, int key)
     /* focus on listbox item N by '0'..'9' keys */
     if (key >= '0' && key <= '9')
     {
-        int oldpos = l->pos;
         listbox_select_entry (l, key - '0');
-
-        /* need scroll to item? */
-        if (abs (oldpos - l->pos) > WIDGET (l)->lines)
-            l->top = l->pos;
-
         return MSG_HANDLED;
     }
 
@@ -507,8 +504,6 @@ listbox_event (Gpm_Event * event, void *data)
         else
             listbox_select_entry (l, listbox_select_pos (l, l->top, local.y - 1));
 
-        /* We need to refresh ourselves since the dialog manager doesn't */
-        /* know about this event */
         listbox_draw (l, TRUE);
         return ret;
     }
@@ -770,7 +765,8 @@ listbox_remove_list (WListbox * l)
 /* --------------------------------------------------------------------------------------------- */
 
 char *
-listbox_add_item (WListbox * l, listbox_append_t pos, int hotkey, const char *text, void *data)
+listbox_add_item (WListbox * l, listbox_append_t pos, int hotkey, const char *text, void *data,
+                  gboolean free_data)
 {
     WLEntry *entry;
 
@@ -783,6 +779,7 @@ listbox_add_item (WListbox * l, listbox_append_t pos, int hotkey, const char *te
     entry = g_new (WLEntry, 1);
     entry->text = g_strdup (text);
     entry->data = data;
+    entry->free_data = free_data;
     entry->hotkey = hotkey;
 
     listbox_append_item (l, entry, pos);

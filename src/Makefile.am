@@ -8,6 +8,10 @@ if USE_DIFF
 SUBDIRS += diffviewer
 endif
 
+if ENABLE_SUBSHELL
+SUBDIRS += subshell
+endif
+
 if USE_LUA
 SUBDIRS += lua
 endif
@@ -41,6 +45,10 @@ if USE_DIFF
 DIFFLIB = diffviewer/libdiffviewer.la
 endif
 
+if ENABLE_SUBSHELL
+SUBSHELLLIB = subshell/libsubshell.la
+endif
+
 if USE_LUA
 LUALIB = lua/libmc-luasrc.la
 endif
@@ -49,7 +57,7 @@ libinternal_la_LIBADD = \
 	filemanager/libmcfilemanager.la \
 	vfs/libmc-vfs.la \
 	viewer/libmcviewer.la \
-	$(DIFFLIB) $(EDITLIB) $(LUALIB)
+	$(DIFFLIB) $(EDITLIB) $(SUBSHELLLIB) $(LUALIB)
 
 mc_LDADD = \
 	libinternal.la \
@@ -84,9 +92,6 @@ if CHARSET
     libinternal_la_SOURCES += selcodepage.c selcodepage.h
 endif
 
-if ENABLE_SUBSHELL
-    libinternal_la_SOURCES += subshell.c subshell.h
-endif
 
 if ENABLE_BACKGROUND
     libinternal_la_SOURCES += background.c background.h

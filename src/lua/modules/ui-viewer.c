@@ -19,7 +19,7 @@
 
 #include "../modules.h"
 
-#define LUA_TO_VIEWER(L, i) ((mcview_t *) (luaUI_check_widget (L, i)))
+#define LUA_TO_VIEWER(L, i) ((WView *) (luaUI_check_widget (L, i)))
 
 /* ------------------------------------------------------------------------ */
 
@@ -40,7 +40,7 @@
 static int
 l_view_get_filename (lua_State * L)
 {
-    mcview_t *view;
+    WView *view;
 
     view = LUA_TO_VIEWER (L, 1);
 
@@ -73,7 +73,7 @@ l_view_get_filename (lua_State * L)
 static int
 l_view_get_top_line (lua_State * L)
 {
-    mcview_t *view;
+    WView *view;
 
     off_t line, column;
 

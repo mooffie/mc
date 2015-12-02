@@ -550,6 +550,7 @@ src/Makefile
 src/consaver/Makefile
 src/editor/Makefile
 src/man2hlp/Makefile
+src/subshell/Makefile
 src/viewer/Makefile
 src/diffviewer/Makefile
 src/filemanager/Makefile
