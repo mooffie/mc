@@ -18,10 +18,6 @@ Tips / notes:
 
 - You can move the axes' origin off screen.
 
-- Moving the ruler, especially with the mouse, might seem sluggish sometimes.
-  It's not because Lua is slow (it isn't) but because the windows underneath
-  are asked to draw themselves.
-
 ]]
 
 local M = {
@@ -172,9 +168,13 @@ function M.run()
 
   ------------------------------ Mouse support -------------------------------
 
-  ruler.on_mouse_down = function (self, x, y) 
-    ox, oy = x, y
-    dlg:redraw()
+  ruler.on_mouse_down = function (self, x, y)
+    -- This is_idle() check is not mandatory. It just prevents a sluggish
+    -- drag when the dialogs beneath are CPU-intensive to draw.
+    if tty.is_idle() then
+      ox, oy = x, y
+      dlg:redraw()
+    end
   end
   ruler.on_mouse_drag = ruler.on_mouse_down
 

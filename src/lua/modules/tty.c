@@ -248,34 +248,6 @@ l_keycode_to_keyname (lua_State * L)
 }
 
 /**
- * Checks that the terminal is idle. That is, that there are no pending
- * keyboard events.
- *
- * This function can be used, for example, to early exist lengthy tasks
- * (I/O, painting) and thereby collapsing them into a final one, when
- * the terminal becomes idle again.
- *
- * EXPERIMENTAL
- *
- * The "debounce" technique (see samples/screensavers/utils.lua) already
- * answers this need, and it seems to be better because we don't need to
- * wonder how we'll be notified when the terminal becomes idle.
- *
- * While this functionality has merit in C, it doesn't seem to have any
- * in the higher-level APIs we provide through Lua.
- *
- * So, for the time being, tty.is_idle() is "undocumented". If somebody
- * can demonstrate that it is useful (from Lua), we'll make it official.
- * Otherwise we'll remove it.
- */
-static int
-l_is_idle (lua_State * L)
-{
-    lua_pushboolean (L, is_idle ());
-    return 1;
-}
-
-/**
  * @section end
  */
 
@@ -986,7 +958,7 @@ l_text_align (lua_State * L)
 /**
  * Whether the UI is ready.
  *
- * Tells us if *curses* has taken control of the terminal. This is when you
+ * It tells us if *curses* has taken control of the terminal. This is when you
  * can use dialog boxes.
  *
  * [info]
@@ -1089,6 +1061,39 @@ l_beep (lua_State * L)
 
     tty_beep ();
     return 0;
+}
+
+/**
+ * Whether the terminal is idle. That is, whether there are no pending
+ * keyboard or mouse events.
+ *
+ * This function can be used, for example, to early exist lengthy
+ * drawing tasks and thereby collapsing them into a final one, when
+ * the terminal becomes idle again. See examples at @{git:dialog-drag.lua}
+ * and @{git:ruler.lua}.
+ *
+ * [tip]
+ *
+ * Caveat: you're likely to misuse this function.
+ *
+ * Usually it'd be @{timer.debounce}, not `is_idle`, what you're looking for.
+ *
+ * The terminal can be "idle" even when a keyboard key is held down (console
+ * applications are oblivious to the physical state of the key -- they only
+ * see the characters sent to them at the _keyboard repeat rate_). `is_idle`,
+ * therefore, should only be used when a
+ * "[throttle](http://google.com/search?q=throttle+debounce+javascript)" pattern is
+ * desired, not a "@{timer.debounce|debounce}" pattern.
+ *
+ * [/tip]
+ *
+ * @function is_idle
+ */
+static int
+l_is_idle (lua_State * L)
+{
+    lua_pushboolean (L, is_idle ());
+    return 1;
 }
 
 /**

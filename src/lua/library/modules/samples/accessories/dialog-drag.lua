@@ -115,9 +115,13 @@ function Mover:on_mouse_up(x, y, ...)
 end
 
 function Mover:on_mouse_drag(x, y, ...)
-  local dx = x - self.drag_start.x
-  local dy = y - self.drag_start.y
-  move_dlg(self.dialog, dx, dy)
+  -- This is_idle() check is not mandatory. It just prevents a sluggish
+  -- drag when the dialogs beneath are CPU-intensive to draw.
+  if tty.is_idle() then
+    local dx = x - self.drag_start.x
+    local dy = y - self.drag_start.y
+    move_dlg(self.dialog, dx, dy)
+  end
 end
 
 function Mover:on_focus()
