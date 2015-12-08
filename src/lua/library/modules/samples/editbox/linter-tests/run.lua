@@ -17,7 +17,7 @@ local function run_tests()
     local file, syntax = table.unpack(test)
     file = dir .. file
 
-    local problems, errmsg = linter.lint(file, syntax)
+    local problems, errmsg = linter.lint(file, linter.primary_checkers, syntax)
     assert(not errmsg, errmsg)
     devel.view({syntax, problems})
   end
