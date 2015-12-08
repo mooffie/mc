@@ -54,7 +54,7 @@ tests/nonauto/fileops.lua \
 tests/nonauto/luafs_markdown.lua \
 tests/nonauto/luafs_mirror.lua \
 tests/nonauto/luafs_stamps.lua \
-tests/nonauto/magic_gc.mcs \
+tests/nonauto/magic_table_gc.mcs \
 tests/nonauto/mcscript_argv.mcs \
 tests/nonauto/mcscript_error.mcs \
 tests/nonauto/mcscript_error2.mcs \
@@ -75,7 +75,8 @@ tests/nonauto/ui_listhotkey.mcs \
 tests/nonauto/ui_setinterval.mcs \
 tests/nonauto/ui_subclass.mcs \
 tests/nonauto/vfs_bug_crash.mcs \
-tests/nonauto/vfs_bug_errno.mcs \
+tests/nonauto/vfs_bug_errno_chdir.mcs \
+tests/nonauto/vfs_bug_errno_open.mcs \
 tests/snippets/actors.lua \
 tests/snippets/autodetect_html.lua \
 tests/snippets/center.lua \
