@@ -526,7 +526,8 @@ Some other potential uses for this ability:
 
 We can inject widgets to the editor too. Here we use this ability 
 to inject, besides a scrollbar, a @{git:access-warning.lua|label warning you}
-about files you won't be able to save.
+about files you won't be able to save. It also makes the editbox read-only in
+such cases.
 
 (This label, as the scrollbar, doesn't come on top
 of the text: it's docked south of it.)

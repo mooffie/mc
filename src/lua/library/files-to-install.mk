@@ -123,6 +123,7 @@ modules/samples/games/blocks/setups/pieces/tetrominos.lua \
 modules/samples/games/blocks/setups/pieces/tinies.lua \
 modules/samples/libs/docker-editor.lua \
 modules/samples/libs/docker.lua \
+modules/samples/libs/editbox-read-only.lua \
 modules/samples/libs/git.lua \
 modules/samples/libs/htmlize-canvas.lua \
 modules/samples/libs/htmlize.lua \
