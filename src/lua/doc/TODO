@@ -17,10 +17,12 @@ ui
   - Mimicking DLG_TRYUP in Lua: see ui_dialog_tryup.lua. Should we make Lua's calculation
     identical to C's?
   - Bug: <<Dialog::open>> is called for modaless dialogs whenever they're switched to.
+  - Bug: <<Dialog::activate>> seems to be called only for the filemanager. And it lacks ldoc.
 
 
 build
-  - Do we really need the '$(PCRE_CPPFLAGS)' in our makefiles?
+  - Do we really need the '$(PCRE_CPPFLAGS)' in our makefiles? (The new makefile
+    at ticket #3547 too has it.)
   - Use of GINT_TO_POINTER, in luafs*.c, now generates warning because of -Wbad-function-cast:
 
       "warning: cast from function call of type 'int' to non-matching type 'void *' [-Wbad-function-cast]

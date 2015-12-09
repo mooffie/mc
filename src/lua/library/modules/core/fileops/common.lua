@@ -36,7 +36,7 @@ local failure_messages = {
 -- You should envelope syscalls in try_io(). It handles errors.
 --
 -- (We don't use an exception-based solution as they don't work across
--- C/Lua boundaries when using coroutines. This was supposedly addressed in
+-- C/Lua boundaries when using coroutines. This was purportedly addressed in
 -- Lua 5.2. Google: "pcall coroutine lua".)
 --
 local function try_io(ctx, operation, fname, result, errmsg, errcode)

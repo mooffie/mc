@@ -66,7 +66,7 @@ function M.run()
   fltr.on_change = rebuild_items
 
   -- When opening the dialog we go and stand on the path on which we last
-  -- stood. Unless we're inside thw editor, in which case we stand on the
+  -- stood. Unless we're inside the editor, in which case we stand on the
   -- file being edited.
   select_by_path(M.last_path)
   if ui.current_widget('Editbox') then

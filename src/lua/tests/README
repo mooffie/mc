@@ -1,10 +1,10 @@
 This directory tree contains tests.
 
 Tests that need MC to run have a '.lua' extension (run them by symlinking
-them to your Lua user folder). Otherwise they have a '.mcs' extension
+to them in your Lua user folder). Otherwise they have a '.mcs' extension
 which means that it's more convenient to run them with mcscript.
 
-sauto/
+auto/
 
   Tests that don't require the user's intervention. You can run them with
   mcscript.
@@ -28,7 +28,7 @@ nonauto/
 snippets/
 
   These aren't "tests" per se. These are snippets you may actually find
-  useful. They're intended to be run inside MC, so symlink them to your
+  useful. They're intended to be run inside MC, so symlink to them in your
   Lua user folder. (If it turns out users find a snippet useful, we'd
   better turn it into a module.)
 

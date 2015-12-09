@@ -981,8 +981,7 @@ l_text_align (lua_State * L)
  *
  * Note: When MC loads your @{~started#first|user scripts} it does this very early,
  * still in non-UI mode. This is why you can't call functions like `tty.style`
- * at the top-level of your user scripts, and why doing `local dlg = ui.Dialog()`
- * there (at the top-level) will result in a "black and white" dialog.
+ * at the top-level of your user scripts.
  *
  * [/info]
  *

@@ -12,6 +12,10 @@ or:
     mysql.user = "bobby"
     mysql.password = "jhonson"  -- leave 'nil' to have a dialog asking for it.
 
+Usage:
+
+Type "cd mysql://" inside MC and enjoy!
+
 ]]
 
 --[[

@@ -261,7 +261,7 @@ function M.run(pnl)
 
   ----------------------------- Dialog placement -----------------------------
 
-  -- Try not to obscure the panel. The user would like to see the files
+  -- Try not to obscure the panel: the user would like to see its files
   -- as he browses the selections.
   local x
   if pnl == ui.Panel.left then

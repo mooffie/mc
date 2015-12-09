@@ -230,7 +230,7 @@ function prompts.flash(message, msec)
     -- Default calculation:
     --
     -- For every character we add 25 msec.
-    -- "Green men from mars" runs in about 1300 msec.
+    -- "Green men from mars" runs for about 1300 msec.
     820 + 25 * tty.text_width(message)
   )
 

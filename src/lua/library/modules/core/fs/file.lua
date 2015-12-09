@@ -48,7 +48,7 @@ end
 --
 -- Concats two strings.
 --
--- Lua 5.2 does this optimization internally, but for Lua 5.1 and luaJIT we do
+-- Lua 5.2+ does this optimization internally, but for Lua 5.1 and luaJIT we do
 -- this explicitly. See:
 --
 --   http://stackoverflow.com/questions/22781134/does-lua-optimize-concatenating-with-an-empty-string

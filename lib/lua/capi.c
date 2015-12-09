@@ -423,12 +423,15 @@ luaMC_checkudata__unsafe (lua_State * L, int index, const char *tname)
  * Gets a userdata's stash.
  *
  * "stash", in our lingo, is a table associated with a userdata. Also known
- * as "user value" in Lua 5.2.
+ * as "user value" in Lua 5.2+.
  *
  * If the stash wasn't yet created, it gets created, and TRUE is returned.
  *
- * The first field of the userdata must be a g_boolean (for recording the
- * fact of the stash's creation).
+ * The first field of the userdata must be a gboolean (for recording the
+ * fact of the stash's creation). It's needed because there's otherwise no
+ * very efficient way to detect this on Lua 5.1:
+ *
+ *   http://stackoverflow.com/questions/23797926/how-to-detect-if-a-userdata-has-environment-table
  *
  * see also http://stackoverflow.com/questions/3332448/treating-userdate-like-a-table-in-lua/3332972#3332972
  */

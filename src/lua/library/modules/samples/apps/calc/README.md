@@ -9,7 +9,7 @@ Examples:
     1 + 2
     ui.Editbox.syntax_list
     fs.read('/etc/issue')
-    s = fs.read('/etc/issue')
+    s = fs.read('/etc/issue')    -- You can then refer to 's' in your expressions.
     {11, 12, 13}
     sin(0.5)
 
@@ -30,7 +30,7 @@ Mathematical functions
 ----------------------
 
 The functions from Lua's math library are available to you directly.
-E.g., you can type "sin(0.5)" instead of "math.sin(0.5)".
+I.e., you can type "sin(0.5)" instead of "math.sin(0.5)".
 
 Defining your own functions
 ---------------------------

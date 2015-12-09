@@ -60,7 +60,7 @@ The sample modules follow these rules:
     -- Enable "modeline" support for the editor.
     require('samples.editbox.modeline')
 
-  Tip: Alternatively, you may _symlink_ such modules to your user Lua
+  Tip: Alternatively, you may _symlink_ to such modules in your user Lua
   folder. This technique works for any kind of files: e.g., you can
   symlink to code snippets in @{git:snippets|snippets/} to "activate"
   them.

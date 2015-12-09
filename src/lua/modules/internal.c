@@ -61,7 +61,7 @@ l_register_system_callback (lua_State * L)
 }
 
 /**
- * Exposed as devel.enable_table_gc(). See documentation there.
+ * Exposed as utils.magic.enable_table_gc(). See documentation there.
  */
 static int
 l_enable_table_gc (lua_State * L)

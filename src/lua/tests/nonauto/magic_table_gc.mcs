@@ -1,6 +1,6 @@
 
 -- This script tests that the __gc operator is called for tables.
--- This feature is built-in for Lua 5.2. For earlier Luas it is the call
+-- This feature is built-in for Lua 5.2+. For older Luas it is the call
 -- to utils.magic.enable_table_gc() that makes it happen.
 
 --
@@ -10,7 +10,7 @@
 --   hi from __gc, #2
 --   File's __gc works
 --
--- It will surely be the case for Lua 5.2, so the test is only useful for 5.1/JIT.
+-- It will surely be the case for Lua 5.2+, so the test is only useful for 5.1/JIT.
 
 local function test_gc()
 

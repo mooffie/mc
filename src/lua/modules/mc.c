@@ -167,6 +167,7 @@ l_edit (lua_State * L)
  * Launches the diff-viewer.
  *
  * @function diff
+ * @args (path1, path2)
  */
 static int
 l_diff (lua_State * L)
@@ -408,9 +409,13 @@ l_expand_format (lua_State * L)
  * default it carries out the "Open" action, but by supplying the **action**
  * parameter you can carry out any other action.
  *
+ * [info]
+ *
  * There's a convention in the extension file to capitalize action names. So
  * make sure to type "Edit", not "edit". But if it's editing or viewing you're
  * after, simply use @{mc.edit} or @{mc.view}.
+ *
+ * [/info]
  *
  * __Returns:__
  *

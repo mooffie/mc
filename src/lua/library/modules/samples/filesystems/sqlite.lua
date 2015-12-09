@@ -6,6 +6,17 @@ Installation:
 
     require('samples.filesystems.sqlite')
 
+Usage:
+
+- Stand on a *.sqlite (or *.sq3) file and press ENTER.
+
+- Or type "cd whatever.the.file.name/sqlite://".
+
+- Or add the following to your extension file:
+
+    type/^SQLite 3.x database
+      Open=%cd %p/sqlite://
+
 ]]
 
 local append = table.insert

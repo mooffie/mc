@@ -221,13 +221,13 @@ check_for_restart (void)
          *      print 'hi'
          *    end, 1000*5)
          *
-         * The user hits C-y, or waits for the timer to fire. The stack
-         * now can't be empty (because luaMC_safe_call() is in progress).
-         * A dialog opens (the empty one) and the user now has a chance
-         * (because of the event loop) to hit the key requesting that Lua
-         * be restarted. He does this. He closes the dialog. The "old"
-         * lua_State now continues to "print 'hi'". But this old lua_State
-         * is kaput already, and we crash.
+         * The user hits C-y, or the timer fires. The stack now can't be
+         * empty (because luaMC_safe_call() is in progress, running our
+         * anonymous function). A dialog opens (the empty one) and the
+         * user now has a chance (because of the event loop) to hit the
+         * key requesting that Lua be restarted. He does this. He closes
+         * the dialog. The "old" lua_State now continues to "print 'hi'".
+         * But this old lua_State is kaput already, and so we crash.
          */
         if (lua_gettop (Lg) == 0)
             restart ();

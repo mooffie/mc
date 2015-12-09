@@ -225,7 +225,7 @@ luaMC_safe_dofile (lua_State * L, const char *dirname, const char *basename)
     }
     else
     {
-        /* Note: LUA_OK (0) isn't defined in Lua 5.1. So using "0". */
+        /* Note: LUA_OK (0) isn't defined in Lua 5.1. So we use "0". */
         return luaMC_safe_call (L, 0, 0) ? 0 : LUA_ERRRUN;
     }
 

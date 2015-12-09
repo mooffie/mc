@@ -6,6 +6,10 @@ Installation:
 
     require('samples.filesystems.mht')
 
+Usage:
+
+Stand on a *.mht file and press ENTER.
+
 More information:
 
 See http://en.wikipedia.org/wiki/MHTML .

@@ -527,6 +527,17 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  */
 
 /*
+ * Note:
+ *
+ * Some of the code below is now proposed for inclusion in MC:
+ *
+ *   http://www.midnight-commander.org/ticket/3571
+ *   "High-level mouse API"
+ *
+ * If it gets in MC, we can delete some of the code here.
+ */
+
+/*
  * For details on the C mouse API, see MC's lib/tty/mouse.h, or GPM's
  * excellent 'info' manual:
  *
