@@ -17,7 +17,7 @@ extern lua_State *Lg;           /* the Lua VM */
 /* ------------------------------- Scalars -------------------------------- */
 
 gboolean luaMC_pop_boolean (lua_State * L);
-int luaMC_pop_integer (lua_State * L);
+lua_Integer luaMC_pop_integer (lua_State * L);
 int luaMC_get_sign (lua_State * L, int idx);
 gboolean luaMC_is_int_eq (lua_State * L, int idx, int val);
 gboolean luaMC_optboolean (lua_State * L, int idx, gboolean def_val);

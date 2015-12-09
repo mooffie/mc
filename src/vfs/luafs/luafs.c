@@ -801,7 +801,7 @@ luafs_getid (const vfs_path_t * vpath)
         luaFS_push_vpath (Lg, vpath);
 
         if (luaMC_safe_call (Lg, 1, 1))
-            return GINT_TO_POINTER (luaMC_pop_integer (Lg));
+            return GINT_TO_POINTER ((int) luaMC_pop_integer (Lg));
     }
     return NULL;
 }

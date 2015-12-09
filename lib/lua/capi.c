@@ -39,10 +39,10 @@ luaMC_pop_boolean (lua_State * L)
     return b;
 }
 
-int
+lua_Integer
 luaMC_pop_integer (lua_State * L)
 {
-    int i;
+    lua_Integer i;
 
     i = lua_tointeger (L, -1);
     lua_pop (L, 1);
