@@ -107,7 +107,7 @@ directly.
 #include "../modules.h"
 
 /*
- * Note: MC, starting with 4.8.14, requires GLib 2.14+, so we do know we have regex support.
+ * Note: MC, starting with 4.8.14, requires GLib 2.14+, so we know we do have regex support.
  */
 
 /*

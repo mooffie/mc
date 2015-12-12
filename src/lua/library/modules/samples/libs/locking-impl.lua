@@ -45,8 +45,7 @@ local ext = '.lck'
 --
 -- We hash the resource name[1] to figure out its lock file's path.
 --
--- We use SHA-1 by default. If it's not available, we fallback to some
--- stupid gsub() "hashing" (where collisions are possible).
+-- We use SHA-1. Collisions are practically impossible.
 --
 -- BTW, a similar scheme is used by:
 --
@@ -55,9 +54,10 @@ local ext = '.lck'
 -- [1] The term "resource name", in this file, means: the absolute path
 --     of the file we're locking
 --
-local hash = utils.text.transport.hash
-               and function(s) return utils.text.transport.hash('sha1', s) end
-               or  function(s) return s:gsub('[^a-zA-Z]','-') end
+
+local function hash(s)
+  return utils.text.transport.hash('sha1', s)
+end
 
 --
 -- Returns the lock file's path that would store a resource's lock.

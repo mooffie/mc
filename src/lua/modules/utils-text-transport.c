@@ -16,9 +16,17 @@
 /**
  * Decodes a base64-encoded string.
  *
- * (Example: the module @{git:mht.lua|samples.filesystems.mht} uses this
- * function in its implementation of an [MHT](http://en.wikipedia.org/wiki/MHTML)
- * filesystem.)
+ * Example:
+ *
+ *    assert(utils.text.transport.base64_decode("ZWFydGg=")
+ *             == "earth")
+ *
+ * [tip]
+ *
+ * The module @{git:mht.lua|samples.filesystems.mht} uses this function in its
+ * implementation of an [MHT](http://en.wikipedia.org/wiki/MHTML) filesystem.
+ *
+ * [/tip]
  *
  * @function base64_decode
  * @args (s)
@@ -43,11 +51,13 @@ l_base64_decode (lua_State * L)
 /**
  * Encodes a string using base64.
  *
- * (You may use the **break_lines** flag to break the lines at 72 columns.
- * Otherwise no line-breaks are used.)
+ * Example:
  *
  *    assert(utils.text.transport.base64_encode("earth")
  *             == "ZWFydGg=")
+ *
+ * You may use the **break_lines** flag to break the lines at 72 columns.
+ * Otherwise no line-breaks are used.
  *
  * @function base64_encode
  * @args (s[, break_lines])
@@ -92,13 +102,13 @@ l_base64_encode (lua_State * L)
     return 1;
 }
 
-#if GLIB_CHECK_VERSION (2, 16, 0)
-
 /**
  * Calculates the checksum of a string.
  *
- * Note-short: This function is only available if you compile your MC
- * against GLib 2.16 and above.
+ * Example:
+ *
+ *    assert(utils.text.transport.hash("md5", "hello!")
+ *             == "5a8dd3ad0756a93ded72b823b19dd877")
  *
  * @function hash
  * @param algo The algorithm name: "md5", "sha1", "sha256" or "sha512".
@@ -121,12 +131,14 @@ l_hash (lua_State * L)
     algo = luaMC_checkoption (L, 1, NULL, algo_names, algo_values);
     data = luaL_checklstring (L, 2, &len);
 
+    /*
+     * Note: MC, starting with 4.8.15, requires GLib 2.26+, so we know we do
+     * have g_compute_checksum_for_data() (which was introduced in GLib 2.16).
+     */
     luaMC_pushstring_and_free (L, g_compute_checksum_for_data (algo, (const guchar *) data, len));
 
     return 1;
 }
-
-#endif
 
 /* ------------------------------------------------------------------------ */
 
@@ -134,9 +146,7 @@ l_hash (lua_State * L)
 static const struct luaL_Reg utils_text_transport_lib[] = {
     { "base64_decode", l_base64_decode },
     { "base64_encode", l_base64_encode },
-#if GLIB_CHECK_VERSION (2, 16, 0)
     { "hash", l_hash },
-#endif
     { NULL, NULL }
 };
 /* *INDENT-ON* */

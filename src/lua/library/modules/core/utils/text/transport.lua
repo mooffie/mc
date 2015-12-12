@@ -21,14 +21,11 @@ end
 
 --[[
 
-@todo: should we replace the following Lua uri_encode/decode functions
-with the GLib's versions? We'd then require GLib 2.16 (whereas now we
-require 2.14).
-
-As a bonus, 2.16 also supports checksums (md5, sha).
+@todo: Since MC (4.8.15, at the time of this writing) now requires GLib
+2.26+, we can replace the following uri_encode/decode functions with
+their GLib implementation (which was introduced in GLib 2.16).
 
 ]]
-
 
 ---
 -- Encodes a string using [percent-encoding](http://en.wikipedia.org/wiki/Percent-encoding).
@@ -41,6 +38,8 @@ As a bonus, 2.16 also supports checksums (md5, sha).
 --
 -- You may use the **allowed** parameter to list characters that are not to be
 -- encoded.
+--
+-- Example:
 --
 --    assert(utils.text.transport.uri_encode("/path/to file?", "/")
 --             == "/path/to%20file%3F")
