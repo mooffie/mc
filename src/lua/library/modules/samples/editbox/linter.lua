@@ -138,7 +138,10 @@ M.primary_checkers = {
         pattern = ':(%d+):'
         -- ERROR example:  luac: sc.lua:8: '=' expected near 'print'
       }
-      -- We might want to consider also LuaInspect and TypedLua (linked from SO #28281475).
+
+      -- @todo: We might also want to consider:
+      -- * luacheck (https://github.com/mpeterv/luacheck) seems good!
+      -- * LuaInspect, TypedLua (linked from SO #28281475).
     }
   },
 

@@ -1,16 +1,23 @@
 /**
- * This file extends Lua's C API. It also handles compatibility
- * issues between the different Lua versions.
+ * This file extends Lua's C API.
  *
- * The functions here are mostly utility functions that make it easier
- * to do common tasks.
+ * capi.{c,h} serve two purposes:
+ *
+ * - It handles compatibility issues between the different Lua versions.
+ *   E.g., it ensures lua_absindex() always exists.
+ *
+ * - It provides utility functions that make it easy to do common Lua tasks.
+ *
+ * Rule:
+ *
+ * All the functions here are *independent* of MC. Please keep it this
+ * way (if you want a function to use any of MC's services, put it in the
+ * appropriate module, e.g., module/fs.h, modules/tty.h, etc.).
+ *
+ * Style:
  *
  * We follow "luaL"'s example by prefixing our functions' names with
  * "luaMC".
- *
- * These functions are *independent* of MC. Please keep it this way (if
- * you want a function to use any of MC's services, put it in the
- * appropriate module, e.g., module/fs.h, modules/tty.h, etc.
  */
 
 #include <config.h>
@@ -18,7 +25,7 @@
 #include <stdio.h>
 
 #include "lib/global.h"
-#include "lib/strutil.h"        /* for implementing luaMC_pushlstring_conv()  */
+#include "lib/strutil.h"        /* str_nconvert() */
 
 #include "utilx.h"              /* E_() */
 

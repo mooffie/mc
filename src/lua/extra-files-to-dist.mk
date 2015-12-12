@@ -8,7 +8,7 @@ doc/REVIEWERS.md \
 doc/SCREENSHOTS.md \
 doc/TICKETS-SOLVED.md \
 doc/TODO \
-doc/TODO-long \
+doc/TODO.long \
 doc/WHY.md \
 doc/guide/10-getting-started.md \
 doc/guide/15-samples.md \

@@ -58,7 +58,7 @@ l_stamp_create (lua_State * L)
  *
  * Enter a TAR archive in a panel. Exit the archive. `require("luafs.gc").get_vfs_stamps()`
  * would now show a "stamp" for this archive. Wait a minute (or do "Free VFSs now"),
- * and the "stamp" would disappear.
+ * and the "stamp" should disappear.
  *
  * @function get_vfs_stamps
  */

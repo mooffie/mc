@@ -14,7 +14,9 @@ Installation:
 Or, with customization:
 
     local dicons = require('samples.accessories.dialog-icons')
-    if tty.is_utf8() then
+    -- The Linux console doesn't have fancy characters, so we exclude it
+    -- using a 'DISPLAY' environment check.
+    if tty.is_utf8() and os.getenv('DISPLAY') then
       dicons.style.char.close = '⚫'  -- Other nice possibilities: ●, ◾
       dicons.style.char.brackets = '╮ ╰'
       dicons.style.icons_margins = 0

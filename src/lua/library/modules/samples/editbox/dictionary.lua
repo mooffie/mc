@@ -35,7 +35,8 @@ local function run()
 
   local wrapper = "fmt -s -w " .. (tty.get_cols() - 6)
 
-  -- @todo: Now that we have the 'libs.speller' module we should use it instead!
+  -- @todo: Now that we have the 'libs.speller' module we should
+  -- use it instead! OTOH, we don't currently have a text wrap() function :-(
   local spelling = runcmd("(echo %q | aspell -a | tail -2  | cut -d ':' -f 2 | " .. wrapper .. ") 2>&1")
   dlg:add(ui.Label(T"Spelling: %s":format(spelling == "*" and "OK" or spelling)))
 

@@ -8,7 +8,7 @@ modules/core/devel/log.lua \
 modules/core/devel/pp.lua \
 modules/core/event.lua \
 modules/core/fields.lua \
-modules/core/fileops/README.txt \
+modules/core/fileops/README \
 modules/core/fileops/common.lua \
 modules/core/fileops/contexts/batch.lua \
 modules/core/fileops/contexts/interactive.lua \

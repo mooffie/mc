@@ -4,8 +4,8 @@ Tests y-axis placement of dialogs.
 
 Dialogs often aren't really centered on the y axis: they're moved up one
 or two lines. On the C side this logic is triggered by the DLG_TRYUP
-flag. But Lua dialogs don't use this flag: the calculation is done for
-them in ui.Dialog:set_dimensions().
+flag. But Lua dialogs, for greater flexibility, don't use this flag: the
+calculation is done for them in ui.Dialog:set_dimensions().
 
 This script displays a horizontal line where ui.Dialog:set_dimensions()
 would have placed the current dialog. Use it to verify that Lua and C do

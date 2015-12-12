@@ -548,7 +548,8 @@ We see two feature here:
 
 - A @{git:accessories/scrollbar.lua|scrollbar}. (If you look
 very carefully you'll see that it's shown for the inactive panel too.)
-Unlike MC's useless
+
+Indent: Unlike MC's useless
 [non-proportional](http://www.digitalmedievalist.org/journal/7/rosselliDelTurco/support/figure5.jpg) listbox scrollbar,
 __this__ scrollbar is
 [proportional](http://www.digitalmedievalist.org/journal/7/rosselliDelTurco/support/figure6.jpg)

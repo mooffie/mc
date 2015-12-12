@@ -1,4 +1,4 @@
-(Items that require a lengthy explanation are put in the file 'TODO-long'.)
+(Items that require a lengthy explanation are put in the file 'TODO.long'.)
 
 vpath
   - Have decent dirname(), basename(), join(), which support the VFS. The couple at

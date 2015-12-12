@@ -69,6 +69,16 @@ trigger our magic at one entry point, each MSG_KEY is effectively
 executing the command directly, leaving us no single entry point at which
 to override the action.
 
+There's a somewhat related bug in our Lua keymap handling. Say you press
+"C-x f" (for the "follow link" feature, written in Lua). Afterwards MC
+still thinks C-x is active so pressing "a" would trigger the "Active VFS
+directories" dialog ("C-x a"). We don't have a way in Lua to reset MC's
+keymap state. That's because MC doesn't really has such state: It's the
+panel widget itself which remembers that C-x was pressed. MC's keymap
+handling should be rewritten so that keymaps are handled by MC, not by
+the widgets themselves. This will solve the above problem (of overriding
+commands) as well.
+
 
 THE EVENT LOOP
 ==============
@@ -80,6 +90,51 @@ filesystem events (i.e. Linux' inotify) like directory changes (ticket
 
   - https://en.wikipedia.org/wiki/Event_loop
   - select.c of LuaSocket
+
+
+WIDGET CLASS IDS
+================
+
+Currently, widgets carry a 'const char *scripting_class_name' which tells
+us their type. Also known as "class". We can very easily use an 'int'
+instead of a string. The reason it hasn't been done yet is because it'd
+better be done in the "interesting" way explained below, instead of the
+"classic" way. This "interesting" way, however, may cause ignorant
+reviewers of the code to complain -- which is why it's been postponed.
+
+First, let's examine the "classic" way:
+
+    typedef enum {
+      WGT_BUTTON,
+      WGT_LISTBOX,
+      WGT_CHECKBOX,
+      WGT_MENU,
+      ...
+    } widget_class_t;
+
+However, there's a problem here: where would we put the definitions for
+widgets created outside the lib/widget folder, as WGT_EDITBOX, WGT_PANEL,
+WGT_VIEWER? While we could define them as
+
+    #define WGT_PANEL  (WGT_LAST + 1)
+
+this has a problem because then we'd have to keep track of how much to
+add to WGT_LAST so different widgets classes won't accidentally share the
+same ID.
+
+A better solution is to use the following, "interesting" way:
+
+In widget/button.h:
+
+    G_DEFINE_QUARK (WButton, button);
+
+In widget/button.c:
+
+    widget_init (..., button_quark());
+
+and likewise for all the other widgets (we may want to create our own
+macro to replace G_DEFINE_QUARK, to ensure the generated function is
+'inline' and/or to have it accept just one argument).
 
 
 MISC

@@ -111,12 +111,13 @@ struct Widget
      * To be able to convert a Widget to a scriptable object, we have to
      * know its type (aka "class"). This member serves this purpose.
      *
-     * We currently use a string, for simplicity.
+     * We currently use a string, for simplicity (for the benefit of
+     * reviewers).
      *
-     * In the future we'll probably change this to a numeric ID. This will
-     * make the code a tad more complex, which is why we postpone this task,
-     * because we currently want the simplest code, for the benefit of
-     * reviewers.
+     * In the future we'll probably change this to a numeric ID. How to do
+     * this "properly" is explained in 'TODO.long'. We'll also change its
+     * name to 'class_id' because it's useful also outside the realm of
+     * scripting.
      *
      * (Using strings has a flaw: we have to settle on the names used in one
      * scripting engine (Lua). Somebody designing, say, a Python support may

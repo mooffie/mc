@@ -1,6 +1,7 @@
 /**
- * This file extends Lua's C API. It also handles compatibility
- * issues between the different Lua versions.
+ * This file extends Lua's C API.
+ *
+ * It also handles compatibility issues between the different Lua versions.
  *
  * #Include this file when you want to use Lua's API. It pulls in Lua's
  * headers.
