@@ -89,7 +89,7 @@ Arabic, character shaping is performed.
 
 Tip: Note the @{git:drop-shadow.lua|drop-shadow} effect for dialogs, the
 @{git:dialog-icons.lua|frame icons}, and how the _Sort order_ dialog was
-@{git:dialog_mover.lua|moved} away from the center to make the screenshot
+@{git:dialog_mover.lua|dragged} away from the center to make the screenshot
 more useful. This "pyrotechnic" is implemented with just a few lines of
 Lua code. No "code bloat" is involved here.
 

@@ -4,7 +4,7 @@ Lets you move dialogs on the screen with shift + arrow keys.
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !                                                                     !
-! There's now a module that lets you move dialogs with the mouse:     !
+! There's now a module that lets you drag dialogs with the mouse:     !
 !                                                                     !
 !  require('samples.accessories.dialog-drag').install()               !
 !                                                                     !
@@ -25,14 +25,14 @@ not a bug.
 
 ]]
 
-local function enabled()
-  -- In the future we may want to turn off this feature for certain dialogs/widgets.
+local function can_move(dlg)
+  -- In the future we may want to turn off this feature for certain dialogs.
   return true
 end
 
 local function do_move(translate)
-  if enabled() then
-    local dlg = ui.Dialog.top
+  local dlg = ui.Dialog.top
+  if can_move(dlg) then
     translate(dlg)
     for wgt in dlg:gmatch() do
       translate(wgt)

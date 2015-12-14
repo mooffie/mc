@@ -740,7 +740,7 @@ l_destruct_style (lua_State * L)
  * needed to display it.
  *
  * Info: While in English there's a one-to-one correspondence between characters
- * and columns, in other languages this isn't so. E.g., diactritic
+ * and columns, in other languages this isn't always so. E.g., diacritic
  * characters consume 0 columns and Asian characters consume 2 columns.
  *
  *    assert(tty.text_width 'ンab᷉c᷉d' == 6)

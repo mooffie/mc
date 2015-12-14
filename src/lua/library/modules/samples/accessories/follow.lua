@@ -15,7 +15,7 @@ Installation:
     -- And, if you want to bind 'enter' on panelized listings:
     ui.Panel.bind('enter', function(pnl)
       -- If we're not panelized, or there's something typed at the commandline, then skip.
-      if (not pnl.panelized) or (ui.current_widget("Input") and ui.current_widget("Input").text ~= "") then
+      if (not pnl.panelized) or (ui.current_widget('Input') and ui.current_widget('Input').text ~= '') then
         return false
       end
       follow(pnl)

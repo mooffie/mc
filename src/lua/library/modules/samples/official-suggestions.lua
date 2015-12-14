@@ -59,11 +59,12 @@ end)
 -- "Restore selection" feature.
 require('samples.accessories.restore-selection')
 ui.Panel.bind('&', function(pnl)
-  if ui.current_widget('Input') and ui.current_widget('Input').text == "" then
-    require('samples.accessories.restore-selection').run(pnl)
-  else
+  if ui.current_widget('Input') and ui.current_widget('Input').text ~= '' then
+    -- If there's something typed at the commanline then we skip: '&' then
+    -- behaves just like any ordinary key.
     return false
   end
+  require('samples.accessories.restore-selection').run(pnl)
 end)
 
 -- "hotkeys" support in the directory hotlist dialog.
@@ -205,7 +206,7 @@ end)
 -- Comment the following if you don't want 'enter' in panelized listings to follow.
 ui.Panel.bind('enter', function(pnl)
   -- If we're not panelized, or there's something typed at the commandline, then skip.
-  if (not pnl.panelized) or (ui.current_widget("Input") and ui.current_widget("Input").text ~= "") then
+  if (not pnl.panelized) or (ui.current_widget('Input') and ui.current_widget('Input').text ~= '') then
     return false
   end
   follow(pnl)

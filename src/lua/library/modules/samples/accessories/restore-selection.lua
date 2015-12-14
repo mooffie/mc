@@ -24,12 +24,14 @@ Installation
 
     require('samples.accessories.restore-selection')
     ui.Panel.bind('&', function(pnl)
-      if ui.current_widget('Input') and ui.current_widget('Input').text == "" then
-        require('samples.accessories.restore-selection').run(pnl)
-      else
+      if ui.current_widget('Input') and ui.current_widget('Input').text ~= '' then
+        -- If there's something typed at the commanline then we skip: '&' then
+        -- behaves just like any ordinary key.
         return false
       end
+      require('samples.accessories.restore-selection').run(pnl)
     end)
+
 
 Or, with customization:
 

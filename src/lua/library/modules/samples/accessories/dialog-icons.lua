@@ -33,7 +33,7 @@ available.
 
 Known issues:
 
-The icons may not work for the help viewer dialog. That's because its
+The icons don't always work in the help viewer dialog. That's because its
 interior foolishly overlaps the frame. Explained in 'dialog-drag.lua'.
 
 ]]

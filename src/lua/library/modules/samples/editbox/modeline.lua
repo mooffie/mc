@@ -41,11 +41,18 @@ More info
 ---------
 
 Succinct information on modelines (with links to vim/emacs ref pages)
-you can find here:
+can be found here:
 
     https://www.wireshark.org/tools/modelines.html
 
-Tip: "vim: tw=76" makes the editor dim the text outside 76 cols.
+Tips
+----
+
+- "vim: tw=76" makes the editor dim text beyond the 76'th column.
+
+- "vim: ft=c" (or some other syntax) is useful for plain text files
+  as well: you can use it to highlight headers, for example, by starting
+  such lines with "#".
 
 ]]
 

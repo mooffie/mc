@@ -18,6 +18,8 @@ ui
     identical to C's?
   - Bug: <<Dialog::open>> is called for modaless dialogs whenever they're switched to.
   - Bug: <<Dialog::activate>> seems to be called only for the filemanager. And it lacks ldoc.
+  - Have <<Dialog::cancel>>, to complement <<Dialog::submit>>?
+  - Have property dialog.title, as an alias for dialog.text?
 
 
 build

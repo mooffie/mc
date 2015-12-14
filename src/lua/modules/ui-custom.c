@@ -492,6 +492,13 @@ custom_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *
  *
  *    end
  *
+ * [tip]
+ *
+ * If your drag handler triggers CPU-intensive tasks (these could also be
+ * drawing operations), you may benefit greatly from @{tty.is_idle}.
+ *
+ * [/tip]
+ *
  * @method on_mouse_drag
  * @args (self, x, y, buttons)
  * @callback
