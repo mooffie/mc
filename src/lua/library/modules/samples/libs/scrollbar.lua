@@ -60,7 +60,7 @@ function M.compile_style(pre)
   for name, C in pairs(pre.char) do
     style.char[name] = (tty.is_utf8() and C.unicode) or
                        C.eightbit or
-                       tty.skin_get(C.fallback, '*')
+                       tty.skin_get(C.fallback[1], C.fallback[2])
   end
   return style
 end

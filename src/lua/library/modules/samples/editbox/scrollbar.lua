@@ -32,12 +32,12 @@ local M = {
       thumb = {
         unicode = '█',
         eightbit = nil,
-        fallback = 'widget-scollbar.current-char',
+        fallback = { 'widget-scollbar.current-char', '*' },
       },
       trough = {
         unicode = '│',
         eightbit = nil,
-        fallback = 'widget-scollbar.background-char',
+        fallback = { 'widget-scollbar.background-char', '|' },
       },
       disabled = {
         unicode = '░',  -- darker version: '▒'

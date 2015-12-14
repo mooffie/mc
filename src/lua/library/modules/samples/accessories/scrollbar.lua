@@ -31,7 +31,7 @@ M.style = {
       -- thin line, making it indistinguishable from the panel's frame.
       unicode = os.getenv('DISPLAY') and '┃' or '█',
       eightbit = nil,
-      fallback = 'widget-scollbar.current-char',
+      fallback = { 'widget-scollbar.current-char', '*' },
     },
   }
 }
