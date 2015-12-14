@@ -145,16 +145,7 @@ luaMC_pushlstring_conv (lua_State * L, const char *s, size_t len, GIConv conv)
     estr_t conv_result;
 
     buffer = g_string_new ("");
-
-    if (conv != INVALID_CONV)
-    {
-        g_iconv (conv, NULL, NULL, NULL, NULL); /* Reset its state. */
-        conv_result = str_nconvert (conv, s, len, buffer);      /* @todo: will the 'size_t -> int' cast cause trouble? */
-    }
-    else
-    {
-        conv_result = ESTR_FAILURE;
-    }
+    conv_result = str_nconvert (conv, s, len, buffer);  /* @todo: will the 'size_t -> int' cast cause trouble? */
 
     lua_pushlstring (L, buffer->str, buffer->len);
     g_string_free (buffer, TRUE);
