@@ -246,16 +246,21 @@ end)
 require('samples.editbox.locking')
 
 -- Displays a scrollbar in the editor.
---require('samples.editbox.scrollbar').install()  -- Disabled by default.
+local sb = require('samples.editbox.scrollbar')
+sb.style.color.thumb = 'core.header'
+-- You may find a west-aligned scrollbar (a la emacs) to be
+-- more convenient as it's closer to the text:
+sb.region = 'west'  -- Comment this out if you want it aligned to the east.
+sb.install()
 
 -- Displays a warning when user has no write access to file.
---require('samples.editbox.access-warning')  -- Disabled by default.
+require('samples.editbox.access-warning')
 
 -- WordStar key-bindings.
 --require('samples.editbox.wordstar')  -- Disabled by default.
 
 -- "modeline" support.
---require('samples.editbox.modeline')  -- Disabled by default, because one usually has to provide a 'reset to defaults' function. Read its header for details.
+--require('samples.editbox.modeline')  -- Disabled by default, because you may want to provide a 'reset to defaults' function too. Read the module's header for details.
 
 ---------------------------- Borrowings from Vim -----------------------------
 

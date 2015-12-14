@@ -11,8 +11,8 @@ Or, if you want to customize its appearance:
     local sb = require('samples.editbox.scrollbar')
     sb.style.color.thumb = 'core.header'
     sb.style.char.thumb.unicode = '┃'
-    -- You might find a west-aligned scrollbar (a la emacs) to be
-    -- more convenient because it's closer to the text:
+    -- You may find a west-aligned scrollbar (a la emacs) to be
+    -- more convenient as it's closer to the text:
     sb.region = 'west'
     sb.install()
 

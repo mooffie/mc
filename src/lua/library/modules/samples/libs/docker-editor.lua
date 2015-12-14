@@ -121,7 +121,7 @@ local function make_room(dlg, space)
   for w in dlg:gmatch('Editbox') do
 
     -- @todo: We should figure out what to do with Editboxes that aren't
-    -- "fullscreen".
+    -- "fullscreen". Right now the following lines maximize them.
     w.x = space.west
     w.y = space.north + 1
     w.rows = center_rows
@@ -238,7 +238,7 @@ end
 local function clean()
   iter(function(dlg, w, region, ws)
     if not (dlg:is_alive() and w:is_alive()) then
-      ws[dlg] = nil  -- It's safe in Lua to clear fields while traversing the table.
+      ws[dlg] = nil  -- It's absolutely alright in Lua to clear a table's fields while traversing it.
     end
   end, true)  -- Note this 'true'.
 end
