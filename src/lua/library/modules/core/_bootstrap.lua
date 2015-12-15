@@ -141,6 +141,7 @@ event.bind('core::loaded', function()
   devel.log((":: Loading user scripts (%s) ::"):format(lua_user_dir))
   load_all_scripts(lua_user_dir)
   devel.log(":: System loaded ::")
+  require('samples.demo').run()
 end)
 
 --------------------------- Let users restart Lua ----------------------------

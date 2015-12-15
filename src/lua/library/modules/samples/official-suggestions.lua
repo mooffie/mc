@@ -3,7 +3,7 @@
 This script enables most sample applications. To use it, put the
 following in one of your startup scripts:
 
-  require('samples.official-suggestions')
+    require('samples.official-suggestions')
 
 Alternatively, copy this file to your user Lua folder.
 
