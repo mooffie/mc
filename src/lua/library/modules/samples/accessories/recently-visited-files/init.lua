@@ -17,12 +17,15 @@ Installation:
 local db_build, db_delete_record = import_from('samples.accessories.recently-visited-files.db', { 'build', 'delete_record' })
 
 local M = {
+  -- We make these variables module-scoped so users can tweak them before
+  -- calling up the dialog.
   last_filter = nil,
   last_path = nil,
 
-  -- Setting this to true means that files that are currently edited
-  -- will never be filtered out of the list.
-  dont_filter_edited = false,
+  -- Setting this to 'true' means that files that are currently edited
+  -- will be filtered out of the list. The default, 'false', is to always
+  -- show them.
+  do_filter_edited = false,
 }
 
 function M.run()
@@ -56,8 +59,8 @@ function M.run()
   local function rebuild_items()
     local val = lst.value
     lst.items = db:filter(function(rec)
-      return rec[1]:find(fltr.text, 1, true) or        -- file's name match; or
-             (M.dont_filter_edited and rec.value.edt)  -- file is being edited.
+      return rec[1]:find(fltr.text, 1, true) or          -- file's name match; or
+             (rec.value.edt and not M.do_filter_edited)  -- file is being edited.
     end)
     lst.value = val
   end
@@ -165,7 +168,7 @@ function M.run()
           the filemanager and *then* the editor (as can be seen in dialog_switch_goto(),
           these are different cases).
 
-          A sure wy to see this big is to use mcedit (mc -e), where we can't
+          A sure way to see this bug is to use mcedit (mc -e), where we can't
           switch to the filemanager. Therefore we disable this application on mcedit.
 
         ]]

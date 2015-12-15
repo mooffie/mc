@@ -36,22 +36,27 @@ Quick filter
 
 It does what you think it does.
 
-CAVEAT: the string you type here is remembered and used next time you call
-up this dialog. You may forget this fact and wonder why some files you're
-currently editing don't show up in the list. If this bothers you, there are
-two ways to solve this:
+The string you type here is remembered and used next time you call
+up this dialog.
 
-You can either instruct the app to never filter out files that are currently
-being edited:
+By default, files that you're currently editing (those prefixed with "*")
+aren't filtered out. They always appear in the list, even if they don't
+match the filter string. This is intended to prevent a confusion: you may
+forget that a filter is active and wonder why some files you're editing
+don't show up in the list. Doing otherwise would also harm the
+effectiveness of using this dialog as a window switcher. But if you don't
+like this behavior --if you want edited files to get filtered too-- then
+you can turn off this feature by doing:
 
-    require('samples.accessories.recently-visited-files').dont_filter_edited = true
+    require('samples.accessories.recently-visited-files').do_filter_edited = true
 
-Or you can make the app not remember the string:
 
-    keymap.bind('M-pgup', function()
-      require('samples.editbox.recently-visited-files').last_filter = nil  -- *** this does the trick! **
-      require('samples.editbox.recently-visited-files').run()
-    end)
+The "Goto" button
+-----------------
+
+Clicking this button (it's easiest to just press M-g) takes you to the
+directory the file is in. This can be such a useful feature sometimes
+that it deserved a special item here.
 
 
 Tips
@@ -79,14 +84,24 @@ locked (=edited).
 the title, this can be a nice usability improvement for people
 having many MC instances open simultaneously.)
 
+Another tip:
+
+You may specify a filter string before calling up the dialog:
+
+    keymap.bind('M-pgup', function()
+      require('samples.editbox.recently-visited-files').last_filter = "project_zeta"
+      require('samples.editbox.recently-visited-files').run()
+    end)
+
 
 Known issues
 ------------
 
 When you open a document and then ask to restart Lua (when inside the
-editor), you'll get an error message saying "You may not restart Lua from
-a dialog, or a window, opened by Lua." This is because the functions used to
-call up the editor (mc.edit() and dialog:focus()) don't "return" outright but
-start an event loop. This is not a bug. To solve the problem, simply switch
-out of the window and then (optionally) switch back to it (that is,
-press M-{, M-}). You'll then be able to restart. Again: this is not a bug.
+editor, or viewer), you'll get an error message saying "You may not
+restart Lua from a dialog, or a window, opened by Lua." This is because
+the functions used to call up the editor (mc.edit() and dialog:focus())
+don't "return" outright but start an event loop. This is not a bug. To
+solve the problem, simply switch out of the window and then (optionally)
+switch back to it (that is, press M-{, M-}). You'll then be able to
+restart. Again: this is not a bug.
