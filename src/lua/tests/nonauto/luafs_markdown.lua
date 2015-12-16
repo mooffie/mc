@@ -42,6 +42,10 @@ end
 
 local MarkdownFS = {
   prefix = "markdown",
+
+  -- Convenience: makes pressing ENTER in a panel over MarkDown files
+  -- automatically 'cd' to them.
+  glob = "*.{md,mkd,mdown}",
 }
 
 function MarkdownFS:open_session()
