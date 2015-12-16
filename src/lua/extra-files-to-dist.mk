@@ -30,6 +30,7 @@ tests/nonauto/magic_table_gc.mcs \
 tests/nonauto/mcscript_argv.mcs \
 tests/nonauto/mcscript_error.mcs \
 tests/nonauto/mcscript_error2.mcs \
+tests/nonauto/mcscript_ui.mcs \
 tests/nonauto/mcscript_uiopen.mcs \
 tests/nonauto/ui1.mcs \
 tests/nonauto/ui2.mcs \
