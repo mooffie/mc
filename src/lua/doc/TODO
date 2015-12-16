@@ -1,0 +1,51 @@
+(Items that require a lengthy explanation are put in the file 'TODO.long'.)
+
+vpath
+  - Have decent dirname(), basename(), join(), which support the VFS. The couple at
+    'utils.path' are ad-hoc.
+  - Have an fs.mkdir_p() which does support the VFS (in contrast to fs.nonvfs_mkdir_p()).
+  - i18n: do we need ui.Panel:to_tty (a la ui.Editbox:to_tty)? Where are filenames and/or
+    directories get encoded? (M-e)
+  - Some file_slup module (used at http://lua-users.org/wiki/GotoStatement) has
+    a useful readfile('shell command', 'p') function. We should have something similar
+    instead of the read_command() we improvise in several of our sample modules.
+
+
+ui
+  - Use a nicer dialog for alert()? I.e., use C's query_dialog() instead of message()?
+    Should we name the button "OK" or "Dismiss"?
+  - Mimicking DLG_TRYUP in Lua: see ui_dialog_tryup.lua. Should we make Lua's calculation
+    identical to C's?
+  - Bug: <<Dialog::open>> is called for modaless dialogs whenever they're switched to.
+  - Bug: <<Dialog::activate>> seems to be called only for the filemanager. And it lacks ldoc.
+  - Have <<Dialog::cancel>>, to complement <<Dialog::submit>>?
+  - Have property dialog.title, as an alias for dialog.text?
+
+
+build
+  - Do we really need the '$(PCRE_CPPFLAGS)' in our makefiles? (The new makefile
+    at ticket #3547 too has it.)
+  - Use of GINT_TO_POINTER, in luafs*.c, now generates warning because of -Wbad-function-cast:
+
+      "warning: cast from function call of type 'int' to non-matching type 'void *' [-Wbad-function-cast]
+        #define GINT_TO_POINTER(i) ((gpointer) (gint) (i))"
+
+
+misc
+  - Module samples.libs.locking-impl fails loudly if the filesystem was
+    mounted read-only. This must be fixed: MC is often used for OS rescue.
+  - See if http://getmoai.com/forums/luajit-traceback-in-coroutine-t2662/
+    anyhow applies to us (LuaJIT "debug mode").
+  - git-related features (fields, etc.) cause error message printed (stderr) when
+    the repository is not valid (right after "git init").
+  - Ask MC's maintainers to add '--leave-preprocessor-space' (short: '-lps') to
+    indent's invocation in doc/HACKING (for our capi.h).
+
+
+ldoc
+  - Use better colors for code snippet?
+    (see http://google-code-prettify.googlecode.com/svn/trunk/styles/index.html
+     and http://swfoo.com/?p=632 )
+  - mc.css: Have a different style for notes/tips? Firefox doesn't manage the rounded
+    corners well. Trac's site "solves" this by using shadow instead (
+    http://trac.edgewall.org/wiki/TracGuide )

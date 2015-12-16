@@ -1,0 +1,2 @@
+# Ignore anything inside the output directory (we have one tracked file there, mc.css).
+html/*

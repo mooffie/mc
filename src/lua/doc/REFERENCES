@@ -1,0 +1,238 @@
+This is a collection of various random links. Most are just "food for thought".
+
+
+===== I18N ===
+
+- There's purportedly Lua support in `xgettext`. Check it out.
+- http://www.pixelbeat.org/programming/i18n.html
+
+
+===== Learn APIs from others =========
+
+File system
+  http://www.boost.org/doc/libs/1_53_0/libs/filesystem/doc/index.htm
+  FUSE
+    ruby: rubyfuse, rfuse, fusefs
+  Lua
+    Watching for changes
+      http://stevedonovan.github.io/winapi/api.html#watch_for_file_changes
+    https://github.com/moteus/lua-path
+    https://keplerproject.github.io/luafilesystem/
+    http://luaposix.github.io/luaposix/
+
+TTY/Style
+  https://github.com/leafo/moonscript/blob/master/extra/scintillua/lexers/themes/moon.lua    **
+
+Thread
+  Roblox (google: "lua scheduler wait")
+
+Regex/split
+  http://www.valadoc.org/#!api=glib-2.0/GLib.Regex  (Vala's binding to GLib's regexp)
+  Lua
+    http://tech.3scale.net/2013/01/09/augment-your-api-without-touching-it/
+    Lrexlib
+
+APIs to make shell-related work easy?
+  read: http://stackoverflow.com/questions/3637668/why-are-scripting-languages-e-g-perl-python-ruby-not-suitable-as-shell-lang
+    which links to: http://viewsourcecode.org/why/hacking/wearingRubySlippersToWork.html
+  http://everythingsysadmin.com/perl2python.html **
+
+Editor
+  See what we can learn from Tk::text's API.
+  Scintila
+  http://www.yellowbrain.com/stc/index.html
+  http://docs.wxwidgets.org/3.0/classwx_styled_text_ctrl.html
+  http://www.tecgraf.puc-rio.br/iup/en/ctrl/iup_scintilla.html  (+ ui widgets)
+  file://localhost/usr/share/doc/python-fltk-doc/CH4_Editor.html (code at bottom has syntax parser?)
+
+Lua patterns
+  "[As a result of these ideas,] LuaSocket implementation [was] simplified [made] more powerful [...] size cut in half"
+    http://lua-users.org/wiki/FinalizedExceptions *
+    http://lua-users.org/wiki/FiltersSourcesAndSinks
+
+Misc
+  http://docs.wxwidgets.org/3.0/overview_events.html ?
+  https://github.com/stevedonovan/winapi/blob/master/examples/
+  http://bitop.luajit.org/ (its C code may interest us if we decide to expand our utils.bit32 module).
+
+
+====== Lua topics =========
+
+OOP
+  - http://loop.luaforge.net/
+  - MoonScript's OOP.
+
+
+===== Interesting =====
+
+- http://code.google.com/p/termbox/
+  "ncurses alternative"
+
+- images in console
+  http://ranger.nongnu.org/
+
+
+===== Interesting: history =====
+
+- Old versions of MC sometimes shed light on some decisions and strange
+  variable names. The oldest the git repo has is MC 4.1.27, which is
+  certainly an interesting reading.
+
+- The VFS in MC is based on AVFS:
+
+    http://sourceforge.net/projects/avf/
+
+  It's interesting to see its evolution. You can even download
+  version 0.2 (avfs-0.2.tar.gz).
+
+
+===== Interesting: other "commanders" =====
+
+- https://github.com/corporateshark/WalCommander **
+- http://www.webupd8.org/2010/02/3-linux-console-file-managers-you.html (LFM has tabs)
+- UnixTree ( http://unixtree.org , http://linmagazine.co.il/book/view/6554 )
+- http://emacswiki.org/emacs/Sunrise_Commander **
+- https://wiki.archlinux.org/index.php/List_of_applications#File_managers
+- https://redmine.bloodycactus.com/projects/alfc  (supports Lua) *
+- http://mc.linuxinside.com  (old MC fork; referred, for example, from #1488, #1761, #2389)
+- Dos Navigator
+    http://www.midnight-commander.org/ticket/1511  (screenshots)
+    Necromancer's Dos Navigator
+      http://ndn.muxe.com/  (from http://www.midnight-commander.org/ticket/280)
+
+
+===== References =======
+
+- http://www.c-for-dummies.com/ncurses/ ?
+
+- S-Lang
+    http://www.jedsoft.org/slang/doc/html/cslang.html  (guide)
+    http://www.jedsoft.org/slang/doc/html/cref.html  (ref)
+
+
+==== Learn Lua integration from others ========
+
+- package "libquvi-scripts"
+
+- VLC
+
+- Ipe
+
+- "Links with Lua extensions" (a text www browser)
+
+- WeeChat (supports several language engines; it could be interesting to compare the bindings)
+
+= C =
+
+- Conky's Cairo.
+
+- http://wxcode.sourceforge.net/components/wxscript/
+
+  "A set of abstract classes to add a script-interpreter support to your
+   wxWidgets applications/libraries. The implementation of these interfaces
+   for the Lua, Python, UnderC and CINT interpreters (these two are C/C++
+   intepreters) are provided. The advantage of a single basic interface
+   makes extremely easy for the programmer not only to add scripting
+   support to its program but also to give the user multi-scripting
+   languages support, learning how to use a single set of powerful classes:
+   wxPython, wxLua, wxUnderC and wxCINT. These classes are easily
+   extensible and they support Unicode as well."
+
+- wxLua
+
+- https://github.com/lwindolf/liferea    (not Lua)
+
+  "Liferea 1.10+ support GObject Introspection based plugins using
+   libpeas. The Liferea distribution comes with a set of Python plugin e.g.
+   the media player, GNOME keyring support, a tray icon plugin and maybe
+   others."
+
+   http://lzone.de/Writing-Liferea-Plugins-Tutorial-Part-1
+
+     "The important point is: by Liferea using GI (as all GNOME applications
+      and many other GTK applications do now) plugins can be written in
+      practically any scripting language."
+
+- man 8 udisks:
+
+  "a library, libudisks2 is also provided. This library can be used from
+  C/C++ and any high-level language with GObjectIntrospection support such
+  as Javascript and Python."
+
+
+======= Ideas for samples ==========
+
+Fields
+  index: show running number (nah! better to print "5/728" at bottom!)
+  bm: show "B"/"*" if there are bookmarks/position saved.
+  package: show the package a file belongs to (via 'dpkg --search path'(?) or wiki.archlinux.org/index.php/Pkgfile)
+    (No, perhaps we should do that in "Quick view" (see "quickview" in TICKETS-SOLVED.md for
+    related ideas. On the other hand, it would be best to allow users to extent "Quick view" via
+    a shell script (@todo: open a ticket); no need for Lua).)
+
+Panel
+  trash ("safe delete")
+    http://www.midnight-commander.org/ticket/3072
+      http://linmagazine.co.il/node/view/50738 (mentions node.js compat wrapper)
+      http://forums.bodhilinux.com/index.php?/topic/1098-the-trash-can-command-line-style/
+  Warn, using a docked panel, if the shell has something typed into
+    it (see #2110, #213).
+  Mounting/listing devices.
+    See #1488, #2506.
+    'man 8 udisks' says "for desktop applications it is a much better idea to
+    use something like GVolumeMonitor". See also wiki.archlinux.org/index.php/Udisks .
+  Logger for file operations (copy/move/delete).
+    Because sometimes you accidentally rename/delete a file and you're not sure what
+    you've just done. Can do its stuff in <<Dialog::submit>>.
+
+Games
+  Squares puzzles
+    http://motris.livejournal.com/141491.html *
+    http://linmagazine.co.il/node/view/50648  "2048"
+  Arcade
+    Pac-Man (Wikipedia), Arkanoid
+  DOS archives
+    http://www.mobygames.com/game/dos/showtext-included-games/screenshots (text *)
+    http://www.classicdosgames.com/game/MasterMind.html
+    http://www.dosgames.com/
+    http://www.old-games.com/ *
+  Arithmetic
+    google: multiplication puzzle
+      arithmagon, emacs
+  Interesting
+    http://www.inn.co.il/Children/Games/Item/36  (mountains in the BG)
+    path finding
+  Kroz / Rogue
+    Kroz, roguebasin.com, Dwarf Fortress, TOME ncurses.
+  Lua
+    http://luaaio.luaforge.net/screenshots.html
+
+Apps
+  some alarm program or a time tracker (gtimer *, osmo, pal)
+  Programs similar to our Visual Rename:
+  - http://www.krename.net/Screenshots.11.0.html
+  - https://github.com/laurent22/massren (and emacs's dired)
+
+Editor
+  ^L to also center line in editor.
+
+Environment variables editor?
+  "Versions 2.05 and later of bash use a different format for the output of
+   the set builtin, designed to make evaluating its output easier. However,
+   this output is not compatible with earlier versions of bash (or with
+   many other shells, probably)."
+
+
+===== Documentation system =====
+
+- The screenshots currently in ldoc are huge. Here are some to prove there are
+  small and pleasant fonts:
+
+    http://www.midnight-commander.org/attachment/ticket/122/15480-mcbug.png   (BTW, it shows a panel scrollbar!)
+    http://www.midnight-commander.org/attachment/ticket/3413/mc-info-overflow.png
+    http://www.midnight-commander.org/ticket/1511   (Dos Navigator screenshots)
+
+- http://luaaio.luaforge.net/documentation.html (see CHM viewer)
+
+- Can "GNU Global" build HTML pages of our Lua code? It can handle C
+  exceptionally but how about Lua? And can it create "permanent" URLs?
