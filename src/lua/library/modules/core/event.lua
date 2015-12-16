@@ -9,6 +9,26 @@ This module lets you run some code when a global event is triggered:
       os.execute('beep -l 4')
     end)
 
+Often, however, you won't use this module directly but instead call the
+@{ui.bind|bind function of a widget class} (when the event is
+widget-related). This serves only a stylistic purpose: it makes the
+syntax of binding events the same as that of @{keymap|binding keys}:
+
+    ui.Panel.bind('<<load>>', function(pnl)
+      devel.log('The ' .. pnl.dir .. ' directory has been read.')
+    end)
+
+Note that here we wrap the event name in "&lt;&lt;" and "&gt;&gt;" (a
+syntax borrowed from the Tk toolkit). Otherwise it'd look like a key
+name to the system.
+
+The above code is equivalent to:
+
+    event.bind('Panel::load', function(pnl)
+      devel.log('The ' .. pnl.dir .. ' directory has been read.')
+    end)
+    -- But please refrain from writing such code. Use ui.Panel.bind() instead.
+
 @module event
 
 ]]

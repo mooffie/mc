@@ -37,6 +37,7 @@
 #include "lib/tty/color.h"      /* tty_set_normal_attrs() */
 #include "lib/widget.h"
 #include "lib/event.h"
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 
 /*** global variables ****************************************************************************/
 
@@ -105,6 +106,7 @@ dialog_switch_goto (GList * dlg)
             {
                 /* switch to panels */
                 midnight_dlg->state = DLG_ACTIVE;
+                scripting_trigger_widget_event ("Dialog::activate", WIDGET (midnight_dlg));
                 do_refresh ();
             }
         }
@@ -170,7 +172,10 @@ dialog_switch_remove (WDialog * h)
 
     /* resume forced the current screen */
     if (mc_current != NULL)
+    {
         DIALOG (mc_current->data)->state = DLG_ACTIVE;
+        scripting_trigger_widget_event ("Dialog::activate", WIDGET (mc_current->data));
+    }
 }
 
 /* --------------------------------------------------------------------------------------------- */

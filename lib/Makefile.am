@@ -49,7 +49,8 @@ libmc_la_SOURCES = \
 	shell.c shell.h \
 	stat-size.h \
 	timefmt.c timefmt.h \
-	timer.c timer.h
+	timer.c timer.h \
+	scripting.c scripting.h
 
 if USE_MAINTAINER_MODE
 libmc_la_SOURCES += logging.c logging.h

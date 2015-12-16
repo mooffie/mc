@@ -464,4 +464,45 @@ For example, each namespace has a @{ui.bind|bind()} function:
 - ...
 
 This `bind()` function binds a function to a key typed when the focus is
-in a widget of a certain kind only.
+in a widget of a certain kind only. As we'll shortly see, `bind()` is
+also used for global events.
+
+## Global events
+
+So far we've seen how to manipulate dialogs, and widgets, we ourselves
+created. But can we manipulate dialogs created by MC itself?
+
+The answer is positive: using "global events" we can hook our code into
+various stages in the life of any dialog, even ones created by MC. We use
+the `bind()` function, mentioned earlier, to do this. For example:
+
+    -- Make the directory hotlist dialog appear in red.
+    ui.Dialog.bind('<<open>>', function(dlg)
+      if dlg.text == T'Directory hotlist' then
+        dlg.colorset = 'alarm'
+      end
+    end)
+
+See @{ui.open__event|the reference} for other events you might find useful.
+
+[info]
+
+You **cannot** use the _widget.on_EVENTNAME = ..._ syntax with widgets
+not created in Lua. This means that you're somewhat limited in what you
+can do with dialogs created by MC itself. For example, the following
+won't work as expected:
+
+    ui.Dialog.bind('<<open>>', function(dlg)
+      if dlg.text == T'Directory hotlist' then
+        dlg:find('Listbox').on_change = function(lst)  -- WON'T WORK!
+          ...
+          -- do something when the listbox selection changes.
+          ...
+        end
+      end
+    end)
+
+There are sometimes alternative ways to achieve what you want. Sometimes
+it's best to just recreate the dialog in Lua.
+
+[/info]
