@@ -45,6 +45,7 @@
 #include "lib/strutil.h"
 #include "lib/util.h"
 #include "lib/widget.h"
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 
 #include "src/setup.h"          /* For profile_bname */
 #include "src/history.h"
@@ -300,7 +301,7 @@ remove_from_panelize (struct panelize *entry)
 
 /* --------------------------------------------------------------------------------------------- */
 
-static void
+/*static*/ void           /* @FIXME: this should be public: lua/modules/ui-panel.c wants this */
 do_external_panelize (char *command)
 {
     int link_to_dir, stale_link;
@@ -378,6 +379,8 @@ do_external_panelize (char *command)
     try_to_select (current_panel, NULL);
     panel_re_sort (current_panel);
     rotate_dash (FALSE);
+
+    scripting_trigger_widget_event ("Panel::panelize", WIDGET (current_panel));
 }
 
 /* --------------------------------------------------------------------------------------------- */

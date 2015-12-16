@@ -176,6 +176,7 @@ void select_item (WPanel * panel);
 void recalculate_panel_summary (WPanel * panel);
 void file_mark (WPanel * panel, int idx, int val);
 void do_file_mark (WPanel * panel, int idx, int val);
+void set_panel_filter_to (WPanel * p, char *allocated_filter_string); /* implemented in cmd.c */
 
 gboolean do_panel_cd (WPanel * panel, const vfs_path_t * new_dir_vpath, enum cd_enum cd_type);
 
