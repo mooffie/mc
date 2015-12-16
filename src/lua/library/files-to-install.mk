@@ -31,7 +31,11 @@ modules/core/utils/path.lua \
 modules/core/utils/table.lua \
 modules/core/utils/text.lua \
 modules/samples/accessories/clock.lua \
+modules/samples/accessories/dialog-drag.lua \
+modules/samples/accessories/dialog-icons.lua \
 modules/samples/accessories/find-as-you-type.lua \
+modules/samples/accessories/hotlist-keys.lua \
+modules/samples/accessories/preserve-attributes.lua \
 modules/samples/accessories/ruler.lua \
 modules/samples/apps/calc/README.md \
 modules/samples/apps/calc/eval.lua \
