@@ -1673,7 +1673,7 @@ require('ui.scaffolding')
 
 for _, klass_name in ipairs {
       "Button", "Checkbox", "Custom", "Dialog", "Gauge", "Groupbox",
-      "HLine", "Input", "Label", "Listbox", "Radios"
+      "HLine", "Input", "Label", "Listbox", "Radios", "Viewer"
     } do
   ui._setup_widget_class(klass_name)  -- defined in 'ui.scaffolding'
 end

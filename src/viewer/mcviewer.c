@@ -200,7 +200,7 @@ mcview_new (int y, int x, int lines, int cols, gboolean is_panel)
     WView *view;
 
     view = g_new0 (WView, 1);
-    widget_init (WIDGET (view), y, x, lines, cols, mcview_callback, mcview_event, NULL);
+    widget_init (WIDGET (view), y, x, lines, cols, mcview_callback, mcview_event, "Viewer");
 
     view->hex_mode = FALSE;
     view->hexedit_mode = FALSE;
