@@ -124,6 +124,7 @@ modules/samples/libs/docker-editor.lua \
 modules/samples/libs/docker.lua \
 modules/samples/libs/editbox-read-only.lua \
 modules/samples/libs/git.lua \
+modules/samples/libs/htmlize.lua \
 modules/samples/libs/locking-impl.lua \
 modules/samples/libs/mplayer.lua \
 modules/samples/libs/os.lua \

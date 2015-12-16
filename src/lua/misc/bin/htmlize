@@ -1,0 +1,29 @@
+#!/usr/bin/env mcscript
+
+--[[
+
+This is a simple script to colorize source files from the command line. Example:
+
+  $ htmlize some_file.c output.html
+
+]]
+
+
+local htmlize = require('samples.libs.htmlize')
+htmlize.palette = htmlize.palettes.mooffie      -- Use a nice dark background.
+
+local function die(msg)
+  io.stderr:write(msg, "\n")
+  os.exit(1)
+end
+
+if #argv ~= 2 then
+  die("Syntax: htmlize <input-file> <output-file>")
+elseif not argv[2]:find '%.html$' then
+  die("Output file must end with '.html' (to prevent accidental overwriting of files).")
+end
+
+local input = argv[1]
+local output = argv[2]
+
+htmlize.htmlize_to_file(input, output)
