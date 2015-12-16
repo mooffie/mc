@@ -43,8 +43,9 @@
 #include "lib/widget.h"
 #include "lib/fileloc.h"        /* MC_HISTORY_FILE */
 #include "lib/event.h"          /* mc_event_raise() */
+#include "lib/scripting.h"      /* scripting_trigger_widget_event(), scripting_notify_on_widget_destruction() */
 #ifdef ENABLE_LUA
-#include "lib/lua/plumbing.h"   /* mc_lua_eat_key(), mc_lua_notify_on_widget_destruction() */
+#include "lib/lua/plumbing.h"   /* mc_lua_eat_key() */
 #endif
 
 /*** global variables ****************************************************************************/
@@ -1177,6 +1178,7 @@ dlg_redraw (WDialog * h)
 
     send_message (h, NULL, MSG_DRAW, 0, NULL);
     dlg_broadcast_msg (h, MSG_DRAW);
+    scripting_trigger_widget_event ("Dialog::draw", WIDGET (h));        /* Can be used to add decoration, like drop-shadow. */
     update_cursor (h);
 }
 
@@ -1220,6 +1222,10 @@ dlg_init (WDialog * h)
     while (h->current != NULL && !dlg_focus (h))
         h->current = dlg_widget_next (h, h->current);
 
+    /* Can be used to notify the user with sound on alert boxes, TTS the title,
+       modify widgets data, etc. */
+    scripting_trigger_widget_event ("Dialog::open", WIDGET (h));
+
     h->ret_value = 0;
 }
 
@@ -1253,6 +1259,10 @@ dlg_run_done (WDialog * h)
 
     if (h->state == DLG_CLOSED)
     {
+        if (h->ret_value != B_CANCEL && h->ret_value != B_EXIT)
+            scripting_trigger_widget_event ("Dialog::submit", WIDGET (h));
+        scripting_trigger_widget_event ("Dialog::close", WIDGET (h));
+
         send_message (h, h->current->data, MSG_END, 0, NULL);
         if (!h->modal)
             dialog_switch_remove (h);
@@ -1286,9 +1296,7 @@ dlg_destroy (WDialog * h)
     {
         /* Inform script engines of dead widgets. */
         dlg_broadcast_msg (h, MSG_BEFORE_DESTROY);
-#ifdef ENABLE_LUA
-        mc_lua_notify_on_widget_destruction (WIDGET (h));
-#endif
+        scripting_notify_on_widget_destruction (WIDGET (h));
     }
     dlg_broadcast_msg (h, MSG_DESTROY);
     g_list_free_full (h->widgets, g_free);

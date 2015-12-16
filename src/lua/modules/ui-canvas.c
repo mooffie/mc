@@ -386,6 +386,10 @@ Do:
 
     end)
 
+    event.bind('ui::skin-change', function()
+      styles = nil
+    end)
+
 (This code doesn't yet deliver the promised end-user customizability.
 That's because this snippet isn't a module and therefore users don't have
 a way to "reach" into it. See the @{~sample|sample} modules for how to do

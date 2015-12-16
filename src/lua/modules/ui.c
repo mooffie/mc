@@ -2439,6 +2439,16 @@ l_dialog_command (lua_State * L)
  *      end
  *    end
  *
+ * You can also read this property:
+ *
+ *    -- Sound a beep when an error dialog is shown.
+ *
+ *    ui.Dialog.bind("<<open>>", function(dlg)
+ *      if dlg.colorset == "alarm" then
+ *        tty.beep()
+ *      end
+ *    end)
+ *
  * @attr dialog.colorset
  * @property rw
  */
@@ -2979,6 +2989,103 @@ l_dialog_focus (lua_State * L)
     dialog_switch_focus (LUA_TO_DIALOG (L, 1));
     return 0;
 }
+
+/**
+ * Triggered after a dialog had been painted.
+ *
+ * You may use this event to add decoration to a dialog, like a
+ * @{git:drop-shadow.lua|drop shadow}.
+ *
+ *    ui.Dialog.bind('<<draw>>', function(dlg)
+ *      local c = dlg:get_canvas()
+ *      c:set_style(tty.style('yellow, red'))
+ *      c:goto_xy(0, 0)
+ *      c:draw_string(T"hello!")
+ *    end)
+ *
+ * [info]
+ *
+ * The differences between this event and @{on_draw} are:
+ *
+ * - This event is @{~interface#global events|global}: it's triggered for *every*
+ *   dialog box in the application, whereas @{on_draw} is attached to a
+ *   single dialog you yourself created.
+ * - This event is triggered after the child widgets had painted themselves,
+ *   whereas @{on_draw} is triggered before that.
+ *
+ * [/info]
+ *
+ * @moniker draw__event
+ * @event
+ */
+
+/**
+ * Triggered when a dialog is opened.
+ *
+ * You may use this event to notify the user with sound on alert boxes,
+ * text-to-speech the title, etc.
+ *
+ *    -- Read aloud dialogs' titles.
+ *
+ *    ui.Dialog.bind('<<open>>', function(dlg)
+ *       -- Note: we run espeak in the background (&) or else we'll be
+ *       -- blocked till it finishes voicing the text.
+ *       os.execute(('espeak %q &'):format(dlg.text))
+ *    end)
+ *
+ * You may also use it to set initial values for widgets of builtin dialogs:
+ *
+ *    -- Make 'xsel' the default command of 'Paste output of...'.
+ *    --
+ *    -- (This technique isn't very robust because dialog titles may
+ *    -- change between MC releases.)
+ *
+ *    ui.Dialog.bind('<<open>>', function(dlg)
+ *      if dlg.text == T'Paste output of external command' then
+ *        dlg:find('Input').text = 'xsel'
+ *      end
+ *    end)
+ *
+ * See @{~interface#global events} in the user guide.
+ *
+ * @moniker open__event
+ * @event
+ */
+
+/**
+ * Triggered when a dialog is about to be closed.
+ *
+ * See @{~interface#global events} in the user guide.
+ *
+ * @moniker zzz_close__event
+ * @event
+ */
+
+/**
+ * Triggered when a dialog is about to be closed "successfully".
+ *
+ * When a dialog is closed by hitting Enter, or by clicking a positive
+ * button (that is, anything except the "Cancel" button), this event is
+ * triggered.
+ *
+ * This event is not triggered for dialogs that are canceled (e.g.,
+ * by pressing ESC).
+ *
+ * You may use this event to read data from the widgets. E.g., the
+ * @{git:find_file_title.lua} snippet uses this event to read the search
+ * parameters from the "Find File" dialog and put them in the title
+ * of the progress dialog that follows.
+ *
+ * Info-short: Right after this event is triggered, the @{zzz_close__event|<<close>>}
+ * event too is triggered.
+ *
+ * Info-short: The name of this event was borrowed from the JavaScript world.
+ *
+ * See @{~interface#global events} in the user guide.
+ *
+ * @moniker submit__event
+ * @event
+ */
 
 /**
  * Static dialog properties.

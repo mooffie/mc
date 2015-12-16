@@ -43,9 +43,7 @@
 #include "lib/tty/color.h"
 #include "lib/skin.h"
 #include "lib/strutil.h"
-#ifdef ENABLE_LUA
-#include "lib/lua/plumbing.h"   /* mc_lua_notify_on_widget_destruction() */
-#endif
+#include "lib/scripting.h"      /* scripting_notify_on_widget_destruction() */
 #include "lib/widget.h"
 
 /*** global variables ****************************************************************************/
@@ -182,9 +180,7 @@ widget_default_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm
         return MSG_HANDLED;
 
     case MSG_BEFORE_DESTROY:
-#ifdef ENABLE_LUA
-        mc_lua_notify_on_widget_destruction (w);
-#endif
+        scripting_notify_on_widget_destruction (w);
         return MSG_HANDLED;
 
     default:

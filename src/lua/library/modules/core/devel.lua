@@ -60,9 +60,9 @@ local suppressed_errors = {}
 function devel.display_error(msg)
 
   -- While uncommon, opening this error dialog may again trigger an
-  -- exception (e.g., if there's a bug in this function, or in the ui
-  -- module). So first thing we do is log the exception so the user has
-  -- a foolproof way to see it.
+  -- exception (e.g., when we have some error in a <<dialog::open>>
+  -- event handler. So first thing we do is log the exception so the
+  -- user has a foolproof way to see it.
   devel.log(E"EXCEPTION: %s":format(msg))
 
   local msg_id = msg:match('[^\n]*')
@@ -76,6 +76,12 @@ function devel.display_error(msg)
   local ui = require("ui")
   local dlg = ui.Dialog {T"Lua error", colorset = "alarm" }
   local suppress = ui.Checkbox(T"&Don't show this specific error again")
+
+  -- As mentioned above, opening this dialog may trigger a new exception and
+  -- so forth ad infinitum. So we tell modules that decorate dialogs (modules
+  -- which may have bugs in their <<dialog::open>> etc.) to to lay their
+  -- hands off us:
+  dlg.data.skip_pyrotechnics = true
 
   dlg:add(
     ui.Label(T"An error occurred while executing Lua code."),
