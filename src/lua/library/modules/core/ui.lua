@@ -1654,9 +1654,22 @@ for _, klass_name in ipairs {
 end
 
 --
--- Load code defined elsewhere.
+-- Load widgets defined elsewhere.
 --
+-- Note that we can't autoload these. Nor can we autoload the 'ui' module
+-- itself. Why? Because of code like the following:
+--
+--   * pnl = ui.current_widget()
+--   * c = wgt:to_canvas()
+--   * event.bind("Panel::load")   -- in contrast to `ui.Panel.bind('<<load>>')`
+--
+-- Such code doesn't reference ui.Panel, ui.Canvas, or even 'ui' (the last
+-- case), so we don't have a lever on which the auto-loading mechanism can
+-- hang.
+--
+
 require('ui.canvas')
+require('ui.panel')
 
 --
 -- Lastly, we VBfy the base class.
@@ -1664,6 +1677,13 @@ require('ui.canvas')
 -- This is not mandatory. It just makes it possible (e.g., in
 -- snippets/dialog_mover.lua) to write `wgt.x = wgt.x + 1` instead of
 -- `wgt:set_x(...)`.
+--
+-- We do this after loading 'panel.lua' and 'editbox.lua' because if the
+-- property protection is activated sooner, those two files will generate
+-- exceptions (which we could solve by moving the _setup_widget_class()
+-- calls to the the top of these files as it'd make the protection mechanism
+-- correctly recognize those objects as metatables (see "is_instance" in
+-- 'magic.lua').
 --
 ui._setup_widget_class("Widget")
 
