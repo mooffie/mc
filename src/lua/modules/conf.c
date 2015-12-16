@@ -22,6 +22,7 @@
  * This table contains booleans that tell whether some MC feature was
  * compiled in, or not.
  *
+ * @field luafs Has LuaFS (writing virtual filesystems in Lua).
  * @field editbox Has internal editor.
  * @field diff Has diff viewer.
  * @field charset Has charset support.
@@ -32,6 +33,13 @@ static void
 build_features_table (lua_State * L)
 {
     lua_newtable (L);
+
+#ifdef ENABLE_VFS_LUAFS
+    lua_pushboolean (L, TRUE);
+#else
+    lua_pushboolean (L, FALSE);
+#endif
+    lua_setfield (L, -2, "luafs");
 
 #ifdef USE_INTERNAL_EDIT
     lua_pushboolean (L, TRUE);

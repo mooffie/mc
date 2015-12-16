@@ -600,6 +600,8 @@ src/vfs/sftpfs/Makefile
 
 src/vfs/local/Makefile
 
+src/vfs/luafs/Makefile
+
 src/vfs/sfs/Makefile
 
 src/vfs/smbfs/Makefile

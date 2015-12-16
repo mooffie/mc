@@ -281,6 +281,19 @@ main (int argc, char *argv[])
         goto startup_exit_falure;
     }
 
+#ifdef ENABLE_LUA
+    /*
+     * We initialize Lua before vfs_init() in case LuaFS's initialization code,
+     * in the future, would want to access Lua's VM (but this is not critical:
+     * there are other solutions to this hypothetical situation).
+     *
+     * We also do this before mc_setup_by_args(), which needs the VM
+     * for exporting 'argv' to the Lua side.
+     */
+    mc_lua_pre_init ();
+    mc_lua_init ();
+#endif
+
     vfs_init ();
     vfs_plugins_init ();
 
@@ -305,13 +318,6 @@ main (int argc, char *argv[])
 
     /* Set up temporary directory after VFS initialization */
     mc_tmpdir ();
-
-#ifdef ENABLE_LUA
-    /* We initialize Lua before mc_setup_by_args(), which needs the VM
-       for exporting 'argv' to the Lua side. */
-     mc_lua_pre_init ();
-     mc_lua_init ();
-#endif
 
     /* do this after vfs initialization and vfs working directory setup
        due to mc_setctl() and mcedit_arg_vpath_new() calls in mc_setup_by_args() */

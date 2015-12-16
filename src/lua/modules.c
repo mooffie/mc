@@ -35,6 +35,9 @@ static const struct luaL_Reg mods[] = {
     { "utils.bit32",  luaopen_utils_bit32 },
     { "c.utils.text", luaopen_utils_text },
     { "c.utils.text.transport", luaopen_utils_text_transport },
+#ifdef ENABLE_VFS_LUAFS
+    { "luafs.gc",     luaopen_luafs_gc },
+#endif
     { NULL, NULL }
 /* *INDENT-ON* */
 };
