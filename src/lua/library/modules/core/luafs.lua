@@ -1065,6 +1065,7 @@ local function validate_fs(fs)
   end
 
   require("luafs.shortcuts").install(fs)
+  require("luafs.panel").install(fs)
 
   for name, func in pairs(defaults) do
     if not fs[name] then

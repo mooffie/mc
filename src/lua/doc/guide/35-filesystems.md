@@ -305,6 +305,10 @@ function MarkdownFS:file(path)
   return self.sections[path]
 end
 
+-- Convenience: makes pressing ENTER in a panel over MarkDown files
+-- automatically 'cd' to them.
+MarkdownFS.glob = "*.{md,mkd,mdown}"
+
 fs.register_filesystem(MarkdownFS)
 ````
 
@@ -313,6 +317,20 @@ Now, to test our filesystem we need to locate some markdown file. If you don't h
     cd /path/to/file.md/markdown://
 
 ...and you'll see the "contents" of the file.
+
+[info]
+
+As a convenience, you can tell MC to automatically "cd" to an archive
+when the user presses ENTER over it. You do this by using any of the
+properties @{luafs.glob|glob}, @{luafs.iglob|iglob}, @{luafs.regex|regex}
+and @{luafs.iregex|iregex}:
+
+    local MarkdownFS = {
+      prefix = "markdown",
+      glob = "*.md",
+    }
+
+[/info]
 
 Finally, note that if you do:
 

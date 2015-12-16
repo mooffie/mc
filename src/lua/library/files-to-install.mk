@@ -15,6 +15,7 @@ modules/core/fs/outputbuffer.lua \
 modules/core/globals.lua \
 modules/core/keymap.lua \
 modules/core/luafs.lua \
+modules/core/luafs/panel.lua \
 modules/core/luafs/shortcuts.lua \
 modules/core/mcscript.lua \
 modules/core/prompts.lua \
