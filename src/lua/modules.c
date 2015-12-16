@@ -34,6 +34,7 @@ static const struct luaL_Reg mods[] = {
     { NULL,           luaopen_ui_custom },
     { "utils.bit32",  luaopen_utils_bit32 },
     { "c.utils.text", luaopen_utils_text },
+    { "c.utils.text.transport", luaopen_utils_text_transport },
     { NULL, NULL }
 /* *INDENT-ON* */
 };

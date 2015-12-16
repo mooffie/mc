@@ -30,6 +30,7 @@ modules/core/utils/magic.lua \
 modules/core/utils/path.lua \
 modules/core/utils/table.lua \
 modules/core/utils/text.lua \
+modules/core/utils/text/transport.lua \
 modules/samples/accessories/clock.lua \
 modules/samples/accessories/dialog-drag.lua \
 modules/samples/accessories/dialog-icons.lua \

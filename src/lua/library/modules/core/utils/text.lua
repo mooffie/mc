@@ -267,4 +267,7 @@ function M.extract_word(line, pos, breaks)
 
 end
 
+require('utils.magic').setup_autoload(M)
+M.autoload('transport', 'utils.text.transport')
+
 return M
