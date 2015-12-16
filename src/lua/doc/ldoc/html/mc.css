@@ -1,0 +1,343 @@
+/**
+
+CSS specific to MC's documentation.
+
+
+Random notes:
+
+For HTML color tables, see:
+
+ - http://www.w3schools.com/tags/ref_colorpicker.asp
+ - http://iceman.armagetron.co.uk/text-colors.gif
+ - http://www.cs.siena.edu/~lederman/truck/AdvanceDesignTrucks/html_color_tables_YoYo.html
+
+*/
+
+/* ------------------------------------------------------------------------ */
+
+/* override the 'pre' from ldoc_pale.css: */
+pre {
+    background-color: rgb(245, 245, 245);
+    border: 1px solid #C0C0C0; /* silver */
+    padding: 10px;
+    margin: 10px 0 10px 0;
+    overflow: auto;
+    font-family: "Andale Mono", monospace;
+
+    /* dark background: */
+
+    background-color: #3a3a3a;
+    color: #b0b0b0;
+}
+
+pre.screenshot {
+  background-color: #d7ff87;  /* lime */
+  color: black;
+}
+
+/* ------------------------------------------------------------------------ */
+
+/*
+ * It looks much better when we add line spacing.
+ */
+
+#content p, #content li {
+  line-height: 140%;
+}
+pre {
+  line-height: 1.2em;
+}
+
+/* ------------------------------------------------------------------------ */
+
+/*
+ * Documents under "Other documents" have their bullet indented to
+ * create the impression of a sub menu.
+ */
+
+body.external li.current {
+  margin-left: 1em !important;
+}
+
+/* ------------------------------------------------------------------------ */
+
+/*
+ * Screenshots
+ */
+
+table.figure {
+  background-color: #99CCFF;
+  margin: 10px 0;
+}
+
+table.figure td {
+  vertical-align: top;
+}
+
+td.figure {
+  padding: 1em 0 1em 1em;
+}
+
+td.legend {
+  padding: 1em;
+}
+
+/*table.figure td { border: 2px solid red; }*/
+
+/* ------------------------------------------------------------------------ */
+
+/* Undo ldoc_pale.css's screwups: */
+
+sub, sup { font-size: .83em }
+sub      { vertical-align: sub }
+sup      { vertical-align: super }
+
+/* ------------------------------------------------------------------------ */
+
+/* Targets are already colored nicely in the main CSS file.
+   What we do now is prevent the whole width of a header from being colored. */
+a:target + h2 {
+  display: inline-block;
+  margin-bottom: 0;
+}
+
+/* ------------------------------------------------------------------------ */
+
+/*
+ * For parameters without descriptions, omit the ":".
+ */
+.parameter.without-description:after {
+  content: "";
+}
+
+/* --------------------------- List styling ------------------------------- */
+
+/* First, undo the screwups ldoc_pale.css does: */
+
+#navigation ul {
+  list-style-type: disc;
+  margin: 16px 0;
+  padding: 0 0 0 40px;
+}
+
+#navigation li {
+  display: list-item;
+  margin: 0;
+  text-indent: 0;
+  list-style-type: inherit;
+}
+
+/* Next, enhance the spacing: */
+
+#navigation li {
+  margin: 3px 0 0;
+}
+#navigation ul {
+  margin: 1px 1px 10px;
+  padding: 0 0 0 20px;
+}
+
+/*
+ * Finally, use our own image bullet.
+ *
+ * We don't use list-style-image because it doesn't vertically aligns
+ * the image well (google: list-style-image vertical).
+ *
+ * So we use this solution:
+ *   http://stackoverflow.com/questions/14709538/aligning-list-style-image-proportionally-with-text
+ *   (http://community.sitepoint.com/t/css-list-style-image-vertical-alignment-issue/5242/2)
+ */
+
+#navigation ul {
+  list-style-type: none;
+  padding: 0;
+}
+#navigation li {
+  padding: 0 0 0 15px;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAGCAYAAADkOT91AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wEECjYa5FdXZAAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAAuSURBVAjXY3yTwfCfgYGBQXj6fwYGBgYGJgY0wPj/////DAwMDG8zGXGoIGgGAEWRDVXK+crwAAAAAElFTkSuQmCC')
+    5px center no-repeat;
+  /*
+     Or, if we prefer a green arrow:
+     url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wEECjoTMT6gzAAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAAmSURBVAjXY0ibzfAfGTD8////P7IgA4wDo1FUpM1mIKACxQwYAAAlVlu5BJukBgAAAABJRU5ErkJggg==')
+   */
+}
+
+/* ---------------------- properties and handlers ------------------------- */
+
+.property {
+  background-color: #00ff66;
+  padding: 0 0.3em;
+  border-radius: 4px;
+}
+
+.handler {
+  background-color: yellow;
+  padding: 0 0.3em;
+  border-radius: 4px;
+}
+
+/* To prevent clutter, we don't display handler arguments in summary lists. */
+table.function_list .handler-args {
+  display: none;
+}
+
+/* ------------------------------------------------------------------------ */
+
+/*
+ * Mark external links.
+ *
+ * http://stackoverflow.com/questions/5379752/css-style-external-links
+ * http://davidwalsh.name/external-links-css
+ */
+a[href^="http"]:after, a[href^="http"]:after {
+  content: " " url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=');
+}
+
+/* ------------------------------------------------------------------------ */
+
+/*
+ * Support [note], [tip], [info].
+ */
+
+div.message {
+  border: 1px dashed black;
+  border-radius: 1em;
+
+  margin-top: 10px;
+  padding: 12px 0.7em 12px 52px;
+  background-repeat: no-repeat;
+  background-position: 10px 12px;
+  min-height: 32px; /* was: 36 */ /* 32px icon height + upper&lower padding. */
+}
+
+/*
+ * The "info" and "tip" icons I took from Ubuntu's manual. I can't find the source now,
+ * so perhaps we'll have to replace them later (b/c of licensing issues). Some links to icons:
+ *
+ * https://wiki.gnome.org/Apps/Yelp/Icons ??
+ * http://www.robmeerman.co.uk/unix/256colours    "note" icon/style *
+ * http://fedoraproject.org/wiki/User_Guide_-_Tour_of_the_KDE_Desktop    "idea" icon/style *
+ * https://developer.gnome.org/gtk-doc-manual/unstable/howdoesgtkdocwork.html.en ( -> https://developer.gnome.org/skin/ )
+ *
+ * file://localhost/usr/share/doc/python2.7/html/library/subprocess.html#module-subprocess  uses red background for warnings.
+ */
+
+div.message.tip {
+  /*
+   * http://en.wikipedia.org/wiki/Data_URI_scheme
+   * http://www.img2data.com/
+   * "In Mozilla Firefox 5, Google Chrome 17, and IE 9 (released June, 2011), encoded data must not contain newlines."
+   */
+
+  /* http://www.typo.co.il/~mooffie/tiger/icon-tip.png */
+  background-image: url('data:image/png;base64,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')
+}
+div.message.info {
+  /* ftp://pak.org/usr/share/yelp/icons/yelp-icon-tip.png */
+  background-image: url('data:image/png;base64,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')
+}
+div.message.note {
+  /* http://www.typo.co.il/~mooffie/tiger/icon-note.png */
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAN1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAATiSURBVFiFzZfbb1RFHMc/c/bsLt3ds3Q3LW0psKWrLVYTSgJVaBoqGKhKIAaDYFQeSmzCi3+C+mJiNF5eTEgkJmAgmgjBFBVIFIhgiBRDQkhAKSXFGJNSoBd2z95+PszZK7vttmLiL/nlzJmZM5/vXM7Mb5SIUI0ppXzALmA70AqEgVqn+B4wDgwD3wCHReRBVQ2LyIwORIFBIA5IlR53vonO1r6qNAJKKQv4DNgBeEBRW/skTY0vEly4DtNcistYTjIFU1M3mJ6+yeTkWSYmfsC2/3B0kAC+BvaKyGRZTjkBSqk24CQQAUUkspWVK9/H728nnYZUEpJJSCTATjhPO+9TU5cZH38L2z6bFXIL2CQi12cVoJTaABwFgn7/Enp7D9HY2ANAJlMAT0IiC01APK7Thc/p6eNMTe1G5A7ABPCSiPxYUYDT81+BYGNjNxs3HsWy6nG5dHk6XdDzgh7bcYiXwLMei/1JLLYJuJoVsaZwJIySOT8JBBsautm8+TSBQD0eD3i9sGABeDzgdoNpgukClwsMo9iVKnbDaMY0fwM6AILASYdVLAC94CI+XzM9PUcwTROXS8O8Xu1udwlUaS+Fljp4gBPoP5eIw8oLUEpFgR2geLrrS7yeRc6oUPTMjxbzsCXAF4AC2OEwMZ3STwFPU9MLhEK9ZEQvuHQaUikYGxtlaOgjbt/+mbt3r5NITFSNVWoxSm0BXgW2AmuB8x6HuUUBPmAclLen5wrhUAdK3SWVGiVu3+Dmza8YGTlKOp2YT7cLzA1cQP+WqwGxgbCJ3l69gcAKvN4OBo/7SaeLd1HDULyyrYuB3et54vEmGhctrAopIly8PMIn+05x6MgF4HXgIrAMuOUFdpnovZ1Q6HlSKXLwtmgDS5rCrF0dZc9rPbQsrfuXI1BozwH7Abab6IMFn6+bZDJf5dr596pqSjX0Vwl1AweBBcD6rIBWA+ffUGpZkYBqTf7en/OBN9aXqbEYeBM4Baxy8qLZwrCJc6QqFSUxx3X2zgfHePfDb3PvzU0hAILBX8hknsG2qdCp9myiVqFPLHc0Oo7XG+LqVZXr2VwskxGs1r08iKWwrEkSCR+JBJQ/bO8AdQBJEx1M1Mdiv6NU15yg5ebfMNpJpXykUpXgANeyiXsGOpIhHh/GtufEL5r/w/sGtCjVSTKpN7HKdiObGDfRYVR7LHYG09yZq7Ly2bdpWVpHb3c72/pW0RqpL2qidP67ux7ToqRzFjjAmWxiWAH9wOeGsRzLGmZiIki54OWpFc1s61vF1r5O1nS2oEoOhL6dH3PipyvA90DfLAJa0DEKe0BvxXFQ4vVeEr9fxLLGxLIuid9/QDyel0WpQLWxoMBfome/kg8JqGzc6MsGnoP6424xTRGPR6SmRsTnE/H7RQKBuNTUfCemOSBKLZ4BXjcLXATWZesPis7KRb62VnZMQEQpEcMQcblETFO7y6XzlJoNUsmPZXtv40TMheH3Qa0sLDA6T8BMPuq0jQAHc9wCARYwoit0CNiPEG47bSIOw3pIgCOiDbifF/EoRmK0EH4faCtilrkJbciLCOfWxPznPFwI3/AQr8J1rC0/HcpZuUNzAA8536jCYW8ry5rhTmg5C9POC4kI9AscEDgnMOb4OSev36mTA9tOG1ZFzv/2clpq/9X1/B+5zflRLQ3EAwAAAABJRU5ErkJggg==')
+}
+
+div.message > *:first-child { margin-top: 0 }
+
+div.message.short p:first-child {
+  margin-top: 6px;
+}
+
+/*
+ * Support [ignore], [indent].
+ */
+
+div.ignore {
+  display: none;
+}
+
+div.indent {
+  margin-left: 20px;
+}
+
+/* ------------------------------------------------------------------------ */
+
+#toc h2 {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+#toc {
+  border: 4px dashed black;
+  background-color: #ffccff;
+  padding: 0.75em;
+  float: right;
+  margin-left: 0.8em;
+  margin-bottom: 0.8em;
+}
+
+/* ------------------------------------------------------------------------ */
+
+/*
+ * Display sections in round boxes.
+ */
+
+.section-header {
+  background-color: #66ccff;
+  padding: 1em 1.3em;
+  border-radius: 25px;
+}
+
+/* When a description follows the header, we "glue" the header to it. */
+.section-header.has-description {
+  margin-bottom: 0;
+  border-radius: 25px 25px 0 0;
+}
+
+.section-description {
+  background-color: #99ffff;
+  padding: 1em 1.3em;
+  border-radius: 0 0 25px 25px;
+}
+
+dt:first-child { border-top: none !important; }
+
+/* ------------------------------------------------------------------------ */
+
+/* Make inline code stand-out. */
+p > code, dd > code, li > code {
+  font-weight: bold;
+  /* debugging: */
+  background: #FDD7E4;
+}
+
+/* ------------------------------------------------------------------------ */
+
+/* Misc. */
+
+hr.separator {
+  margin-top: 2em;
+}
+
+/* ------------------------------------------------------------------------ */
+
+/* styles for prettification of source */
+pre .comment { color: #8ED950; font-style: italic; }
+pre .constant { color: #a8660d; }
+pre .escape { color: #844631; }
+pre .keyword { color: #b25050; font-weight: bold; }
+    /* or:  pre .keyword { color: #D87C7B; font-weight: normal; } */
+    /* or:  pre .keyword { color: #f92772; font-weight: normal; } */
+pre .library { color: #0e7c6b; }
+pre .marker { color: #512b1e; background: #fedc56; font-weight: bold; }
+pre .string { color: #8888f8; }
+    /* or:  pre .string { color: #92AFC1; } */
+    /* or:  pre .string { color: #66d9e7; } */
+pre .number { color: #f8660d; }
+pre .operator { color: #2239a8; font-weight: bold; }
+pre .preprocessor, pre .prepro { color: #a33243; }
+pre .global, pre .user-keyword { color:  #D6D681; }
+pre .prompt { color: #558817; }
+pre .url { color: #272fc2; text-decoration: underline; }
+pre .keyword-T, pre .keyword-N, pre .keyword-Q, pre .keyword-E { color: #8AC6F2 !important; }
+
+/* ------------------------------------------------------------------------ */
