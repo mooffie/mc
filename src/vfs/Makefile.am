@@ -50,3 +50,8 @@ if ENABLE_VFS_UNDELFS
 SUBDIRS += undelfs
 libmc_vfs_la_LIBADD += undelfs/libvfs-undelfs.la
 endif
+
+if ENABLE_VFS_LUAFS
+SUBDIRS += luafs
+libmc_vfs_la_LIBADD += luafs/libvfs-luafs.la
+endif
