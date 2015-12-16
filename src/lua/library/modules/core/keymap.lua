@@ -237,7 +237,7 @@ local function keymap_eat(kcode)
   local function process(o)  -- Processes keymap or actions.
     if is_keymap(o) then
       bindings.active_map = o
-      local is_mc_prefix = (kcode == CTRL_X)
+      local is_mc_prefix = (kcode == CTRL_X and ui.current_widget("Panel"))
       if not is_mc_prefix then
         -- If we have some action bound to, say, "C-u C-q t", we
         -- don't want MC to see either "C-u" or the following "C-q".

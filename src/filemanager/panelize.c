@@ -307,7 +307,7 @@ remove_from_panelize (struct panelize *entry)
 
 /* --------------------------------------------------------------------------------------------- */
 
-static void
+/*static*/ void           /* @FIXME: this should be public: lua/modules/ui-panel.c wants this */
 do_external_panelize (char *command)
 {
     int link_to_dir, stale_link;

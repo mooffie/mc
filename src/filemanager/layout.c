@@ -50,6 +50,7 @@
 #include "lib/strutil.h"
 #include "lib/widget.h"
 #include "lib/event.h"
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 
 #include "src/consaver/cons.saver.h"
 #include "src/viewer/mcviewer.h"        /* The view widget */
@@ -751,6 +752,8 @@ setup_panels (void)
         widget_set_size (WIDGET (the_hint), height + start_y, 0, 1, COLS);
     else
         widget_set_size (WIDGET (the_hint), 0, 0, 0, 0);
+
+    scripting_trigger_widget_event ("Dialog::layout", WIDGET (midnight_dlg));
 
     update_xterm_title_path ();
 }

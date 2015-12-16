@@ -3088,6 +3088,28 @@ l_dialog_focus (lua_State * L)
  */
 
 /**
+ * Triggered after a dialog layouts itself.
+ *
+ * Triggered after the placement of child widgets has been set.
+ * You may use this event to inject your own widgets into a dialog.
+ *
+ * [note]
+ *
+ * This event is currently triggered only for MC's filemanager and MC's
+ * editor. It is used by the @{git:docker.lua|docker} module to inject
+ * widgets there.
+ *
+ * (In the future we may replace this event with `<<resize>>`.)
+ *
+ * [/note]
+ *
+ * See @{~interface#global events} in the user guide.
+ *
+ * @moniker layout__event
+ * @event
+ */
+
+/**
  * Static dialog properties.
  * @section
  */
