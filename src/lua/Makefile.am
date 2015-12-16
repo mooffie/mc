@@ -36,6 +36,7 @@ libmc_luasrc_la_SOURCES = \
 	modules/ui-custom.c \
 	modules/ui-custom.h \
 	modules/ui-panel.c \
+	modules/ui-viewer.c \
 	modules/utils-bit32.c \
 	modules/utils-text.c \
 	modules/utils-text-transport.c
