@@ -10,6 +10,7 @@ int luaopen_fs_vpath (lua_State * L);
 int luaopen_internal (lua_State * L);
 int luaopen_locale (lua_State * L);
 int luaopen_mc (lua_State * L);
+int luaopen_mc_os (lua_State * L);
 int luaopen_prompts (lua_State * L);
 int luaopen_regex (lua_State * L);
 int luaopen_timer (lua_State * L);
