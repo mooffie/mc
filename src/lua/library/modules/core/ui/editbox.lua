@@ -131,6 +131,166 @@ function ui.Editbox.meta:get_current_word()
 end
 
 ------------------------------------------------------------------------------
+-- Syntax
+-- @section
+
+---
+-- Syntax-highlights a string.
+--
+-- This adds a string (typically a keyword) to the syntax definition. This
+-- makes the string shown in a different style than normal text.
+--
+-- Example:
+--
+--    -- When you're editing source code you sometimes wish to see
+--    -- all the places on the screen where a variable is used.
+--    --
+--    -- In Vim this is done with the * (asterisk) key. Here we use
+--    -- alt-* instead.
+--    --
+--    ui.Editbox.bind('M-*', function(edt)
+--      abortive(edt.current_word, T'Stand on a word, will you?')
+--      edt:add_keyword(edt.current_word, tty.style('white, red'), {range='all'})
+--      edt:redraw()
+--    end)
+--
+-- Another example:
+--
+--    -- Spellcheck the file.
+--    -- Misspelled words will be highlighted.
+--    ui.Editbox.bind('C-c', function(edt)
+--      local f = io.popen('spell < ' .. edt.filename .. ' | sort | uniq')
+--      for word in f:lines() do
+--        edt:add_keyword(word, tty.style('white, red'), {range='spellcheck'})
+--      end
+--      edt:redraw()
+--      f:close()
+--    end)
+--
+-- (For better spellchecking, see @{git:editbox/speller.lua}.)
+--
+-- Another example:
+--
+--    --[[
+--
+--    When you read novels you sometimes want people's names
+--    highlighted.
+--
+--    Look no further :-)
+--
+--    With this script you can add "Actors:" lines to the first
+--    lines of your novel's text to make that happen. Example:
+--
+--       Actors: Benedict Brand Corwin Eric Julian Oberon (male)
+--       Actors: Deirdre Fiona Flora Llewella (female)
+--
+--    It's probably convenient to use this on 256 color terminals
+--    only, where we can pick non-intrusive colors.
+--
+--    ]]
+--
+--    ui.Editbox.bind('<<load>>', function(edt)
+--
+--      local styles = {
+--        -- By specifying only the foreground color we get the default
+--        -- background color, which is usually (not always) the editor's
+--        -- background as well. You may, of course, explicitly specify
+--        -- the background here.
+--        male   = tty.style {color='yellow', hicolor='color159'}, -- Bluish
+--        female = tty.style {color='brown',  hicolor='color219'}, -- Pinkish
+--        object = tty.style {color='white',  hicolor='color186'}, -- Yellowish
+--        place  = tty.style {color='green',  hicolor='color120'}, -- Greenish
+--      }
+--
+--      for line, i in edt:lines() do
+--        -- The following "[o]" is a trick to prevent this line from
+--        -- being recognized as an Actors line.
+--        local names, gender = line:match "Act[o]rs:(.*)%((.*)%)"
+--        if names then
+--          for name in names:gmatch "[^%s,]+" do
+--            edt:add_keyword(name, abortive(styles[gender], 'missing style ' .. gender), {range='all'})
+--          end
+--        end
+--        if i > 50 then  -- look in 50 first lines only.
+--          break
+--        end
+--      end
+--
+--    end)
+--
+-- [info]
+--
+-- You must redraw the editbox, by calling @{ui.redraw|:redraw()}, to see the
+-- effect on the text. For performance reasons this is _not_ done automatically after
+-- each :add_keyword().
+--
+-- Of course, if you're doing your stuff in `<<load>>`, as in the example above, you
+-- don't need to call @{ui.redraw|:redraw()} because the text is drawn afterwards in
+-- any case.
+--
+-- [/info]
+--
+-- [note]
+--
+-- There's currently no remove_keyword() method to cancel the effect
+-- of add_keyword().
+--
+-- To remove any keywords you added you can reset the syntax definition
+-- by doing:
+--
+--    edt.style = edt.style
+--
+-- Or, as a user, press `C-s` twice (the first time disables
+-- syntax highlighting; the second enables it again).
+--
+-- [/note]
+--
+-- @function add_keyword
+-- @args (s, style[, opts])
+-- @param s The string to highlight.
+-- @param style The style to highlight it in.
+-- @param opts An optional table with additional options:
+--
+--  Indent: __whole__ (_true_ by default): Whether the string must be whole (bounded
+--  by non-word characters) or not.
+--
+--  Indent: __range__ (_"default"_ by default): One of "default", "all", "spellcheck",
+--  "!spellcheck". Syntaxes are composed of @{git:c.syntax|contexts}; E.g., in a
+--  programming language the _default_ context holds normal code, another context
+--  is for comments, another for strings, etc. The __range__ option determines
+--  which context(s) the string will be added to. By default the string will be
+--  added to the _default_ context only (which means that it _won't_ be recognized
+--  in comments and strings). You can specify _"all"_ to add it to all contexts;
+--  _"spellcheck"_ to add it to all contexts marked as being appropriate for spell
+--  checking; and _"!spellcheck"_ for those not marked so.
+--
+--  [indent]
+--
+--  __linestart__ (_false_ by default): Whether the string must start
+--  at beginnings of lines.
+--
+--  [/indent]
+
+local WHOLE_WORD_DEFAULT = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_01234567890"
+
+function ui.Editbox.meta:add_keyword(s, style, opts, _dummy)
+  assert(type(s) == 'string', E"I'm expecting a string as the first argument.")
+  assert(type(style) == 'number', E"I'm expecting a style as the second argument.")
+  assert(not opts or type(opts) == 'table', E"I'm expecting a table of options as the third argument.")
+  assert(not _dummy, E"I'm expecting only three arguments. You seem to be using outdated code.")  -- @todo: remove this sometime.
+  opts = opts or {}
+
+  local whole = true
+  if opts.whole ~= nil then
+    whole = opts.whole
+  end
+  local left = (whole and s:find '^[a-zA-Z_0-9]') and WHOLE_WORD_DEFAULT or nil
+  local right = (whole and s:find '[a-zA-Z_0-9]$') and WHOLE_WORD_DEFAULT or nil
+
+  self:_add_keyword(opts.range or 'default', s, left, right, opts.linestart, style)
+end
+
+------------------------------------------------------------------------------
 -- Static functions
 -- @section
 

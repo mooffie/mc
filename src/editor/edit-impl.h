@@ -94,6 +94,14 @@ typedef enum
     EDIT_DO_BACKUP
 } edit_save_mode_t;
 
+typedef enum
+{
+    RANGE_TYPE_DEFAULT = 0,
+    RANGE_TYPE_ANY,
+    RANGE_TYPE_SPELLCHECK,
+    RANGE_TYPE_NOT_SPELLCHECK
+} syntax_range_type_t;
+
 /*** structures declarations (and typedefs of structures)*****************************************/
 
 /* search/replace options */
@@ -268,6 +276,9 @@ void edit_set_filename (WEdit * edit, const vfs_path_t * name_vpath);
 void edit_load_syntax (WEdit * edit, GPtrArray * pnames, const char *type);
 void edit_free_syntax_rules (WEdit * edit);
 int edit_get_syntax_color (WEdit * edit, off_t byte_index);
+gboolean edit_add_syntax_keyword (WEdit * edit, syntax_range_type_t range, const char *kwd_str,
+                                  const char *left, const char *right, gboolean line_start,
+                                  int color);
 
 void book_mark_insert (WEdit * edit, long line, int c);
 gboolean book_mark_query_color (WEdit * edit, long line, int c);

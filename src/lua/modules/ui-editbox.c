@@ -1043,6 +1043,39 @@ l_edit_set_syntax (lua_State * L)
 }
 
 /**
+ * The following is exported to Lua as _add_keyword and is wrapped
+ * by a higher-level Lua function (see editbox.lua for ldoc).
+ */
+static int
+l_edit_add_keyword (lua_State * L)
+{
+    static const char *const range_names[] =
+        { "default", "all", "spellcheck", "!spellcheck", NULL };
+    static int range_values[] =
+        { RANGE_TYPE_DEFAULT, RANGE_TYPE_ANY, RANGE_TYPE_SPELLCHECK, RANGE_TYPE_NOT_SPELLCHECK };
+
+    WEdit *edit;
+    int range;
+    const char *s;
+    const char *left;
+    const char *right;
+    gboolean line_start;
+    int style;
+
+    edit = LUA_TO_EDITBOX (L, 1);
+    range = luaMC_checkoption (L, 2, NULL, range_names, range_values);
+    s = luaL_checkstring (L, 3);
+    left = luaL_optstring (L, 4, NULL);
+    right = luaL_optstring (L, 5, NULL);
+    line_start = lua_toboolean (L, 6);
+    style = luaL_checkint (L, 7);
+
+    lua_pushboolean (L, edit_add_syntax_keyword (edit, range, s, left, right, line_start, style));
+
+    return 1;
+}
+
+/**
  * @section end
  */
 
@@ -1330,6 +1363,7 @@ static const struct luaL_Reg ui_edit_lib[] = {
     { "len", l_edit_len },
     { "get_syntax", l_edit_get_syntax },
     { "set_syntax", l_edit_set_syntax },
+    { "_add_keyword", l_edit_add_keyword },
     { "bookmark_set", l_edit_bookmark_set },
     { "bookmark_clear", l_edit_bookmark_clear },
     { "bookmark_exists", l_edit_bookmark_exists },
