@@ -27,6 +27,7 @@ tests/benchmarks/treewalk/bench.py \
 tests/benchmarks/treewalk/bench.rb \
 tests/benchmarks/treewalk/run.sh \
 tests/nonauto/close_current_dialog.lua \
+tests/nonauto/fileops.lua \
 tests/nonauto/luafs_markdown.lua \
 tests/nonauto/luafs_mirror.lua \
 tests/nonauto/luafs_stamps.lua \
@@ -67,4 +68,5 @@ tests/snippets/mark_wordstar.lua \
 tests/snippets/menu_user_button_focus.lua \
 tests/snippets/quicksearch_asterisk_first.lua \
 tests/snippets/safer_dir_size.lua \
-tests/snippets/sort_by_filesystem.lua
+tests/snippets/sort_by_filesystem.lua \
+tests/snippets/upload_documentation

@@ -58,7 +58,7 @@ local function save_shots()
   local tmpf, tmp_path = fs.temporary_file()
   assert(tmpf:write(header, "return ", devel.pp(shots), "\n"))
   assert(tmpf:close())
-  assert(fs.rename(tmp_path, shots_path))
+  mc.mv(tmp_path, shots_path)
 end
 
 local function load_shots()
