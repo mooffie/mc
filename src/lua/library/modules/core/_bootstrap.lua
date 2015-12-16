@@ -147,6 +147,24 @@ event.bind('core::loaded', function()
   devel.log(":: System loaded ::")
 end)
 
+--------------------------- Let users restart Lua ----------------------------
+
+keymap.bind('C-x l', function()
+  internal.request_lua_restart()
+end)
+
+event.bind('core::before-restart', function()
+  -- The user may have initiated the restart because the system is inconsistent.
+  -- The pcall() is to turn off exceptions, which are likelier in such state.
+  pcall(function()
+    prompts.post(T"Restarting Lua...")
+  end)
+end)
+
+event.bind('core::after-restart', function()
+  prompts.flash(T"Lua has restarted!")
+end)
+
 ------------------------------------------------------------------------------
 
 devel.log(":: Core loaded ::")
