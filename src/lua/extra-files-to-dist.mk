@@ -61,6 +61,7 @@ tests/nonauto/vfs_bug_errno_open.mcs \
 tests/snippets/autodetect_html.lua \
 tests/snippets/center.lua \
 tests/snippets/cfunc.lua \
+tests/snippets/complete_word.lua \
 tests/snippets/dev_clock.lua \
 tests/snippets/dialog_mover.lua \
 tests/snippets/edit_max.lua \
