@@ -471,6 +471,71 @@ l_canvas_get_serial (lua_State * L)
 }
 #endif
 
+/**
+ * Gets the character, and style, displayed at a certain position on the
+ * screen.
+ *
+ * This function is intended for developers: to aid them in writing tests
+ * and automatically generating "screenshots" for code snippets in
+ * documentation. Nevertheless, this shouldn't prevent end-users from using
+ * it for "special effects" and various amusements.
+ *
+ *    -- Redraws the screen in green on black.
+ *
+ *    keymap.bind('C-y', function()
+ *      local c = tty.get_canvas()
+ *      c:set_style(tty.style('green, black'))
+ *
+ *      for y = 0, c:get_rows() - 1 do
+ *        for x = 0, c:get_cols() - 1 do
+ *          c:goto_xy(x,y)
+ *          c:draw_string(c:get_char_at(x,y))
+ *        end
+ *      end
+ *    end
+ *
+ * (For more examples, see the modules @{git:libs/htmlize.lua|samples.libs.htmlize}
+ * (or @{git:bin/htmlize}) and @{git:drop-shadow.lua|samples.accessories.eyecandy.drop-shadow}.)
+ *
+ * When combining characters are used (e.g., diacritics), more than one
+ * character will be returned. If a wide character (e.g., Japanese) is
+ * used, an empty string will be returned for the next screen column.
+ *
+ * **Implementation issues:**
+ *
+ * Currently, if **ncurses** is used, only ASCII characters are supported:
+ * line-drawing characters are returned as "#", and any other characters
+ * are returned as "!". No such limitations exist when using S-Lang.
+ *
+ * @function get_char_at
+ * @args (x, y)
+ */
+static int
+l_canvas_get_char_at (lua_State * L)
+{
+    Canvas *c;
+    int x, y;
+
+    char *s;
+    int style;
+
+    c = LUA_TO_CANVAS (L, 1);
+    x = luaMC_checkcoord (L, 2);
+    y = luaMC_checkcoord (L, 3);
+
+    if (tty_read_screen (y + c->y, x + c->x, &s, &style))
+    {
+        lua_pushstring (L, s);
+        lua_pushinteger (L, style);
+        g_free (s);
+        return 2;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 /* ------------------------------------------------------------------------ */
 
 /* *INDENT-OFF* */
@@ -482,6 +547,7 @@ static const struct luaL_Reg ui_canvas_lib[] = {
     { "set_style", l_canvas_set_style },
     { "fill_rect", l_canvas_fill_rect },
     { "draw_box", l_canvas_draw_box },
+    { "get_char_at",  l_canvas_get_char_at },
 #if DEBUG_CANVAS
     { "get_serial", l_canvas_get_serial },
 #endif
