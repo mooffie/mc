@@ -38,6 +38,9 @@ static const struct luaL_Reg mods[] = {
     { "utils.bit32",  luaopen_utils_bit32 },
     { "c.utils.text", luaopen_utils_text },
     { "c.utils.text.transport", luaopen_utils_text_transport },
+#ifdef USE_INTERNAL_EDIT
+    { NULL,           luaopen_ui_editbox },
+#endif
 #ifdef ENABLE_VFS_LUAFS
     { "luafs.gc",     luaopen_luafs_gc },
 #endif

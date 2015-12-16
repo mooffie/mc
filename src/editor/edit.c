@@ -56,6 +56,7 @@
 #include "lib/timefmt.h"        /* time formatting */
 #include "lib/lock.h"
 #include "lib/widget.h"
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 
 #ifdef HAVE_CHARSET
 #include "lib/charsets.h"       /* get_codepage_id */
@@ -670,7 +671,7 @@ is_blank (const edit_buffer_t * buf, off_t offset)
 /* --------------------------------------------------------------------------------------------- */
 /** returns the offset of line i */
 
-static off_t
+/*static*/ off_t  /* @FIXME: we make this useful function non-static so others can use it. */
 edit_find_line (WEdit * edit, long line)
 {
     long i, j = 0;
@@ -2096,7 +2097,7 @@ edit_init (WEdit * edit, int y, int x, int lines, int cols, const vfs_path_t * f
         edit = g_malloc0 (sizeof (WEdit));
         to_free = TRUE;
 
-        widget_init (WIDGET (edit), y, x, lines, cols, NULL, NULL, NULL);
+        widget_init (WIDGET (edit), y, x, lines, cols, NULL, NULL, "Editbox");
         edit->fullscreen = TRUE;
         edit_save_size (edit);
     }
@@ -2156,6 +2157,10 @@ edit_init (WEdit * edit, int y, int x, int lines, int cols, const vfs_path_t * f
     }
 
     edit_load_macro_cmd (edit);
+
+    /* Alternatively we can put this in MSG_INIT, but then it won't get
+     * triggered for editboxes that aren't inserted into dialogs. */
+    scripting_trigger_widget_event ("Editbox::load", WIDGET (edit));
 
     return edit;
 }
