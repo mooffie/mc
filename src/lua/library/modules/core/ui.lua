@@ -1156,6 +1156,10 @@ function DlgMeta:on_cancel()
   self.result = nil
 end
 
+function DlgMeta:popup(...)
+  return require('ui.popup').popup(self, ...)
+end
+
 --[[-
 
 Finds a widget among the children.
