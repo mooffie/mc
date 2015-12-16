@@ -54,9 +54,17 @@ tests/nonauto/vfs_bug_errno_chdir.mcs \
 tests/nonauto/vfs_bug_errno_open.mcs \
 tests/snippets/dev_clock.lua \
 tests/snippets/dialog_mover.lua \
+tests/snippets/edit_max.lua \
 tests/snippets/find_file_title.lua \
 tests/snippets/fop_move_basename.lua \
+tests/snippets/fop_move_jump.lua \
+tests/snippets/fop_move_tail.lua \
 tests/snippets/hotlist_right_as_enter.lua \
 tests/snippets/listbox_AZ.lua \
 tests/snippets/listbox_digits.lua \
-tests/snippets/menu_user_button_focus.lua
+tests/snippets/mark_files_by_contents.lua \
+tests/snippets/mark_wordstar.lua \
+tests/snippets/menu_user_button_focus.lua \
+tests/snippets/quicksearch_asterisk_first.lua \
+tests/snippets/safer_dir_size.lua \
+tests/snippets/sort_by_filesystem.lua
