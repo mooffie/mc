@@ -1,0 +1,29 @@
+-- Demonstrates an Editbox embedded in a normal dialog.
+
+local function test()
+  local dlg = ui.Dialog()
+
+  local ed = ui.Editbox {cols=80, rows=15}
+  dlg:add(ed)
+
+  local btn = ui.Button{T"Count &lines", on_click=function()
+    alert(ed.max_line)
+  end}
+
+  dlg:add(ui.Label(
+[[This example shows that, currently, Editbox in a custom dialog
+is very far from perfect: it draws a status line, the buttons'
+hotkeys ('l' and 'c') have precedence (Input widgets don't have
+this problem because of W_IS_INPUT), and we can't assign 'syntax'
+to it because here it isn't associated with a file.]]))
+
+  -- Note also that this Editbox doesn't support mouse events. This is
+  -- explained in ui-editbox.c:edit_constructor().
+
+  dlg:add(ui.Buttons():add(btn, ui.CancelButton()))
+  dlg:run()
+end
+
+test()
+
+-- vim: set ft=lua:
