@@ -1043,6 +1043,27 @@ l_edit_set_syntax (lua_State * L)
 }
 
 /**
+ * Returns the @{~mod:tty#styles|style} at a certain position.
+ *
+ * See usage example at @{tty.destruct_style}.
+ *
+ * @function get_style_at
+ * @param pos Position in buffer (1-based; byte-oriented).
+ */
+static int
+l_edit_get_style_at (lua_State * L)
+{
+    WEdit *edit;
+    off_t pos;
+
+    edit = LUA_TO_EDITBOX (L, 1);
+    pos = luaL_checki (L, 2);
+
+    lua_pushinteger (L, edit_get_syntax_color (edit, pos - 1));
+    return 1;
+}
+
+/**
  * The following is exported to Lua as _add_keyword and is wrapped
  * by a higher-level Lua function (see editbox.lua for ldoc).
  */
@@ -1377,6 +1398,7 @@ static const struct luaL_Reg ui_edit_lib[] = {
     { "set_fullscreen", l_edit_set_fullscreen },
     { "focus", l_edit_focus },
     { "load", l_edit_load },
+    { "get_style_at", l_edit_get_style_at },
     { "to_tty", l_edit_to_tty },
     { "is_utf8", l_edit_is_utf8 },
     { NULL, NULL }
