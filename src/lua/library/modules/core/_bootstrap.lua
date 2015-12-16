@@ -64,6 +64,7 @@ autoload('mc', 'mc')
 autoload('devel', 'devel')
 autoload('timer', 'timer')
 autoload('event', 'event')
+autoload('fields', 'fields')
 autoload('tty', 'tty')
 autoload('ui', 'ui')
 autoload('keymap', 'keymap')
@@ -81,6 +82,10 @@ require('regex').expose()
 
 -- We can't auto-load the ui module. A comment in 'ui.lua' explains why.
 require('ui')
+
+-- Let the 'fields' module install its 'core::after-restart' handler.
+-- See explanation there.
+require('fields')
 
 ----------------------------------- Timers -----------------------------------
 
