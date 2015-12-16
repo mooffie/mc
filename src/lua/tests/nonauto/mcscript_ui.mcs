@@ -1,0 +1,9 @@
+
+-- Tests whether we can enter UI mode implicitly. A dialog box should appear.
+
+prompts.query("Who do you like more?", {
+  {"mommy"},
+  {"daddy"}
+})
+
+-- vim: set ft=lua:
