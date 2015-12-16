@@ -44,6 +44,9 @@ modules/samples/apps/calc/README.md \
 modules/samples/apps/calc/eval.lua \
 modules/samples/apps/calc/init.lua \
 modules/samples/apps/calc/utils.lua \
+modules/samples/filesystems/mht.lua \
+modules/samples/filesystems/mysql.lua \
+modules/samples/filesystems/sqlite.lua \
 modules/samples/games/blocks/board.lua \
 modules/samples/games/blocks/dialog.lua \
 modules/samples/games/blocks/init.lua \
@@ -53,6 +56,7 @@ modules/samples/games/blocks/setups/classicwide.lua \
 modules/samples/games/blocks/setups/pieces/pentominos.lua \
 modules/samples/games/blocks/setups/pieces/tetrominos.lua \
 modules/samples/games/blocks/setups/pieces/tinies.lua \
+modules/samples/libs/os.lua \
 modules/samples/screensavers/clocks/analog.lua \
 modules/samples/screensavers/simplest.lua \
 modules/samples/screensavers/utils.lua \
