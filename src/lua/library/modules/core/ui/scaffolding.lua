@@ -158,7 +158,7 @@ end
 
 ---------------------------------- Binding -----------------------------------
 
---- Binds functions to keys.
+--- Binds functions to keys and events.
 --
 -- Use this to execute a function when a certain @{~mod:keymap!key-sequences|key sequence}
 -- is pressed in a certain class of widgets:
@@ -167,7 +167,13 @@ end
 --      alert("You're standing on " .. pnl.current)
 --    end)
 --
--- The bound function is invoked with the widget as its first
+-- Or when a certain @{event} occurs:
+--
+--    ui.Panel.bind('<<load>>', function(pnl)
+--      alert("You're browsing " .. pnl.dir)
+--    end)
+--
+-- In both cases the bound function is invoked with the widget as its first
 -- (and only) argument.
 --
 -- @function bind
@@ -180,6 +186,10 @@ local function bind_key(widget_type, keyseq, callback)
   callback.condition = function() return ui.current_widget(widget_type) end
   callback.arg = callback.condition
   keymap.bind(keyseq, callback)
+end
+
+local function bind_event(widget_type, event_name, callback)
+  event.bind(widget_type .. "::" .. event_name, callback)
 end
 
 ------------------------------------------------------------------------------
@@ -226,9 +236,14 @@ function ui._setup_widget_class(klass_name)
   -- Enable static properties: lets you type ui.Panel.left instead of ui.Panel.get_left().
   vbfy_singleton(klass)
 
-  klass.bind = function(keyseq, ...)
-    assert(type(keyseq) == "string", E"string expected as first argument to bind()")
-    bind_key(klass_name, keyseq, ...)
+  klass.bind = function(keyseq_or_event, ...)
+    assert(type(keyseq_or_event) == "string", E"string expected as first argument to bind()")
+    local event_name = keyseq_or_event:match '^<<(.*)>>$'
+    if event_name then
+      bind_event(klass_name, event_name, ...)
+    else
+      bind_key(klass_name, keyseq_or_event, ...)
+    end
   end
 
   klass.subclass = function(new_klass_name)

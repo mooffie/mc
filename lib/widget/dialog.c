@@ -42,8 +42,9 @@
 #include "lib/strutil.h"
 #include "lib/fileloc.h"        /* MC_HISTORY_FILE */
 #include "lib/event.h"          /* mc_event_raise() */
+#include "lib/scripting.h"      /* scripting_trigger_widget_event(), scripting_notify_on_widget_destruction() */
 #ifdef ENABLE_LUA
-#include "lib/lua/plumbing.h"   /* mc_lua_eat_key(), mc_lua_notify_on_widget_destruction() */
+#include "lib/lua/plumbing.h"   /* mc_lua_eat_key() */
 #endif
 
 #include "lib/widget.h"
@@ -1110,6 +1111,7 @@ dlg_redraw (WDialog * h)
 
     send_message (h, NULL, MSG_DRAW, 0, NULL);
     dlg_broadcast_msg (h, MSG_DRAW);
+    scripting_trigger_widget_event ("Dialog::draw", WIDGET (h));        /* Can be used to add decoration, like drop-shadow. */
     update_cursor (h);
 }
 
@@ -1157,6 +1159,17 @@ dlg_init (WDialog * h)
     widget_set_state (WIDGET (h->current->data), WST_FOCUSED, TRUE);
 
     h->ret_value = 0;
+
+    /* The <<Dialog::open>> event can be used to modify widgets' data,
+     * notify the user with sound on alert boxes, TTS the title, etc.
+     *
+     * This event also allows for "automation": the programmer can submit
+     * or cancel forms in this event (by calling dialog:close() or
+     * dialog:command 'cancel'). To make this possible, we trigger this
+     * event *after* the `h->ret_value = 0` line (otherwise the effect
+     * of a CK_Cancel command issued in the event handler would get
+     * overwritten). */
+    scripting_trigger_widget_event ("Dialog::open", WIDGET (h));
 }
 
 /* --------------------------------------------------------------------------------------------- */
@@ -1186,6 +1199,10 @@ dlg_run_done (WDialog * h)
 
     if (widget_get_state (WIDGET (h), WST_CLOSED))
     {
+        if (h->ret_value != B_CANCEL && h->ret_value != B_EXIT)
+            scripting_trigger_widget_event ("Dialog::submit", WIDGET (h));
+        scripting_trigger_widget_event ("Dialog::close", WIDGET (h));
+
         send_message (h, h->current->data, MSG_END, 0, NULL);
         if (!widget_get_state (WIDGET (h), WST_MODAL))
             dialog_switch_remove (h);
@@ -1219,9 +1236,7 @@ dlg_destroy (WDialog * h)
     {
         /* Inform script engines of dead widgets. */
         dlg_broadcast_msg (h, MSG_BEFORE_DESTROY);
-#ifdef ENABLE_LUA
-        mc_lua_notify_on_widget_destruction (WIDGET (h));
-#endif
+        scripting_notify_on_widget_destruction (WIDGET (h));
     }
     dlg_broadcast_msg (h, MSG_DESTROY);
     g_list_free_full (h->widgets, g_free);

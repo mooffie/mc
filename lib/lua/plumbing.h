@@ -32,6 +32,7 @@ typedef struct Widget Widget;
 
 gboolean mc_lua_eat_key (int keycode);
 void mc_lua_trigger_event (const char *event_name);
+void mc_lua_trigger_event__with_widget (const char *event_name, Widget * w);
 void mc_lua_notify_on_widget_destruction (Widget * w);  /* implemented in ui-impl.c */
 gboolean mc_lua_ui_is_ready (void);
 

@@ -177,6 +177,24 @@ arg = argv
 -- @moniker ui::ready
 -- @event
 
+--- Triggered when the UI is restored.
+--
+-- Whenever a user returns from running a shell command, or resumes a
+-- suspended MC process, the UI is restored.
+--
+-- For example, the @{git:screensavers/utils.lua|screensaver} uses this
+-- event to reschedule the animation.
+--
+-- @moniker ui::restored
+-- @event
+
+--- Triggered when the user changes the skin.
+--
+-- See explanation in @{tty.style}.
+--
+-- @moniker ui::skin-change
+-- @event
+
 ---
 -- [Used internally].
 --

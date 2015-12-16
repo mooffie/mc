@@ -17,6 +17,7 @@
 
 #include "capi.h"
 #include "capi-safecall.h"
+#include "ui-impl.h"            /* luaUI_push_widget() */
 #include "utilx.h"              /* E_() */
 
 #ifdef HAVE_LUAJIT
@@ -196,6 +197,24 @@ mc_lua_trigger_event (const char *event_name)
     {
         lua_pushstring (Lg, event_name);
         luaMC_safe_call (Lg, 1, 0);
+    }
+}
+
+void
+mc_lua_trigger_event__with_widget (const char *event_name, Widget * w)
+{
+    /*
+     * main.c uses message() to display some error message boxes. Some of these
+     * boxes are displayed before the UI is ready in Lua's opinion
+     * (mc_lua_ui_is_ready()), a stage where a user event handler won't be
+     * able to use many UI related functions (e.g., tty.style()), so we
+     * simply disable triggering UI events at that early stage.
+     */
+    if (mc_lua_ui_is_ready () && luaMC_get_system_callback (Lg, "event::trigger"))
+    {
+        lua_pushstring (Lg, event_name);
+        luaUI_push_widget (Lg, w, TRUE);
+        luaMC_safe_call (Lg, 2, 0);
     }
 }
 

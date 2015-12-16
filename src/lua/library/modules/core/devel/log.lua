@@ -16,6 +16,12 @@ local f
 -- The output to the log file isn't buffered: it will be written out
 -- immediately.
 --
+-- Example:
+--
+--    ui.Panel.bind('<<load>>', function(pnl)
+--      devel.log('the folder ' .. pnl.dir .. ' has been read.')
+--    end)
+--
 function M.log(msg)
 
   if not initialized then
