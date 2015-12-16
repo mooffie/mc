@@ -9,6 +9,7 @@ doc/guide/80-installation.md \
 misc/bin/calc \
 misc/bin/clock \
 misc/bin/game-blocks \
+misc/bin/mcscanimage \
 tests/README \
 tests/auto/bit32.mcs \
 tests/auto/fs.mcs \
@@ -70,6 +71,7 @@ tests/snippets/fop_move_jump.lua \
 tests/snippets/fop_move_tail.lua \
 tests/snippets/goto_line_col.lua \
 tests/snippets/hotlist_right_as_enter.lua \
+tests/snippets/input_sanitize.lua \
 tests/snippets/listbox_AZ.lua \
 tests/snippets/listbox_digits.lua \
 tests/snippets/mark_files_by_contents.lua \
