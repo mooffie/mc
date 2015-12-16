@@ -195,6 +195,26 @@ arg = argv
 -- @moniker ui::skin-change
 -- @event
 
+--- Triggered after Lua has been restarted (e.g., by pressing `C-x l`, by default).
+--
+--    -- Sound a beep so the user knows Lua's been
+--    -- restarted successfully.
+--    event.bind('core::after-restart', function()
+--      os.execute('beep -l 4')
+--    end)
+--
+-- See also @{core::before-restart}.
+--
+-- @moniker core::after-restart
+-- @event
+
+--- Triggered just before Lua gets restarted.
+--
+-- See also @{core::after-restart}.
+--
+-- @moniker core::before-restart
+-- @event
+
 ---
 -- [Used internally].
 --

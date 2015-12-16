@@ -14,6 +14,7 @@
 #include "lib/mcconfig.h"       /* mc_config_get_data_path() */
 #include "lib/event.h"
 #include "lib/widget.h"         /* message(), Widget */
+#include "lib/util.h"           /* Q_() */
 
 #include "capi.h"
 #include "capi-safecall.h"
@@ -31,7 +32,9 @@
 #define BOOTSTRAP_FILE "modules/core/_bootstrap.lua"
 
 static gboolean ui_is_ready = FALSE;
+static gboolean restart_requested = FALSE;      /* Have we been requested to restart Lua? */
 static gboolean lua_core_found = FALSE;
+static gboolean is_restarting = FALSE;
 
 /* -------------------------- Meta information ---------------------------- */
 
@@ -161,6 +164,83 @@ mc_lua_shutdown (void)
     Lg = NULL;                  /* For easier debugging, in case somebody tries to use Lua after shutdown. */
 }
 
+gboolean
+mc_lua_is_restarting (void)
+{
+    return is_restarting;
+}
+
+static void
+restart (void)
+{
+    is_restarting = TRUE;
+    mc_lua_trigger_event ("core::before-restart");
+    mc_lua_shutdown ();
+
+    /* and back on: */
+
+    mc_lua_init ();
+    mc_lua_load ();
+    mc_lua_trigger_event ("core::after-restart");
+    is_restarting = FALSE;
+}
+
+/**
+ * A mechanism letting scripts restart Lua.
+ *
+ * It is exposed to Lua as 'internal.request_lua_restart()' (see
+ * documentation there).
+ */
+void
+mc_lua_request_restart (void)
+{
+    restart_requested = TRUE;
+}
+
+/**
+ * Restarts Lua, if a script asked us to.
+ */
+static void
+check_for_restart (void)
+{
+    if (restart_requested)      /* The script wants us to restart. */
+    {
+        restart_requested = FALSE;
+
+        /*
+         * It's only safe for us to restart Lua when the stack is
+         * empty. Why? Imagine either of the following:
+         *
+         *    keymap.bind('C-y', function()
+         *      ui.Dialog():run()
+         *      print 'hi'
+         *    end)
+         *
+         *    timer.set_timeout(function()
+         *      ui.Dialog():run()
+         *      print 'hi'
+         *    end, 1000*5)
+         *
+         * The user hits C-y, or the timer fires. The stack now can't be
+         * empty (because luaMC_safe_call() is in progress, running our
+         * anonymous function). A dialog opens (the empty one) and the
+         * user now has a chance (because of the event loop) to hit the
+         * key requesting that Lua be restarted. He does this. He closes
+         * the dialog. The "old" lua_State now continues to "print 'hi'".
+         * But this old lua_State is kaput already, and so we crash.
+         */
+        if (lua_gettop (Lg) == 0)
+            restart ();
+        else
+            /* "Window" in this error message refers to an editor or viewer
+             * started by Lua (e.g., by doing mc.edit() or devel.view()). */
+            message (D_ERROR | D_CENTER, Q_ ("DialogTitle|Lua"),
+                     _
+                     ("You may not restart Lua from a dialog, or a window, opened by Lua.\n"
+                      "First close, or switch out of, this window."));
+    }
+}
+
 /* ------------------------------- Runtime -------------------------------- */
 
 /**
@@ -182,6 +262,8 @@ mc_lua_eat_key (int keycode)
             /* If some Lua error stopped the script (an alert will be shown),
              * that's still no reason to revert to the key's default action. */
             consumed = TRUE;
+
+        check_for_restart ();
     }
 
     return consumed;
