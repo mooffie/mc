@@ -35,6 +35,7 @@ tests/nonauto/ui1.mcs \
 tests/nonauto/ui2.mcs \
 tests/nonauto/ui_canvas.mcs \
 tests/nonauto/ui_canvas_mouse.mcs \
+tests/nonauto/ui_dialog_tryup.lua \
 tests/nonauto/ui_filechooser.mcs \
 tests/nonauto/ui_gc.lua \
 tests/nonauto/ui_gc2.mcs \
@@ -48,6 +49,9 @@ tests/nonauto/vfs_bug_errno_chdir.mcs \
 tests/nonauto/vfs_bug_errno_open.mcs \
 tests/snippets/dev_clock.lua \
 tests/snippets/dialog_mover.lua \
+tests/snippets/find_file_title.lua \
+tests/snippets/fop_move_basename.lua \
 tests/snippets/hotlist_right_as_enter.lua \
 tests/snippets/listbox_AZ.lua \
-tests/snippets/listbox_digits.lua
+tests/snippets/listbox_digits.lua \
+tests/snippets/menu_user_button_focus.lua
