@@ -4,6 +4,9 @@ doc/guide/10-getting-started.md \
 doc/guide/40-user-interface.md \
 doc/guide/60-standalone.md \
 doc/guide/80-installation.md \
+misc/bin/calc \
+misc/bin/clock \
+misc/bin/game-blocks \
 tests/README \
 tests/auto/bit32.mcs \
 tests/auto/fs.mcs \
@@ -43,6 +46,8 @@ tests/nonauto/ui_subclass.mcs \
 tests/nonauto/vfs_bug_crash.mcs \
 tests/nonauto/vfs_bug_errno_chdir.mcs \
 tests/nonauto/vfs_bug_errno_open.mcs \
+tests/snippets/dev_clock.lua \
+tests/snippets/dialog_mover.lua \
 tests/snippets/hotlist_right_as_enter.lua \
 tests/snippets/listbox_AZ.lua \
 tests/snippets/listbox_digits.lua
