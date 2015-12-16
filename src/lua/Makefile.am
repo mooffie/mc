@@ -33,7 +33,8 @@ libmc_luasrc_la_SOURCES = \
 	modules/ui-custom.c \
 	modules/ui-custom.h \
 	modules/utils-bit32.c \
-	modules/utils-text.c
+	modules/utils-text.c \
+	modules/utils-text-transport.c
 
 AM_CPPFLAGS = -I$(top_srcdir) $(GLIB_CFLAGS) $(PCRE_CPPFLAGS) $(LUA_CFLAGS)
 
