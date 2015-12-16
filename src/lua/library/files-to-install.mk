@@ -100,6 +100,7 @@ modules/samples/editbox/linter.lua \
 modules/samples/editbox/locking.lua \
 modules/samples/editbox/modeline.lua \
 modules/samples/editbox/scrollbar.lua \
+modules/samples/editbox/speller.lua \
 modules/samples/editbox/unicodedata.lua \
 modules/samples/editbox/wordstar.lua \
 modules/samples/fields/better-size.lua \
@@ -127,6 +128,7 @@ modules/samples/libs/locking-impl.lua \
 modules/samples/libs/mplayer.lua \
 modules/samples/libs/os.lua \
 modules/samples/libs/scrollbar.lua \
+modules/samples/libs/speller.lua \
 modules/samples/screensavers/clocks/analog.lua \
 modules/samples/screensavers/simplest.lua \
 modules/samples/screensavers/utils.lua \

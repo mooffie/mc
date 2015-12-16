@@ -58,6 +58,7 @@ tests/nonauto/ui_subclass.mcs \
 tests/nonauto/vfs_bug_crash.mcs \
 tests/nonauto/vfs_bug_errno_chdir.mcs \
 tests/nonauto/vfs_bug_errno_open.mcs \
+tests/snippets/actors.lua \
 tests/snippets/autodetect_html.lua \
 tests/snippets/center.lua \
 tests/snippets/cfunc.lua \
@@ -84,4 +85,8 @@ tests/snippets/search_by_regex.lua \
 tests/snippets/sort_by_filesystem.lua \
 tests/snippets/superhome.lua \
 tests/snippets/supertab.lua \
+tests/snippets/syntax-c-glib.lua \
+tests/snippets/syntax-lua.lua \
+tests/snippets/syntax-php.lua \
+tests/snippets/syntax-vala.lua \
 tests/snippets/upload_documentation
