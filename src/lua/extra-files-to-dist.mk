@@ -9,6 +9,7 @@ doc/guide/80-installation.md \
 misc/bin/calc \
 misc/bin/clock \
 misc/bin/game-blocks \
+misc/bin/htmlize \
 misc/bin/mcscanimage \
 tests/README \
 tests/auto/bit32.mcs \
