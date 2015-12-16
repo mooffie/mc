@@ -17,6 +17,7 @@
 static const struct luaL_Reg mods[] = {
 /* *INDENT-OFF* */
     { "conf",         luaopen_conf },
+    { "c.fields",     luaopen_fields },
     { "c.fs",         luaopen_fs },
     { "fs.dir",       luaopen_fs_dir },
     { "fs.filedes",   luaopen_fs_filedes },

@@ -369,5 +369,26 @@ function ui.Panel.meta:glob_or_unglob(positive, gpat, opts)
 end
 
 ------------------------------------------------------------------------------
+-- Static panel functions.
+--
+-- @section panel-static
+
+---
+-- Registers a field.
+--
+-- The subject of creating fields is covered extensively in the
+-- @{fields|reference} and user guide.
+--
+-- @function ui.Panel.register_field
+-- @args (info)
+
+function ui.Panel.register_field(...)
+  return require('fields').register_field(...)
+end
+
+---
+-- @section end
+
+------------------------------------------------------------------------------
 
 ui._setup_widget_class("Panel")
