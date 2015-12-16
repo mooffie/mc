@@ -8,7 +8,9 @@ Installation:
 
 Usage:
 
-- Type "cd whatever.the.file.name/sqlite://".
+- Stand on a *.sqlite (or *.sq3) file and press ENTER.
+
+- Or type "cd whatever.the.file.name/sqlite://".
 
 - Or add the following to your extension file:
 
@@ -40,6 +42,9 @@ local commands = {
 local sqlitefs = {
 
   prefix = "sqlite",
+
+  -- @FIXME: We should instead use "type='^SQLite 3.x database'" once we support it.
+  iglob = '*.{sq3,sqlite}',
 
   readdir = function(session, p)
     local files = {}
