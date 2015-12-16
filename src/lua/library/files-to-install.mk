@@ -50,6 +50,7 @@ modules/core/utils/text/transport.lua \
 modules/samples/accessories/clock.lua \
 modules/samples/accessories/dialog-drag.lua \
 modules/samples/accessories/dialog-icons.lua \
+modules/samples/accessories/eyecandy/drop-shadow.lua \
 modules/samples/accessories/filter-as-you-type.lua \
 modules/samples/accessories/find-as-you-type.lua \
 modules/samples/accessories/follow.lua \
@@ -124,6 +125,7 @@ modules/samples/libs/docker-editor.lua \
 modules/samples/libs/docker.lua \
 modules/samples/libs/editbox-read-only.lua \
 modules/samples/libs/git.lua \
+modules/samples/libs/htmlize-canvas.lua \
 modules/samples/libs/htmlize.lua \
 modules/samples/libs/locking-impl.lua \
 modules/samples/libs/mplayer.lua \

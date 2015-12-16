@@ -1,12 +1,16 @@
 --[[
 
-Turns a syntax-highlighted Editbox into HTML.
+Turns the screen, or a syntax-highlighted Editbox, into HTML.
 
 Usage example:
 
     local htmlize = require('samples.libs.htmlize')
 
     htmlize.palette = htmlize.palettes.mooffie   -- Optional. Use a nice dark background instead of bluish one.
+
+    keymap.bind('C-y', function()
+      htmlize.htmlize_to_file(tty.get_canvas(), '/tmp/out.html')
+    end)
 
     ui.Editbox.bind('C-y', function(edt)
       htmlize.htmlize_to_file(edt, '/tmp/out.html')
@@ -279,11 +283,23 @@ local function html_escape(s)
 end
 
 ---
--- Htmlizes an Editbox.
+-- Htmlizes an Editbox or a Canvas.
+--
+-- The object htmlized has to support the following methods:
+--
+--  * get_style_at
+--  * len
+--  * sub
 --
 -- Returns two strings: the CSS, and the HTML.
 --
 function M.htmlize(edt)
+
+  if not edt.get_style_at then
+    require('samples.libs.htmlize-canvas')
+  end
+
+  assert(edt.get_style_at, "I can only HTMLize certain objects, like ui.Editbox and ui.Canvas.")
 
   local segs = segmentize(edt)
   --devel.view(segs)
@@ -323,7 +339,7 @@ end
 ---
 -- Htmlizes into a file.
 --
--- The input may be an Editbox or a string denoting a path
+-- The input may be an Editbox, a Canvas, or a string denoting a path
 -- to some source file (which will be loaded into a non-visible Editbox
 -- and htmlized).
 --
