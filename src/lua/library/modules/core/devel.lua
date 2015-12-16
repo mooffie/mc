@@ -8,6 +8,26 @@ devel.autoload('ensure', 'devel.ensure')
 devel.autoload('log', { 'devel.log', 'log' })
 
 ---
+-- Sends SIGSTOP to the MC process.
+--
+-- This causes a debugger (e.g., GDB) to kick in. This lets you examine the C
+-- stack trace and variables to understand why some Lua code was called.
+--
+-- Additionally, before the signal is sent, the Lua stack trace is printed out
+-- using @{log}.
+--
+-- Note-short: This is intended for MC's core C developers. Others will find
+-- no use for this function.
+--
+-- Info: If no debugger is running, MC will just seem to hang.
+-- do `kill -SIGCONT {pid}` to resume the process.
+--
+function devel.stop()
+  devel.log("\n----------------------\n" .. debug.traceback(2))
+  os.kill(os.getpid(), "SIGSTOP")
+end
+
+---
 -- "Pretty prints" a value. It doesn't actually do any printing: it returns a string.
 --
 -- This function can handle complex structures: circular references in
