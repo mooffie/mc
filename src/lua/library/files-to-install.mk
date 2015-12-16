@@ -68,6 +68,10 @@ modules/samples/apps/calc/README.md \
 modules/samples/apps/calc/eval.lua \
 modules/samples/apps/calc/init.lua \
 modules/samples/apps/calc/utils.lua \
+modules/samples/fields/better-size.lua \
+modules/samples/fields/bidi.lua \
+modules/samples/fields/git.lua \
+modules/samples/fields/mplayer.lua \
 modules/samples/filesystems/mht.lua \
 modules/samples/filesystems/mysql.lua \
 modules/samples/filesystems/sqlite.lua \
@@ -82,6 +86,7 @@ modules/samples/games/blocks/setups/pieces/tetrominos.lua \
 modules/samples/games/blocks/setups/pieces/tinies.lua \
 modules/samples/libs/docker.lua \
 modules/samples/libs/git.lua \
+modules/samples/libs/mplayer.lua \
 modules/samples/libs/os.lua \
 modules/samples/libs/scrollbar.lua \
 modules/samples/screensavers/clocks/analog.lua \
