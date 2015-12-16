@@ -30,4 +30,23 @@ modules/core/utils/magic.lua \
 modules/core/utils/path.lua \
 modules/core/utils/table.lua \
 modules/core/utils/text.lua \
-modules/samples/accessories/find-as-you-type.lua
+modules/samples/accessories/clock.lua \
+modules/samples/accessories/find-as-you-type.lua \
+modules/samples/accessories/ruler.lua \
+modules/samples/apps/calc/README.md \
+modules/samples/apps/calc/eval.lua \
+modules/samples/apps/calc/init.lua \
+modules/samples/apps/calc/utils.lua \
+modules/samples/games/blocks/board.lua \
+modules/samples/games/blocks/dialog.lua \
+modules/samples/games/blocks/init.lua \
+modules/samples/games/blocks/setups/advanced.lua \
+modules/samples/games/blocks/setups/classic.lua \
+modules/samples/games/blocks/setups/classicwide.lua \
+modules/samples/games/blocks/setups/pieces/pentominos.lua \
+modules/samples/games/blocks/setups/pieces/tetrominos.lua \
+modules/samples/games/blocks/setups/pieces/tinies.lua \
+modules/samples/screensavers/clocks/analog.lua \
+modules/samples/screensavers/simplest.lua \
+modules/samples/screensavers/utils.lua \
+modules/samples/ui/extlabel.lua
