@@ -50,6 +50,12 @@ function M.create_installer(run)
       return false
     end)
 
+    -- 'ui::restored' is triggered when the user comes back from running
+    -- a shell command. If this command took, say, hours, the screensaver
+    -- will kick in immediately. So on every such event too we "postpone"
+    -- the screensaver.
+    event.bind('ui::restored', reschedule)
+
   end
 
 end

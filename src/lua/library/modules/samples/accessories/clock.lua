@@ -71,6 +71,10 @@ local function tick()
   tty.refresh()
 end
 
+event.bind('ui::skin-change', function()
+  style = nil
+end)
+
 function M.install()
   timer.set_interval(tick, M.interval)
   M.install = function() end  -- Don't let people install() us more than once.
