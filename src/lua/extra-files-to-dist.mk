@@ -28,6 +28,8 @@ tests/benchmarks/treewalk/bench.py \
 tests/benchmarks/treewalk/bench.rb \
 tests/benchmarks/treewalk/run.sh \
 tests/nonauto/close_current_dialog.lua \
+tests/nonauto/docking_editor.lua \
+tests/nonauto/editbox_instance.mcs \
 tests/nonauto/fileops.lua \
 tests/nonauto/luafs_markdown.lua \
 tests/nonauto/luafs_mirror.lua \
@@ -38,6 +40,7 @@ tests/nonauto/mcscript_error.mcs \
 tests/nonauto/mcscript_error2.mcs \
 tests/nonauto/mcscript_ui.mcs \
 tests/nonauto/mcscript_uiopen.mcs \
+tests/nonauto/tty_max_styles.lua \
 tests/nonauto/ui1.mcs \
 tests/nonauto/ui2.mcs \
 tests/nonauto/ui_canvas.mcs \
@@ -54,13 +57,18 @@ tests/nonauto/ui_subclass.mcs \
 tests/nonauto/vfs_bug_crash.mcs \
 tests/nonauto/vfs_bug_errno_chdir.mcs \
 tests/nonauto/vfs_bug_errno_open.mcs \
+tests/snippets/autodetect_html.lua \
+tests/snippets/center.lua \
+tests/snippets/cfunc.lua \
 tests/snippets/dev_clock.lua \
 tests/snippets/dialog_mover.lua \
 tests/snippets/edit_max.lua \
+tests/snippets/edit_read_only.lua \
 tests/snippets/find_file_title.lua \
 tests/snippets/fop_move_basename.lua \
 tests/snippets/fop_move_jump.lua \
 tests/snippets/fop_move_tail.lua \
+tests/snippets/goto_line_col.lua \
 tests/snippets/hotlist_right_as_enter.lua \
 tests/snippets/listbox_AZ.lua \
 tests/snippets/listbox_digits.lua \
@@ -69,5 +77,8 @@ tests/snippets/mark_wordstar.lua \
 tests/snippets/menu_user_button_focus.lua \
 tests/snippets/quicksearch_asterisk_first.lua \
 tests/snippets/safer_dir_size.lua \
+tests/snippets/search_by_regex.lua \
 tests/snippets/sort_by_filesystem.lua \
+tests/snippets/superhome.lua \
+tests/snippets/supertab.lua \
 tests/snippets/upload_documentation
