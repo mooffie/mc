@@ -96,6 +96,7 @@ modules/samples/colon/commands/panelize.lua \
 modules/samples/colon/commands/visren.lua \
 modules/samples/colon/defaults.lua \
 modules/samples/colon/init.lua \
+modules/samples/demo.lua \
 modules/samples/editbox/access-warning.lua \
 modules/samples/editbox/dictionary.lua \
 modules/samples/editbox/funclist.lua \
