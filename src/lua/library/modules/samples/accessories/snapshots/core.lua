@@ -61,7 +61,7 @@ local header = [[
 ]]
 local function save_shots()
   local temp_path = fs.temporary_string_file(header, "return ", devel.pp(shots), "\n")
-  assert(fs.rename(temp_path, shots_path))
+  mc.mv(temp_path, shots_path)
 end
 
 local function load_shots()
