@@ -81,6 +81,9 @@ When configure finishes, it prints a summary:
 Configuration:
 
   Compiler:                   gcc -std=gnu99
+  Compiler flags:             ...
+  File system:                Midnight Commander Virtual Filesystem
+&nbsp;                             cpio, tar, sfs, extfs, ftp, fish, <b>luafs</b>
   ...
   Internal editor:            yes
   Diff viewer:                yes

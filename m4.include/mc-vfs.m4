@@ -18,6 +18,7 @@ m4_include([m4.include/vfs/mc-vfs-undelfs.m4])
 m4_include([m4.include/vfs/mc-vfs-tarfs.m4])
 m4_include([m4.include/vfs/mc-vfs-cpiofs.m4])
 m4_include([m4.include/vfs/mc-vfs-samba.m4])
+m4_include([m4.include/vfs/mc-vfs-luafs.m4])
 
 dnl mc_VFS_CHECKS
 dnl   Check for various functions needed by libvfs.
@@ -73,6 +74,7 @@ AC_DEFUN([mc_VFS_CHECKS],
     mc_VFS_EXTFS
     mc_VFS_FISH
     mc_VFS_FTP
+    mc_VFS_LUAFS
     mc_VFS_SFS
     mc_VFS_SFTP
     mc_VFS_SMB

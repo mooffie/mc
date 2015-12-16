@@ -235,8 +235,17 @@ function M.temporary_string_file(...)
   return path
 end
 
+---
+-- Registers a filesystem.
+--
+-- See the @{~filesystem|user guide} for a detailed explanation.
+--
+-- @function register_filesystem
+-- @args (spec)
+
 M.autoload('glob', {'fs.glob', 'glob'})
  .autoload('tglob', {'fs.glob', 'tglob'})
  .autoload('fnmatch', {'fs.glob', 'fnmatch'})
+ .autoload('register_filesystem', {'luafs', 'register_filesystem'})
 
 return M
