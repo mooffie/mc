@@ -50,6 +50,7 @@
 #include "lib/widget.h"
 #include "lib/mcconfig.h"
 #include "lib/event.h"          /* mc_event_raise() */
+#include "lib/scripting.h"      /* scripting_trigger_widget_event() */
 #ifdef HAVE_CHARSET
 #include "lib/charsets.h"
 #endif
@@ -1017,6 +1018,7 @@ edit_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, v
         widget_set_size (WIDGET (menubar), w->y, w->x, 1, w->cols);
         menubar_arrange (menubar);
         g_list_foreach (h->widgets, (GFunc) edit_dialog_resize_cb, NULL);
+        scripting_trigger_widget_event ("Dialog::layout", w);
         return MSG_HANDLED;
 
     case MSG_ACTION:
@@ -1099,7 +1101,7 @@ edit_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, v
 
 /* --------------------------------------------------------------------------------------------- */
 
-static cb_ret_t
+/*static*/ cb_ret_t  /* @FIXME: See comment in edit-impl.h as to why this is non-static. */
 edit_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *data)
 {
     WEdit *e = (WEdit *) w;
@@ -1166,6 +1168,14 @@ edit_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void *da
     case MSG_DESTROY:
         edit_clean (e);
         return MSG_HANDLED;
+
+    case MSG_BEFORE_DESTROY:
+        /* Note: We shouldn't put this at MSG_DESTROY. At MSG_DESTROY the Lua
+         * wrapper has been invalidated already and the event would then re-create
+         * a new Lua wrapper, causing the one seen at <<unload>> to be different
+         * than the one seen at <<load>>. */
+        scripting_trigger_widget_event ("Editbox::unload", w);
+        /* fall through */
 
     default:
         return widget_default_callback (w, sender, msg, parm, data);
@@ -1250,6 +1260,8 @@ edit_files (const GList * files)
         /* at least one file has been opened succefully */
         ok = ok || f_ok;
     }
+
+    scripting_trigger_widget_event ("Dialog::layout", WIDGET (edit_dlg));
 
     if (ok)
         dlg_run (edit_dlg);
@@ -1491,6 +1503,8 @@ edit_toggle_fullscreen (WEdit * edit)
         edit->force |= REDRAW_PAGE;
         edit_update_screen (edit);
     }
+
+    scripting_trigger_widget_event ("Dialog::layout", WIDGET (WIDGET (edit)->owner));
 }
 
 /* --------------------------------------------------------------------------------------------- */

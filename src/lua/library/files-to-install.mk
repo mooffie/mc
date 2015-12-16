@@ -35,6 +35,7 @@ modules/core/timer.lua \
 modules/core/tty.lua \
 modules/core/ui.lua \
 modules/core/ui/canvas.lua \
+modules/core/ui/editbox.lua \
 modules/core/ui/gc.lua \
 modules/core/ui/panel.lua \
 modules/core/ui/scaffolding.lua \

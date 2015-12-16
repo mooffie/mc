@@ -306,6 +306,20 @@ l_widget_command (lua_State * L)
     if (cmd == CK_IgnoreKey)
         luaL_error (L, E_ ("Invalid command name '%s'"), cmd_name);
 
+    /*
+     * MC snafu:
+     *
+     * Editbox has no proper constructor (see note in ui-editbox.c). We emit
+     * its <<load>> event before w->callback gets set. Here we catch any tries
+     * to :command() an editbox from its <<load>> handler.
+     *
+     * @FIXME
+     */
+    if (w->callback == NULL)
+        luaL_error (L,
+                    E_
+                    ("My oh my! w->callback is NULL. I cannot :command() the widget!\nAre you trying to :command() an Editbox from its <<load>> event?"));
+
     lua_pushboolean (L, send_message (w, NULL, MSG_ACTION, cmd, NULL) == MSG_HANDLED);
     return 1;
 }

@@ -168,6 +168,30 @@ book_mark_query_color (WEdit * edit, long line, int c)
 }
 
 /* --------------------------------------------------------------------------------------------- */
+/**
+ * Several bookmarks may be set on a single line. This function returns
+ * the topmost bookmark (that is, the one set last).
+ *
+ * This is needed when drawing the line: it's the topmost bookmark which
+ * is painted.
+ */
+
+int
+book_mark_get_topmost_color (WEdit * edit, long line)
+{
+    if (edit->book_mark != NULL)
+    {
+      edit_book_mark_t *p;
+
+      p = book_mark_find (edit, line);
+      if (p->line == line)
+          return p->c;
+    }
+
+    return 0;
+}
+
+/* --------------------------------------------------------------------------------------------- */
 /** insert a bookmark at this line */
 
 void

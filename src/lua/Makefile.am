@@ -40,6 +40,10 @@ libmc_luasrc_la_SOURCES = \
 	modules/utils-text.c \
 	modules/utils-text-transport.c
 
+if USE_INTERNAL_EDIT
+    libmc_luasrc_la_SOURCES += modules/ui-editbox.c
+endif
+
 AM_CPPFLAGS = -I$(top_srcdir) $(GLIB_CFLAGS) $(PCRE_CPPFLAGS) $(LUA_CFLAGS)
 
 libmc_luasrc_la_LIBADD = ../../lib/libmc.la

@@ -922,6 +922,27 @@ InputMeta.__allowed_properties = {
 ---
 -- @section end
 
+---------------------------------- Editbox -----------------------------------
+
+--[[
+
+  because of a limitation in ldoc, we can't place the following documentation
+  in the editbox module (ui/editbox.lua) and have it appear on the 'ui' module
+  page. So for the time being it's here.
+
+]]
+
+--- Creates an @{ui.Editbox|Editbox widget}.
+--
+-- You'll usually access an already-existing Editbox (as in the editor),
+-- but you can create one yourself. Note, however, that since it was not
+-- foreseen by the core developers that this widget would be used outside
+-- the editor, it has a few problems when used in that fashion. See
+-- @{git:editbox_instance.mcs}.
+--
+-- @function Editbox
+-- @args (...)
+
 ----------------------------------- Gauge ------------------------------------
 
 --- Creates a @{~#gauge|gauge widget}
@@ -1670,6 +1691,16 @@ end
 
 require('ui.canvas')
 require('ui.panel')
+
+if conf.features.editbox then
+  require('ui.editbox')
+else
+  -- We don't have to do the following. It's just to give a better error message
+  -- than the confusing "attempt to index a nil value (field 'Editbox')".
+  ui.autoload('Editbox', function()
+    error(E"The Editbox support hasn't been compiled in. You must compile MC with the internal editor to use this feature.", 3)
+  end)
+end
 
 --
 -- Lastly, we VBfy the base class.
