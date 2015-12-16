@@ -7,6 +7,14 @@ modules/core/devel/ensure.lua \
 modules/core/devel/log.lua \
 modules/core/devel/pp.lua \
 modules/core/event.lua \
+modules/core/fileops/README \
+modules/core/fileops/common.lua \
+modules/core/fileops/contexts/batch.lua \
+modules/core/fileops/contexts/interactive.lua \
+modules/core/fileops/contexts/passive.lua \
+modules/core/fileops/copy.lua \
+modules/core/fileops/delete.lua \
+modules/core/fileops/move.lua \
 modules/core/fs.lua \
 modules/core/fs/file.lua \
 modules/core/fs/glob.lua \
@@ -17,6 +25,7 @@ modules/core/keymap.lua \
 modules/core/luafs.lua \
 modules/core/luafs/panel.lua \
 modules/core/luafs/shortcuts.lua \
+modules/core/mc.lua \
 modules/core/mcscript.lua \
 modules/core/prompts.lua \
 modules/core/regex.lua \

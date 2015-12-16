@@ -24,7 +24,7 @@ static const struct luaL_Reg mods[] = {
     { NULL,           luaopen_fs_vpath },
     { "internal",     luaopen_internal },
     { "locale",       luaopen_locale },
-    { "mc",           luaopen_mc },
+    { "c.mc",         luaopen_mc },
     { NULL,           luaopen_mc_os },
     { "c.prompts",    luaopen_prompts },
     { "c.regex",      luaopen_regex },
