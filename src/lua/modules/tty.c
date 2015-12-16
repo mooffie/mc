@@ -808,7 +808,7 @@ l_text_cols (lua_State * L)
     return 1;
 }
 
-static int                      /* align_crt_t */
+int                             /* align_crt_t */
 luaTTY_check_align (lua_State * L, int idx)
 {
     static const char *const just_names[] = {

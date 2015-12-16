@@ -428,6 +428,19 @@ end
 -- @section panel-static
 
 ---
+-- Registers a field.
+--
+-- The subject of creating fields is covered extensively in the
+-- @{fields|reference} and user guide.
+--
+-- @function ui.Panel.register_field
+-- @args (info)
+
+function ui.Panel.register_field(...)
+  return require('fields').register_field(...)
+end
+
+---
 -- Binds a key, when the command-line is empty.
 --
 -- This function is similar to @{~extending|ui.Panel.bind} except that the
