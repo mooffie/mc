@@ -22,6 +22,7 @@ libmc_luasrc_la_SOURCES = \
 	modules/internal.c \
 	modules/locale.c \
 	modules/mc.c \
+	modules/os.c \
 	modules/prompts.c \
 	modules/regex.c \
 	modules/timer.c \
