@@ -87,6 +87,7 @@ modules/samples/apps/visren/search/plugins/pcre.lua \
 modules/samples/apps/visren/search/plugins/rex.lua \
 modules/samples/apps/visren/worlds/editboxworld.lua \
 modules/samples/apps/visren/worlds/panelworld.lua \
+modules/samples/demo.lua \
 modules/samples/editbox/access-warning.lua \
 modules/samples/editbox/dictionary.lua \
 modules/samples/editbox/funclist.lua \
