@@ -6,6 +6,72 @@ This file contains the code that drives 'mcscript' (or 'mc --script').
 
 local M = {}
 
+M.wallpaper = {
+  --
+  -- Alas, it seems that it takes "long" for gnome-terminal to draw this UTF-8
+  -- character.
+  --
+  -- It makes scrolling the list in tests/manual/ui_filechooser.lua sluggish. The
+  -- background's on_draw() isn't even being called.
+  --
+  -- @todo: check if it's just a matter of gnome-terminal queuing the screen
+  -- updates or whether the CPU is actually utilized. If the latter, we'll
+  -- have to use a plain space character instead :-(
+  --
+  char = tty.is_utf8() and '▒' or ' ',
+  style = 'core._default_',
+}
+
+--
+-- Creates the "wallpaper" for UI applications. It's just a dialog
+-- that covers the whole background.
+--
+-- This wallpaper is not a necessity. mcscript can function without it.
+-- However, without this wallpaper MC won't paint over the "garbage"
+-- accumulating at the background as dialogs come and go.
+--
+local function create_wallpaper()
+  local dlg = ui.Dialog()
+
+  function dlg:on_resize()
+    self:set_dimensions(0, 0, tty.get_cols(), tty.get_rows())
+  end
+  dlg:on_resize()
+
+  function dlg:on_draw()
+    local c = self:get_canvas()
+    c:set_style(tty.style(M.wallpaper.style))
+    c:erase(M.wallpaper.char)
+    return true
+  end
+
+  return dlg
+end
+
+--
+-- A wrapper around coroutine.resume().
+--
+-- You may remove it if you don't want a wallpaper.
+--
+local function resume(co)
+  local success, result
+
+  if tty.is_ui_ready() then
+    local wallpaper = create_wallpaper()
+    wallpaper.on_idle = function()
+      wallpaper.on_idle = nil
+      success, result = coroutine.resume(co)
+      wallpaper:close()
+    end
+    wallpaper:run()
+  else
+    success, result = coroutine.resume(co)
+  end
+
+  return success, result
+end
+
+
 local script = nil
 
 --
@@ -46,7 +112,7 @@ function M.run_script(pathname)
     return
   end
 
-  local success, result = coroutine.resume(script)
+  local success, result = resume(script)
   if not success then
     -- We can't do just `error(result, 2)` because the user then won't see
     -- a useful stack trace.
