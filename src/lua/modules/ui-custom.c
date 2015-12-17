@@ -10,6 +10,11 @@ to keyboard and mouse events.
 
 For a sample script that uses a custom widget, see @{git:ui_canvas.mcs}.
 
+Tip: There are two ways to use ui.Custom. You can instantiate it and use
+it outright, as shown on these pages, or you can @{ui.subclass|subclass}
+it. Subclassing is especially useful when you want your widget to be
+reusable.
+
 @classmod ui.Custom
 
 */
