@@ -39,4 +39,7 @@ tests/nonauto/ui_listhotkey.mcs \
 tests/nonauto/ui_setinterval.mcs \
 tests/nonauto/vfs_bug_crash.mcs \
 tests/nonauto/vfs_bug_errno_chdir.mcs \
-tests/nonauto/vfs_bug_errno_open.mcs
+tests/nonauto/vfs_bug_errno_open.mcs \
+tests/snippets/hotlist_right_as_enter.lua \
+tests/snippets/listbox_AZ.lua \
+tests/snippets/listbox_digits.lua

@@ -25,6 +25,13 @@ nonauto/
   has not been initialized".
   [/comment]
 
+snippets/
+
+  These aren't "tests" per se. These are snippets you may actually find
+  useful. They're intended to be run inside MC, so symlink to them in your
+  Lua user folder. (If it turns out users find a snippet useful, we'd
+  better turn it into a module.)
+
 benchmarks/
 
   benchmarking scripts.
