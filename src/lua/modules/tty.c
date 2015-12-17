@@ -9,12 +9,16 @@
 #include "lib/global.h"
 #include "lib/widget.h"         /* mc_refresh(), do_refresh() */
 #include "lib/tty/key.h"        /* lookup_key*() */
+#include "lib/tty/color.h"
+#include "lib/tty/color-internal.h"     /* tty_color_get_index_by_name() */
+#include "lib/skin.h"           /* mc_skin_color_get(), mc_skin_get() */
 #include "lib/strutil.h"        /* str_*() */
 #include "lib/lua/capi.h"
 #include "lib/lua/plumbing.h"   /* mc_lua_ui_is_ready() */
 #include "lib/lua/utilx.h"
 
 #include "../modules.h"
+#include "ui-canvas.h"          /* luaUI_new_canvas() */
 
 #include "tty.h"
 
@@ -178,6 +182,8 @@ luaTTY_check_keycode (lua_State * L, int name_index, gboolean push_name_short)
  * Converts a keyname to a keycode.
  *
  * Throws an exception if the keyname is invalid.
+ *
+ * See use example at @{ui.Custom:on_key}.
  *
  * @function keyname_to_keycode
  * @args (keyname)
@@ -442,6 +448,34 @@ l_refresh (lua_State * L)
 }
 
 /**
+ * Returns a @{ui.Canvas|canvas object} encompassing the whole screen.
+ *
+ * This lets you draw on the screen. Alternatively you can use the
+ * @{~mod:ui*widget:get_canvas|:get_canvas()} method of a widget if you're
+ * interested in its limited screen area.
+ *
+ * @function get_canvas
+ */
+static int
+l_get_canvas (lua_State * L)
+{
+    /* Search for a cached canvas object. */
+    lua_getfield (L, LUA_REGISTRYINDEX, "_tty_canvas");
+
+    if (lua_isnil (L, -1))
+    {
+        /* If not found, create a new canvas, */
+        luaUI_new_canvas (L);
+        /* ...and cache it, for the next call: */
+        lua_pushvalue (L, -1);
+        lua_setfield (L, LUA_REGISTRYINDEX, "_tty_canvas");
+    }
+
+    luaUI_set_canvas_dimensions (L, -1, 0, 0, COLS, LINES);
+    return 1;
+}
+
+/**
  * @section end
  */
 
@@ -480,6 +514,137 @@ luaTTY_assert_ui_is_ready (lua_State * L)
 }
 
 /* ------------------------------------------------------------------------ */
+
+/**
+ *
+ * Styles.
+ *
+ * The way a character is displayed on the screen is called a **style**. A
+ * style is composed of three things:
+ *
+ * - Foreground color
+ * - Background color
+ * - Attributes: underlined, italic, bold and/or reversed.
+ *
+ * A style happens to be represented internally as a numeric handle. For
+ * example, on your system the style **64** may mean "red foreground, green
+ * background, italic." We, as humans, don't manipulate such numbers
+ * directly but instead use @{style|style()} to convert a human-readable
+ * style description to this number.
+ *
+ * @section style
+ */
+
+static void
+validate_color_name (lua_State * L, const char *color_name)
+{
+    if (color_name && tty_color_get_index_by_name (color_name) == -1
+        && !STREQ (color_name, "default") && !STREQ (color_name, "base"))
+    {
+        luaL_error (L, _("Invalid color name '%s'. Perhaps you misspelled it?"), color_name);
+    }
+}
+
+/**
+ * This low-level function is exposed to Lua as "_style" and is wrapped by
+ * a higher-level function, "style", written in Lua.
+ */
+static int
+l_style (lua_State * L)
+{
+    const char *fg;
+    const char *bg;
+    const char *attrs;
+
+    int pair;
+
+    luaTTY_assert_ui_is_ready (L);
+
+    /* We could use lua_tostring() instead of luaL_checkstring(), as
+     * tty_try_alloc_color_pair2() can handle NULL arguments. But we prefer to
+     * push all the policy decisions to the Lua side: it, and not the C side,
+     * will decide what to do with unspecified values. */
+    fg = luaL_checkstring (L, 1);
+    bg = luaL_checkstring (L, 2);
+    attrs = luaL_checkstring (L, 3);
+
+    validate_color_name (L, fg);
+    validate_color_name (L, bg);
+
+    pair = tty_try_alloc_color_pair2 (fg, bg, attrs, FALSE);
+    if (pair > 250)
+    {
+        /*
+         * Pheew! The user is probably enjoying himself creating rainbows in
+         * the editor.
+         *
+         * There's a limit to the number of pairs we can allocate.
+         * Currently we use some arbitrary number (250), but we should
+         * investigate this issue and do something more robust. Pointers: man
+         * pages for init_pair (ncurses) and SLtt_set_color (S-Lang). @todo.
+         */
+        luaL_error (L, E_ ("Too many styles were allocated!"));
+    }
+
+    lua_pushinteger (L, pair);
+    return 1;
+}
+
+/**
+ * This low-level function is exposed to Lua as "_skin_style" and is
+ * called by the higher-level "style" when needed.
+ */
+static int
+l_skin_style (lua_State * L)
+{
+    const char *group;
+    const char *name;
+
+    luaTTY_assert_ui_is_ready (L);
+
+    group = luaL_checkstring (L, 1);
+    name = luaL_checkstring (L, 2);
+
+    lua_pushinteger (L, mc_skin_color_get (group, name));
+    return 1;
+}
+
+/**
+ * Whether it's a color terminal.
+ *
+ * Return **true** if the terminal supports colors, or **false** if it's a
+ * monochrome terminal.
+ *
+ * @function is_color
+ */
+static int
+l_is_color (lua_State * L)
+{
+    luaTTY_assert_ui_is_ready (L);
+    lua_pushboolean (L, tty_use_colors ());
+    return 1;
+}
+
+/**
+ * Whether it's a rich color terminal.
+ *
+ * Return **true** if the terminal supports [256 colors]
+ * (http://whiletruecode.tumblr.com/post/13358288098/enabling-256-color-mode-in-ubuntus-bash-terminal)
+ * (in this case @{is_color} too will return **true**), or **false** otherwise.
+ *
+ * @function is_hicolor
+ */
+static int
+l_is_hicolor (lua_State * L)
+{
+    luaTTY_assert_ui_is_ready (L);
+    lua_pushboolean (L, tty_use_256colors ());
+    return 1;
+}
+
+/**
+ * @section end
+ */
 
 /**
  * Text handling.
@@ -556,6 +721,9 @@ l_text_width (lua_State * L)
  *
  * (If the terminal's encoding isn't UTF-8, this function is identical to
  * @{string.sub}.)
+ *
+ * Tip: If you want to draw part of a string on screen, use @{ui.Canvas:draw_clipped_string},
+ * which does the "hard" calculations for you.
  *
  * @function text_cols
  * @args (s, i [, j])
@@ -752,6 +920,28 @@ l_is_ui_ready (lua_State * L)
 }
 
 /**
+ * This low-level function is exposed to Lua as "_skin_get" and is wrapped by
+ * a higher-level function, "skin_get", written in Lua.
+ */
+static int
+l_skin_get (lua_State * L)
+{
+    const char *group;
+    const char *name;
+    const char *def;
+
+    luaTTY_assert_ui_is_ready (L);
+
+    group = luaL_checkstring (L, 1);
+    name = luaL_checkstring (L, 2);
+    def = lua_tostring (L, 3);  /* Optional. */
+
+    luaMC_pushstring_and_free (L, mc_skin_get (group, name, def));
+
+    return 1;
+}
+
+/**
  * Returns the terminal width, in characters.
  *
  * @function get_cols
@@ -789,6 +979,24 @@ l_beep (lua_State * L)
 
     tty_beep ();
     return 0;
+}
+
+/**
+ * Whether the terminal is idle. That is, whether there are no pending
+ * keyboard or mouse events.
+ *
+ * This function can be used, for example, to early exist lengthy
+ * drawing tasks and thereby collapsing them into a final one, when
+ * the terminal becomes idle again. See examples at @{git:dialog-drag.lua}
+ * and @{git:ruler.lua}.
+ *
+ * @function is_idle
+ */
+static int
+l_is_idle (lua_State * L)
+{
+    lua_pushboolean (L, is_idle ());
+    return 1;
 }
 
 /**
@@ -905,23 +1113,54 @@ l_is_utf8 (lua_State * L)
  * @section end
  */
 
+/**
+ * A Lua function to produce a suitable error message if the UI isn't
+ * ready.
+ *
+ * We could do this in pure Lua, of course. But we want uniformity: we want
+ * Lua functions and C functions to print the same message.
+ */
+static int
+l_generate_error_message (lua_State * L)
+{
+    const char *funcname;
+
+    funcname = luaL_checkstring (L, 1);
+
+    if (!mc_lua_ui_is_ready ())
+    {
+        luaTTY_assert_ui_is_ready_ex (L, TRUE, funcname);
+        return 1;
+    }
+    else
+        return 0;
+}
+
 /* ------------------------------------------------------------------------ */
 
 /* *INDENT-OFF* */
 static const struct luaL_Reg ttylib[] = {
     { "keyname_to_keycode", l_keyname_to_keycode },
     { "keycode_to_keyname", l_keycode_to_keyname },
+    { "is_idle", l_is_idle },
     { "redraw", l_redraw },
     { "refresh", l_refresh },
+    { "get_canvas", l_get_canvas },
+    { "_style", l_style },
+    { "_skin_style", l_skin_style },
+    { "is_color", l_is_color },
+    { "is_hicolor", l_is_hicolor },
     { "text_width", l_text_width },
     { "text_cols", l_text_cols },
     { "text_align", l_text_align },
     { "is_ui_ready", l_is_ui_ready },
+    { "_skin_get", l_skin_get },
     { "get_cols", l_get_cols },
     { "get_rows", l_get_rows },
     { "beep", l_beep },
     { "conv", l_conv },
     { "is_utf8", l_is_utf8 },
+    { "_generate_error_message", l_generate_error_message },
     { NULL, NULL }
 };
 /* *INDENT-ON* */

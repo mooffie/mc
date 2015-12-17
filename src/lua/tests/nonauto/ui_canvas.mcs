@@ -1,0 +1,72 @@
+-- Tests the ui module: ui.Canvas and ui.Custom.
+
+local function test()
+
+  local dlg = ui.Dialog("Test")
+
+  dlg:add(ui.Label(
+[[Use the arrow keys to move the asterisk (you can
+move it outside the dialog; it's not a bug.]]))
+
+  local wgt = ui.Custom()
+
+  wgt.cols = 80
+  wgt.rows = 5
+
+  local pos = { x = 50, y = 0 }
+
+  wgt.on_focus = function(self)
+    return true
+  end
+
+  wgt.on_cursor = function(self)
+    self:get_canvas():goto_xy(pos.x, pos.y)
+  end
+
+  wgt.on_draw = function(self)
+    local c = self:get_canvas()
+    c:erase(".")
+
+    c:goto_xy(1, 1)
+    c:set_style(tty.style("red, white"))
+    c:draw_string("נסיון...")
+
+    c:goto_xy(pos.x, pos.y)
+    c:draw_string("*")
+  end
+
+  local K = tty.keyname_to_keycode
+
+  local K_LEFT = K'left'
+  local K_RIGHT = K'right'
+  local K_UP = K'up'
+  local K_DOWN = K'down'
+
+  wgt.on_key = function(self, key)
+    if key == K_LEFT then
+      pos.x = pos.x - 1
+    elseif key == K_RIGHT then
+      pos.x = pos.x + 1
+    elseif key == K_UP then
+      pos.y = pos.y - 1
+    elseif key == K_DOWN then
+      pos.y = pos.y + 1
+    else
+      return false
+    end
+
+    self:redraw()
+    return true
+  end
+
+  dlg:add(wgt)
+
+  dlg:add(ui.DefaultButtons())
+
+  dlg:run()
+
+end
+
+test()
+
+-- vim: set ft=lua:

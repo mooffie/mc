@@ -367,6 +367,17 @@ RadiosMeta.__allowed_properties = {
 ---
 -- @section end
 
+----------------------------------- Custom -----------------------------------
+
+ui.Custom.meta.__allowed_properties = {
+  on_draw = true,
+  on_key = true,
+  on_hotkey = true,
+  on_focus = true,
+  on_unfocus = true,
+  on_cursor = true,
+}
+
 ------------------------------- Dimensionable --------------------------------
 
 -- It's the base class for pseudo widgets.
@@ -1280,6 +1291,7 @@ DlgMeta.__allowed_properties = {
   on_validate = true,
   on_resize = true,
   on_title = true,
+  on_draw = true,
   on_help = true,
 }
 
@@ -1626,11 +1638,16 @@ require('ui.gc')
 require('ui.scaffolding')
 
 for _, klass_name in ipairs {
-      "Button", "Checkbox", "Dialog", "Gauge", "Groupbox",
+      "Button", "Checkbox", "Custom", "Dialog", "Gauge", "Groupbox",
       "HLine", "Input", "Label", "Listbox", "Radios"
     } do
   ui._setup_widget_class(klass_name)  -- defined in 'ui.scaffolding'
 end
+
+--
+-- Load code defined elsewhere.
+--
+require('ui.canvas')
 
 --
 -- Lastly, we VBfy the base class.
