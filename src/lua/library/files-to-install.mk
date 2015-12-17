@@ -27,4 +27,5 @@ modules/core/utils/glob.lua \
 modules/core/utils/magic.lua \
 modules/core/utils/path.lua \
 modules/core/utils/table.lua \
-modules/core/utils/text.lua
+modules/core/utils/text.lua \
+modules/samples/accessories/find-as-you-type.lua
