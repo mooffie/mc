@@ -15,6 +15,8 @@ int luaopen_regex (lua_State * L);
 int luaopen_timer (lua_State * L);
 int luaopen_tty (lua_State * L);
 int luaopen_ui (lua_State * L);
+int luaopen_ui_canvas (lua_State * L);
+int luaopen_ui_custom (lua_State * L);
 int luaopen_utils_bit32 (lua_State * L);
 int luaopen_utils_text (lua_State * L);
 

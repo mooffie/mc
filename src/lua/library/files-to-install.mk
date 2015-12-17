@@ -19,7 +19,9 @@ modules/core/prompts.lua \
 modules/core/regex.lua \
 modules/core/string.lua \
 modules/core/timer.lua \
+modules/core/tty.lua \
 modules/core/ui.lua \
+modules/core/ui/canvas.lua \
 modules/core/ui/gc.lua \
 modules/core/ui/scaffolding.lua \
 modules/core/utils.lua \

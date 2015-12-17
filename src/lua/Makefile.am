@@ -28,6 +28,10 @@ libmc_luasrc_la_SOURCES = \
 	modules/tty.c \
 	modules/tty.h \
 	modules/ui.c \
+	modules/ui-canvas.c \
+	modules/ui-canvas.h \
+	modules/ui-custom.c \
+	modules/ui-custom.h \
 	modules/utils-bit32.c \
 	modules/utils-text.c
 
