@@ -31,6 +31,7 @@ tests/nonauto/mcscript_uiopen.mcs \
 tests/nonauto/ui1.mcs \
 tests/nonauto/ui2.mcs \
 tests/nonauto/ui_canvas.mcs \
+tests/nonauto/ui_canvas_mouse.mcs \
 tests/nonauto/ui_filechooser.mcs \
 tests/nonauto/ui_gc.lua \
 tests/nonauto/ui_gc2.mcs \

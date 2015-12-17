@@ -1,0 +1,63 @@
+-- Tests the ui module: ui.Canvas and ui.Custom, especially mouse handling.
+
+local function test()
+
+  local dlg = ui.Dialog("Test")
+
+  dlg:add(ui.Label(
+[[Mouse handling test.]]))
+
+  local wgt = ui.Custom{cols=80, rows=5}
+
+  local point = {
+    x = 1,
+    y = 1,
+  }
+
+  wgt.on_draw = function(self, s)
+    local c = self:get_canvas()
+    c:erase(".")
+  end
+
+  local function draw_point(x, y)
+    local c = wgt:get_canvas()
+    c:set_style(tty.style('white, red'))
+    c:goto_xy(x, y)
+    c:draw_string('*')
+  end
+
+  wgt.on_mouse_down = function(self, x, y, buttons, count)
+    self:focus()
+    draw_point(x, y)
+  end
+
+  wgt.on_click = function(self, x, y, buttons, count)
+    point.x = x
+    point.y = y
+    -- Note: after processing a key or mouse event, MC automatically re-positions the cursor. So we don't need to trigger on_cursor ourselves.
+    -- Note: if you release the mouse outside the widget, on_click won't be triggered and the cursor will remain in its old place. This isn't a bug.
+  end
+
+  wgt.on_mouse_drag = function(self, x, y, ...)
+    if x >= 0 and x < self.cols and y >= 0 and y < self.rows then
+      draw_point(x, y)
+    end
+  end
+
+  wgt.on_cursor = function()
+    wgt:get_canvas():goto_xy(point.x, point.y)
+  end
+
+  wgt.on_focus = function() return true end
+
+  dlg:add(wgt)
+
+  dlg:add(ui.DefaultButtons())
+
+  dlg:run()
+
+end
+
+test()
+
+-- vim: set ft=lua:

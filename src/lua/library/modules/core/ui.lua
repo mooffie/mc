@@ -376,6 +376,15 @@ ui.Custom.meta.__allowed_properties = {
   on_focus = true,
   on_unfocus = true,
   on_cursor = true,
+  -- mouse:
+  on_mouse_down = true,
+  on_mouse_up = true,
+  on_mouse_click = true,
+  on_mouse_drag = true,
+  on_mouse_move = true,
+  on_mouse_scroll_up = true,
+  on_mouse_scroll_down = true,
+  on_click = true,
 }
 
 ------------------------------- Dimensionable --------------------------------
