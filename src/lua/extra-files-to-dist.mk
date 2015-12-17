@@ -39,6 +39,7 @@ tests/nonauto/ui_groupboxes.mcs \
 tests/nonauto/ui_inputchange.mcs \
 tests/nonauto/ui_listhotkey.mcs \
 tests/nonauto/ui_setinterval.mcs \
+tests/nonauto/ui_subclass.mcs \
 tests/nonauto/vfs_bug_crash.mcs \
 tests/nonauto/vfs_bug_errno_chdir.mcs \
 tests/nonauto/vfs_bug_errno_open.mcs \

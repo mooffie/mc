@@ -7,6 +7,7 @@ E.g., for Input, it creates:
 
   ui.Input()               (the constructor)
   ui.input.bind()
+  ui.input.subclass()
 
 it also vbfy()'s the metatables to enable properties.
 
@@ -37,6 +38,123 @@ function aren't methods: they're what called in OOP parlance "static".
 @section static_widget
 
 ]]
+
+-------------------------------- Subclassing ---------------------------------
+
+--[[-
+
+Creates a new widget class.
+
+For example, let's suppose we want to create a widget that shows the
+current time. We can do it thus:
+
+    local clock = ui.Custom()
+
+    function clock:on_draw()
+      self.canvas:draw_string(os.date("%H:%M:%S"))
+    end
+
+    ui.Dialog():add(clock):run()
+
+However, this widget isn't quite reusable. We can instead create is as a class,
+
+    local ClockMeta = ui.Custom.subclass("Clock")
+
+    function ClockMeta:on_draw()
+      self.canvas:draw_string(os.date("%H:%M:%S"))
+    end
+
+...and then re-use this class wherever we want:
+
+    ui.Dialog():add(ui.Clock(), ui.Clock(), ui.Clock()):run()
+
+This function, @{subclass}, returns the metatable of the new class. It
+also creates the namespace ui.*NewClassName*.
+
+Info: You can initialize your instances in a method called "init". It's
+like the constructor from other programming languages.
+
+[tip]
+
+Your new class behaves just like any other widget class. You can even
+further inherit from it:
+
+    local RedClock = ui.Clock.subclass("RedClock")
+
+[/tip]
+
+[info]
+
+The namespace also stores the widget's metatable at `meta`. This is true
+for all widget classes. You can define new methods on a class easily:
+
+    -- Define a :word_left() method for Editboxes.
+    function ui.Editbox.meta:word_left()
+      self:command "WordLeft"
+    end
+
+[tip]
+
+This `meta` table is very similar to JavaScript's `prototype` property:
+
+    // JavaScript code!
+    String.prototype.trim = function() { ... }
+    Array.prototype.some = function() { ... }
+
+[/tip]
+
+[/info]
+
+Tip-short: For more examples, see @{git:samples/ui/extlabel.lua} and
+@{git:tests/nonauto/ui_subclass.mcs}.
+
+@function subclass
+@args (new_class_name)
+
+]]
+
+-- Create a new widget class, named 'name', inheriting from 'parent'.
+local function subclass(name, parent)
+
+  assert(type(name) == "string", E"The new class name must be a string.")
+  assert(parent.meta, E"This doesn't look like a UI class.")
+  assert(parent._new, E"Parent class is not designed to be instantiated")
+
+  -- The following is basically what ui-impl.c:create_widget_metatable() does.
+
+  local meta = {}
+  meta.__index = meta
+  meta.widget_type = name -- Ease debugging.
+  setmetatable(meta, parent.meta)
+
+  ui[name] = {
+    meta = meta
+  }
+
+  -- A constructor function:
+
+  ui[name]._new = function()
+    local wgt = parent._new()
+
+    -- Set the correct meta:
+    setmetatable(wgt, meta)
+
+    -- Call the correct init(), for any class who wants to use it.
+    --
+    -- But we call it only if it was defined directly on our meta because we
+    -- don't want to end up with some ancestor's init() called twice (as
+    -- parent._new() would have already called it).
+    if rawget(meta, 'init') then
+      wgt:init()
+    end
+
+    return wgt
+  end
+
+  ui._setup_widget_class(name)
+
+  return meta
+end
 
 ---------------------------------- Binding -----------------------------------
 
@@ -111,6 +229,11 @@ function ui._setup_widget_class(klass_name)
   klass.bind = function(keyseq, ...)
     assert(type(keyseq) == "string", E"string expected as first argument to bind()")
     bind_key(klass_name, keyseq, ...)
+  end
+
+  klass.subclass = function(new_klass_name)
+    assert(new_klass_name, E"You must provide a class name.")
+    return subclass(new_klass_name, klass)
   end
 
 end
