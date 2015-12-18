@@ -446,3 +446,22 @@ In fact, we didn't have to create the `dlg` variable either. We could do:
     ui.Dialog()
       :add(use_proxy, proxy_address, btn, ui.DefaultButtons())
       :run()
+
+## Static functions
+
+We've mentioned constructor functions, like ui.Button(), ui.Label(),
+etc.
+
+These functions also serve as @{~mod:ui#static widget|namespaces in which functions are stored},
+functions that don't operate on a specific widget object (otherwise
+they're be normal methods) but serve some other utility.
+
+For example, each namespace has a @{ui.bind|bind()} function:
+
+- ui.Editbox.bind()
+- ui.Listbox.bind()
+- ui.Panel.bind()
+- ...
+
+This `bind()` function binds a function to a key typed when the focus is
+in a widget of a certain kind only.
