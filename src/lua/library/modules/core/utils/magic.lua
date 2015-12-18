@@ -5,6 +5,35 @@
 
 local M = {}
 
+---
+-- Caches the results of a function call.
+--
+--    local function heavy(x)
+--      return x^(1/3)
+--    end
+--
+--    local light = utils.magic.memoize(heavy)
+--
+--    -- The following calculates the result just once.
+--    print(light(27), light(27), light(27))
+--
+-- The memoized function may receive several arguments, but as the caching key
+-- will serve only the first argument. Thus `light(3, 5)` and `light(3, "whatever")`
+-- will give the same result.
+function M.memoize(f)
+  local lookup = {}
+  return function(x, ...)
+    local y = lookup[x]
+    if y then
+      return y
+    else
+      y = f(x, ...)
+      lookup[x] = y
+      return y
+    end
+  end
+end
+
 -------------------------------- VB-fication ---------------------------------
 
 local function is_allowed_prop(meta, prop)
@@ -315,6 +344,36 @@ function M.setup_strict(t, protect_read, protect_write)
 end
 
 ------------------------------------------------------------------------------
+
+---
+-- Protects a function against being called recursively.
+--
+-- It wraps the function **fn** inside a function that uses locking to
+-- ensure that the function is invoked only once in the calling stack.
+--
+-- See example at @{ui.Panel.load|<<load>>}.
+--
+-- @function once
+-- @args ([lock_name,] fn)
+
+local active_locks = {}
+
+function M.once(lock_name, fn)
+  if type(lock_name) == 'function' then
+    fn = lock_name
+  end
+  return function(...)
+    if not active_locks[lock_name] then
+      active_locks[lock_name] = true
+      -- Unless somebody demonstrates that it could be useful, we don't bother
+      -- about multiple return values. We return nothing when locked, so there's
+      -- no point in being pedantic about the other case.
+      local result = fn(...)
+      active_locks[lock_name] = nil
+      return result
+    end
+  end
+end
 
 ---
 -- Make __gc for tables work for old Lua engines too.
