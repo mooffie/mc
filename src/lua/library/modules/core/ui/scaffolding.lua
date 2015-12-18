@@ -1,21 +1,70 @@
 --[[
 
-This file setups the widget classes' "namespaces" (which are their
-metatables really).
+This file creates a few class functions (or "static widget functions",
+if you will) for each widget type.
 
-Currently it only creates constructor functions. E.g., for the Input
-class it creates ui.Input().
+E.g., for Input, it creates:
 
-In the future we will create static functions in each namespace; e.g.,
-ui.Input.bind() and ui.Input.subclass().
+  ui.Input()               (the constructor)
+  ui.input.bind()
 
-We're also vbfy()'ing the metatables to enable properties.
+it also vbfy()'s the metatables to enable properties.
+
+All this work is done by ui._setup_widget_class(), defined here.
 
 ]]
 --- @module ui
 
 local ui = require("c.ui")
 local vbfy, vbfy_singleton  = import_from('utils.magic', {'vbfy', 'vbfy_singleton'})
+
+
+--[[-
+
+Static widget functions.
+
+You already know that for every widget class there exists a
+ui._WidgetClass()_ function that creates ("instantiates") such widget.
+E.g., `ui.Input()`.
+
+But ui._WidgetClass_ is also a namespace that groups further functions
+and properties. E.g., `ui.Input.bind()`, `ui.Panel.register_field()`,
+`ui.Editbox.options`, etc.
+
+This section describes functions common to all widget classes. These
+function aren't methods: they're what called in OOP parlance "static".
+
+@section static_widget
+
+]]
+
+---------------------------------- Binding -----------------------------------
+
+--- Binds functions to keys.
+--
+-- Use this to execute a function when a certain @{~mod:keymap!key-sequences|key sequence}
+-- is pressed in a certain class of widgets:
+--
+--    ui.Panel.bind('C-y', function(pnl)
+--      alert("You're standing on " .. pnl.current)
+--    end)
+--
+-- The bound function is invoked with the widget as its first
+-- (and only) argument.
+--
+-- @function bind
+-- @args (keyseq_or_event, function)
+
+local function bind_key(widget_type, keyseq, callback)
+  if type(callback) ~= "table" then
+    callback = { fn = callback }
+  end
+  callback.condition = function() return ui.current_widget(widget_type) end
+  callback.arg = callback.condition
+  keymap.bind(keyseq, callback)
+end
+
+------------------------------------------------------------------------------
 
 function ui._setup_widget_class(klass_name)
 
@@ -59,4 +108,12 @@ function ui._setup_widget_class(klass_name)
   -- Enable static properties: lets you type ui.Panel.left instead of ui.Panel.get_left().
   vbfy_singleton(klass)
 
+  klass.bind = function(keyseq, ...)
+    assert(type(keyseq) == "string", E"string expected as first argument to bind()")
+    bind_key(klass_name, keyseq, ...)
+  end
+
 end
+
+---
+-- @section end

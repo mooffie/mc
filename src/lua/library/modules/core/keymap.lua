@@ -8,6 +8,41 @@ This module is used to define keybindings that are recognized throughout the app
       alert("hi!")
     end)
 
+Usually, however, you won't use this module directly but instead call
+the @{ui.bind|bind function of a widget class} to restrict the binding to
+a certain widget type (often an Editbox or a Panel):
+
+    ui.Listbox.bind('C-a q', function()
+      alert("hi from a listbox!")
+    end)
+    -- One place where you can test this is the
+    -- "Directory hotlist" dialog, which contains
+    -- a listbox.
+
+The above code is equivalent to:
+
+    keymap.bind('C-a q', {
+      fn = function()
+        alert("hi from a listbox!!")
+      end,
+      condition = function()
+        -- this effectively returns 'true' if the current
+        -- widget is a listbox.
+        return ui.current_widget("Listbox")
+      end,
+      arg = function()
+        return ui.current_widget()
+      end,
+    })
+    -- Of course, in practice you won't need to type all
+    -- this: simply use ui.Listbox.bind() instead.
+
+We see here that using the 'condition' entry one can make a keybinding
+active under a certain condition only. This creates the impression of
+having several "keymaps" (one for each widget type). (In reality
+there's only one keymap, but you don't need to be aware of this
+implementation detail.)
+
 <a name="key-sequences"></a>
 
 ## Key sequences
