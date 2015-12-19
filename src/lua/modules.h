@@ -15,5 +15,6 @@ int luaopen_regex (lua_State * L);
 int luaopen_timer (lua_State * L);
 int luaopen_tty (lua_State * L);
 int luaopen_utils_bit32 (lua_State * L);
+int luaopen_utils_text (lua_State * L);
 
 #endif /* MC__LUA_MODULES_H */

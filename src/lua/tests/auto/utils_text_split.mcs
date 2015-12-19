@@ -1,0 +1,46 @@
+-- Tests utils.text.tsplit(), utils.text.shell_split()
+
+local ensure = devel.ensure
+
+local function test_tsplit()
+
+  local tsplit = require('utils.text').tsplit
+
+  ensure.equal(tsplit("one:two:three:", ":"), {"one", "two", "three"}, "tsplit simple")
+  ensure.equal(tsplit("one:two:three:", ":", -1), {"one", "two", "three", ""}, "tsplit limit #1")
+  ensure.equal(tsplit("one:two:three:", ":", 2), {"one", "two:three:"}, "tsplit limit #2")
+  ensure.equal(tsplit("", ":", -1), {}, "tsplit empty")
+  ensure.equal(tsplit("  one \t two  three  "), {"one", "two", "three"}, "tsplit whitespace")
+  ensure.equal(tsplit("one", ""), {"o", "n", "e"}, "tsplit zero-length-match")
+
+end
+
+local function test_shell_split()
+
+  local tokens = require('utils.text').shell_split
+
+  ensure.equal(tokens [[  one\ two   three  ]],
+               { 'one two', 'three' },
+               'shell_split simple case' )
+
+  ensure.equal(tokens [[one "two"three]],
+               { 'one', 'twothree' },
+               'shell_split glued strings')
+
+  ensure.equal(tokens [['o"netwo' '' "t'hree"]],
+               { 'o"netwo', '', "t'hree" },
+               'shell_split quotes inside')
+
+  ensure.equal(tokens [['o\netwo' '\' "t\"hree"]],
+               { "o\\netwo", "\\", 't"hree'},
+               'shell_split escaping')
+
+  ensure.equal(tokens '  ',
+               { },
+               'shell_split empty string')
+end
+
+test_tsplit()
+test_shell_split()
+
+-- vim: set ft=lua:

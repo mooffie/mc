@@ -23,3 +23,9 @@
 
 --- Alias for @{regex.tsplit}
 -- @function p_tsplit
+
+--- Alias for @{utils.text.tsplit}
+-- @function l_tsplit
+
+--- Alias for @{utils.text.split}
+-- @function l_split

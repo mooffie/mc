@@ -1,0 +1,30 @@
+-- Tests utils.text.extract_word().
+
+local ensure = devel.ensure
+
+local extract_word = require('utils.text').extract_word
+
+local function test()
+
+  local function t(s, expected)
+    local pos = s:find('*')
+    local s_  = s:gsub('%*', '')
+    local result, b = extract_word(s_, pos)
+    ensure.equal(result, expected, s)
+  end
+
+  t("one  two* three", "two")
+  t("one*  two three", "one")
+  t("one * two three", nil)
+  t("*one", "one")
+  t("one *a two", "a")
+  t("on*e", "one")
+  t("one* ", "one")
+  t("one*", "one")
+  t("one *", nil)
+
+end
+
+test()
+
+-- vim: set ft=lua:
