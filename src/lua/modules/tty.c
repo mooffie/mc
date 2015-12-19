@@ -452,15 +452,31 @@ l_refresh (lua_State * L)
  * a useful and uniform error message.
  */
 
-void
-luaTTY_assert_ui_is_ready (lua_State * L)
+static void
+luaTTY_assert_ui_is_ready_ex (lua_State * L, gboolean push_only, const char *funcname)
 {
     if (!mc_lua_ui_is_ready ())
     {
-        luaL_error (L,
-                    E_ ("You can not use %s() yet, because the UI has not been initialized."),
-                    luaMC_get_function_name (L, 0, FALSE));
+        const char *msg_without_solution =
+            E_ ("You can not use %s() yet, because the UI has not been initialized.");
+        const char *msg_with_solution =
+            E_ ("You can not use %s() yet, because the UI has not been initialized.\n"
+                "One way to solve this problem is to call ui_open() before calling this function.");
+
+        const char *msg =
+            (mc_global.mc_run_mode == MC_RUN_SCRIPT) ? msg_with_solution : msg_without_solution;
+
+        if (push_only)
+            lua_pushfstring (L, msg, funcname);
+        else
+            luaL_error (L, msg, funcname);
     }
+}
+
+void
+luaTTY_assert_ui_is_ready (lua_State * L)
+{
+    luaTTY_assert_ui_is_ready_ex (L, FALSE, luaMC_get_function_name (L, 0, FALSE));
 }
 
 /* ------------------------------------------------------------------------ */
