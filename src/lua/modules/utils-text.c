@@ -71,7 +71,7 @@ l_format_size (lua_State * L)
  * units, though.)
  *
  * @return An integer on success. The pair `(nil, error message)` on error
- * (so you can wrap the call in @{assert}).
+ * (so you can wrap the call in @{assert} or @{globals.abortive|abortive}).
  *
  * @function parse_size
  * @args (s)

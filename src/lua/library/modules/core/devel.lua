@@ -101,4 +101,18 @@ function devel.display_error(msg)
   -- "after dlg:run() returns". So instead we do our stuff in on_validate.
 end
 
+--
+-- Similar to display_error(), except that it's intended for "benign" errors.
+--
+-- See 'capi-safecall.c'.
+--
+function devel.display_abort(obj)
+  local msg = obj.message
+  local ui = require("ui")
+  ui.Dialog(T"Abort")
+    :add(ui.Label(tostring(msg)))
+    :add(ui.Buttons():add(ui.OkButton()))
+    :run()
+end
+
 return devel
