@@ -8,6 +8,7 @@ tests/auto/bit32.mcs \
 tests/auto/fs.mcs \
 tests/auto/fs_file.mcs \
 tests/auto/glob.mcs \
+tests/auto/key_bugs.mcs \
 tests/auto/magic_strict.mcs \
 tests/auto/regex.mcs \
 tests/benchmarks/treewalk/README \
