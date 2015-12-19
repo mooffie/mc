@@ -17,6 +17,7 @@
 
 #include "capi.h"
 #include "capi-safecall.h"
+#include "utilx.h"              /* E_() */
 
 #ifdef HAVE_LUAJIT
 #include <luajit.h>             /* LUAJIT_VERSION */
@@ -200,17 +201,41 @@ mc_lua_ui_is_ready (void)
 /*
  * Runs a scripts.
  *
- * This is how 'mcscript' (or 'mc -L') runs a script. (It's just a wrapper
- * around luaMC_safe_dofile().)
+ * This is how 'mcscript' (or 'mc -L') runs a script. (If you're looking
+ * for a simple-minded function, use luaMC_safe_dofile() instead.)
  *
- * Returns TRUE if the script finished successfully (i.e.: script file found,
- * no exception raised, no syntax error). Otherwise, prints an error message
- * and returns FALSE.
+ * Return codes:
+ *
+ * MC_LUA_SCRIPT_RESULT_FINISH - The script run to completion.
+ *
+ * MC_LUA_SCRIPT_RESULT_ERROR - Some error occurred: script file not found,
+ * syntax error, or a runtime exception was raised.
+ *
+ * MC_LUA_SCRIPT_RESULT_CONTINUE - The execution arrived at some code that
+ * wants to use the UI. The execution has stopped and is to be resumed (by
+ * calling mc_lua_run_script() again with a NULL filename) when the UI is
+ * ready.
  */
-gboolean
+mc_lua_script_result_t
 mc_lua_run_script (const char *pathname)
 {
-    return (luaMC_safe_dofile (Lg, pathname, NULL) == 0);
+    if (luaMC_get_system_callback (Lg, "mcscript::run_script"))
+    {
+        lua_pushstring (Lg, pathname);
+
+        if (luaMC_safe_call (Lg, 1, 1))
+            return luaMC_pop_boolean (Lg)
+                ? MC_LUA_SCRIPT_RESULT_CONTINUE : MC_LUA_SCRIPT_RESULT_FINISH;
+        else
+            return MC_LUA_SCRIPT_RESULT_ERROR;
+    }
+    else
+    {
+        fprintf (stderr, "%s\n",
+                 E_
+                 ("Internal error: I don't know how to run scripts. The core probably wasn't bootstrapped correctly."));
+        return MC_LUA_SCRIPT_RESULT_ERROR;
+    }
 }
 
 static void

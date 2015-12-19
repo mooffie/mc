@@ -333,10 +333,37 @@ main (int argc, char *argv[])
     if (mc_global.mc_run_mode == MC_RUN_SCRIPT)
     {
         /* Standalone mode: we're to run the script given on the command line. */
+        mc_lua_script_result_t result;
 
-        return mc_lua_run_script ((char *) mc_run_param0) ? EXIT_SUCCESS : EXIT_FAILURE;
-        /* @todo: Exit gracefully, executing the various shutdown procedures. */
+        result = mc_lua_run_script ((char *) mc_run_param0);
+
+        if (result != MC_LUA_SCRIPT_RESULT_CONTINUE)
+        {
+            /* The script does not ask us to continue to the UI stage, so we stop here.
+             * @todo: Exit gracefully, executing the various shutdown procedures. */
+            return (result == MC_LUA_SCRIPT_RESULT_ERROR) ? EXIT_FAILURE : EXIT_SUCCESS;
+        }
+        /* We'll be resuming the script's execution when the UI is loaded
+         * (see midnight.c:mc_maybe_editor_or_viewer). */
     }
+#endif
+
+#ifdef HAVE_LIBGPM
+    /*
+     * When MC is already running as an ancestor (a plausible scenario
+     * when using mcscript), and when using GPM in the *console* (but not
+     * in xterm), the mouse support won't actually work (a bug). Worse, it
+     * will make MC's timeout mechanism (in tty_get_event()) not work,
+     * which in turn will make our Lua timers not work.
+     *
+     * We don't care too much about the mouse, but many Lua apps put
+     * timers to good use (MC itself too, for vfs_timeout_handler()), so
+     * we kill the mouse to save the timers.
+     *
+     * This, of course, is a temporary hackish solution.
+     */
+    if (g_getenv ("MC_SID") && !g_getenv ("DISPLAY"))
+        mc_args__nomouse = TRUE;
 #endif
 
     /* check terminal type
