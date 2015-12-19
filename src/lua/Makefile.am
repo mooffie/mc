@@ -27,7 +27,8 @@ libmc_luasrc_la_SOURCES = \
 	modules/timer.c \
 	modules/tty.c \
 	modules/tty.h \
-	modules/utils-bit32.c
+	modules/utils-bit32.c \
+	modules/utils-text.c
 
 AM_CPPFLAGS = -I$(top_srcdir) $(GLIB_CFLAGS) $(PCRE_CPPFLAGS) $(LUA_CFLAGS)
 

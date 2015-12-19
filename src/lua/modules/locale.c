@@ -350,6 +350,8 @@ format_number__clib (lua_State * L, double num, int precision)
  * You may set the number of digits to show after the decimal mark with the
  * optional **precision** argument.
  *
+ * See also @{utils.text.format_size}.
+ *
  * @function format_number
  * @args (n[, precision])
  */
