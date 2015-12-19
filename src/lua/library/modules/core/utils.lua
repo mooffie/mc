@@ -3,7 +3,8 @@ local M = {}
 
 require('utils.magic').setup_autoload(M)
 
-M.autoload('table', 'utils.table')
+M.autoload('path', 'utils.path')
+ .autoload('table', 'utils.table')
  .autoload('text', 'utils.text')
  .autoload('glob', 'utils.glob')
  .autoload('magic', 'utils.magic')
