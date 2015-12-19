@@ -112,27 +112,6 @@ function require_legacy(module_name)
   return mod
 end
 
------------------------------ mcscript-related -------------------------------
-
----
--- Enter UI mode.
---
--- Makes the terminal enter @{tty.is_ui_ready|UI mode}, where dialogs can be
--- displayed.
---
--- This function can be called in @{~standalone|standalone} mode only. See
--- there for details.
---
--- Note: At the time of this writing, there's no `ui_close()`. That is,
--- once you enter UI mode you cannot go back to "line printer" mode.
---
-function ui_open()
-  assert(mc.is_standalone(), E"You may call ui_open() only in standalone ('mcscript') mode.")
-  if not tty.is_ui_ready() then
-    coroutine.yield("continue")
-  end
-end
-
 ------------------------------------------------------------------------------
 -- Command line arguments.
 --
@@ -180,6 +159,14 @@ arg = argv
 -- used by the system to initiate the loading of user and system scripts.
 --
 -- @moniker core::loaded
+-- @event
+
+---
+-- [Used internally].
+--
+-- Note-short: End-users won't need this.
+--
+-- @moniker core::before-vfs-shutdown
 -- @event
 
 ------------------------------------------------------------------------------

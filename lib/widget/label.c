@@ -142,7 +142,7 @@ label_new (int y, int x, const char *text)
 
     l = g_new (WLabel, 1);
     w = WIDGET (l);
-    widget_init (w, y, x, lines, cols, label_callback, NULL);
+    widget_init (w, y, x, lines, cols, label_callback, NULL, "Label");
 
     l->text = g_strdup (text);
     l->auto_adjust_cols = TRUE;

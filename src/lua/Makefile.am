@@ -27,6 +27,7 @@ libmc_luasrc_la_SOURCES = \
 	modules/timer.c \
 	modules/tty.c \
 	modules/tty.h \
+	modules/ui.c \
 	modules/utils-bit32.c \
 	modules/utils-text.c
 

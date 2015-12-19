@@ -196,7 +196,7 @@ radio_new (int y, int x, int count, const char **texts)
         wmax = max (width, wmax);
     }
 
-    widget_init (w, y, x, count, 4 + wmax, radio_callback, radio_event);
+    widget_init (w, y, x, count, 4 + wmax, radio_callback, radio_event, "Radios");
     /* 4 is width of "(*) " */
     r->state = 1;
     r->pos = 0;

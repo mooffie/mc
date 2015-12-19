@@ -139,7 +139,7 @@ check_new (int y, int x, int state, const char *text)
     c = g_new (WCheck, 1);
     w = WIDGET (c);
     c->text = parse_hotkey (text);
-    widget_init (w, y, x, 1, 4 + hotkey_width (c->text), check_callback, check_event);
+    widget_init (w, y, x, 1, 4 + hotkey_width (c->text), check_callback, check_event, "Checkbox");
     /* 4 is width of "[X] " */
     c->state = state ? C_BOOL : 0;
     widget_want_hotkey (w, TRUE);

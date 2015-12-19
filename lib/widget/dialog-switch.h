@@ -18,10 +18,12 @@ extern WDialog *midnight_dlg;
 
 void dialog_switch_add (struct WDialog *h);
 void dialog_switch_remove (struct WDialog *h);
+void dialog_switch_foreach (GFunc func, gpointer user_data);
 size_t dialog_switch_num (void);
 
 void dialog_switch_next (void);
 void dialog_switch_prev (void);
+void dialog_switch_focus (WDialog * h);
 void dialog_switch_list (void);
 
 int dialog_switch_process_pending (void);

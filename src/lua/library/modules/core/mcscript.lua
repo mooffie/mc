@@ -59,7 +59,7 @@ function M.run_script(pathname)
 
   if result == "continue" then
     -- Signal the C side to run us again when the UI is ready.
-    -- See ui_open().
+    -- See ui.open().
     return true
   end
 

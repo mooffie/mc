@@ -1,0 +1,32 @@
+-- Tests the ui module: the groupbox widget.
+
+local function test()
+
+  local dlg = ui.Dialog()
+
+  local g1 = ui.Groupbox{"with zero padding", padding=0}
+  g1:add(
+    ui.Checkbox("see this?"),
+    ui.Checkbox("looong caption............................"),
+    ui.HBox{expandx=true}:add(
+      ui.Groupbox{"One", expandx=true},
+      ui.Groupbox{"Two", expandx=false},
+      ui.Groupbox{"Three", expandx=true}
+    )
+  )
+
+  local g2 = ui.Groupbox("g2")
+  g2:add(ui.Checkbox("Humpty dumpty."))
+  g2:add(ui.Groupbox("empty"))
+
+  local g3 = ui.Groupbox("g3")
+
+  dlg:add(g1, g2, g3)
+  dlg:add(ui.DefaultButtons())
+  dlg:run()
+
+end
+
+test()
+
+-- vim: set ft=lua:

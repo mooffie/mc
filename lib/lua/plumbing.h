@@ -21,12 +21,18 @@ const char *mc_lua_user_dir (void);
 
 void mc_lua_init (void);
 void mc_lua_load (void);
+void mc_lua_before_vfs_shutdown (void);
 void mc_lua_shutdown (void);
 
 /* ------------------------------- Runtime -------------------------------- */
 
+/* forward declarations */
+struct Widget;
+typedef struct Widget Widget;
+
 gboolean mc_lua_eat_key (int keycode);
 void mc_lua_trigger_event (const char *event_name);
+void mc_lua_notify_on_widget_destruction (Widget * w);  /* implemented in ui-impl.c */
 gboolean mc_lua_ui_is_ready (void);
 
 /* --------------------------- mcscript-related --------------------------- */

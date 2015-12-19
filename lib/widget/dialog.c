@@ -44,7 +44,7 @@
 #include "lib/fileloc.h"        /* MC_HISTORY_FILE */
 #include "lib/event.h"          /* mc_event_raise() */
 #ifdef ENABLE_LUA
-#include "lib/lua/plumbing.h"   /* mc_lua_eat_key() */
+#include "lib/lua/plumbing.h"   /* mc_lua_eat_key(), mc_lua_notify_on_widget_destruction() */
 #endif
 
 /*** global variables ****************************************************************************/
@@ -274,7 +274,7 @@ refresh_cmd (void)
 
 /* --------------------------------------------------------------------------------------------- */
 
-static cb_ret_t
+/*static*/ cb_ret_t  /* @FIXME: this should be public: lua/modules/ui.c wants this */
 dlg_execute_cmd (WDialog * h, long command)
 {
     cb_ret_t ret = MSG_HANDLED;
@@ -789,7 +789,7 @@ dlg_create (gboolean modal, int y1, int x1, int lines, int cols,
     new_d = g_new0 (WDialog, 1);
     w = WIDGET (new_d);
     widget_init (w, y1, x1, lines, cols, (callback != NULL) ? callback : dlg_default_callback,
-                 mouse_handler);
+                 mouse_handler, "Dialog");
     widget_want_cursor (w, FALSE);
 
     new_d->state = DLG_CONSTRUCT;
@@ -959,7 +959,7 @@ del_widget (void *w)
         h->current = dlg_widget_next (h, d);
 
     h->widgets = g_list_remove_link (h->widgets, d);
-    send_message (d->data, NULL, MSG_DESTROY, 0, NULL);
+    widget_destroy (WIDGET (d->data));
     g_free (d->data);
     g_list_free_1 (d);
 
@@ -1220,7 +1220,6 @@ dlg_init (WDialog * h)
     while (h->current != NULL && !dlg_focus (h))
         h->current = dlg_widget_next (h, h->current);
 
-
     h->ret_value = 0;
 }
 
@@ -1284,6 +1283,13 @@ dlg_destroy (WDialog * h)
 {
     /* if some widgets have history, save all history at one moment here */
     dlg_save_history (h);
+    {
+        /* Inform script engines of dead widgets. */
+        dlg_broadcast_msg (h, MSG_BEFORE_DESTROY);
+#ifdef ENABLE_LUA
+        mc_lua_notify_on_widget_destruction (WIDGET (h));
+#endif
+    }
     dlg_broadcast_msg (h, MSG_DESTROY);
     g_list_free_full (h->widgets, g_free);
     mc_event_group_del (h->event_group);

@@ -557,7 +557,7 @@ listbox_new (int y, int x, int height, int width, gboolean deletable, lcback_fn 
 
     l = g_new (WListbox, 1);
     w = WIDGET (l);
-    widget_init (w, y, x, height, width, listbox_callback, listbox_event);
+    widget_init (w, y, x, height, width, listbox_callback, listbox_event, "Listbox");
 
     l->list = NULL;
     l->top = l->pos = 0;
