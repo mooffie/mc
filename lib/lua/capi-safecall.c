@@ -21,12 +21,56 @@ static const char *first_error = NULL;
 
 /* ------------------------- Displaying errors ---------------------------- */
 
+/*
+ * Errors are displayed in a fancy dialog box registered with us from the
+ * Lua side (see _bootstrap.lua). If this fancy facility isn't available
+ * (e.g., when there's some error in the core itself), we display the
+ * errors ourselves using a simple alert box (see display_error__simple()).
+ */
+
 static void
-display_error (lua_State * L)
+display_error (lua_State * L, const char *fancy, lua_CFunction simple)
+{
+    gboolean use_simple = FALSE;
+
+#ifdef ENABLE_BACKGROUND
+    if (mc_global.we_are_background)
+        use_simple = TRUE;
+#endif
+    if (!mc_lua_ui_is_ready ())
+        use_simple = TRUE;
+
+    if (!use_simple)
+    {
+        if (luaMC_get_system_callback (L, fancy))
+        {
+            lua_pushvalue (L, -2);      /* the error object. */
+            if (lua_pcall (L, 1, 0, 0))
+            {
+                /* the fancy callback failed. */
+                lua_pop (L, 1); /* we don't need this new err msg. */
+                use_simple = TRUE;
+            }
+        }
+        else
+            use_simple = TRUE;  /* no fancy callback. */
+    }
+
+    if (use_simple)
+    {
+        lua_pushcfunction (L, simple);
+        lua_pushvalue (L, -2);  /* the error object. */
+        if (lua_pcall (L, 1, 0, 0))
+            lua_pop (L, 1);     /* we don't need this new err msg. */
+    }
+}
+
+static int
+display_error__simple (lua_State * L)
 {
     const char *error_message;
 
-    error_message = lua_tostring (L, -1);
+    error_message = lua_tostring (L, 1);
     if (error_message)
     {
         if (mc_lua_ui_is_ready ())
@@ -34,6 +78,7 @@ display_error (lua_State * L)
         else
             fprintf (stderr, E_ ("LUA EXCEPTION: %s\n"), error_message);
     }
+    return 0;
 }
 
 /* -------------------------- Running Lua code ---------------------------- */
@@ -70,7 +115,7 @@ handle_error (lua_State * L)
         lua_pushstring (L, E_ ("(error object is not a string)"));
     }
     record_first_error (L);
-    display_error (L);
+    display_error (L, "devel::display_error", display_error__simple);
 
     lua_pop (L, 1);             /* the error */
 }

@@ -33,6 +33,9 @@ require('globals')
 internal.register_system_callback('mcscript::run_script', function(...)
   return require('mcscript').run_script(...)
 end)
+internal.register_system_callback('devel::display_error', function(...)
+  return require('devel').display_error(...)
+end)
 
 ----------------------------- Auto-loading stuff -----------------------------
 
