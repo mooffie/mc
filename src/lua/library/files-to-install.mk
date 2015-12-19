@@ -22,4 +22,5 @@ modules/core/timer.lua \
 modules/core/utils.lua \
 modules/core/utils/glob.lua \
 modules/core/utils/magic.lua \
+modules/core/utils/table.lua \
 modules/core/utils/text.lua
