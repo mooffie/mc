@@ -6,6 +6,7 @@ It setups the Lua environment and loads system and user scripts.
 
 ]]
 
+local internal = require('internal')
 local conf = require('conf')
 
 local lua_system_dir, lua_user_dir = conf.dirs.system_lua, conf.dirs.user_lua
@@ -26,6 +27,12 @@ package.path =
                package.path
 
 require('globals')
+
+------------------------------------------------------------------------------
+
+internal.register_system_callback('mcscript::run_script', function(...)
+  return require('mcscript').run_script(...)
+end)
 
 ----------------------------- Auto-loading stuff -----------------------------
 
