@@ -19,6 +19,9 @@ modules/core/prompts.lua \
 modules/core/regex.lua \
 modules/core/string.lua \
 modules/core/timer.lua \
+modules/core/ui.lua \
+modules/core/ui/gc.lua \
+modules/core/ui/scaffolding.lua \
 modules/core/utils.lua \
 modules/core/utils/glob.lua \
 modules/core/utils/magic.lua \

@@ -142,7 +142,7 @@ lookup_emacs_key (const char *name, char **label)
  * If 'push_name_short' is TRUE, also pushes onto the stack the canonical
  * short name of the key. Otherwise, the stack isn't modified in any way.
  */
-static long
+long
 luaTTY_check_keycode (lua_State * L, int name_index, gboolean push_name_short)
 {
     const char *name;
@@ -461,7 +461,7 @@ luaTTY_assert_ui_is_ready_ex (lua_State * L, gboolean push_only, const char *fun
             E_ ("You can not use %s() yet, because the UI has not been initialized.");
         const char *msg_with_solution =
             E_ ("You can not use %s() yet, because the UI has not been initialized.\n"
-                "One way to solve this problem is to call ui_open() before calling this function.");
+                "One way to solve this problem is to call ui.open() before calling this function.");
 
         const char *msg =
             (mc_global.mc_run_mode == MC_RUN_SCRIPT) ? msg_with_solution : msg_without_solution;
@@ -739,6 +739,11 @@ l_text_align (lua_State * L)
  * @function is_ui_ready
  */
 
+/*
+ * Note: it's in the 'tty' module, not in 'ui', because doing ui.is_ready()
+ * would autoload the UI module, something that isn't necessary in non-UI
+ * apps.
+ */
 static int
 l_is_ui_ready (lua_State * L)
 {

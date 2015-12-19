@@ -194,7 +194,7 @@ radio_new (int y, int x, int count, const char **texts)
     }
 
     /* 4 is width of "(*) " */
-    widget_init (w, y, x, count, 4 + wmax, radio_callback, radio_mouse_callback);
+    widget_init (w, y, x, count, 4 + wmax, radio_callback, radio_mouse_callback, "Radios");
     w->options |= WOP_SELECTABLE | WOP_WANT_CURSOR | WOP_WANT_HOTKEY;
     r->pos = 0;
     r->sel = 0;

@@ -10,6 +10,8 @@ libmc_lualib_la_SOURCES = \
 	plumbing.h \
 	timer.c \
 	timer.h \
+	ui-impl.c \
+	ui-impl.h \
 	utilx.c \
 	utilx.h
 

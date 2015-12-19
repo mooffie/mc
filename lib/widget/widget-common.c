@@ -43,6 +43,9 @@
 #include "lib/tty/color.h"
 #include "lib/skin.h"
 #include "lib/strutil.h"
+#ifdef ENABLE_LUA
+#include "lib/lua/plumbing.h"   /* mc_lua_notify_on_widget_destruction() */
+#endif
 #include "lib/widget.h"
 
 /*** global variables ****************************************************************************/
@@ -194,7 +197,8 @@ hotkey_draw (Widget * w, const hotkey_t hotkey, gboolean focused)
 
 void
 widget_init (Widget * w, int y, int x, int lines, int cols,
-             widget_cb_fn callback, widget_mouse_cb_fn mouse_callback)
+             widget_cb_fn callback, widget_mouse_cb_fn mouse_callback,
+             const char *scripting_class_name)
 {
     w->x = x;
     w->y = y;
@@ -208,6 +212,7 @@ widget_init (Widget * w, int y, int x, int lines, int cols,
     w->mouse.capture = FALSE;
     w->mouse.last_msg = MSG_MOUSE_NONE;
     w->mouse.last_buttons_down = 0;
+    w->scripting_class_name = scripting_class_name;
 
     w->options = WOP_DEFAULT;
     w->state = WST_DEFAULT;
@@ -235,6 +240,12 @@ widget_default_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm
     case MSG_DESTROY:
     case MSG_CURSOR:
     case MSG_IDLE:
+        return MSG_HANDLED;
+
+    case MSG_BEFORE_DESTROY:
+#ifdef ENABLE_LUA
+        mc_lua_notify_on_widget_destruction (w);
+#endif
         return MSG_HANDLED;
 
     default:
@@ -458,7 +469,8 @@ widget_replace (Widget * old_w, Widget * new_w)
     new_w->id = old_w->id;
     holder->data = new_w;
 
-    send_message (old_w, NULL, MSG_DESTROY, 0, NULL);
+    widget_destroy (old_w);
+
     send_message (new_w, NULL, MSG_INIT, 0, NULL);
 
     if (should_focus)
@@ -509,6 +521,15 @@ void
 widget_set_bottom (Widget * w)
 {
     widget_reorder (dlg_find (w->owner, w), FALSE);
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+void
+widget_destroy (Widget * w)
+{
+    send_message (w, NULL, MSG_BEFORE_DESTROY, 0, NULL);
+    send_message (w, NULL, MSG_DESTROY, 0, NULL);
 }
 
 /* --------------------------------------------------------------------------------------------- */

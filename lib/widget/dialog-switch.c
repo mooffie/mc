@@ -214,6 +214,27 @@ dialog_switch_prev (void)
 
 /* --------------------------------------------------------------------------------------------- */
 
+/**
+ * Lets programmers switch to a certain dialog.
+ *
+ * It's like dialog_switch_goto() but accepts a WDialog.
+ */
+void
+dialog_switch_focus (WDialog * h)
+{
+    GList *dlg;
+
+    if (mc_current == NULL)     /* Abort if the topmost dialog is modal. */
+        return;
+
+    dlg = g_list_find (mc_dialogs, h);
+
+    if (dlg != NULL)
+        dialog_switch_goto (dlg);
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
 void
 dialog_switch_list (void)
 {
@@ -251,6 +272,17 @@ dialog_switch_list (void)
     selected = run_listbox_with_data (listbox, mc_current);
     if (selected != NULL)
         dialog_switch_goto (selected);
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+/**
+ * For the benefit of applications that want to traverse the dialogs.
+ */
+void
+dialog_switch_foreach (GFunc func, gpointer user_data)
+{
+    g_list_foreach (mc_dialogs, func, user_data);
 }
 
 /* --------------------------------------------------------------------------------------------- */

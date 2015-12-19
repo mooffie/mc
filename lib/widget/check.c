@@ -140,7 +140,7 @@ check_new (int y, int x, gboolean state, const char *text)
     w = WIDGET (c);
     c->text = parse_hotkey (text);
     /* 4 is width of "[X] " */
-    widget_init (w, y, x, 1, 4 + hotkey_width (c->text), check_callback, check_mouse_callback);
+    widget_init (w, y, x, 1, 4 + hotkey_width (c->text), check_callback, check_mouse_callback, "Checkbox");
     w->options |= WOP_SELECTABLE | WOP_WANT_CURSOR | WOP_WANT_HOTKEY;
     c->state = state;
 

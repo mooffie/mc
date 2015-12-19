@@ -144,6 +144,15 @@ mc_lua_load (void)
     g_assert (lua_gettop (Lg) == 0);    /* sanity check */
 }
 
+/**
+ * Handles the complexity caused by shutting off the VFS before Lua.
+ */
+void
+mc_lua_before_vfs_shutdown (void)
+{
+    mc_lua_trigger_event ("core::before-vfs-shutdown");
+}
+
 void
 mc_lua_shutdown (void)
 {
