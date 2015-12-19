@@ -37,6 +37,33 @@
 ------------------------------------------------------------------------------
 
 ---
+-- A "benign" version of @{error}.
+--
+-- Instead of showing the error message in a frightening red box with a stack
+-- trace, it's shown as a normal @{alert}. This is intended for usage errors
+-- whereas @{error} is intended for programming errors.
+--
+function abort(message)
+  error {
+    abort=true,
+    message=message
+  }
+end
+
+---
+-- A "benign" version of @{assert}.
+--
+-- See @{abort}.
+--
+function abortive(val, message, ...)
+  if val then
+    return val, message, ...
+  else
+    abort(message)
+  end
+end
+
+---
 -- A utility for validating types of function arguments.
 --
 -- Example:

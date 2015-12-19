@@ -26,10 +26,7 @@ end
 
 local function test_gc()
 
-  if weak_count() ~= 0 then
-    alert("Error: You have to start this test with a clean slate. You have other Lua plugins loaded.")
-    return
-  end
+  abortive(weak_count() == 0, "Error: You have to start this test with a clean slate. You have other Lua plugins loaded.")
 
   do
     local b1 = ui.Button("click me")

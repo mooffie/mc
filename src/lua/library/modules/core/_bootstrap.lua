@@ -36,6 +36,9 @@ end)
 internal.register_system_callback('devel::display_error', function(...)
   return require('devel').display_error(...)
 end)
+internal.register_system_callback('devel::display_abort', function(...)
+  return require('devel').display_abort(...)
+end)
 
 ----------------------------- Auto-loading stuff -----------------------------
 
