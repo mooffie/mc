@@ -59,6 +59,7 @@ autoload('devel', 'devel')
 autoload('timer', 'timer')
 autoload('event', 'event')
 autoload('tty', 'tty')
+autoload('ui', 'ui')
 autoload('keymap', 'keymap')
 autoload('utils', 'utils')
 autoload('prompts', 'prompts')
@@ -71,6 +72,9 @@ magic.setup_autoload(string)
 string.autoload('l_tsplit', {'utils.text', 'tsplit'})
 string.autoload('l_split', {'utils.text', 'split'})
 require('regex').expose()
+
+-- We can't auto-load the ui module. A comment in 'ui.lua' explains why.
+require('ui')
 
 ----------------------------------- Timers -----------------------------------
 

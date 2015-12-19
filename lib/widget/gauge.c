@@ -137,7 +137,7 @@ gauge_new (int y, int x, int cols, gboolean shown, int max, int current)
 
     g = g_new (WGauge, 1);
     w = WIDGET (g);
-    widget_init (w, y, x, 1, cols, gauge_callback, NULL);
+    widget_init (w, y, x, 1, cols, gauge_callback, NULL, "Gauge");
     widget_want_cursor (w, FALSE);
     widget_want_hotkey (w, FALSE);
 

@@ -891,7 +891,7 @@ menubar_new (int y, int x, int cols, GList * menu, gboolean visible)
 
     menubar = g_new0 (WMenuBar, 1);
     w = WIDGET (menubar);
-    widget_init (w, y, x, 1, cols, menubar_callback, menubar_mouse_callback);
+    widget_init (w, y, x, 1, cols, menubar_callback, menubar_mouse_callback, NULL);
 
     menubar->is_visible = visible;
     widget_want_cursor (w, FALSE);

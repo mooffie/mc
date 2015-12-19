@@ -43,7 +43,8 @@ typedef enum
     MSG_RESIZE,                 /* Screen size has changed */
     MSG_VALIDATE,               /* Dialog is to be closed */
     MSG_END,                    /* Shut down dialog */
-    MSG_DESTROY                 /* Sent to widget at destruction time */
+    MSG_DESTROY,                /* Sent to widget at destruction time */
+    MSG_BEFORE_DESTROY          /* Sent before MSG_DESTROY */
 } widget_msg_t;
 
 /* Widgets are expected to answer to the following messages:
@@ -121,6 +122,24 @@ struct Widget
         mouse_msg_t last_msg;   /* The previous event type processed. */
         int last_buttons_down;
     } mouse;
+
+    /*
+     * To be able to convert a Widget to a scriptable object, we have to
+     * know its type (aka "class"). This member serves this purpose.
+     *
+     * We currently use a string, for simplicity (for the benefit of
+     * reviewers).
+     *
+     * In the future we'll probably change this to a numeric ID. How to do
+     * this "properly" is explained in 'TODO.long'. We'll also change its
+     * name to 'class_id' because it's useful also outside the realm of
+     * scripting.
+     *
+     * (Using strings has a flaw: we have to settle on the names used in one
+     * scripting engine (Lua). Somebody designing, say, a Python support may
+     * want to name his classes differently.)
+     */
+    const char *scripting_class_name;
 };
 
 /* structure for label (caption) with hotkey, if original text does not contain
@@ -149,7 +168,8 @@ void hotkey_draw (Widget * w, const hotkey_t hotkey, gboolean focused);
 
 /* widget initialization */
 void widget_init (Widget * w, int y, int x, int lines, int cols,
-                  widget_cb_fn callback, widget_mouse_cb_fn mouse_callback);
+                  widget_cb_fn callback, widget_mouse_cb_fn mouse_callback,
+                  const char *lua_class_name);
 /* Default callback for widgets */
 cb_ret_t widget_default_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm,
                                   void *data);
@@ -163,6 +183,7 @@ void widget_erase (Widget * w);
 gboolean widget_is_active (const void *w);
 gboolean widget_overlapped (const Widget * a, const Widget * b);
 void widget_replace (Widget * old, Widget * new);
+void widget_destroy (Widget * w);
 
 /* get mouse pointer location within widget */
 Gpm_Event mouse_get_local (const Gpm_Event * global, const Widget * w);

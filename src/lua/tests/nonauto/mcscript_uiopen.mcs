@@ -1,7 +1,7 @@
 
 -- Tests whether we can enter UI mode explicitly. The alert() should show a dialog.
 
-ui_open()
+ui.open()
 alert('hi')
 
 -- vim: set ft=lua:

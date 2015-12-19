@@ -50,23 +50,60 @@ Put the following in a file named "listetc":
     @plain
     $ ./listetc
 
-In your script you have access to all of MC's facilities, like the virtual
-file system.
+In your script you have access to all of MC's facilities: the virtual
+file system, the UI, etc.
 
 Tip: 'mcscript' isn't really a binary. It's a symlink to the 'mc' binary,
 in the same way 'mcedit' is. Running a script by issuing
 `mcscript some_script` is equivalent to issuing `mc --script some_script`.
 
-## Entering UI mode
+## Having a user interface
+
+If you want to use the UI, go ahead and do it. Upon invoking most UI
+functions, the terminal will enter UI mode automatically:
+
+    #!/usr/bin/env mcscript
+
+    local dlg = ui.Dialog()
+    local moral_person = ui.Checkbox(T"I love MC")
+
+    dlg:add(moral_person, ui.DefaultButtons())
+
+    if dlg:run() then
+      if moral_person.checked then
+        alert(T"The world needs people like you.")
+      else
+        alert(T"Scumbag!")
+      end
+    end
+
+Tip: It is very easy to write UI programs that run both "inside" and
+"outside" MC. The @{git:misc/bin} folder contains several mcscript
+executables that launch the @{git:bin/calc|calculator}, the
+@{git:bin/game-blocks|blocks game}, and other
+@{git:bin/clock|assortments} "outside" MC.
+
+[tip]
+
+mcscript can be an ideal replacement for
+[dialog](http://invisible-island.net/dialog/dialog.html),
+[zenity](http://live.gnome.org/Zenity) and similar utilities.
+
+So, when you write the next Damn Tiny Linux distro, think about basing
+it on mcscript!
+
+[/tip]
+
+## Explicitly entering UI mode
 
 Some functions, like @{prompts.alert|alert} and @{devel.view}, won't
 enter @{tty.is_ui_ready|UI mode} for you: they're happy to work in
 non-UI mode. If you want them to use the UI, you need to start it
-yourself explicitly. You do this by calling @{ui_open}:
+yourself explicitly. You do this by calling @{ui.open}:
 
     #!/usr/bin/env mcscript
 
-    ui_open()
+    ui.open()
     alert("Hi")
 
 ## Command-line arguments
