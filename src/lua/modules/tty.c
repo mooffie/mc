@@ -7,6 +7,7 @@
 #include <config.h>
 
 #include "lib/global.h"
+#include "lib/widget.h"         /* mc_refresh(), do_refresh() */
 #include "lib/tty/key.h"        /* lookup_key*() */
 #include "lib/strutil.h"        /* str_*() */
 #include "lib/lua/capi.h"
@@ -244,6 +245,206 @@ l_keycode_to_keyname (lua_State * L)
  * @section end
  */
 
+/**
+
+Drawing and Refreshing the Screen.
+
+It's useful to know a bit about how things are drawn on the screen,
+especially if you're programming with @{timer|timers}.
+
+MC is a **curses** application. In such applications drawing (others may
+call it "painting") is made to a *virtual* screen, which is simply a
+memory buffer in the program. This virtual screen is then written out to
+the *physical* screen.
+
+Info: This two-stage process helps curses minimize the amount of data
+transferred to the physical screen. Only the smallest region (usually a
+rectangle) in the virtual screen that actually differs from the contents
+of the physical screen is written out.
+
+Likewise in Lua. Any function (or method) dealing with the screen
+belongs to one, and one only, of the stages.
+
+Functions belonging to the drawing stage have "**redraw**" in their
+names. They don't affect the physical screen, only the virtual one.
+We'll call this **the drawing stage**.
+
+Functions belonging to the second stage, which affects the physical
+screen, have "**refresh**" in their names. We'll call this **the refresh stage**.
+
+Here's a summary of the functions (or method) dealing with the screen:
+
+### The drawing stage
+
+- @{~mod:ui*widget:redraw}
+
+- @{~mod:ui*dialog:redraw}
+
+- @{~mod:ui*dialog:redraw_cursor}
+  > Positioning the cursor is just like a drawing operation: it occurs
+  in the *virtual* screen, and doesn't show on the physical screen
+  unless one of the refresh stage functions is called.
+
+- @{tty.redraw}
+
+### The refresh stage
+
+- @{tty.refresh}
+  > Copies the virtual screen onto the physical one.
+
+- @{~mod:ui*dialog:refresh}
+  > A utility function that also positions the cursor.
+
+### When to call which function?
+
+You may feel overwhelmed by the many functions you have at your hands.
+Don't feel so.
+
+In normal code you won't need to call any of them. When you set a
+property of some widget, its :redraw() method will be called
+automatically. Then, as part of MC's event loop, @{tty.refresh} will be
+called. So the screen will be updated appropriately without your explicit
+intervention.
+
+On the other hand, when using a @{ui.Custom} you have to call its
+:redraw() yourself whenever its state changes in a way that affects its
+display because only you know when this happens.
+
+### Working with timers
+
+We explained that you normally don't need to call @{tty.refresh}
+yourself as this is done automatically. One exception, however, is when
+working with timers. If your timed function affects the display (for
+example, if it updates some widget, as  in `label.text = "new label"`)
+then you need to call @{tty.refresh} (or @{~mod:ui*dialog:refresh})
+yourself to refresh the screen:
+
+    timer.set_timeout(function()
+      label.text = label.text .. "!"
+      dlg:refresh()
+      -- dialog:refresh() is like tty.refresh() except that
+      -- it also puts the cursor at the focused widget. Had
+      -- we called tty.refresh() instead, the cursor would have
+      -- appeared at the last widget to draw itself (the label).
+    end, 1000)
+
+    -- another example:
+
+    timer.set_timeout(function()
+      alert('hi')
+      tty.refresh()
+    end, 1000)
+
+The reason for this is the way MC's event loop works. Here's a schema of
+it:
+
+<pre>
+event_loop:
+  repeat:
+&nbsp;   (A) while there's no keyboard or mouse events:
+&nbsp;         execute timers
+&nbsp;   (B) get keyboard or mouse event
+&nbsp;   (C) process the event
+&nbsp;   (D) position the cursor at the focused widget
+&nbsp;   (E) refresh the screen
+</pre>
+
+When our timer function returns, MC still sits there waiting
+(loop **(A)**) for a keyboard (or mouse) event. Step **(E)**
+isn't arrived at, and hence the screen isn't refreshed. That's
+why we need to refresh the screen explicitly from our timer function.
+
+[info]
+
+The previous paragraph gave a "schema" of MC's event loop. Here's an
+overview of the actual C code, for interested programmers:
+
+[expand]
+
+    dlg_run() {
+      dlg_init() {
+        dlg_redraw()
+      }
+      frontend_dlg_run() {
+        while (dlg->state == DLG_ACTIVE) {
+          update_cursor(dlg)
+          event = tty_get_event() {
+            mc_refresh()
+            while (no keyboard or mouse event) {
+              execute pending timeouts
+            }
+            read event
+          }
+          dlg_process_event(dlg, event)
+        }
+      }
+    }
+
+(You'll notice that, in the `while` loop, steps **(D)** and **(E)**
+actually are the first to happen, but that's insignificant.)
+
+[/expand]
+
+[/info]
+
+@section drawing
+
+*/
+
+
+/**
+ * Redraws all the screen's contents.
+ *
+ * All the dialogs on screen are redrawn, from the bottom to the top.
+ *
+ * Note: You'll hardly ever need to use this function yourself. This documentation
+ * entry exists because this function is used, once, in the implementation
+ * of the @{ui} module: It's used to redraw the screen after a dialog box
+ * is closed. Except for achieving some "pyrotechnics", as demonstrated below,
+ * there's little to no reason to use this function.
+ *
+ *    keymap.bind('C-y', function()
+ *      local dlg = ui.Dialog()
+ *      local btn = ui.Button(T"Move this dialog to the right")
+ *      btn.on_click = function()
+ *        dlg:set_dimensions(dlg.x + 1, dlg.y)
+ *        tty.redraw() -- comment this out to see what happens.
+ *      end
+ *      dlg:add(btn):run()
+ *    end)
+ *
+ * @function redraw
+ */
+static int
+l_redraw (lua_State * L)
+{
+    (void) L;
+    do_refresh ();
+    return 0;
+}
+
+/**
+ * Refreshes the screen.
+ *
+ * This copies the *virtual* screen onto the *physical* one.
+ *
+ * Info-short: Only the regions that are known to differ from the target are
+ * copied.
+ *
+ * @function refresh
+ */
+static int
+l_refresh (lua_State * L)
+{
+    (void) L;
+    mc_refresh ();
+    return 0;
+}
+
+/**
+ * @section end
+ */
+
 /* ------------------------------ Utilities ------------------------------- */
 
 /**
@@ -263,6 +464,225 @@ luaTTY_assert_ui_is_ready (lua_State * L)
 }
 
 /* ------------------------------------------------------------------------ */
+
+/**
+ * Text handling.
+ *
+ * @section text
+ */
+
+/**
+ * Calculates a string's "visual" width.
+ *
+ * Given a string in the terminal's encoding, returns the amount of columns
+ * needed to display it.
+ *
+ * Info: While in English there's a one-to-one correspondence between characters
+ * and columns, in other languages this isn't always so. E.g., diacritic
+ * characters consume 0 columns and Asian characters consume 2 columns.
+ *
+ *    assert(tty.text_width 'ンab᷉c᷉d' == 6)
+ *
+ *    -- ...and now, assuming this is a UTF-8 encoded source file, compare
+ *    -- this with string.len(), which is oblivious to characters and
+ *    -- their properties:
+ *    assert(string.len 'ンab᷉c᷉d' == 13)
+ *
+ * (If the terminal's encoding isn't UTF-8, this function is identical to
+ * @{string.len} (except for handling multiple lines).)
+ *
+ * if the string contains multiple lines, the width of the widest line is
+ * returned. Also returned is the number of lines:
+ *
+ *    assert(tty.text_width "once\nupon\na time" = 6)
+ *    assert(select(2, tty.text_width "once\nupon\na time") = 3)
+ *
+ * @function text_width
+ * @args (s)
+ */
+static int
+l_text_width (lua_State * L)
+{
+    const char *s;
+
+    int cols, lines = 1;
+
+    s = luaL_checkstring (L, 1);
+
+    if (strchr (s, '\n'))
+        str_msg_term_size (s, &lines, &cols);
+    else
+        cols = str_term_width1 (s);
+
+    lua_pushinteger (L, cols);
+    lua_pushinteger (L, lines);
+    return 2;
+}
+
+/**
+ * Returns a "visual" substring of a string.
+ *
+ * Given a string in the terminal's encoding, returns the substring falling
+ * within certain screen columns.
+ *
+ * The arguments to this function are the same as @{string.sub}'s. Indeed, you
+ * can think of this function as equivalent to @{string.sub} except that the
+ * indices are interpreted to be screen columns instead of bytes.
+ *
+ * (See discussion at @{tty.text_width}.)
+ *
+ *    assert(tty.text_cols('ンab᷉c᷉d', 4, 5) == 'b᷉c᷉')
+ *
+ *    -- ...and now, assuming this is a UTF-8 encoded source file, compare
+ *    -- this with string.sub(), which is oblivious to characters and
+ *    -- their properties:
+ *    assert(string.sub('ンab᷉c᷉d', 4, 5) == 'ab')
+ *
+ * (If the terminal's encoding isn't UTF-8, this function is identical to
+ * @{string.sub}.)
+ *
+ * @function text_cols
+ * @args (s, i [, j])
+ */
+static int
+l_text_cols (lua_State * L)
+{
+    const char *s;
+    int col1;
+    int col2;
+
+    int width;
+
+    s = luaL_checkstring (L, 1);
+    col1 = luaL_checkint (L, 2);
+    col2 = luaL_optint (L, 3, -1);
+
+    if (col1 < 0 || col2 < 0)
+        /* We compute the width only when needed. */
+        width = str_term_width1 (s);
+    else
+        width = -1;
+
+    /* Convert Lua indices to C indices. */
+    col1 = mc_lua_fixup_idx (col1, width, FALSE);
+    col2 = mc_lua_fixup_idx (col2, width, TRUE);
+
+    if (col1 < col2)
+    {
+        int ch1, ch2;
+        const char *p1, *p2;
+        int size;
+
+        /* Note the unfortunate names of these two functions: "pos" is used
+         * in both but means different things. */
+
+        ch1 = str_column_to_pos (s, col1);
+        ch2 = str_column_to_pos (s, col2);
+
+        p1 = s + str_offset_to_pos (s, ch1);
+        p2 = s + str_offset_to_pos (s, ch2);
+
+        size = p2 - p1;
+
+        lua_pushlstring (L, p1, size);
+
+        /*
+         * @todo?
+         *
+         * tty.text_cols("aンbc", 3, 4) currently returns "ンb". Ideally, maybe,
+         * it should return " b". But perhaps that's too far fetched.
+         */
+    }
+    else
+    {
+        lua_pushliteral (L, "");
+    }
+
+    return 1;
+}
+
+static int                      /* align_crt_t */
+luaTTY_check_align (lua_State * L, int idx)
+{
+    static const char *const just_names[] = {
+        "left", "right", "center", "center or left",
+        "left~", "right~", "center~", "center or left~", NULL
+    };
+    static const align_crt_t just_values[] = {
+        J_LEFT, J_RIGHT, J_CENTER, J_CENTER_LEFT,
+        J_LEFT_FIT, J_RIGHT_FIT, J_CENTER_FIT, J_CENTER_LEFT_FIT
+    };
+
+    return luaMC_checkoption (L, idx, NULL, just_names, just_values);
+}
+
+/**
+ * Aligns ("justifies") a string.
+ *
+ * Fits a string to **width** terminal columns by padding it with spaces or
+ * trimming it.
+ *
+ * **align_mode** may be:
+ *
+ * - "left"
+ * - "right"
+ * - "center"
+ * - "center or left"
+ *
+ * if the string is wider than **width**, the excess it cut off. You may
+ * instead append "~" to the align mode to shorten the string by replacing
+ * characters from its middle with a tilde character.
+ *
+ *    assert(tty.text_align("Alice", 10, "left") == "Alice     ")
+ *    assert(tty.text_align("Alice", 10, "right") == "     Alice")
+ *    assert(tty.text_align("Alice", 10, "center") == "  Alice   ")
+ *
+ *    assert(tty.text_align("Alice in Wonderland", 10, "left") == "Alice in W")
+ *    assert(tty.text_align("Alice in Wonderland", 10, "left~") == "Alice~land")
+ *    assert(tty.text_align("Alice in Wonderland", 10, "center") == "")
+ *    -- "center or left" means to center if there's enough room, and align
+ *    -- to left otherwise.
+ *    assert(tty.text_align("Alice in Wonderland", 10, "center or left")
+ *            == "Alice in W")
+ *
+ *    -- Multiple lines are not supported:
+ *    assert(tty.text_align("one\ntwo", 8, "left") == "one.two ")
+ *
+ * @function text_align
+ * @args (s, width, align_mode)
+ */
+static int
+l_text_align (lua_State * L)
+{
+    const char *s;
+    int width;
+    align_crt_t align;
+
+    s = luaL_checkstring (L, 1);
+    width = luaL_checkint (L, 2);
+    align = luaTTY_check_align (L, 3);
+
+    /* @FIXME:
+     * str_*_term_trim() crashes on long strings (as pointed out
+     * in 'samples/ui/extlabel.lua'). In the meantime:
+     */
+    if (width > BUF_MEDIUM - 1)
+        /* That's the size of the buffer used by str_*_fit_to_term(). */
+        luaL_error (L, E_ ("The width may not exceed %d."), BUF_MEDIUM - 1);
+
+    /* @FIXME:
+     * MC bug: tty.text_align('abcdefg',5,'center') gives 'abcdefg'.
+     * But 'center' really is a weird creature that perhaps shouldn't exist: What's the
+     * point in tty.text_align('long long long',5,'center') giving '' ?!
+     */
+
+    lua_pushstring (L, str_fit_to_term (s, width, align));
+    return 1;
+}
+
+/**
+ * @section end
+ */
 
 /**
  * Misc functions
@@ -311,6 +731,32 @@ l_is_ui_ready (lua_State * L)
 }
 
 /**
+ * Returns the terminal width, in characters.
+ *
+ * @function get_cols
+ */
+static int
+l_get_cols (lua_State * L)
+{
+    luaTTY_assert_ui_is_ready (L);      /* @todo: It would be nice to have this function work regardless of UI state. */
+    lua_pushinteger (L, COLS);
+    return 1;
+}
+
+/**
+ * Returns the terminal height, in lines.
+ *
+ * @function get_rows
+ */
+static int
+l_get_rows (lua_State * L)
+{
+    luaTTY_assert_ui_is_ready (L);
+    lua_pushinteger (L, LINES);
+    return 1;
+}
+
+/**
  * Sounds a beep.
  *
  * @function beep
@@ -325,7 +771,84 @@ l_beep (lua_State * L)
 }
 
 /**
+
+Encodings.
+
+Whenever you output a string to the terminal --for example, when you
+pass it to a function like alert() or to widgets like ui.Label,
+ui.Listbox-- you should convert it first to the terminal's encoding.
+
+This is the result of not living in a perfect world: The file you're
+editing, or a string you read from some data file, may be of a different
+encoding than your terminal's. For example, your terminal's encoding may
+be UTF-8 whereas your data may be encoded in ISO-8859-8.
+
+This isn't really an issue on modern systems where everything is encoded
+in UTF-8. It'd be legitimate for you, therefore, to decide to ignore
+this issue --especially if you're the only user of your script.
+Nevertheless, you should at least be aware of this issue in order to
+support your user-base.
+
+There are two ways to convert a string to the terminal's encoding:
+
+__(1)__ When you know the string's encoding, use @{tty.conv}:
+
+    -- Displaying the contents of a ISO-8859-8 encoded file.
+    local s = assert(fs.read('data_file.txt'))
+    alert(tty.conv(s, 'iso-5589-8'))
+
+__(2)__ When the string originates in some widget like @{ui.Editbox},
+which keeps its data encoded independently of the terminal, use the
+widget's @{ui.Editbox:to_tty|:to_tty} method:
+
+    alert('The current word is ' .. edt:to_tty(edt.current_word))
+
+(In the example above we could've used instead the *hypothetical* code
+`tty.conv(edt.current_word, edt.encoding)` but an @{ui.Editbox} doesn't
+keep the name of its encoding.)
+
+@section encodings
+
+*/
+
+/**
+ * Converts a string to the terminal's encoding.
+ *
+ * See example in the discussion above.
+ *
+ * @function conv
+ * @param s The string to convert.
+ * @param encoding_name The string's encoding name. Like "ISO-8859-8",
+ *   "KOI8-R", etc. This name is case-insensitive. If the encoding name
+ *   is unknown to the system, an exception will be raised.
+ */
+static int
+l_conv (lua_State * L)
+{
+    const char *s;
+    size_t len;
+    const char *from_enc;
+
+    GIConv conv;
+
+    s = luaL_checklstring (L, 1, &len);
+    from_enc = luaL_checkstring (L, 2);
+
+    conv = str_crt_conv_from (from_enc);
+    if (conv == INVALID_CONV)
+        return luaL_error (L, E_ ("Unknown encoding '%s'"), from_enc);
+    (void) luaMC_pushlstring_conv (L, s, len, conv);
+    /* We don't care about ESTR_PROBLEM/ESTR_FAILURE: we deem it natural that
+     * terminal conversion won't preserve all the data. */
+    str_close_conv (conv);
+
+    return 1;
+}
+
+/**
  * Whether the terminal is UTF-8 encoded.
+ *
+ * See example in @{skin_get}.
  *
  * @function is_utf8
  */
@@ -367,8 +890,16 @@ l_is_utf8 (lua_State * L)
 static const struct luaL_Reg ttylib[] = {
     { "keyname_to_keycode", l_keyname_to_keycode },
     { "keycode_to_keyname", l_keycode_to_keyname },
+    { "redraw", l_redraw },
+    { "refresh", l_refresh },
+    { "text_width", l_text_width },
+    { "text_cols", l_text_cols },
+    { "text_align", l_text_align },
     { "is_ui_ready", l_is_ui_ready },
+    { "get_cols", l_get_cols },
+    { "get_rows", l_get_rows },
     { "beep", l_beep },
+    { "conv", l_conv },
     { "is_utf8", l_is_utf8 },
     { NULL, NULL }
 };
