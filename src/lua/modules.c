@@ -30,6 +30,7 @@ static const struct luaL_Reg mods[] = {
     { "c.timer",      luaopen_timer },
     { "tty",          luaopen_tty },
     { "utils.bit32",  luaopen_utils_bit32 },
+    { "c.utils.text", luaopen_utils_text },
     { NULL, NULL }
 /* *INDENT-ON* */
 };

@@ -65,6 +65,9 @@ autoload('locale', 'locale')
 autoload('regex', 'regex')
 
 -- Add some juice to strings:
+magic.setup_autoload(string)
+string.autoload('l_tsplit', {'utils.text', 'tsplit'})
+string.autoload('l_split', {'utils.text', 'split'})
 require('regex').expose()
 
 ----------------------------------- Timers -----------------------------------

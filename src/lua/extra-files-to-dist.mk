@@ -11,6 +11,10 @@ tests/auto/glob.mcs \
 tests/auto/key_bugs.mcs \
 tests/auto/magic_strict.mcs \
 tests/auto/regex.mcs \
+tests/auto/utils_text_extword.mcs \
+tests/auto/utils_text_fmtitvl.mcs \
+tests/auto/utils_text_fmtsz.mcs \
+tests/auto/utils_text_split.mcs \
 tests/benchmarks/treewalk/README \
 tests/benchmarks/treewalk/bench.mcs \
 tests/benchmarks/treewalk/bench.py \

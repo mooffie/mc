@@ -1,0 +1,20 @@
+-- Tests utils.text.tsplit().
+
+local ensure = devel.ensure
+
+local tsplit = require('utils.text').tsplit
+
+local function test()
+
+  ensure.equal(tsplit("one:two:three:", ":"), {"one", "two", "three"}, "tsplit simple")
+  ensure.equal(tsplit("one:two:three:", ":", -1), {"one", "two", "three", ""}, "tsplit limit #1")
+  ensure.equal(tsplit("one:two:three:", ":", 2), {"one", "two:three:"}, "tsplit limit #2")
+  ensure.equal(tsplit("", ":", -1), {}, "tsplit empty")
+  ensure.equal(tsplit("  one \t two  three  "), {"one", "two", "three"}, "tsplit whitespace")
+  ensure.equal(tsplit("one", ""), {"o", "n", "e"}, "tsplit zero-length-match")
+
+end
+
+test()
+
+-- vim: set ft=lua:
