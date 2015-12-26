@@ -16,6 +16,7 @@ modules/core/globals.lua \
 modules/core/keymap.lua \
 modules/core/regex.lua \
 modules/core/string.lua \
+modules/core/timer.lua \
 modules/core/utils.lua \
 modules/core/utils/glob.lua \
 modules/core/utils/magic.lua
