@@ -34,6 +34,7 @@ run "$MCSCRIPT bench.mcs flavor=posix_dir   $MCSCRIPT_DEFS $DIR"
 run "$MCSCRIPT bench.mcs flavor=files       $MCSCRIPT_DEFS $DIR"
 run "$MCSCRIPT bench.mcs flavor=opendir     $MCSCRIPT_DEFS $DIR"
 run "$MCSCRIPT bench.mcs flavor=dir         $MCSCRIPT_DEFS $DIR"
+run "$MCSCRIPT bench.mcs flavor=glob        $MCSCRIPT_DEFS $DIR"
 
 run "$RUBY bench.rb"
 run "$RUBY bench.rb --flavor default        $RUBY_DEFS $DIR"
