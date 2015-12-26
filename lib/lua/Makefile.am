@@ -8,6 +8,8 @@ libmc_lualib_la_SOURCES = \
 	capi-safecall.h \
 	plumbing.c \
 	plumbing.h \
+	timer.c \
+	timer.h \
 	utilx.c \
 	utilx.h
 
