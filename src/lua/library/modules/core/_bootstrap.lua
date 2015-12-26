@@ -59,33 +59,56 @@ autoload('regex', 'regex')
 -- Add some juice to strings:
 require('regex').expose()
 
------------------------------ Load user scripts ------------------------------
+------------------------ Load system and user scripts ------------------------
 
--- A primitive way to check for a file's existence. We'll replace it once we can.
-local function file_exists(path)
-  local f = io.open(path)
-  if f then
-    f:close()
-    return true
+local function load_all_scripts(dir)
+
+  -- We can shorten this code by using fs.tglob(), but _bootstrap should strive
+  -- not to autoload extra modules (which glob/tglob pulls in): this should be
+  -- the user's own prerogative.
+
+  -- Note: in the future, if we want to support luac files, it could be done in
+  -- package.path alone, for modules. Non-module files don't need this feature.
+
+  local files, failure_reason = fs.dir(dir)
+
+  if not files then
+    devel.log(E"I cannot read scripts in this directory: %s":format(failure_reason))
+    return
   end
+
+  -- We sort the files alphabetically.
+  --
+  -- The loading order is, in general, unimportant because we protect the global
+  -- namespace and snippets therefore can't mess in each other's guts anyway. But
+  -- for things like chaining keyboard.bind(), order does matter.
+  --
+  -- Nevertheless, we should discourage users from relying on this alphabetic
+  -- loading order. We may even decide to remove this "feature" anytime. Users should
+  -- instead organize their code in proper modules (and require() them explicitly).
+  --
+  table.sort(files)
+
+  for _, base in ipairs(files) do
+    if base:find "^[^.].*%.lua$" then  -- Exclude files beginning with dot.
+      local path = dir .. "/" .. base
+      devel.log(E"Loading %s":format(path))
+      dofile(path)
+    end
+  end
+
 end
 
--- Load user scripts.
+-- Load the rest of the site.
 --
--- We load only 'index.lua', from the user dir. The user can require() other
--- scripts from there.
---
--- We're doing it at a later stage (event.bind) so that possible exceptions
--- in the user code don't halt the rest of this script.
---
+-- We're doing it at a later stage so that possible exceptions there don't
+-- halt the rest of this script.
 event.bind('core::loaded', function()
-  local user_script = lua_user_dir .. "/index.lua"
-  if file_exists(user_script) then
-    devel.log((":: Loading user script (%s) ::"):format(user_script))
-    dofile(user_script)
-  else
-    devel.log((":: User script not found (%s) ::"):format(user_script))
-  end
+  devel.log(":: Loading distro scripts ::")
+  load_all_scripts(lua_system_dir)
+  devel.log((":: Loading user scripts (%s) ::"):format(lua_user_dir))
+  load_all_scripts(lua_user_dir)
+  devel.log(":: System loaded ::")
 end)
 
 ------------------------------------------------------------------------------

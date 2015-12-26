@@ -129,7 +129,7 @@ mc_lua_init (void)
 }
 
 /**
- * Loads the core, and then the user scripts.
+ * Loads the core, and then the system & user scripts.
  */
 void
 mc_lua_load (void)
@@ -137,7 +137,7 @@ mc_lua_load (void)
     /* Load core. */
     lua_core_found = (luaMC_safe_dofile (Lg, mc_lua_system_dir (), BOOTSTRAP_FILE) != LUA_ERRFILE);
 
-    /* Trigger the loading of user scripts. */
+    /* Trigger the loading of system & user scripts. */
     mc_lua_trigger_event ("core::loaded");
 
     g_assert (lua_gettop (Lg) == 0);    /* sanity check */
