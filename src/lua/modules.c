@@ -27,6 +27,7 @@ static const struct luaL_Reg mods[] = {
     { "mc",           luaopen_mc },
     { "prompts",      luaopen_prompts },
     { "c.regex",      luaopen_regex },
+    { "c.timer",      luaopen_timer },
     { "tty",          luaopen_tty },
     { "utils.bit32",  luaopen_utils_bit32 },
     { NULL, NULL }

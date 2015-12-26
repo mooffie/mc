@@ -47,6 +47,7 @@ magic.setup_autoload(_G)
 autoload('fs', 'fs')
 autoload('mc', 'mc')
 autoload('devel', 'devel')
+autoload('timer', 'timer')
 autoload('event', 'event')
 autoload('tty', 'tty')
 autoload('keymap', 'keymap')
@@ -58,6 +59,21 @@ autoload('regex', 'regex')
 
 -- Add some juice to strings:
 require('regex').expose()
+
+----------------------------------- Timers -----------------------------------
+
+-- Expire unused VFS's.
+--
+-- (We're calling _vfs_expire every 10 seconds but this number isn't very
+-- significant: _vfs_expire in its turn expires, by default, only VFS's
+-- not in use for 60 seconds.)
+timer.set_interval(fs._vfs_expire, 10*1000)
+
+-- We don't have to call the GC explicitly, but we do, to witness errors
+-- in __gc handlers early.
+timer.set_interval(function()
+  collectgarbage()  -- Should we do "step" instead?
+end, 3*1000)
 
 ------------------------ Load system and user scripts ------------------------
 
