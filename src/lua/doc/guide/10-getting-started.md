@@ -39,9 +39,10 @@ Let's write a "Hello World" program.
 
 __Where are scripts stored?__
 
-When MC starts it executes the script `index.lua` found in a certain folder
-within your home. You can put your code there. We often call this folder
-_"user Lua folder"_.
+When MC starts it executes all the Lua scripts found in a certain folder
+within your home. This is where you may put your own scripts. We will
+often call this folder _"user Lua folder"_, and to the files within
+we'll sometimes call  _"startup scripts"_.
 
 To discover the location of this folder, run MC with the -F option:
 
@@ -93,9 +94,12 @@ major versions of API: each would have a different number.
 
 [/tip]
 
-Let's create this folder and in it create a file named `index.lua`, containing:
+Let's create this folder and place in it a file containing:
 
     print("Hello World!")
+
+The name you pick for this file doesn't matter (as long as it has a ".lua"
+extension and doesn't start with a dot). Let's name it "hello.lua".
 
 Now restart MC.
 
@@ -103,14 +107,15 @@ Nothing too exciting seems to have happened, has it? Press `C-o` to
 switch to the shell. Voila! You can see our "Hello World!" there.
 Hurrey! (Note: You @{~general#alert|wouldn't normally use print()}.)
 
-Let's have a more exciting exercise. Add the following to `index.lua`:
+Let's have a more exciting exercise. Add the following to hello.lua:
 
     keymap.bind("C-q", function()
       alert("Hello World!")
     end)
 
 This will bind the `C-q` key (Control q) to a function that popups a
-"Hello World!" message. Restart MC and press `C-q`.
+"Hello World!" message. Restart MC, or, better,
+@{~general#restart|restart Lua only}, and press `C-q`.
 
 [info]
 
@@ -141,3 +146,9 @@ Specifically, look for a line telling you that your script has been loaded.
 [/indent]
 
 [/info]
+
+## What next?
+
+* You can play with the @{~sample|sample applications}.
+
+* You can learn more about @{~extend|how to extend MC}.
