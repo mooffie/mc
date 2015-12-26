@@ -108,6 +108,15 @@ local function rcrs_dir(dir)
 end
 
 --
+-- Using fs.glob().
+--
+local function rcrs_glob(dir)
+  for file in fs.glob(dir .. "/**") do
+    show_progress(file)
+  end
+end
+
+--
 -- Benchmarks the creation of VPath.
 --
 local function test_vpath()
@@ -137,6 +146,7 @@ local flavors = {
   files = rcrs_files,
   dir = rcrs_dir,
   opendir = rcrs_opendir,
+  glob = rcrs_glob,
   vpath = test_vpath,
 }
 
