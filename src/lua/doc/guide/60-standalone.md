@@ -31,21 +31,24 @@ Let's have an example.
 
 ## Example
 
-Put the following in a file named "hello":
+Put the following in a file named "listetc":
 
     #!/usr/bin/env mcscript
 
-    print("Hello World!")
+    -- List all the directories in /etc.
+    for file in fs.glob("/etc/*/") do
+      print(file)
+    end
 
 ...turn on this script's executable bit:
 
     @plain
-    $ chmod +x hello
+    $ chmod +x listetc
 
 ...and run it:
 
     @plain
-    $ ./hello
+    $ ./listetc
 
 In your script you have access to all of MC's facilities, like the virtual
 file system.
