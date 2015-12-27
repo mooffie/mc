@@ -1,0 +1,54 @@
+-- Tests the regex module.
+
+local ensure = devel.ensure
+
+local function test()
+
+  local name, value = ("flavor = sweet"):p_split "\\s*=\\s*"
+  ensure(name == "flavor" and value == "sweet", "split")
+
+  ensure.equal(regex.compile{"one", "i"}, regex.compile{"one", "i"}, "regexp cache")
+
+  ensure.throws(function() regex.compile{"pattern", "illegal flags"} end, nil, "error on bad flags")
+
+  ensure.throws(function() regex.compile "pat(tern" end, nil, "error on bad pattern")
+  -- Test the __gc of an invalid regexp userdata to see that it doesn't segfault us:
+  collectgarbage()
+  collectgarbage()
+
+  ensure.equal({ ("abc"):p_find("b") }, {2,2}, "find()")
+
+  ensure.equal({ ("one two three"):p_find("(t)\\w+",7) }, {9,13,"t"}, "find() with offset")
+  ensure.equal({ ("one two three"):p_find("(e\\w*)",-2) }, {12,13,"ee"}, "find() with negative offset")
+
+  ensure.throws(function() ("abc"):p_find("b", 1, true) end, nil, "find() mustn't accept a 4'th argument")
+  ensure.throws(function() ("abc"):p_gsub("b", "a", 10) end, nil, "gsub() mustn't accept a 4'th argument")
+
+  ensure.equal({ ("abc"):p_match(".") }, {"a"}, "match()")
+
+  ensure.equal({ ("abc"):p_match("(.)(.)") }, {"a","b"}, "match(), 2")
+
+  ensure.equal(table.concat( { ("נסיון"):p_split {"", "u"} }, ":"), "נ:ס:י:ו:ן", "empty pattern splits on characters. +unicode support")
+
+  ensure.equal(("one two three"):p_gsub("(\\w+) (\\w+)", "\\U\\2 \\1"), "TWO ONE three", "gsub")
+
+  ensure.equal(("one two three"):p_gsub("\\w+", string.reverse), "eno owt eerht", "gsub with callback")
+
+  ensure.equal(("one=wan two=tu three=thri"):p_gsub("(\\w+)=(\\w+)", function(a, b) return a .. "=" .. b:upper() end), "one=WAN two=TU three=THRI",
+    "gsub with callback and captures")
+
+  ensure.equal(("abcdaba"):p_gsub("a", function() end), "abcdaba", "gsub with callback returning nothing")
+
+  local s = ""
+  for a, b in regex.gmatch("ababab","(.)(.)") do
+    s = s .. "[" .. a .. "," .. b .. "]"
+  end
+  ensure.equal(s, "[a,b][a,b][a,b]", "gmatch")
+
+  -- split: check limit.
+
+end
+
+test()
+
+-- vim: set ft=lua:

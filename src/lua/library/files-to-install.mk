@@ -13,5 +13,7 @@ modules/core/fs/inputbuffer.lua \
 modules/core/fs/outputbuffer.lua \
 modules/core/globals.lua \
 modules/core/keymap.lua \
+modules/core/regex.lua \
+modules/core/string.lua \
 modules/core/utils.lua \
 modules/core/utils/magic.lua
