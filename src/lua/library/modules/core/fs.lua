@@ -122,4 +122,8 @@ function M.temporary_file(opts)
   end
 end
 
+M.autoload('glob', {'fs.glob', 'glob'})
+ .autoload('tglob', {'fs.glob', 'tglob'})
+ .autoload('fnmatch', {'fs.glob', 'fnmatch'})
+
 return M
