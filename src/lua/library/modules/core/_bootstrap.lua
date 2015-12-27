@@ -54,6 +54,10 @@ autoload('utils', 'utils')
 autoload('prompts', 'prompts')
 autoload('conf', 'conf')
 autoload('locale', 'locale')
+autoload('regex', 'regex')
+
+-- Add some juice to strings:
+require('regex').expose()
 
 ----------------------------- Load user scripts ------------------------------
 
