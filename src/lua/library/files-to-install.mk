@@ -9,6 +9,7 @@ modules/core/devel/pp.lua \
 modules/core/event.lua \
 modules/core/fs.lua \
 modules/core/fs/file.lua \
+modules/core/fs/glob.lua \
 modules/core/fs/inputbuffer.lua \
 modules/core/fs/outputbuffer.lua \
 modules/core/globals.lua \
@@ -16,4 +17,5 @@ modules/core/keymap.lua \
 modules/core/regex.lua \
 modules/core/string.lua \
 modules/core/utils.lua \
+modules/core/utils/glob.lua \
 modules/core/utils/magic.lua

@@ -235,4 +235,8 @@ function M.temporary_string_file(...)
   return path
 end
 
+M.autoload('glob', {'fs.glob', 'glob'})
+ .autoload('tglob', {'fs.glob', 'tglob'})
+ .autoload('fnmatch', {'fs.glob', 'fnmatch'})
+
 return M
