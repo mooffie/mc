@@ -9,4 +9,6 @@ tests/auto/magic_strict.mcs \
 tests/nonauto/mcscript_argv.mcs \
 tests/nonauto/mcscript_error.mcs \
 tests/nonauto/mcscript_error2.mcs \
-tests/nonauto/vfs_bug_errno_chdir.mcs
+tests/nonauto/vfs_bug_crash.mcs \
+tests/nonauto/vfs_bug_errno_chdir.mcs \
+tests/nonauto/vfs_bug_errno_open.mcs
