@@ -8,6 +8,8 @@
 
 local M = require('c.fs')
 
+M.dir, M.files, M.opendir = import_from('fs.dir', {'dir', 'files', 'opendir'})
+
 require('utils.magic')
   .setup_strict(M, true, false)  -- Guard against typos in constants' spelling.
 
