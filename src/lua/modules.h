@@ -3,6 +3,7 @@
 
 int luaopen_conf (lua_State * L);
 int luaopen_fs (lua_State * L);
+int luaopen_fs_filedes (lua_State * L);
 int luaopen_fs_statbuf (lua_State * L);
 int luaopen_fs_vpath (lua_State * L);
 int luaopen_internal (lua_State * L);

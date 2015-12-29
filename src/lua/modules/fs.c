@@ -826,9 +826,32 @@ l_statbuf_new (lua_State * L)
 
 static const luaMC_constReg fslib_constants[] = {
 
-    /* Errors. We export only the ones we will likely use in core.
-     * End-users shouldn't need to use any. */
+    /* Constants used in our Lua core: */
+    REGC (O_CREAT),
+    REGC (O_WRONLY),
+    REGC (O_RDWR),
+    REGC (O_RDONLY),
+    REGC (O_APPEND),
+    REGC (O_TRUNC),
+    REGC (O_LINEAR),            /* We don't currently use this. */
 
+    /* Not used by us; a note in 'lib/vfs/vfs.h' says are fine to use: */
+    REGC (O_EXCL),
+    REGC (O_NOCTTY),
+    REGC (O_SYNC),
+    /* @FIXME: On my Linux, I need to #include vfs.h before global.h for the
+     * following O_NDELAY, or for O_NONBLOCK, to be recognized. Why's that?
+     * (BTW, replacing this line with { "O_NDELAY", O_NDELAY } makes the
+     * compiler give a more detailed error message. */
+    /*REGC (O_NDELAY), */
+
+    /* Seeking. */
+    REGC (SEEK_SET),
+    REGC (SEEK_CUR),
+    REGC (SEEK_END),
+
+    /* Errors. We export only the ones we use. End-users shouldn't need to
+     * use any. */
     REGC (ENOENT),
     REGC (EXDEV),
     REGC (EINVAL),

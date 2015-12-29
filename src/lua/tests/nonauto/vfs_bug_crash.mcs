@@ -1,0 +1,10 @@
+print "*** This script will crash MC. It demonstrates a bug in MC's VFS layer ***"
+
+local posix = require "fs.filedes"
+
+-- The following code will crash MC. It doesn't detect that the 'fd' on the second close() call is invalid.
+local fd = assert(posix.open("/etc/issue"))
+posix.close(fd)
+posix.close(fd)  -- crashes MC !!
+
+-- vim: set ft=lua:
