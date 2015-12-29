@@ -990,6 +990,21 @@ l_beep (lua_State * L)
  * the terminal becomes idle again. See examples at @{git:dialog-drag.lua}
  * and @{git:ruler.lua}.
  *
+ * [tip]
+ *
+ * Caveat: you're likely to misuse this function.
+ *
+ * Usually it'd be @{timer.debounce}, not `is_idle`, what you're looking for.
+ *
+ * The terminal can be "idle" even when a keyboard key is held down (console
+ * applications are oblivious to the physical state of the key -- they only
+ * see the characters sent to them at the _keyboard repeat rate_). `is_idle`,
+ * therefore, should only be used when a
+ * "[throttle](http://google.com/search?q=throttle+debounce+javascript)" pattern is
+ * desired, not a "@{timer.debounce|debounce}" pattern.
+ *
+ * [/tip]
+ *
  * @function is_idle
  */
 static int
