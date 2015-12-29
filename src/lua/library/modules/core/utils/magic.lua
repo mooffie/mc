@@ -173,4 +173,33 @@ end
 
 ------------------------------------------------------------------------------
 
+---
+-- Make __gc for tables work for old Lua engines too.
+--
+-- Lua 5.2+ supports __gc for table. Older Lua engines don't. To make older
+-- Lua engines support it, add a call to `enable_table_gc`:
+--
+-- Let's first look at a Lua 5.2+ compatible code:
+--
+--    do
+--      local t = setmetatable({},{
+--        __gc = function() print("works") end
+--      })
+--    end
+--    collectgarbage()
+--
+-- To make it work under older Lua engines (Lua 5.1 and LuaJIT), do:
+--
+--    do
+--      local t = setmetatable({},{
+--        __gc = function() print("works") end
+--      })
+--      utils.magic.enable_table_gc(t)
+--    end
+--    collectgarbage()
+--
+-- @function enable_table_gc
+-- @args (t)
+M.enable_table_gc = require('internal').enable_table_gc
+
 return M
