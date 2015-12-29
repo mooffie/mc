@@ -7,6 +7,11 @@ tests/README \
 tests/auto/bit32.mcs \
 tests/auto/fs.mcs \
 tests/auto/magic_strict.mcs \
+tests/benchmarks/treewalk/README \
+tests/benchmarks/treewalk/bench.mcs \
+tests/benchmarks/treewalk/bench.py \
+tests/benchmarks/treewalk/bench.rb \
+tests/benchmarks/treewalk/run.sh \
 tests/nonauto/mcscript_argv.mcs \
 tests/nonauto/mcscript_error.mcs \
 tests/nonauto/mcscript_error2.mcs \

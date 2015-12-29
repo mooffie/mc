@@ -1,0 +1,171 @@
+
+----------------------------------- Output -----------------------------------
+
+local counter = 0
+
+local function show_progress_start()
+  counter = 0
+end
+
+local function show_progress(full)
+  counter = counter + 1
+  if counter % 1000 == 0 then
+    io.stdout:write('.') io.stdout:flush()
+  end
+end
+
+local function show_progress_end()
+  print()
+  print('<' .. counter .. ' files>')
+end
+
+local function die(msg)
+  print(msg)
+  os.exit()
+end
+
+---------------------------------- luaposix ----------------------------------
+--
+-- See https://github.com/luaposix/luaposix
+--
+
+local posix = nil  -- module loaded below.
+
+--
+-- Using posix.files().
+--
+local function rcrs_posix_files(dir)
+  for file in assert(posix.files(dir)) do
+    if file ~= "." and file ~= ".." then
+      local full = dir .. "/" .. file
+      show_progress(full)
+      if posix.stat(full, "type") == "directory" then
+        rcrs_posix_files(full)
+      end
+    end
+  end
+end
+
+--
+-- Using posix.dir().
+--
+local function rcrs_posix_dir(dir)
+  for _, file in ipairs(assert(posix.dir(dir))) do
+    if file ~= "." and file ~= ".." then
+      local full = dir .. "/" .. file
+      show_progress(full)
+      if posix.stat(full, "type") == "directory" then
+        rcrs_posix_dir(full)
+      end
+    end
+  end
+end
+
+------------------------------------ MC --------------------------------------
+
+--
+-- Using fs.opendir().
+--
+-- It's effectively what `for ... in fs.files()` translates to behind the scene.
+--
+local function rcrs_opendir(dir)
+  local d = assert(fs.opendir(dir))
+  while true do
+    local file = d:next()
+    if not file then break end
+    local full = dir .. "/" .. file
+    show_progress(full)
+    if fs.lstat(full, "type") == "directory" then
+      rcrs_opendir(full)
+    end
+  end
+end
+
+--
+-- Using fs.file().
+--
+local function rcrs_files(dir)
+  for file in fs.files(dir) do
+    local full = dir .. "/" .. file
+    show_progress(full)
+    if fs.lstat(full, "type") == "directory" then
+      rcrs_files(full)
+    end
+  end
+end
+
+--
+-- Using fs.dir().
+--
+local function rcrs_dir(dir)
+  for _, file in ipairs(assert(fs.dir(dir))) do
+    local full = dir .. "/" .. file
+    show_progress(full)
+    if fs.lstat(full, "type") == "directory" then
+      rcrs_dir(full)
+    end
+  end
+end
+
+--
+-- Benchmarks the creation of VPath.
+--
+local function test_vpath()
+  local VPath = fs.VPath
+  for i = 1, 200000 do
+    local p = VPath("tt" .. i)
+    show_progress()
+  end
+end
+
+local function rcrs_none()
+  local dummy = fs.dir  -- just to trigger the autoloader so we see memory consumption.
+end
+
+------------------------------------------------------------------------------
+
+local flavors = {
+  none = rcrs_none,
+  posix_files = function(...)
+    posix = require_legacy 'posix'
+    return rcrs_posix_files(...)
+  end,
+  posix_dir = function(...)
+    posix = require_legacy 'posix'
+    return rcrs_posix_dir(...)
+  end,
+  files = rcrs_files,
+  dir = rcrs_dir,
+  opendir = rcrs_opendir,
+  vpath = test_vpath,
+}
+
+local args = {
+  flavor = nil,
+  times = 1,
+  dir = nil,
+}
+
+for _, opt in ipairs(argv) do
+  if opt:find '^times=' then args.times = assert(opt:match '^times=(%d+)')
+  elseif opt:find '^flavor=' then args.flavor = assert(opt:match '^flavor=([%w_]+)')
+  else args.dir = opt end
+end
+
+if not args.dir then
+  die("You must specify a directory to traverse")
+end
+if not args.flavor then
+  die("You must specify the flavor")
+end
+if not flavors[args.flavor] then
+  die("Invalid flavor " .. args.flavor)
+end
+
+for _ = 1, args.times do
+  show_progress_start()
+  flavors[args.flavor](args.dir)
+  show_progress_end()
+end
+
+-- vim: set ft=lua:

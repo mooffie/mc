@@ -1,0 +1,14 @@
+
+These scripts benchmark various ways to traverse a directory tree.
+
+We test:
+
+(1) Lua: the luxposix module ( https://github.com/luaposix/luaposix )
+(2) Lua: MC (our 'fs' module)
+(3) Ruby
+(4) Python
+
+Not surprisingly, (1) is faster than (2). That's because MC uses an
+extra layer, the VFS, which needs to construct VPaths.
+
+The surprising thing is that (2) is on a par with (3) and (4).
