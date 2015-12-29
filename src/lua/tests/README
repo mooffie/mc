@@ -13,3 +13,7 @@ nonauto/
 
   Tests that require the user's inspection or interaction. Read their
   headers to see what they're trying to achieve.
+
+benchmarks/
+
+  benchmarking scripts.
