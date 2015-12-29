@@ -722,6 +722,104 @@ l_vpath_new (lua_State * L)
     return 1;
 }
 
+/* -------------------------------- stat ---------------------------------- */
+
+static int
+do_stat (lua_State * L, gboolean lstat)
+{
+    vpath_argument *vpath;
+
+    struct stat sb;
+    int result;
+
+    vpath = get_vpath_argument (L, 1);
+    result = lstat ? mc_lstat (vpath->vpath, &sb) : mc_stat (vpath->vpath, &sb);
+    destroy_vpath_argument (vpath);
+
+    if (result == -1)
+        return luaFS_push_error__by_idx (L, 1);
+    else
+        return luaFS_statbuf_extract_fields (L, &sb, 2);
+}
+
+/**
+ * Returns a file's properties.
+ *
+ * Returns a @{~mod:fs.StatBuf} object. On error, returns a triad.
+ *
+ * See also @{lstat}.
+ *
+ * [info]
+ *
+ * If you're interested in a couple of fields only, you can fetch them
+ * immediately by specifying their names:
+ *
+ *    if fs.stat("/path/to/file", "type") == "directory" then
+ *      alert("This is a directory")
+ *    end
+ *
+ * ...which is more efficient (and shorter) than doing:
+ *
+ *    if (fs.stat("/path/to/file") or {}).type == "directory" then
+ *      alert("This is a directory")
+ *    end
+ *    -- We added 'or {}' to make it functionally equivalent to
+ *    -- the previous code: for the case when stat() fails.
+ *
+ * [/info]
+ *
+ * @function stat
+ * @args (path[, ...])
+ *
+ * @param path
+ * @param ... Either none, to return a whole @{fs.StatBuf}, or names of
+ *   fields to return.
+ */
+static int
+l_stat (lua_State * L)
+{
+    return do_stat (L, FALSE);
+}
+
+/**
+ * Returns a file's properties.
+ *
+ * Symbolic links aren't resolved.
+ *
+ * Returns a @{~mod:fs.StatBuf} object. On error, returns a triad.
+ *
+ * See also @{stat} for further details.
+ *
+ * @function lstat
+ * @args (path[, ...])
+ */
+static int
+l_lstat (lua_State * L)
+{
+    return do_stat (L, TRUE);
+}
+
+/**
+ * Constructs a @{~mod:fs.StatBuf} object.
+ *
+ * Given a table with fields like "size", "type" etc., this function
+ * constructs the corresponding @{~mod:fs.StatBuf} object. For missing
+ * fields sane defaults will be picked.
+ *
+ * Note: End-users won't ever need to use this function. In the one case
+ * where end-users do need to @{luafs.stat|conjure up a StatBuf} they can
+ * use a table instead.
+ *
+ * @function StatBuf
+ * @args (t)
+ */
+static int
+l_statbuf_new (lua_State * L)
+{
+    luaFS_check_statbuf (L, 1);
+    return 1;
+}
+
 /* ------------------------------------------------------------------------ */
 
 #define REGC(name) { #name, name }
@@ -781,6 +879,9 @@ static const struct luaL_Reg fslib[] = {
     { "current_vdir", l_current_vdir },
     { "current_dir", l_current_dir },
     { "VPath", l_vpath_new },
+    { "StatBuf", l_statbuf_new },
+    { "stat", l_stat },
+    { "lstat", l_lstat },
     { NULL, NULL }
 };
 /* *INDENT-ON* */
