@@ -18,6 +18,7 @@ libmc_luasrc_la_SOURCES = \
 	modules/fs-vpath.c \
 	modules/internal.c \
 	modules/locale.c \
+	modules/mc.c \
 	modules/prompts.c \
 	modules/tty.c \
 	modules/tty.h \

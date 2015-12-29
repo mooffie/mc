@@ -6,6 +6,7 @@ int luaopen_fs (lua_State * L);
 int luaopen_fs_vpath (lua_State * L);
 int luaopen_internal (lua_State * L);
 int luaopen_locale (lua_State * L);
+int luaopen_mc (lua_State * L);
 int luaopen_prompts (lua_State * L);
 int luaopen_tty (lua_State * L);
 int luaopen_utils_bit32 (lua_State * L);

@@ -25,7 +25,7 @@ devel.autoload('log', { 'devel.log', 'log' })
 devel.autoload('pp', { 'devel.pp', 'pp' })
 
 ---
--- "Pretty prints" a value to the screen.
+-- "Pretty prints" a value into the viewer.
 --
 -- Example:
 --
@@ -36,8 +36,17 @@ devel.autoload('pp', { 'devel.pp', 'pp' })
 -- Note-short: If the UI is not ready, the output will be written to stdout.
 --
 -- @args (v)
-function devel.view(v)
-  alert(devel.pp(v))
+function devel.view(v, pp)
+  if tty.is_ui_ready() then
+    -- @todo: Once we have mc.view_string() we won't need to use a temporary file.
+    local f, tempname = fs.temporary_file{prefix="devel"}
+    f:write((pp or devel.pp)(v))
+    f:close()
+    mc.view(tempname)
+    fs.unlink(tempname)
+  else
+    print(devel.pp(v))
+  end
 end
 
 return devel

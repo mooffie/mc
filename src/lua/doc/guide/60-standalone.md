@@ -61,5 +61,5 @@ You can access the command-line arguments via the global variable
 
 ## No UI mode
 
-A few functions, like @{prompts.confirm}, will refuse to
+A few functions, like @{prompts.confirm} and @{mc.view}, will refuse to
 work because the terminal isn't in @{tty.is_ui_ready|UI mode}.
