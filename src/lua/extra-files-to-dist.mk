@@ -12,6 +12,7 @@ tests/benchmarks/treewalk/bench.mcs \
 tests/benchmarks/treewalk/bench.py \
 tests/benchmarks/treewalk/bench.rb \
 tests/benchmarks/treewalk/run.sh \
+tests/nonauto/magic_table_gc.mcs \
 tests/nonauto/mcscript_argv.mcs \
 tests/nonauto/mcscript_error.mcs \
 tests/nonauto/mcscript_error2.mcs \

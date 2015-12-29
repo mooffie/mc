@@ -56,11 +56,29 @@ l_register_system_callback (lua_State * L)
     return 0;
 }
 
+/**
+ * Exposed as utils.magic.enable_table_gc(). See documentation there.
+ */
+static int
+l_enable_table_gc (lua_State * L)
+{
+    luaL_checktype (L, 1, LUA_TTABLE);
+    luaL_argcheck (L, luaL_getmetafield (L, 1, "__gc"), 1,
+                   E_
+                   ("The table doesn't have a metatable, or its metatable doesn't have a '__gc' field."));
+    luaMC_enable_table_gc (L, 1);
+
+    /* Convenience: return the table itself. */
+    lua_settop (L, 1);          /* In case the user provided (needless) extra args. */
+    return 1;
+}
+
 /* ------------------------------------------------------------------------ */
 
 /* *INDENT-OFF* */
 static const struct luaL_Reg internal_lib[] = {
     { "register_system_callback", l_register_system_callback },
+    { "enable_table_gc", l_enable_table_gc },
     { NULL, NULL }
 };
 /* *INDENT-ON* */
