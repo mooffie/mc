@@ -15,6 +15,7 @@ libmc_luasrc_la_SOURCES = \
 	modules/conf.c \
 	modules/fs.c \
 	modules/fs.h \
+	modules/fs-statbuf.c \
 	modules/fs-vpath.c \
 	modules/internal.c \
 	modules/locale.c \
