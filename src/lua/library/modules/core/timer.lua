@@ -192,6 +192,49 @@ function timer.set_interval(fn, delay)
   return o
 end
 
+---
+-- A variation of `set_timeout`.
+--
+-- See explanation for debounce [on the internet](http://google.com/search?q=debounce+javascript).
+--
+-- In GUI applications it's common to perform some action as the user types
+-- something. For example, you may want to update search results while the user
+-- types the query. A naive approach would be to do (assuming an
+-- @{~mod:ui!input:on_change|Input} widget):
+--
+--    query.on_change = function()
+--      do_search()
+--    end
+--
+-- However, this might make the interface sluggish. A better approach is:
+--
+--    query.on_change = timer.debounce(function()
+--      do_search()
+--    end, 500)
+--
+-- See another example at @{~mod:ui.Panel*ui.Panel:select-file|<<select-file>>}.
+--
+-- @function debounce
+-- @args (fn, delay)
+--
+function timer.debounce(fn, delay)
+  -- Hey, it turns out our set_timout(), unlike in JavaScript, doesn't
+  -- accept args to pass to the function. We can very easily add that
+  -- feature there, but since we've managed to write so much code without
+  -- it, it proves that it's not a critical feature. The less, the better.
+  -- So we implement a workaround here instead. Maybe we'll revisit this
+  -- decision in the future.
+  local args
+  local wrapper = function()
+    fn(table.unpack(args, 1, args.n))
+  end
+  return function(...)
+    args = table.pack(...)
+    timer.clear_timeout(wrapper)
+    timer.set_timeout(wrapper, delay)
+  end
+end
+
 
 function timer.show()  -- debugging.
   queue.show()
