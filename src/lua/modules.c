@@ -12,10 +12,12 @@
 #include "modules.h"
 #include "pre-init.h"
 
+/* As to why we expose some modules as "c.NAME", see "Writing hybrid
+ * modules" in doc/HACKING. */
 static const struct luaL_Reg mods[] = {
 /* *INDENT-OFF* */
     { "conf",         luaopen_conf },
-    { "fs",           luaopen_fs },
+    { "c.fs",         luaopen_fs },
     { NULL,           luaopen_fs_vpath },
     { "internal",     luaopen_internal },
     { "locale",       luaopen_locale },

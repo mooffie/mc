@@ -1,0 +1,15 @@
+-- Demonstrates an 'errno' bug in mc_chdir().
+
+--[[
+
+chdir()'ing to an invalid filesystem reports the previous errno.
+
+]]
+
+-- First, let's set the errno to "Illegal seek":
+assert(io.popen("ls -l"), "pipes aren't supported on this sys"):seek("end")
+
+-- And now chdir() to some invalid FS:
+print( fs.chdir("/invalidfs://") )  -- Bug: chdir() reports "Illegal seek"!
+
+-- vim: set ft=lua:

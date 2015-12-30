@@ -1,6 +1,10 @@
 #ifndef MC__LUA_FS_H
 #define MC__LUA_FS_H
 
+int luaFS_push_error (lua_State * L, const char *filename);
+int luaFS_push_error__by_idx (lua_State * L, int filename_index);
+int luaFS_push_result (lua_State * L, int result, const char *filename);
+
 /* -------------------- Implemented in fs-vpath.c: ------------------------ */
 
 void luaFS_push_vpath (lua_State * L, const vfs_path_t * vpath);
