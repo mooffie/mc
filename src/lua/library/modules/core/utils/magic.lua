@@ -154,6 +154,10 @@ end
 -- Info: This facility is how the global namespace is protected. See
 -- `setup_strict(_G, true, true)` in @{git:core/_bootstrap.lua}.
 --
+-- Info: This facility is how constants in the @{fs} module are protected
+-- against misspellings. E.g., doing `fs.O_RWDR` instead of `fs.O_RDWR`
+-- raises an exception.
+--
 -- Tip-short: This function returns the magic module itself, thereby
 -- allowing for "fluent API".
 --
