@@ -5,6 +5,149 @@
 
 local M = {}
 
+-------------------------------- VB-fication ---------------------------------
+
+local function is_allowed_prop(meta, prop)
+  if meta then
+    local allowed_properties = meta.__allowed_properties
+    return allowed_properties and allowed_properties[prop] or is_allowed_prop(getmetatable(meta), prop)
+  end
+  -- implicitly return false.
+end
+
+local function __getter(tbl, prop)
+
+  local meta = getmetatable(tbl)
+
+  local v = meta[prop]
+  if type(v) ~= "nil" then
+    return v
+  end
+
+  -- We turn the magic on only for instance objects, not for meta tables.
+  --
+  -- For example, let's assume we have a 'Button' meta table (whose own meta
+  -- table may be 'Widget'), and a 'btn' table serving as the actual object
+  -- (instance). When we do:
+  --
+  --    btn.title = "abc"
+  --
+  -- we want the magic to kick in; as if we typed 'btn.set_title("abc")'.
+  -- But when we do:
+  --
+  --    Button.title = function ...
+  --
+  -- we don't want any magic.
+
+  local is_instance = not rawget(tbl, "__allowed_properties")
+  if is_instance then
+    if prop:sub(1,4) ~= "set_" then
+      v = meta["get_" .. prop]
+      if type(v) == "nil" then
+        if not is_allowed_prop(meta, prop) then
+          error(E'Property "%s" not found':format(prop), 2)
+        end
+      else
+        return v(tbl)
+      end
+    end
+  end
+
+end
+
+local function __setter(tbl, prop, value)
+
+  local setter = tbl["set_" .. prop]
+  if type(setter) == "function" then
+    setter(tbl, value)
+  else
+    -- We turn off magic if it's not an instance (see explanation in __getter).
+    local is_instance = not rawget(tbl, "__allowed_properties")
+    if (not is_instance) or is_allowed_prop(getmetatable(tbl), prop) then
+      rawset(tbl, prop, value)
+    else
+      error(E'Property "%s" not legal':format(prop), 2)
+    end
+  end
+
+end
+
+---
+-- Enables "syntactic sugar" for properties.
+--
+-- This facility lets you type (for example):
+--
+--    obj.title = "abc"
+--    print(obj.title)
+--
+-- instead of:
+--
+--    obj:set_title("abc")
+--    print(obj:get_title())
+--
+-- An attempt to read/write a property that don't have a getter/setter will
+-- be regarded as a typo and an exception will be raised:
+--
+--    obj.undeclared_property = -666  -- raises exception!
+--
+-- To allow access to fields without writing getters/setters for them, you
+-- need to declare them in the `__allowed_properties` table. Alternatively,
+-- use @{rawget}/@{rawset} to access such fields.
+--
+-- Info: The "vb" in the name of this function stands for "Visual Basic".
+-- Since it's a trademark, this function will be renamed as soon as somebody
+-- stimulates his neurons enough to come up with a better name.
+--
+-- This facility is used for @{ui|widgets}. We don't want to encourage its
+-- use outside that realm because it's not very conventional. Therefore we
+-- don't provide a usage example here (but see @{git:tests/auto/magic_vbfy.mcs}
+-- if you want to).
+--
+-- @param meta The meta table.
+function M.vbfy(meta)
+  if not rawget(meta, '__allowed_properties') then
+    rawset(meta, '__allowed_properties', {})
+  end
+  rawset(meta, '__index', __getter)
+  rawset(meta, '__newindex', __setter)
+end
+
+-------------------------- VB-fication for modules ---------------------------
+
+local function __getter_singleton(tbl, prop)
+  local getter = rawget(tbl, "get_" .. prop)
+  if type(getter) == "nil" then
+    error(E'Property "%s" not found':format(prop), 2)
+  else
+    return getter(tbl)
+  end
+end
+
+local function __setter_singleton(tbl, prop, value)
+  local setter = rawget(tbl, "set_" .. prop)
+  if type(setter) == "nil" then
+    if type(value) == "function" then
+      rawset(tbl, prop, value)
+    else
+      error(E'Property "%s" not found':format(prop), 2)
+    end
+  else
+    setter(value)
+  end
+end
+
+---
+-- Enables "syntactic sugar" for properties, on modules.
+--
+-- Like @{vbfy} but works on modules (on tables, to be exact).
+
+function M.vbfy_singleton(module)
+  local meta = getmetatable(module) or {}
+  meta.__index = __getter_singleton
+  meta.__newindex = __setter_singleton
+  setmetatable(module, meta)
+end
+
 ------------------------------------------------------------------------------
 
 --
