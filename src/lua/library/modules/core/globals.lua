@@ -142,6 +142,26 @@ end
 arg = argv
 
 ------------------------------------------------------------------------------
+-- Events
+-- @section
+
+--- Triggered when the UI has become @{tty.is_ui_ready|ready}.
+--
+-- @moniker ui::ready
+-- @event
+
+---
+-- [Used internally].
+--
+-- Note-short: End-users won't need this.
+--
+-- Triggered after the core's @{git:_bootstrap.lua} script has run. It's
+-- used by the system to initiate the loading of user and system scripts.
+--
+-- @moniker core::loaded
+-- @event
+
+------------------------------------------------------------------------------
 -- Lua compatibility.
 --
 -- These are functions that were either removed or added in Lua 5.2+. We
