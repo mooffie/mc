@@ -10,6 +10,7 @@ tests/auto/fs_file.mcs \
 tests/auto/glob.mcs \
 tests/auto/key_bugs.mcs \
 tests/auto/magic_strict.mcs \
+tests/auto/magic_vbfy.mcs \
 tests/auto/regex.mcs \
 tests/auto/utils_text_extword.mcs \
 tests/auto/utils_text_fmtitvl.mcs \
