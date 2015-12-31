@@ -4,6 +4,7 @@ doc/guide/10-getting-started.md \
 doc/guide/60-standalone.md \
 doc/guide/80-installation.md \
 tests/README \
+tests/auto/bit32.mcs \
 tests/auto/magic_strict.mcs \
 tests/nonauto/mcscript_argv.mcs \
 tests/nonauto/mcscript_error.mcs \
