@@ -26,6 +26,7 @@ void mc_lua_shutdown (void);
 /* ------------------------------- Runtime -------------------------------- */
 
 gboolean mc_lua_eat_key (int keycode);
+void mc_lua_trigger_event (const char *event_name);
 gboolean mc_lua_ui_is_ready (void);
 
 /* --------------------------- mcscript-related --------------------------- */

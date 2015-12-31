@@ -109,6 +109,9 @@ ui_is_ready_handler (const gchar * event_group_name, const gchar * event_name,
                  mc_lua_system_dir (), MC_LUA_SYSTEM_DIR__ENVAR);
     }
 
+    /* Inform scripts that want to know about this. */
+    mc_lua_trigger_event ("ui::ready");
+
     return TRUE;
 }
 
@@ -131,8 +134,11 @@ mc_lua_init (void)
 void
 mc_lua_load (void)
 {
-    /* Load core (which in turn loads user scripts). */
+    /* Load core. */
     lua_core_found = (luaMC_safe_dofile (Lg, mc_lua_system_dir (), BOOTSTRAP_FILE) != LUA_ERRFILE);
+
+    /* Trigger the loading of user scripts. */
+    mc_lua_trigger_event ("core::loaded");
 
     g_assert (lua_gettop (Lg) == 0);    /* sanity check */
 }
@@ -168,6 +174,19 @@ mc_lua_eat_key (int keycode)
     }
 
     return consumed;
+}
+
+/**
+ * Triggers an event on the Lua side.
+ */
+void
+mc_lua_trigger_event (const char *event_name)
+{
+    if (luaMC_get_system_callback (Lg, "event::trigger"))
+    {
+        lua_pushstring (Lg, event_name);
+        luaMC_safe_call (Lg, 1, 0);
+    }
 }
 
 gboolean
