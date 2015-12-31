@@ -37,6 +37,8 @@ later.
 #include "../modules.h"
 
 
+static gboolean numeric_locale_is_posix = FALSE;
+
 /**
  * Global functions.
  *
@@ -237,10 +239,145 @@ l_format_plural (lua_State * L)
     return 1;
 }
 
+/* ------------------------- Number formatting ---------------------------- */
+
+static void
+_add_commas (char *in, char *out)
+{
+    char *p, *q;
+
+    /* @FIXME: lib/util.c:size_trunc_sep() already has code for adding
+     * commas (and is better: doesn't use strreverse), which we could
+     * re-use after factoring it out. */
+
+    g_strreverse (in);
+    p = in;
+    q = out;
+    while (*p)
+    {
+        *q++ = *p++;
+        if (*p && ((p - in) % 3 == 0))
+            *q++ = ',';
+    }
+    *q = '\0';
+    g_strreverse (out);
+}
+
+static char *
+add_commas (double num, int precision)
+{
+    static char in[BUF_SMALL], out[BUF_SMALL];
+    char *fraction = NULL;
+
+    if (precision >= 0)
+        sprintf (in, "%.*f", precision, num);
+    else
+    {
+        /*
+         * Figure out a sensible precision for this number.
+         *
+         * Using just "%g" doesn't give too good results: it tends to truncate the
+         * number and add 'e' when not needed. "%.14g" is a good workaround (as
+         * 'doubles' typically have about 15 significant decimal digits precision),
+         * which is also the solution used in other scripting languages; e.g.
+         * Ruby (see numeric.c:flo_to_s) and Lua (see luaconf.h:LUA_NUMBER_FMT).
+         */
+        sprintf (in, "%.14g", num);
+
+        if (strchr (in, 'e'))
+            return in;          /* give up */
+    }
+
+    fraction = strchr (in, '.');
+
+    if (fraction)
+    {
+        *fraction = '\0';
+        fraction++;
+    }
+
+    _add_commas (in, out);
+
+    if (fraction)
+    {
+        strcat (out, ".");
+        strcat (out, fraction);
+    }
+
+    return out;
+}
+
+static int
+format_number__ours (lua_State * L, double num, int precision)
+{
+    lua_pushstring (L, add_commas (num, precision));
+    return 1;
+}
+
+#ifdef HAVE_PRINTF_I18N_GROUPING
+static int
+format_number__clib (lua_State * L, double num, int precision)
+{
+    char buf[BUF_SMALL];
+
+    if (precision >= 0)
+        sprintf (buf, "%'.*f", precision, num);
+    else
+        sprintf (buf, "%'.14g", num);   /* See comment above. */
+
+    lua_pushstring (L, buf);
+    return 1;
+}
+#endif
+
+/**
+ * Formats a number according to the locale.
+ *
+ * In most English-speaking countries, for example, this means that a comma
+ * is added every three digits, and that a period is used as the decimal mark.
+ * This is also the case (for this function alone; not as a general rule in
+ * the computing world) for the POSIX locale. Other locales have other rules.
+ *
+ *    -- en_US, or POSIX/C
+ *    assert(locale.format_number(1234567.89) == "1,234,567.89")
+ *
+ *    -- da_DK
+ *    assert(locale.format_number(1234567.89) == "1.234.567,89")
+ *
+ *    -- nl_NL
+ *    assert(locale.format_number(1234567.89) == "1234567,89")
+ *
+ * You may set the number of digits to show after the decimal mark with the
+ * optional **precision** argument.
+ *
+ * @function format_number
+ * @args (n[, precision])
+ */
+static int
+l_format_number (lua_State * L)
+{
+    double num;
+    int precision;
+
+    num = luaL_checknumber (L, 1);
+    precision = luaL_optint (L, 2, -1);
+
+#ifdef HAVE_PRINTF_I18N_GROUPING
+    if (numeric_locale_is_posix)
+        /* We want to show commas when in POSIX loale. */
+        return format_number__ours (L, num, precision);
+    else
+        return format_number__clib (L, num, precision);
+#else
+    return format_number__ours (L, num, precision);
+#endif
+}
+
 /* ------------------------------------------------------------------------ */
 
 /* *INDENT-OFF* */
 static const struct luaL_Reg locale_lib[] = {
+    { "format_number", l_format_number },
     /* We may expose the following as a global function PL() (for example) if
      * our POT extractor would have some difficulty seeing it otherwise. */
     { "format_plural", l_format_plural },
@@ -259,6 +396,9 @@ static const struct luaL_Reg locale_global_lib[] = {
 int
 luaopen_locale (lua_State * L)
 {
+    numeric_locale_is_posix = STREQ (setlocale (LC_NUMERIC, NULL), "C")
+        || STREQ (setlocale (LC_NUMERIC, NULL), "POSIX");
+
     luaMC_register_globals (L, locale_global_lib);
     luaL_newlib (L, locale_lib);
     return 1;
