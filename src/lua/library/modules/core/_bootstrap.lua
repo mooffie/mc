@@ -47,6 +47,7 @@ magic.setup_autoload(_G)
 
 -- Make it possible to reference builtin modules without 'require'ing them first.
 autoload('devel', 'devel')
+autoload('event', 'event')
 autoload('tty', 'tty')
 autoload('keymap', 'keymap')
 autoload('utils', 'utils')
@@ -70,7 +71,10 @@ end
 -- We load only 'index.lua', from the user dir. The user can require() other
 -- scripts from there.
 --
-local function load_user_scripts()
+-- We're doing it at a later stage (event.bind) so that possible exceptions
+-- in the user code don't halt the rest of this script.
+--
+event.bind('core::loaded', function()
   local user_script = lua_user_dir .. "/index.lua"
   if file_exists(user_script) then
     devel.log((":: Loading user script (%s) ::"):format(user_script))
@@ -78,9 +82,7 @@ local function load_user_scripts()
   else
     devel.log((":: User script not found (%s) ::"):format(user_script))
   end
-end
-
-load_user_scripts()
+end)
 
 ------------------------------------------------------------------------------
 
