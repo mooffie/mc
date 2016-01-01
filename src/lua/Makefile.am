@@ -14,7 +14,8 @@ libmc_luasrc_la_SOURCES = \
 	pre-init.h \
 	modules/conf.c \
 	modules/internal.c \
-	modules/locale.c
+	modules/locale.c \
+	modules/tty.c
 
 AM_CPPFLAGS = -I$(top_srcdir) $(GLIB_CFLAGS) $(PCRE_CPPFLAGS) $(LUA_CFLAGS)
 
