@@ -25,6 +25,8 @@ package.path =
                -- Anything else:
                package.path
 
+require('globals')
+
 ----------------------------- Load user scripts ------------------------------
 
 -- A primitive way to check for a file's existence. We'll replace it once we can.
