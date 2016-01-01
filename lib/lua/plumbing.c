@@ -151,3 +151,51 @@ mc_lua_ui_is_ready (void)
 {
     return ui_is_ready;
 }
+
+/* --------------------------- mcscript-related --------------------------- */
+
+/*
+ * Runs a scripts.
+ *
+ * This is how 'mcscript' (or 'mc -L') runs a script. (It's just a wrapper
+ * around luaMC_safe_dofile().)
+ *
+ * Returns TRUE if the script finished successfully (i.e.: script file found,
+ * no exception raised, no syntax error). Otherwise, prints an error message
+ * and returns FALSE.
+ */
+gboolean
+mc_lua_run_script (const char *pathname)
+{
+    return (luaMC_safe_dofile (Lg, pathname, NULL) == 0);
+}
+
+static void
+create_argv (lua_State * L, const char *script_path, int argc, char **argv, int offs)
+{
+    int i;
+
+    lua_newtable (L);
+
+    for (i = offs; i < argc; i++)
+    {
+        lua_pushstring (L, argv[i]);
+        luaMC_raw_append (L, -2);
+    }
+
+    lua_pushstring (L, script_path);
+    lua_rawseti (L, -2, 0);
+
+    lua_setglobal (L, "argv");
+}
+
+/**
+ * Exports argv to the Lua side, for user scripts that want to use it.
+ *
+ * argv[0] gets the script's name. The arguments then follow.
+ */
+void
+mc_lua_create_argv (const char *script_path, int argc, char **argv, int offs)
+{
+    create_argv (Lg, script_path, argc, argv, offs);
+}

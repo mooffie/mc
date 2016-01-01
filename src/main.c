@@ -306,6 +306,13 @@ main (int argc, char *argv[])
     /* Set up temporary directory after VFS initialization */
     mc_tmpdir ();
 
+#ifdef ENABLE_LUA
+    /* We initialize Lua before mc_setup_by_args(), which needs the VM
+       for exporting 'argv' to the Lua side. */
+     mc_lua_pre_init ();
+     mc_lua_init ();
+#endif
+
     /* do this after vfs initialization and vfs working directory setup
        due to mc_setctl() and mcedit_arg_vpath_new() calls in mc_setup_by_args() */
     if (!mc_setup_by_args (argc, argv, &mcerror))
@@ -318,10 +325,18 @@ main (int argc, char *argv[])
     }
 
 #ifdef ENABLE_LUA
-    mc_lua_pre_init ();
-    mc_lua_init ();
-    /* Run system and user startup scripts: */
+    /* Run system and user startup scripts. */
     mc_lua_load ();
+#endif
+
+#ifdef ENABLE_LUA
+    if (mc_global.mc_run_mode == MC_RUN_SCRIPT)
+    {
+        /* Standalone mode: we're to run the script given on the command line. */
+
+        return mc_lua_run_script ((char *) mc_run_param0) ? EXIT_SUCCESS : EXIT_FAILURE;
+        /* @todo: Exit gracefully, executing the various shutdown procedures. */
+    }
 #endif
 
     /* check terminal type

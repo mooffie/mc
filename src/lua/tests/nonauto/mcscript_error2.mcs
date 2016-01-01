@@ -1,0 +1,10 @@
+-- Tests mcscript:
+
+-- This script contains a runtime error.
+--
+-- * mcscript should give a proper error message.
+-- * exist code shouldn't be zero.
+
+non_existent_func()
+
+-- vim: set ft=lua:

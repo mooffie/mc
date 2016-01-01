@@ -1,0 +1,12 @@
+-- Tests mcscript:
+
+-- Prints the command-line arguments.
+
+print "hello!"
+
+print "argv is:"
+for i = 0, #argv do
+  print('#' .. i, argv[i])
+end
+
+-- vim: set ft=lua:

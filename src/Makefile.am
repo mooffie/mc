@@ -109,6 +109,9 @@ endif
 if USE_DIFF
 	$(MAKE) install_mcdiff
 endif
+if USE_LUA
+	$(MAKE) install_mcscript
+endif
 
 #
 # Make relative symlinks, but do the right thing if LN_S is `ln' or `cp'.
@@ -122,6 +125,9 @@ install_mcedit:
 install_mcdiff:
 	cd $(DESTDIR)$(bindir)/$(binprefix) && rm -f mcdiff && $(LN_S) mc mcdiff
 
+install_mcscript:
+	cd $(DESTDIR)$(bindir)/$(binprefix) && rm -f mcscript && $(LN_S) mc mcscript
+
 uninstall-hook:
 	rm -f $(DESTDIR)$(bindir)/$(binprefix)/mcview
 if USE_INTERNAL_EDIT
@@ -129,4 +135,7 @@ if USE_INTERNAL_EDIT
 endif
 if USE_DIFF
 	rm -f $(DESTDIR)$(bindir)/$(binprefix)/mcdiff
+endif
+if USE_LUA
+	rm -f $(DESTDIR)$(bindir)/$(binprefix)/mcscript
 endif

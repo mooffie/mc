@@ -27,4 +27,9 @@ void mc_lua_shutdown (void);
 
 gboolean mc_lua_ui_is_ready (void);
 
+/* --------------------------- mcscript-related --------------------------- */
+
+gboolean mc_lua_run_script (const char *filename);
+void mc_lua_create_argv (const char *script_path, int argc, char **argv, int offs);
+
 #endif /* MC__LUA_PLUMBING_H */
