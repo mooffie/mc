@@ -1,4 +1,10 @@
-SUBDIRS = event filehighlight mcconfig search skin tty vfs strutil widget .
+SUBDIRS = event filehighlight mcconfig search skin tty vfs strutil widget
+
+if USE_LUA
+    SUBDIRS += lua
+endif
+
+SUBDIRS += .
 
 if ENABLE_MCLIB
     LIB_VERSION=`echo $(LIBMC_VERSION) | \
@@ -66,6 +72,10 @@ libmc_la_LIBADD = \
 	vfs/libmcvfs.la \
 	widget/libmcwidget.la
 
+if USE_LUA
+    libmc_la_LIBADD += lua/libmc-lualib.la
+endif
+
 libmc_la_LIBADD += $(MCLIBS) $(SLANGLIB)
 
 if HAVE_GMODULE
@@ -74,4 +84,4 @@ else
     libmc_la_LIBADD += $(GLIB_LIBS)
 endif
 
-libmc_la_LIBADD += $(PCRE_LIBS) $(LIBICONV) $(LIBINTL)
+libmc_la_LIBADD += $(PCRE_LIBS) $(LIBICONV) $(LIBINTL) $(LUA_LIBS)

@@ -1,0 +1,7 @@
+
+# You may symlink your user's Lua folder here for easier access:
+_user
+
+# A script I use to set ../../version.h's date in the past so make(1) doesn't
+# rebuild the whole system. See ticket #2252.
+fix-version.h.sh

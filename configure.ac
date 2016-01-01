@@ -383,6 +383,28 @@ else
     AC_DEFINE_UNQUOTED([MC_USERCONF_DIR], ["$with_homedir"], [Where configs will be placed relative to $HOME])
 fi
 
+dnl ############################################################################
+dnl Lua
+dnl ############################################################################
+
+mc_WITH_LUA
+if test -n "$with_lua"; then
+    mc_CHECK_LUA
+    AC_DEFINE(ENABLE_LUA, [1], [Support for Lua])
+    lua_msg="yes ($lua_engine_title)"
+else
+    lua_msg="no"
+fi
+
+AM_CONDITIONAL(USE_LUA, [test -n "$with_lua"])
+
+dnl The version of *our* API. Change this whenever you break compatibility. It's embedded in directory names.
+AC_SUBST([MC_LUA_API_VERSION], [0.3])
+AC_DEFINE_UNQUOTED([MC_LUA_API_VERSION], ["$MC_LUA_API_VERSION"], [Version string of the Lua API we expose to users.])
+
+dnl Where system Lua scripts are kept:
+AC_SUBST([mcluasystemdir], ['${libexecdir}/${PACKAGE}/lua-${MC_LUA_API_VERSION}'])
+dnl (see http://stackoverflow.com/questions/3538705/adding-a-custom-installation-directory-option-to-autoconf)
 
 dnl ############################################################################
 dnl MC options
@@ -535,6 +557,8 @@ src/subshell/Makefile
 src/viewer/Makefile
 src/diffviewer/Makefile
 src/filemanager/Makefile
+src/lua/Makefile
+src/lua/library/Makefile
 
 src/vfs/Makefile
 
@@ -595,6 +619,7 @@ lib/search/Makefile
 lib/skin/Makefile
 lib/strutil/Makefile
 lib/tty/Makefile
+lib/lua/Makefile
 
 lib/vfs/Makefile
 
@@ -669,6 +694,7 @@ Configuration:
   Diff viewer:                ${diff_msg}
   Support for charset:        ${charset_msg}
   Search type:                ${SEARCH_TYPE}
+  Lua support:                ${lua_msg}
 ])
 
 dnl option checking is disable by default due to AC_CONFIG_SUBDIRS
