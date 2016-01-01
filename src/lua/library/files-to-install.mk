@@ -5,6 +5,7 @@ modules/core/_bootstrap.lua \
 modules/core/devel.lua \
 modules/core/devel/ensure.lua \
 modules/core/devel/log.lua \
+modules/core/devel/pp.lua \
 modules/core/globals.lua \
 modules/core/utils.lua \
 modules/core/utils/magic.lua

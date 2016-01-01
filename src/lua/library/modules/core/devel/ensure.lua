@@ -40,6 +40,33 @@ function M.ok(cond, msg)
   end
 end
 
+local function are_equal(a, b)
+  return (a == b) or
+         (type(a) == "table" and type(b) == "table" and
+           -- We compare tables by serializing them
+           devel.pp(a) == devel.pp(b))
+end
+
+---
+-- Tests for equality.
+function M.equal(a, b, msg)
+  if are_equal(a, b) then
+    print(msg .. "   - OK")
+  else
+    error(E"Testing \"%s\" failed: %s isn't equal to %s":format(msg, devel.pp(a), devel.pp(b)), 2)
+  end
+end
+
+---
+-- Tests for inequality.
+function M.not_equal(a, b, msg)
+  if not are_equal(a, b) then
+    print(msg .. "   - OK")
+  else
+    error(E"Testing \"%s\" failed: %s *is* equal to %s":format(msg, devel.pp(a), devel.pp(b)), 2)
+  end
+end
+
 local function throws(f, needle)
   local ok, errmsg = pcall(f)
   if not ok then
