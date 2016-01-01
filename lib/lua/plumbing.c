@@ -13,6 +13,7 @@
 #include "lib/global.h"
 #include "lib/mcconfig.h"       /* mc_config_get_data_path() */
 #include "lib/event.h"
+#include "lib/widget.h"         /* message(), Widget */
 
 #include "capi.h"
 #include "capi-safecall.h"
@@ -26,6 +27,9 @@
 
 /* The path of the bootstrap file, relative to mc_lua_system_dir(). */
 #define BOOTSTRAP_FILE "modules/core/_bootstrap.lua"
+
+static gboolean ui_is_ready = FALSE;
+static gboolean lua_core_found = FALSE;
 
 /* -------------------------- Meta information ---------------------------- */
 
@@ -77,6 +81,37 @@ mc_lua_user_dir (void)
 
 /* ----------------------------- Start/stop ------------------------------- */
 
+/* "ui is ready" event handler */
+static gboolean
+ui_is_ready_handler (const gchar * event_group_name, const gchar * event_name,
+                     gpointer init_data, gpointer data)
+{
+    (void) event_group_name;
+    (void) event_name;
+    (void) init_data;
+    (void) data;
+
+    ui_is_ready = TRUE;
+
+    mc_lua_replay_first_error ();
+
+    if (!lua_core_found)
+    {
+        message (D_ERROR, _("Lua error"),
+                 _("I can't find the Lua core scripts. Most probably you haven't\n"
+                   "installed MC correctly.\n"
+                   "\n"
+                   "Did you remember to do \"make install\"? This will create the folder\n"
+                   "%s and populate it with some scripts.\n"
+                   "\n"
+                   "Alternatively, if you don't wish to install MC, you may point me\n"
+                   "to the Lua folder by the %s environment variable."),
+                 mc_lua_system_dir (), MC_LUA_SYSTEM_DIR__ENVAR);
+    }
+
+    return TRUE;
+}
+
 /**
  * Initializes the Lua VM.
  */
@@ -87,6 +122,7 @@ mc_lua_init (void)
     luaL_openlibs (Lg);
     /* The following line causes code in the 'src' tree to open our C modules. */
     mc_event_raise (MCEVENT_GROUP_LUA, "init", NULL);
+    mc_event_add (MCEVENT_GROUP_CORE, "ui_is_ready", ui_is_ready_handler, NULL, NULL);
 }
 
 /**
@@ -95,24 +131,8 @@ mc_lua_init (void)
 void
 mc_lua_load (void)
 {
-    gboolean lua_core_found;
-
     /* Load core (which in turn loads user scripts). */
     lua_core_found = (luaMC_safe_dofile (Lg, mc_lua_system_dir (), BOOTSTRAP_FILE) != LUA_ERRFILE);
-
-    if (!lua_core_found)
-    {
-        fprintf (stderr,
-                 _("I can't find the Lua core scripts. Most probably you haven't\n"
-                   "installed MC correctly.\n"
-                   "\n"
-                   "Did you remember to do \"make install\"? This will create the folder\n"
-                   "%s and populate it with some scripts.\n"
-                   "\n"
-                   "Alternatively, if you don't wish to install MC, you may point me\n"
-                   "to the Lua folder by the %s environment variable.\n"),
-                 mc_lua_system_dir (), MC_LUA_SYSTEM_DIR__ENVAR);
-    }
 
     g_assert (lua_gettop (Lg) == 0);    /* sanity check */
 }
@@ -122,4 +142,12 @@ mc_lua_shutdown (void)
 {
     lua_close (Lg);
     Lg = NULL;                  /* For easier debugging, in case somebody tries to use Lua after shutdown. */
+}
+
+/* ------------------------------- Runtime -------------------------------- */
+
+gboolean
+mc_lua_ui_is_ready (void)
+{
+    return ui_is_ready;
 }
