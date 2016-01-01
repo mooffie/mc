@@ -7,6 +7,28 @@
 -- @pseudo
 -- @module globals
 
+----------------------------- defined elsewhere ------------------------------
+
+---
+-- Defined @{locale.T|at the locale module}.
+-- @function T
+-- @args
+
+---
+-- Defined @{locale.N|at the locale module}.
+-- @function N
+-- @args
+
+---
+-- Defined @{locale.Q|at the locale module}.
+-- @function Q
+-- @args
+
+---
+-- Defined @{locale.E|at the locale module}.
+-- @function E
+-- @args
+
 ------------------------------------------------------------------------------
 -- Command line arguments.
 --
