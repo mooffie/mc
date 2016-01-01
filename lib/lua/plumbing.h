@@ -23,4 +23,8 @@ void mc_lua_init (void);
 void mc_lua_load (void);
 void mc_lua_shutdown (void);
 
+/* ------------------------------- Runtime -------------------------------- */
+
+gboolean mc_lua_ui_is_ready (void);
+
 #endif /* MC__LUA_PLUMBING_H */
