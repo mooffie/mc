@@ -1,0 +1,15 @@
+This directory tree contains tests.
+
+Tests that need MC to run have a '.lua' extension (run them by symlinking
+to them in your Lua user folder). Otherwise they have a '.mcs' extension
+which means that it's more convenient to run them with mcscript.
+
+auto/
+
+  Tests that don't require the user's intervention. You can run them with
+  mcscript.
+
+nonauto/
+
+  Tests that require the user's inspection or interaction. Read their
+  headers to see what they're trying to achieve.
