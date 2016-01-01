@@ -45,6 +45,7 @@ magic.setup_autoload(_G)
 
 -- Make it possible to reference builtin modules without 'require'ing them first.
 autoload('devel', 'devel')
+autoload('tty', 'tty')
 autoload('utils', 'utils')
 autoload('conf', 'conf')
 autoload('locale', 'locale')
