@@ -76,12 +76,24 @@ handle_error (lua_State * L)
 }
 
 /**
- * "Safely" calls a Lua function.
+ * "Safely" calls a Lua function. In case of error, an alert is displayed
+ * on the screen.
  *
- * This function catches any exceptions and displays them nicely to the
- * user.
+ * There are two ways to call a Lua function: Either in unprotected mode
+ * (via lua_call()) or in protected mode (aka "safe", via luaMC_pcall(),
+ * which this function conveniently wraps).
  *
- * You can think of it as a fancy version of lua_pcall().
+ * You'd use unprotected mode (lua_call()) when you're inside a Lua
+ * function. That's because the top-level Lua function calling you is
+ * _already_ protected. For example, l_gsub() calls a Lua function using
+ * lua_call().
+ *
+ * OTOH, when you are *not* inside a Lua function (but at MC's top-level)
+ * you'd use *this* function to call Lua functions. This function catches
+ * any exceptions and displays them nicely to the user.
+ *
+ * WARNING: make sure to pop all the variables returned on the stack when this
+ * function returns successfully. You don't want the global stack to fill up.
  */
 gboolean
 luaMC_safe_call (lua_State * L, int nargs, int nresults)

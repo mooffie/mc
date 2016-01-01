@@ -27,6 +27,11 @@ package.path =
 
 require('globals')
 
+------------------------------ Pre-loading stuff -----------------------------
+
+-- Make it possible to use the builtin modules without 'require'ing them first.
+locale = require('locale')
+
 ----------------------------- Load user scripts ------------------------------
 
 -- A primitive way to check for a file's existence. We'll replace it once we can.
