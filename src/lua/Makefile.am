@@ -1,0 +1,22 @@
+SUBDIRS = library
+
+# The following option is meant to prevent a clash when two files with the same
+# name reside in this tree (in two different directories, of course). We have _no_
+# such issue in our project, but nevertheless this option has a cute by-product:
+# it displays the "modules/" prefix as it compiles. That's nice to have.
+AUTOMAKE_OPTIONS = subdir-objects
+
+noinst_LTLIBRARIES = libmc-luasrc.la
+
+libmc_luasrc_la_SOURCES = \
+	modules.c \
+	modules.h \
+	pre-init.h \
+	modules/conf.c
+
+AM_CPPFLAGS = -I$(top_srcdir) $(GLIB_CFLAGS) $(PCRE_CPPFLAGS) $(LUA_CFLAGS)
+
+libmc_luasrc_la_LIBADD = ../../lib/libmc.la
+
+include extra-files-to-dist.mk
+EXTRA_DIST = $(extra_files_to_dist)

@@ -1,0 +1,7 @@
+
+This directory contains:
+
+(1) MC's core (in modules/core). "The core" is the the part of MC's Lua
+    support that's written in Lua itself.
+
+(2) Modules installed by your administrator or distro (in modules/).

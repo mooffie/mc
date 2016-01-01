@@ -12,6 +12,10 @@ if ENABLE_SUBSHELL
 SUBDIRS += subshell
 endif
 
+if USE_LUA
+SUBDIRS += lua
+endif
+
 noinst_LTLIBRARIES = libinternal.la
 
 AM_CPPFLAGS = \
@@ -26,7 +30,7 @@ SUBDIRS += consaver
 AM_CPPFLAGS += -DSAVERDIR=\""$(pkglibexecdir)"\"
 endif
 
-AM_CPPFLAGS += -I$(top_srcdir) $(GLIB_CFLAGS) $(PCRE_CPPFLAGS)
+AM_CPPFLAGS += -I$(top_srcdir) $(GLIB_CFLAGS) $(PCRE_CPPFLAGS) $(LUA_CFLAGS)
 
 localedir = $(datadir)/locale
 pkglibexecdir = $(libexecdir)/@PACKAGE@
@@ -45,11 +49,15 @@ if ENABLE_SUBSHELL
 SUBSHELLLIB = subshell/libsubshell.la
 endif
 
+if USE_LUA
+LUALIB = lua/libmc-luasrc.la
+endif
+
 libinternal_la_LIBADD = \
 	filemanager/libmcfilemanager.la \
 	vfs/libmc-vfs.la \
 	viewer/libmcviewer.la \
-	$(DIFFLIB) $(EDITLIB) $(SUBSHELLLIB)
+	$(DIFFLIB) $(EDITLIB) $(SUBSHELLLIB) $(LUALIB)
 
 mc_LDADD = \
 	libinternal.la \
