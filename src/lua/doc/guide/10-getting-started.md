@@ -107,7 +107,7 @@ Hurrey!
 
 __If something goes wrong...__
 
-- If you have a syntax error in your code, an error message will be printed
+- If you have a syntax error in your code, an alert box will appear
   telling you the number of the offending line. Fix it.
 
 - If nothing seems to happen, make sure you're indeed using the
