@@ -5,8 +5,6 @@
 print "hello!"
 
 print "argv is:"
-for i = 0, #argv do
-  print('#' .. i, argv[i])
-end
+devel.view(argv)
 
 -- vim: set ft=lua:
