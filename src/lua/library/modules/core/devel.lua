@@ -29,11 +29,15 @@ devel.autoload('pp', { 'devel.pp', 'pp' })
 --
 -- Example:
 --
---    devel.view(_G)
+--    keymap.bind('C-y', function()
+--      devel.view(_G)
+--    end)
+--
+-- Note-short: If the UI is not ready, the output will be written to stdout.
 --
 -- @args (v)
 function devel.view(v)
-  print(devel.pp(v))
+  alert(devel.pp(v))
 end
 
 return devel

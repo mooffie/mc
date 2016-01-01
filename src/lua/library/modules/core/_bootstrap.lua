@@ -47,6 +47,7 @@ magic.setup_autoload(_G)
 autoload('devel', 'devel')
 autoload('tty', 'tty')
 autoload('utils', 'utils')
+autoload('prompts', 'prompts')
 autoload('conf', 'conf')
 autoload('locale', 'locale')
 

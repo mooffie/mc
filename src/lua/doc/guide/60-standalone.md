@@ -58,3 +58,8 @@ in the same way 'mcedit' is. Running a script by issuing
 
 You can access the command-line arguments via the global variable
 @{globals.argv|argv}.
+
+## No UI mode
+
+A few functions, like @{prompts.confirm}, will refuse to
+work because the terminal isn't in @{tty.is_ui_ready|UI mode}.

@@ -10,6 +10,11 @@
 ----------------------------- defined elsewhere ------------------------------
 
 ---
+-- Alias for @{prompts.alert}.
+-- @function alert
+-- @args
+
+---
 -- Defined @{locale.T|at the locale module}.
 -- @function T
 -- @args
