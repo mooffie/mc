@@ -3,5 +3,6 @@ files_to_install = \
 README \
 modules/core/_bootstrap.lua \
 modules/core/devel.lua \
+modules/core/devel/ensure.lua \
 modules/core/devel/log.lua \
 modules/core/globals.lua
