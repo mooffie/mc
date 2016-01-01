@@ -114,4 +114,21 @@ __If something goes wrong...__
   Lua-enabled MC. Run it with `mc -F` or `mc -V` to verify that it's indeed
   the case.
 
+- If still nothing seems to happen, examine the log:
+
+[indent]
+
+    @plain
+
+    # in one terminal window:
+    $ export MC_LUA_LOG_FILE=~/log.txt
+    $ mc
+
+    # in another terminal window:
+    $ tail -F ~/log.txt
+
+Specifically, look for a line telling you that your script has been loaded.
+
+[/indent]
+
 [/info]

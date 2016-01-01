@@ -30,6 +30,7 @@ require('globals')
 ------------------------------ Pre-loading stuff -----------------------------
 
 -- Make it possible to use the builtin modules without 'require'ing them first.
+devel = require('devel')
 locale = require('locale')
 
 ----------------------------- Load user scripts ------------------------------
@@ -51,10 +52,10 @@ end
 local function load_user_scripts()
   local user_script = lua_user_dir .. "/index.lua"
   if file_exists(user_script) then
-    print((":: Loading user script (%s) ::"):format(user_script))
+    devel.log((":: Loading user script (%s) ::"):format(user_script))
     dofile(user_script)
   else
-    print((":: User script not found (%s) ::"):format(user_script))
+    devel.log((":: User script not found (%s) ::"):format(user_script))
   end
 end
 
@@ -62,4 +63,4 @@ load_user_scripts()
 
 ------------------------------------------------------------------------------
 
-print(":: Core loaded ::")
+devel.log(":: Core loaded ::")
