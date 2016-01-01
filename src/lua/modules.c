@@ -15,6 +15,7 @@
 static const struct luaL_Reg mods[] = {
 /* *INDENT-OFF* */
     { "conf",         luaopen_conf },
+    { "internal",     luaopen_internal },
     { "locale",       luaopen_locale },
     { NULL, NULL }
 /* *INDENT-ON* */
