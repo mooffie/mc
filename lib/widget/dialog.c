@@ -43,6 +43,9 @@
 #include "lib/widget.h"
 #include "lib/fileloc.h"        /* MC_HISTORY_FILE */
 #include "lib/event.h"          /* mc_event_raise() */
+#ifdef ENABLE_LUA
+#include "lib/lua/plumbing.h"   /* mc_lua_eat_key() */
+#endif
 
 /*** global variables ****************************************************************************/
 
@@ -485,6 +488,11 @@ dlg_key_event (WDialog * h, int d_key)
 
     if (h->current == NULL)
         h->current = h->widgets;
+
+#ifdef ENABLE_LUA
+    if (mc_lua_eat_key (d_key))
+        return;
+#endif
 
     /* TAB used to cycle */
     if ((h->flags & DLG_WANT_TAB) == 0)

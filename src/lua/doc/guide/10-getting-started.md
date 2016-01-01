@@ -101,7 +101,16 @@ Now restart MC.
 
 Nothing too exciting seems to have happened, has it? Press `C-o` to
 switch to the shell. Voila! You can see our "Hello World!" there.
-Hurrey!
+Hurrey! (Note: You @{~general#alert|wouldn't normally use print()}.)
+
+Let's have a more exciting exercise. Add the following to `index.lua`:
+
+    keymap.bind("C-q", function()
+      alert("Hello World!")
+    end)
+
+This will bind the `C-q` key (Control q) to a function that popups a
+"Hello World!" message. Restart MC and press `C-q`.
 
 [info]
 

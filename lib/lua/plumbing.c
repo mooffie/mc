@@ -146,6 +146,30 @@ mc_lua_shutdown (void)
 
 /* ------------------------------- Runtime -------------------------------- */
 
+/**
+ * Called on every key press.
+ */
+gboolean
+mc_lua_eat_key (int keycode)
+{
+    gboolean consumed = FALSE;
+
+    if (luaMC_get_system_callback (Lg, "keymap::eat"))
+    {
+        lua_pushinteger (Lg, keycode);
+
+        if (luaMC_safe_call (Lg, 1, 1))
+            /* The callback returns 'true' if the key was consumed. */
+            consumed = luaMC_pop_boolean (Lg);
+        else
+            /* If some Lua error stopped the script (an alert will be shown),
+             * that's still no reason to revert to the key's default action. */
+            consumed = TRUE;
+    }
+
+    return consumed;
+}
+
 gboolean
 mc_lua_ui_is_ready (void)
 {
