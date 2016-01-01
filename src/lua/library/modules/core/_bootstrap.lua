@@ -27,11 +27,29 @@ package.path =
 
 require('globals')
 
------------------------------- Pre-loading stuff -----------------------------
+----------------------------- Auto-loading stuff -----------------------------
 
--- Make it possible to use the builtin modules without 'require'ing them first.
-devel = require('devel')
-locale = require('locale')
+local magic = require('utils.magic')
+
+-- Disable casual use of global variables.
+magic.setup_strict(_G, true, true)
+
+-- ...and relax it a bit:
+declare('bit32')   -- So people can do 'if bit32' to test availability.
+declare('bit')     -- ditto. (luajit)
+declare('jit')     -- ditto. (luajit)
+declare('utf8')    -- ditto. (Lua 5.3+)
+declare('setfenv') -- ditto.
+declare('argv')    -- So people can reference argv even when not using mcscript.
+declare('arg')     -- ditto.
+
+magic.setup_autoload(_G)
+
+-- Make it possible to reference builtin modules without 'require'ing them first.
+autoload('devel', 'devel')
+autoload('utils', 'utils')
+autoload('conf', 'conf')
+autoload('locale', 'locale')
 
 ----------------------------- Load user scripts ------------------------------
 

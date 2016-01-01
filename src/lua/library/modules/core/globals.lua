@@ -30,6 +30,20 @@
 -- @args
 
 ------------------------------------------------------------------------------
+
+---
+-- Declares global variables.
+--
+-- You @{~general#global|won't normally use global variables}, but if
+-- you have to, you first have to declare them:
+--
+--    declare('foo')
+--    foo = 666
+--
+-- @function declare
+-- @args (variable_name)
+
+------------------------------------------------------------------------------
 -- Command line arguments.
 --
 -- A table holding command line arguments, starting at index 1. Index 0
