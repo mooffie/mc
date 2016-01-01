@@ -69,6 +69,20 @@ context default lightgray
 
 # Library Functions
 
+    # midnight-commander globals
+    keyword whole T cyan
+    keyword whole Q cyan
+    keyword whole N cyan
+    keyword whole E cyan
+    keyword whole abort yellow
+    keyword whole abortive yellow
+    keyword whole assert_arg_type yellow
+    keyword whole import_from yellow
+    keyword whole require_legacy yellow
+    keyword whole declare yellow
+    keyword whole alert yellow
+    keyword whole argv brightmagenta
+
     # basiclib
     keyword whole error yellow
     keyword whole getmetatable yellow
