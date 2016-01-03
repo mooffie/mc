@@ -8,6 +8,7 @@
 --
 --   hi from __gc, #1
 --   hi from __gc, #2
+--   File's __gc works
 --
 -- It will surely be the case for Lua 5.2+, so the test is only useful for 5.1/JIT.
 
@@ -39,6 +40,24 @@ local function test_gc()
   end
   collectgarbage()
   collectgarbage()
+
+  ----------------------------------------
+
+  local filename
+  do
+    local f
+    f, filename = fs.temporary_file()
+    f:write('house')
+    -- The file's __gc will flush/close the file.
+  end
+  collectgarbage()
+  collectgarbage()
+  local contents = fs.open(filename):read('*all')
+  if contents == 'house' then
+    print "File's __gc works"
+  else
+    print "File's __gc fails"
+  end
 
 end
 
