@@ -2,9 +2,16 @@ print "*** This script will crash MC. It demonstrates a bug in MC's VFS layer **
 
 local posix = require "fs.filedes"
 
+
 -- The following code will crash MC. It doesn't detect that the 'fd' on the second close() call is invalid.
 local fd = assert(posix.open("/etc/issue"))
 posix.close(fd)
 posix.close(fd)  -- crashes MC !!
+
+
+-- The following won't crash MC because the fs.File object sets its internal 'fd' to a special sentry value.
+local f = assert(fs.open("/etc/issue"))
+f:close()
+f:close()  -- No crash. An exception will be raised.
 
 -- vim: set ft=lua:

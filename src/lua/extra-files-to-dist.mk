@@ -6,6 +6,7 @@ doc/guide/80-installation.md \
 tests/README \
 tests/auto/bit32.mcs \
 tests/auto/fs.mcs \
+tests/auto/fs_file.mcs \
 tests/auto/magic_strict.mcs \
 tests/benchmarks/treewalk/README \
 tests/benchmarks/treewalk/bench.mcs \

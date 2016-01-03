@@ -3,8 +3,8 @@
  *
  * This module groups functions that do file I/O using *descriptors*.
  *
- * Note: End-users eventually won't need to to use this module: we'll
- * provide a higher-level interface similar to C's FILE.
+ * Note: End-users don't need to use this module: the @{fs} module provides a
+ * higher-level interface to file I/O via @{fs.open}.
  *
  * @internal
  * @module fs.filedes
