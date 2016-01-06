@@ -91,4 +91,6 @@ tests/snippets/syntax-c-glib.lua \
 tests/snippets/syntax-lua.lua \
 tests/snippets/syntax-php.lua \
 tests/snippets/syntax-vala.lua \
-tests/snippets/upload_documentation
+tests/snippets/upload_documentation \
+tests/snippets/viewer_edit.lua \
+tests/snippets/viewer_smooth_scrolling.lua
