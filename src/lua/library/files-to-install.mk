@@ -132,6 +132,7 @@ modules/samples/libs/mplayer.lua \
 modules/samples/libs/os.lua \
 modules/samples/libs/scrollbar.lua \
 modules/samples/libs/speller.lua \
+modules/samples/official-suggestions.lua \
 modules/samples/screensavers/clocks/analog.lua \
 modules/samples/screensavers/simplest.lua \
 modules/samples/screensavers/utils.lua \
