@@ -1222,11 +1222,16 @@ dlg_init (WDialog * h)
     while (h->current != NULL && !dlg_focus (h))
         h->current = dlg_widget_next (h, h->current);
 
-    /* Can be used to notify the user with sound on alert boxes, TTS the title,
-       modify widgets data, etc. */
-    scripting_trigger_widget_event ("Dialog::open", WIDGET (h));
-
     h->ret_value = 0;
+
+    /* The <<Dialog::open>> event can be used to modify widget data, 
+     * notify the user with sound on alert boxes, TTS the title, etc.
+     *
+     * It can also be used for automatically canceling or submitting
+     * dialogs ("automation"). For this reason we put this *after* the
+     *`h->ret_value = 0` line (otherwise the effect of a CK_Cancel command
+     * the user issues in the event handler would get overwritten). */
+    scripting_trigger_widget_event ("Dialog::open", WIDGET (h));
 }
 
 /* --------------------------------------------------------------------------------------------- */
