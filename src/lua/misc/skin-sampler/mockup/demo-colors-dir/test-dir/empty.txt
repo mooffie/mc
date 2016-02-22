@@ -1,0 +1,1 @@
+For git to create this directory, it mustn't be empty. Hence this file.
