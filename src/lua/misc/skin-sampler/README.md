@@ -9,6 +9,9 @@ generates screenshots for it.
 
 The output is written to the 'output' folder.
 
+(There's also the `generate-headless.sh` script, which may be more
+convenient than `generate.sh` if you're on a headless server.)
+
 ## Reference
 
 This app was instigated by this ticket:
