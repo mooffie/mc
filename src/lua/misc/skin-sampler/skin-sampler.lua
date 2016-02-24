@@ -21,6 +21,9 @@ local function file_exists(path) return fs.nonvfs_access(path, '') end
 -- rxvt. Each assigns slightly different RGB values to the 16 colors.
 htmlize.palette = htmlize.palettes.rxvt
 
+-- Uncomment this to disable bold font (otherwise colors 8..15 are bold).
+--htmlize.bold_range = { min = -10, max = -10 }
+
 ---------------------- Output and mockup configuration -----------------------
 
 local data_dir = fs.current_dir() .. '/mockup'
