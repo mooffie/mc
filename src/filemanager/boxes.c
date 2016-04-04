@@ -151,7 +151,7 @@ configure_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, voi
 
 /* --------------------------------------------------------------------------------------------- */
 
-static void
+/*static*/ void    /* FIXME: this should be public: lua/modules/tty.c wants this */
 skin_apply (const gchar * skin_override)
 {
     GError *mcerror = NULL;
