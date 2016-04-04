@@ -17,11 +17,12 @@
 #include "lib/lua/plumbing.h"   /* mc_lua_ui_is_ready() */
 #include "lib/lua/utilx.h"
 
+#include "src/filemanager/boxes.h"      /* skin_apply() */
+
 #include "../modules.h"
 #include "ui-canvas.h"          /* luaUI_new_canvas() */
 
 #include "tty.h"
-
 
 /**
  * Keyboard keys.
@@ -1046,6 +1047,92 @@ l_skin_get (lua_State * L)
 }
 
 /**
+ * Changes the active skin.
+ *
+ * Example:
+ *
+ *     -- There are three ways to specify a skin.
+ *
+ *     ui.Panel.bind('C-q', function()
+ *
+ *       tty.skin_change('gotar')
+ *
+ *       -- Or you may include the '.ini' suffix:
+ *       tty.skin_change('gotar.ini')
+ *
+ *       -- Or: if your skin file isn't located in one of the
+ *       -- predefined places, you can use it by providing
+ *       -- an absolute path (but not relative!) to it:
+ *       tty.skin_change('/usr/share/mc/skins/gotar.ini')
+ *
+ *     end)
+ *
+ * Here's how to change the skin depending on which directory you're in:
+ *
+ *     -- Use a special skin when we're in the /etc tree.
+ *
+ *     local function on_chdir(pnl)
+ *       if pnl == ui.Panel.current then  -- <<load>> is fired for the "other" (inactive) panel as well.
+ *         if pnl.dir:find '^/etc' then
+ *           tty.skin_change('gotar')
+ *         else
+ *           tty.skin_change('default')
+ *         end
+ *       end
+ *     end
+ *
+ *     ui.Panel.bind("<<load>>", on_chdir)      -- When the user navigates between directories.
+ *     ui.Panel.bind("<<activate>>", on_chdir)  -- When the user switches between panels.
+ *
+ *     -- Note: if you're interested in this idea, see the 'dynamic-skin'
+ *     -- module, which is more robust.
+ *
+ * @function skin_change
+ * @param skin_name The name of the skin (with or without the ending '.ini'),
+ *   or an absolute path to a skin file.
+ * @param[opt] force Normally the function only changes the skin if it's not
+ *   already the active one. This saves you from worrying about performance
+ *   yourself if you call the function frequently. But you can pass __true__ as
+ *   the `force` flag to always change the skin (useful if, for example,
+ *   you've edited it on disk and want to reload it).
+ * @return
+ *   Returns the name of the skin now active. It should match the name of the
+ *   skin you fed this function, unless some error occurred. You may call this
+ *   function with a __nil__ `skin_name` if you're only interested in the
+ *   active skin name.
+ *
+ * [info]
+ *
+ * Changing the skin while in the editor will jumble up the syntax-highlighting
+ * colors. (Exiting and re-entering the editor fixes this.)
+ *
+ * [/info]
+ */
+static int
+l_skin_change (lua_State * L)
+{
+    const char *name;
+    gboolean force;
+
+    name = luaL_optstring (L, 1, NULL);
+    force = lua_toboolean (L, 2);
+
+    luaTTY_assert_ui_is_ready (L);
+
+    if (name != NULL)
+    {
+        /* For performance, we switch the skin only if it's not already active.
+         * But the user can override this with the 'force' flag. */
+        if (force || (g_strcmp0 (name, mc_skin__default.name) != 0))
+            skin_apply (name);
+    }
+
+    lua_pushstring (L, mc_skin__default.name);
+
+    return 1;
+}
+
+/**
  * Returns the terminal width, in characters.
  *
  * @function get_cols
@@ -1276,6 +1363,7 @@ static const struct luaL_Reg ttylib[] = {
     { "text_align", l_text_align },
     { "is_ui_ready", l_is_ui_ready },
     { "_skin_get", l_skin_get },
+    { "skin_change", l_skin_change },
     { "get_cols", l_get_cols },
     { "get_rows", l_get_rows },
     { "beep", l_beep },
