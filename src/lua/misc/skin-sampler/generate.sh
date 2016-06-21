@@ -46,14 +46,9 @@ AddCharset UTF-8 .html
 EOS
 
 ########################################################################
-# Create a few special files not recorded in git (pipe, device).
+# Setup the mockup directory.
 
-(
-  cd mockup/demo-colors-dir || die "I cannot see the data dir."
-  [ -p pipe-file ] || mkfifo pipe-file
-  # sudo mknod device-file c 1 3
-  chmod +x shell.sh  # In case git didn't keep the permission.
-)
+./mockup-up.sh || die "I cannot setup the mockup dir."
 
 ########################################################################
 # Do the job.
@@ -87,6 +82,8 @@ done
 # Cleanup.
 
 reset  # Because the os.exit() we do in Lua doesn't restore the screen.
+
+./mockup-down.sh
 
 # Move the "defbg" skins to a separate folder, because users browsing them
 # are likely to think there's a bug somewhere: one needs to set the browser's

@@ -11,6 +11,9 @@ echo "It makes use of the 'empty' program, which you can get here:"
 echo
 echo "    http://empty.sourceforge.net/"
 echo
+echo "** ALTHOUGH, PREFERABLY, YOU SHOULD INSTALL IT USING YOUR DISTRO'S **"
+echo "** PACKAGE MANAGER AS IT MAY CONTAIN BUG FIXES.                    **"
+echo
 echo "Ok,"
 echo
 echo "I'm about to run $PROG, in a pseudo terminal."

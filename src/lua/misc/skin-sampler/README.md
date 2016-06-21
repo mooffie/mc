@@ -21,8 +21,13 @@ This app was instigated by this ticket:
 
 ## Other notes
 
-The reason we use the shell script, in addition to Lua, is because we
+* The reason we use the shell script, in addition to Lua, is because we
 haven't (yet) exposed to Lua a function to switch MC's skin. So we set
 the skin with the `-S` command-line option. But it turns out using a
 shell script was a good idea for other reasons too: it's probably a
 better place to set up the environment.
+
+* Since we can't store special files in git (like pipes & devices), which
+are files we want to show in screenshots, we create such files using the
+shell script `mockup-up.sh`. You may need to edit this file to adjust it
+to your system.
