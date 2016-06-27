@@ -132,8 +132,8 @@ ui.Dialog.bind('<<open>>', function(dlg)
   if dlg.text == T'Copy' then
     take_shot('panel-brief')
     -- There are two ways to close a dialog: either by doing dlg:command('cancel')
-    -- or by doing dlg:close(). See explanation in `tests/nonauto/close_current_dialog.lua`
-    -- to learn about the difference.
+    -- or by doing dlg:close(). See note in dialog:close's documentation explaining
+    -- the difference.
     dlg:command 'cancel'
   end
 end)

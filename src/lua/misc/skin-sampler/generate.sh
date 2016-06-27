@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+srcdir="$(cd "$(dirname "$0")" && pwd)"   # taken from autogen.sh (")
+cd "$srcdir"
 
 ########################################################################
 # Variables.
@@ -60,8 +61,9 @@ EOS
 # in it.
 export MC_LUA_USER_DIR=`pwd`
 
-# Since we arn't using mcscript, we need to guard against the following case
-# or MC will complain that "Midnight Commander is already running on this terminal".
+# Since we aren't using mcscript, we need to guard against the following
+# case or else MC will complain that "Midnight Commander is already running
+# on this terminal".
 [ -z "$MC_SID" ] || die "You cannot run this script from inside MC. Exit MC first. Or use 'generate-headless.sh' instead."
 
 # Some setups don't enable this by default.
