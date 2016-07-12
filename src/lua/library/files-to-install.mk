@@ -88,6 +88,14 @@ modules/samples/apps/visren/search/plugins/pcre.lua \
 modules/samples/apps/visren/search/plugins/rex.lua \
 modules/samples/apps/visren/worlds/editboxworld.lua \
 modules/samples/apps/visren/worlds/panelworld.lua \
+modules/samples/colon/commands/editbox.lua \
+modules/samples/colon/commands/fun.lua \
+modules/samples/colon/commands/help.lua \
+modules/samples/colon/commands/lua.lua \
+modules/samples/colon/commands/panelize.lua \
+modules/samples/colon/commands/visren.lua \
+modules/samples/colon/defaults.lua \
+modules/samples/colon/init.lua \
 modules/samples/editbox/access-warning.lua \
 modules/samples/editbox/dictionary.lua \
 modules/samples/editbox/funclist.lua \
