@@ -429,14 +429,43 @@ l_edit_get_filename (lua_State * L)
 /**
  * Whether the buffer has been modified.
  *
+ * [info]
+ *
+ * This property is writable. You can use this when you want some modification
+ * to not "dirty" the buffer. Example:
+ *
+ *    local mod = edt.modified
+ *    -- ...
+ *    -- code to remove all Windows/DOS line ends (CRs) from the buffer
+ *    -- ...
+ *    edt.modified = mod
+ *
+ * [/info]
+ *
+ *
  * @function modified
- * @property r
+ * @property rw
  */
 static int
 l_edit_get_modified (lua_State * L)
 {
     lua_pushboolean (L, LUA_TO_EDITBOX (L, 1)->modified);
     return 1;
+}
+
+static int
+l_edit_set_modified (lua_State * L)
+{
+    WEdit *edit;
+    gboolean modified;
+
+    edit = LUA_TO_EDITBOX (L, 1);
+    modified = lua_toboolean (L, 2);
+
+    edit->modified = modified;
+    edit_update_view (edit);    /* Repaint the status line only. */
+
+    return 0;
 }
 
 /**
@@ -459,13 +488,28 @@ l_edit_get_max_line (lua_State * L)
  * The number of the first line displayed.
  *
  * @function top_line
- * @property r
+ * @property rw
  */
 static int
 l_edit_get_top_line (lua_State * L)
 {
     lua_pushi (L, LUA_TO_EDITBOX (L, 1)->start_line + 1);
     return 1;
+}
+
+static int
+l_edit_set_top_line (lua_State * L)
+{
+    WEdit *edit;
+    long line;
+
+    edit = LUA_TO_EDITBOX (L, 1);
+    line = luaL_checklong (L, 2);
+
+    edit_move_display (edit, line - 1);
+    edit_update_view (edit);
+
+    return 0;
 }
 
 /**
@@ -759,6 +803,15 @@ l_edit_bookmark_flush (lua_State * L)
 /**
  * The cursor's line number.
  *
+ * [info]
+ *
+ * When you set the cursor's line (by writing to this property), the view will
+ * be scrolled so the line is centered on screen. If you don't want to center
+ * the line, call this property as a method and pass a "nocenter" argument.
+ * E.g.: `edt:set_cursor_line(50, "nocenter")`.
+ *
+ * [/info]
+ *
  * @function cursor_line
  * @property rw
  */
@@ -769,24 +822,31 @@ l_edit_get_cursor_line (lua_State * L)
     return 1;
 }
 
-/**
- * In the future we may want to turn this function into a full
- * blown goto_line() and add more arguments to control its operation
- * (e.g., scroll line to top/center/bottom of window).
- */
 static int
 l_edit_set_cursor_line (lua_State * L)
 {
+    static const char *const scroll_names[] = {
+        /* In the future we may want to add "top" & "bottom", and rename "nocenter" to "keep". */
+        "center", "nocenter", NULL
+    };
+    static gboolean scroll_values[] = {
+        TRUE, FALSE
+    };
+
     WEdit *edit;
     long line;
+    gboolean do_center;
 
     edit = LUA_TO_EDITBOX (L, 1);
     line = luaL_checklong (L, 2);
+    do_center = luaMC_checkoption (L, 3, "center", scroll_names, scroll_values);
 
-    /* Copied from edit_goto_cmd() */
-    edit_move_display (edit, line - WIDGET (edit)->lines / 2 - 1);
+    /* Code mostly copied from edit_goto_cmd(). */
+
+    if (do_center)
+        edit_move_display (edit, line - WIDGET (edit)->lines / 2 - 1);
     edit_move_to_line (edit, line - 1);
-    edit->force |= REDRAW_COMPLETELY;
+    /* edit->force |= REDRAW_COMPLETELY; *//* Why does edit_goto_cmd() do this? Seems unneeded. */
     edit_update_view (edit);
 
     return 0;
@@ -1391,8 +1451,10 @@ static const struct luaL_Reg ui_edit_lib[] = {
     { "bookmark_flush", l_edit_bookmark_flush },
     { "get_filename", l_edit_get_filename },
     { "get_modified", l_edit_get_modified },
+    { "set_modified", l_edit_set_modified },
     { "get_max_line", l_edit_get_max_line },
     { "get_top_line", l_edit_get_top_line },
+    { "set_top_line", l_edit_set_top_line },
     { "get_markers", l_edit_get_markers },
     { "get_fullscreen", l_edit_get_fullscreen },
     { "set_fullscreen", l_edit_set_fullscreen },
