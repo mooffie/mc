@@ -313,11 +313,14 @@ end
 -- that you can't have two Editboxes opened at once each having a different
 -- `tab_size` value.
 --
--- Available fields (options):
+-- Here are the available fields (options). In parentheses is how the feature is
+-- named in MC's Editor Options dialog.
 --
 -- - tab_size  - The tab character width
 -- - fake_half_tab - (boolean) Simulate tabs at half the size.
 -- - expand_tab - (boolean) Emit spaces, instead of a tab, when the TAB key is pressed.
+-- - show_tabs - (boolean) Show tabs ("Visible tabs").
+-- - show_tws - (boolean) Show trailing whitespace ("Visible trailing spaces").
 -- - show_numbers - (boolean) Show line numbers.
 -- - wrap_column - The column for word-wrapping.
 -- - show_right_margin - (boolean) Show where wrap_column is (works even if

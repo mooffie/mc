@@ -1270,6 +1270,16 @@ l_edit_set_option (lua_State * L)
         option_line_state_width = option_line_state ? LINE_STATE_WIDTH : 0;
         redraw_editors ();
     }
+    else if (STREQ (option, "show_tabs"))
+    {
+        visible_tabs = lua_toboolean (L, 2);
+        redraw_editors ();
+    }
+    else if (STREQ (option, "show_tws"))
+    {
+        visible_tws = lua_toboolean (L, 2);
+        redraw_editors ();
+    }
     else if (STREQ (option, "show_right_margin"))
     {
         show_right_margin = lua_toboolean (L, 2);
@@ -1305,6 +1315,10 @@ l_edit_get_option (lua_State * L)
         lua_pushboolean (L, option_fill_tabs_with_spaces);
     else if (STREQ (option, "show_numbers"))
         lua_pushboolean (L, option_line_state);
+    else if (STREQ (option, "show_tabs"))
+        lua_pushboolean (L, visible_tabs);
+    else if (STREQ (option, "show_tws"))
+        lua_pushboolean (L, visible_tws);
     else if (STREQ (option, "show_right_margin"))
         lua_pushboolean (L, show_right_margin);
     else if (STREQ (option, "wrap_column"))
