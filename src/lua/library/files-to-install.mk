@@ -119,6 +119,7 @@ modules/samples/editbox/wordstar.lua \
 modules/samples/fields/better-size.lua \
 modules/samples/fields/bidi.lua \
 modules/samples/fields/git.lua \
+modules/samples/fields/github-folder-jumping.lua \
 modules/samples/fields/mplayer.lua \
 modules/samples/filesystems/mht.lua \
 modules/samples/filesystems/mysql.lua \
