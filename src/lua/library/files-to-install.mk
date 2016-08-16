@@ -57,6 +57,7 @@ modules/samples/accessories/find-as-you-type.lua \
 modules/samples/accessories/follow.lua \
 modules/samples/accessories/git-branch.lua \
 modules/samples/accessories/hotlist-keys.lua \
+modules/samples/accessories/lynx-keys.lua \
 modules/samples/accessories/preserve-attributes.lua \
 modules/samples/accessories/recently-visited-files/README.md \
 modules/samples/accessories/recently-visited-files/db.lua \
