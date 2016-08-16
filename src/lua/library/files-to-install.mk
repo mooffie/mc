@@ -113,6 +113,7 @@ modules/samples/editbox/modeline.lua \
 modules/samples/editbox/scrollbar.lua \
 modules/samples/editbox/speller.lua \
 modules/samples/editbox/unicodedata.lua \
+modules/samples/editbox/unwind.lua \
 modules/samples/editbox/wordstar.lua \
 modules/samples/fields/better-size.lua \
 modules/samples/fields/bidi.lua \
