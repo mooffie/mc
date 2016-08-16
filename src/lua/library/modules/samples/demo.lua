@@ -23,7 +23,7 @@ Assuming, of course, that ./dummy doesn't exist.)
 
 local M = {}
 
-local msg_question = T[[
+local msg_welcome = T[[
 Hi!
 
 I'm MC with Lua support. Yes, I can talk!
@@ -41,7 +41,7 @@ Do you want me to load some "factory defaults" scripts that will juice me
 up and make you happy?
 ]]
 
-local msg_done = T[[
+local msg_menu1 = T[[
 Good, I knew I could trust you!
 
 I've loaded some goodies. If you enable the "Help ticker" (below), I'll
@@ -52,6 +52,11 @@ Tip: Enable the git status field (below) if you're a developer.
 There are many more features in me beside those you'll shortly see.
 Browse my 'snippets' and 'samples' folders, or read my user manual!
 You can return to this screen later by restarting Lua (C-x l).
+]]
+
+local msg_menu2 = T[[
+Marvelous, you're still with me! Here are a few more modules you may want
+to enable. C'mon, tick them all! Don't be shy!
 ]]
 
 local function prepare_msg(msg)
@@ -152,7 +157,7 @@ end
 
 local default_screensaver_minutes = 3
 
-local function run_done_dlg()
+local function run_menu1_dlg()
   local dlg = ui.Dialog(T"Done.")
 
   local chk_help_ticker = ui.Checkbox{T"&Help ticker", checked=true}
@@ -166,7 +171,7 @@ local function run_done_dlg()
   local chk_field_dur = ui.Checkbox(T'"&Duration" field (mplayer)')
   local chk_field_bidi = ui.Checkbox(T'&BiDi name (bidiv)')
 
-  dlg:add(ui.Label(prepare_msg(msg_done)))
+  dlg:add(ui.Label(prepare_msg(msg_menu1)))
   dlg:add(ui.Space())
   dlg:add(ui.Groupbox(T"Additional stuff you can enable now:"):add(
     ui.HBox():add(
@@ -191,8 +196,10 @@ local function run_done_dlg()
     )
   ))
   dlg:add(ui.Buttons():add(
-    ui.Button{T"Cool, thanks.", type='default', result=true},
-    ui.Button{T"Show me what you've loaded", result='show'}
+    ui.OkButton(T"Next..."),
+    ui.Button{T"Show me what you've just loaded", on_click=function()
+      mc.edit(utils.path.module_path 'samples.official-suggestions')
+    end}
   ))
 
   if dlg:run() then
@@ -243,18 +250,53 @@ local function run_done_dlg()
     end
   end
 
-  if dlg.result == 'show' then
-    mc.edit(utils.path.module_path 'samples.official-suggestions')
-  end
-
+  return dlg.result
 end
 
 ------------------------------------------------------------------------------
 
-local function run_question_dlg()
+local function run_menu2_dlg()
+  local dlg = ui.Dialog(T"Just a sec!")
+
+  local chk_github = ui.Checkbox{T'&GitHub-style "folder jumping"', checked=true}
+  local chk_lynx = ui.Checkbox{T"Enhanced &Lynx-like motion", checked=true}
+  local chk_unwind = ui.Checkbox(T"Un&Wind for the editor (easier editing of CR+LF files)")
+
+  dlg:add(ui.Label(prepare_msg(msg_menu2)))
+  dlg:add(ui.Space())
+  dlg:add(ui.Groupbox(T"Additional stuff you can enable now:"):add(
+    chk_github,
+    chk_lynx,
+    chk_unwind
+  ))
+  dlg:add(ui.Buttons():add(
+    ui.OkButton(T"Cool, thanks!")
+  ))
+
+  if dlg:run() then
+    if chk_lynx.checked then
+      require('samples.accessories.lynx-keys')
+    end
+    if chk_unwind.checked then
+      require('samples.editbox.unwind').install()
+    end
+    if chk_github.checked then
+      require('samples.fields.github-folder-jumping')
+      -- Because of late-stage definition of the 'name' field, we
+      -- call the following function. See its documentation.
+      fields._reparse_format_string()
+    end
+  end
+
+  return dlg.result
+end
+
+------------------------------------------------------------------------------
+
+local function run_welcome_dlg()
   local dlg = ui.Dialog(T"Welcome")
 
-  dlg:add(ui.Label(prepare_msg(msg_question)))
+  dlg:add(ui.Label(prepare_msg(msg_welcome)))
   dlg:add(ui.Buttons():add(
     ui.Button{T"&Sure, load 'em up!", type='default', result='load'},
     ui.Button{T"&No.", result=false},
@@ -270,10 +312,11 @@ local function run_question_dlg()
       -- 'better-size'), we call the following function. See its documentation.
       fields._reparse_format_string()
     end)
-    run_done_dlg()
   else
     prompts.flash(T"My! You're such a party breaker! :-(")
   end
+
+  return dlg.result
 end
 
 --------------------------------- Startup ------------------------------------
@@ -309,7 +352,7 @@ function M.run()
           and #ui.Dialog.screens ~= 0 then
         itvl:stop()
         timer.unlock()
-        run_question_dlg()
+        local _ = run_welcome_dlg() and run_menu1_dlg() and run_menu2_dlg()
         tty.refresh()
       end
     end, 500)
