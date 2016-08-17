@@ -186,8 +186,13 @@ local function restore_shot_part(shot)
     )
   end
 
+  local function has_dir_only(shot)
+    -- @todo: how to implement this?
+    return false
+  end
+
   dlg:add(ui.Groupbox(T"Which settings to restore?"):add(
-    core.has_dir_only(shot) and ui.Label(T"(This shot has only a directory stored in it.)") or domain
+    has_dir_only(shot) and ui.Label(T"(This shot has only a directory stored in it.)") or domain
   ))
 
   dlg:add(ui.DefaultButtons())
