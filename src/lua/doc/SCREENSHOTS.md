@@ -143,6 +143,33 @@ Visual Rename act somewhat like a @{~#filter|filter-as-you-type} feature.
 
 <!-- --------------------------------------------------------------------- -->
 
+## "Folder Jumping"
+
+<a name="folder-jumping"></a>
+
+[figure]
+
+[ss:screenshots/folderjumping.png]
+
+[split]
+
+@{git:github-folder-jumping.lua|Folder jumping} lets you jump over
+folders that contain nothing more than a single sub-folder.
+
+The feature was borrowed
+[from GitHub.com](https://github.com/blog/1877-folder-jumping).
+
+This is a great <del>time-saver</del> sanity-saver when navigating
+projects that suffer from "Directoritis", a syndrome that afflicts Java
+and modern PHP projects.
+
+The screenshot at the background shows that you can use a fancy separator
+instead of "/".
+
+[/figure]
+
+<!-- --------------------------------------------------------------------- -->
+
 ## Filesystems
 
 You can @{~filesystem|write filesystems} in Lua. The following naive code:
@@ -309,6 +336,34 @@ about.
 on the screen. It works anywhere, not just in the editor.
 
 - There's a @{git:editbox/scrollbar.lua|scrollbar} at the left.
+
+[/figure]
+
+<!-- --------------------------------------------------------------------- -->
+
+## UnWind
+
+<a name="unwind"></a>
+
+[figure]
+
+[ss:screenshots/unwind.png]
+
+[split]
+
+Are you editing files created by Windows/DOS programmers? Let the
+@{git:unwind.lua|unwind} module automatically convert CR+LF to LF for
+you. No more distracting "^M" at line ends!
+
+It also lets you toggle _visible tabs_ with a hotkey (as files coming
+from Visual Studio often use tabs).
+
+This screenshot shows the indicator it displays at the bottom-right
+corner:
+
+- "cr-converted" means that the line-endings have been converted.
+- "T" means that _visible tabs_ is on.
+- "4" is the tab size.
 
 [/figure]
 

@@ -92,6 +92,8 @@ sub, sup { font-size: .83em }
 sub      { vertical-align: sub }
 sup      { vertical-align: super }
 
+del { text-decoration: line-through }  /* Why does ldoc_pale clears this?! */
+
 /* ------------------------------------------------------------------------ */
 
 /* Targets are already colored nicely in the main CSS file.
