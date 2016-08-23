@@ -262,12 +262,26 @@ local function run_menu2_dlg()
   local chk_lynx = ui.Checkbox{T"Enhanced &Lynx-like motion", checked=true}
   local chk_unwind = ui.Checkbox(T"Un&Wind for the editor (easier editing of CR+LF files)")
 
+  -- Tabs
+  local chk_tabs_south = ui.Checkbox{T'Show the tabs bar at botto&m (not top)'}
+  local chk_tabs_bindings = ui.Checkbox{T'&Keys: Make C-n open new tab; C-c close tab.'}
+  local chk_tabs = ui.Checkbox{T'Enable &tabs', on_change=function(self)
+    chk_tabs_south.enabled = self.checked
+    chk_tabs_bindings.enabled = self.checked
+  end}
+  chk_tabs:on_change()
+
   dlg:add(ui.Label(prepare_msg(msg_menu2)))
   dlg:add(ui.Space())
   dlg:add(ui.Groupbox(T"Additional stuff you can enable now:"):add(
     chk_github,
     chk_lynx,
-    chk_unwind
+    chk_unwind,
+    ui.Groupbox(T"Tabs"):add(
+      chk_tabs,
+      chk_tabs_south,
+      chk_tabs_bindings
+    )
   ))
   dlg:add(ui.Buttons():add(
     ui.OkButton(T"Cool, thanks!")
@@ -285,6 +299,18 @@ local function run_menu2_dlg()
       -- Because of late-stage definition of the 'name' field, we
       -- call the following function. See its documentation.
       fields._reparse_format_string()
+    end
+    if chk_tabs.checked then
+      require('samples.accessories.tabs.default-key-bindings')
+      require('samples.accessories.tabs.colon-commands')
+      local tabs = require('samples.accessories.tabs.core')
+      if chk_tabs_south.checked then
+        tabs.region = "south"
+      end
+      if chk_tabs_bindings.checked then
+        ui.Panel.bind('C-n', function() tabs.create_tab() end)
+        ui.Panel.bind('C-c', function() tabs.close_tab() end)
+      end
     end
   end
 
