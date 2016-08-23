@@ -511,6 +511,20 @@ In the "radio" snapshot one (or both) of the panels is panelized
 
 <!-- --------------------------------------------------------------------- -->
 
+## Tabs
+
+[figure]
+
+[ss:screenshots/tabs.png]
+
+[split]
+
+You want tabs? @{git:tabs|You've got them.}
+
+[/figure]
+
+<!-- --------------------------------------------------------------------- -->
+
 ## Calculator
 
 [figure]
