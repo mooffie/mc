@@ -71,6 +71,11 @@ modules/samples/accessories/size-calculator.lua \
 modules/samples/accessories/snapshots/README.md \
 modules/samples/accessories/snapshots/core.lua \
 modules/samples/accessories/snapshots/init.lua \
+modules/samples/accessories/tabs/README.md \
+modules/samples/accessories/tabs/colon-commands.lua \
+modules/samples/accessories/tabs/core.lua \
+modules/samples/accessories/tabs/default-key-bindings.lua \
+modules/samples/accessories/tabs/tbuttonbar.lua \
 modules/samples/accessories/ticker.lua \
 modules/samples/accessories/unfilter.lua \
 modules/samples/apps/calc/README.md \
