@@ -205,12 +205,13 @@ l_widget_set_enabled (lua_State * L)
 
     dlg = w->owner;
 
-    if (!b && dlg && dlg->current && dlg->current->data == w)
+    // VERIFY: this behaves strangely (see tetris).
+    if (!b && (dlg != NULL) && widget_get_state (w, WST_FOCUSED))
     {
         /* If we've disabled ourselves, focus the next widget. This in
          * order to circumvent a "bug" in MC where it's still possible
          * to hit ENTER on a disabled button thereby activating it. */
-        dlg_one_down (dlg);
+        dlg_select_next_widget (dlg);
     }
 
     return 0;
@@ -219,7 +220,7 @@ l_widget_set_enabled (lua_State * L)
 static int
 l_widget_get_enabled (lua_State * L)
 {
-    lua_pushboolean (L, (luaUI_check_widget (L, 1)->options & W_DISABLED) == 0);
+    lua_pushboolean (L, !widget_get_state (luaUI_check_widget (L, 1), WST_DISABLED));
     return 1;
 }
 
@@ -458,7 +459,7 @@ l_widget_focus (lua_State * L)
     if (!w->owner)
         luaL_error (L, E_ ("You can only focus a widget that has been mapped in a dialog."));
 
-    dlg_select_widget (w);
+    widget_select (w);
     update_cursor (w->owner);   /* Position the cursor at the focused element. */
     return 0;
 }
@@ -704,7 +705,7 @@ l_checkbox_new (lua_State * L)
 static int
 l_checkbox_get_checked (lua_State * L)
 {
-    lua_pushboolean (L, LUA_TO_CHECKBOX (L, 1)->state & C_BOOL);
+    lua_pushboolean (L, LUA_TO_CHECKBOX (L, 1)->state);
     return 1;
 }
 
@@ -714,12 +715,7 @@ l_checkbox_set_checked (lua_State * L)
     WCheck *chk = LUA_TO_CHECKBOX (L, 1);
     gboolean b = lua_toboolean (L, 2);
 
-    chk->state = b ? C_BOOL : 0;
-
-    /* @todo: use C_CHANGE? It's not used anywhere in MC, but maybe in the
-       future. @FIXME: MC should have a setter for this so we won't have to
-       deal with stuff like this ourselves. */
-
+    chk->state = b;
     widget_redraw (WIDGET (chk));
 
     return 0;
@@ -2174,23 +2170,26 @@ ui_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, voi
 
     case MSG_VALIDATE:
         {
-            WDialog *dlg = DIALOG (w);
+            // VERIFY:
+            //WDialog *dlg = DIALOG (w);
             gboolean action_found, ok_to_close;
-            dlg_state_t old_state;
+            widget_state_t old_state;
 
             /* At this point the dialog is DLG_CLOSED. This may cause an
              * aesthetic problem: if the on_validate handler shows an alert(),
              * dismissing this alert() won't repaint our dialog. So we
              * temporarily activate the dialog. */
-            old_state = dlg->state;
-            dlg->state = DLG_ACTIVE;
+            old_state = w->state;
+            //dlg->state = DLG_ACTIVE;
+            widget_set_state (w, WST_ACTIVE, TRUE);
 
             ok_to_close = (call_widget_method (w, "on_validate", 0, &action_found) == MSG_HANDLED);
 
             if (action_found)
-                dlg->state = ok_to_close ? DLG_CLOSED : DLG_ACTIVE;
+                //w->state = ok_to_close ? WST_CLOSED : WST_ACTIVE;
+                widget_set_state (w, ok_to_close ? WST_CLOSED : WST_ACTIVE, TRUE);
             else
-                dlg->state = old_state;
+                w->state = old_state;
 
             if (mc_global.midnight_shutdown)
             {
@@ -2200,7 +2199,8 @@ ui_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, voi
                  * ask is "Save changes? Y/N", not "Save changes? Y/N/C".
                  */
                 /* message (D_NORMAL, "Debug", "MC is exiting. I'm closing this modaless dialog anyway."); */
-                DIALOG (w)->state = DLG_CLOSED;
+                //DIALOG (w)->state = DLG_CLOSED;
+                widget_set_state (w, WST_CLOSED, TRUE);
             }
 
             return MSG_HANDLED;
@@ -2250,8 +2250,9 @@ dialog_constructor (void)
 {
     /* The '-1' is a sentry value we check for on the Lua side. */
     WDialog *dlg = dlg_create (TRUE, -1, -1, 4, 4,
+                               WPOS_KEEP_DEFAULT /* pos_flags */ , FALSE /* compact */ ,
                                dialog_colors, ui_dialog_callback,
-                               NULL, NULL, NULL, 0);
+                               NULL /* mouse */ , NULL /* help */ , NULL /* title */ );
     dlg->get_title = dlg_title_handler; /* for modaless dialogs. */
     return WIDGET (dlg);
 }
@@ -2322,7 +2323,7 @@ l_dialog_new (lua_State * L)
 static int
 l_dialog_set_on_idle (lua_State * L)
 {
-    widget_set_options (WIDGET (LUA_TO_DIALOG (L, 1)), W_WANT_IDLE, lua_toboolean (L, 2));
+    widget_idle (WIDGET (LUA_TO_DIALOG (L, 1)), lua_toboolean (L, 2));
     luaMC_rawsetfield (L, 1, "on_idle__real");
     return 0;
 }
@@ -2522,8 +2523,9 @@ l_dialog_run (lua_State * L)
 
         w = WIDGET (dlg->current->data);
 
-        if (((w->options & W_DISABLED) == 0)
-            && ((w->options & (W_WANT_CURSOR | W_WANT_HOTKEY)) != 0))
+        // VERIFY:
+        if (!widget_get_state (w, WST_DISABLED)
+            && (widget_get_options (w, WOP_WANT_CURSOR) || widget_get_options (w, WOP_WANT_HOTKEY)))
             break;
 
         dlg->current = g_list_next (dlg->current);
@@ -2705,14 +2707,14 @@ l_dialog_set_help_id (lua_State * L)
 static int
 l_dialog_set_modal (lua_State * L)
 {
-    LUA_TO_DIALOG (L, 1)->modal = lua_toboolean (L, 2);
+    widget_set_state (WIDGET (LUA_TO_DIALOG (L, 1)), WST_MODAL, lua_toboolean (L, 2));
     return 0;
 }
 
 static int
 l_dialog_get_modal (lua_State * L)
 {
-    lua_pushboolean (L, LUA_TO_DIALOG (L, 1)->modal);
+    lua_pushboolean (L, widget_get_state (WIDGET (LUA_TO_DIALOG (L, 1)), WST_MODAL));
     return 1;
 }
 
@@ -2733,7 +2735,7 @@ l_dialog_destroy (lua_State * L)
 
     dlg = LUA_TO_DIALOG (L, 1);
 
-    if (dlg->state != DLG_CLOSED && dlg->state != DLG_CONSTRUCT)
+    if (!widget_get_state (WIDGET (dlg), WST_CLOSED) && !widget_get_state (WIDGET (dlg), WST_CONSTRUCT))
     {
         /* In case a programmer tries to close a dialog by calling destroy() */
         return luaL_error (L,
@@ -2831,7 +2833,7 @@ l_dialog_set_dimensions (lua_State * L)
     rows = luaL_checkint (L, 5);
     send_msg_resize = lua_toboolean (L, 6);
 
-    dlg_set_position (dlg, y, x, y + rows, x + cols);
+    dlg_set_position (dlg, y, x, rows, cols);
 
     if (send_msg_resize)
         send_message (dlg, NULL, MSG_RESIZE, 0, NULL);
@@ -2851,7 +2853,10 @@ l_dialog_set_dimensions (lua_State * L)
      */
     {
         Widget *w = WIDGET (dlg);
-        dlg->fullscreen = (w->x == 0 && w->y == 0 && w->cols == COLS && w->lines == LINES);
+        if (w->x == 0 && w->y == 0 && w->cols == COLS && w->lines == LINES)
+            w->pos_flags |= WPOS_FULLSCREEN;
+        else
+            w->pos_flags &= ~WPOS_FULLSCREEN;
     }
 
     return 0;
@@ -2881,15 +2886,16 @@ l_dialog_get_state (lua_State * L)
 
     const char *state;
 
-    /* *INDENT-OFF* */
-    switch (dlg->state) {
-    case DLG_CONSTRUCT: state = "construct"; break;
-    case DLG_ACTIVE:    state = "active";    break;
-    case DLG_SUSPENDED: state = "suspended"; break;
-    case DLG_CLOSED:    state = "closed";    break;
-    default:            state = "_invalid_"; break;
-    }
-    /* *INDENT-ON* */
+    if (widget_get_state (WIDGET (dlg), WST_CONSTRUCT))
+        state = "construct";
+    else if (widget_get_state (WIDGET (dlg), WST_ACTIVE))
+        state = "active";
+    else if (widget_get_state (WIDGET (dlg), WST_SUSPENDED))
+        state = "suspended";
+    else if (widget_get_state (WIDGET (dlg), WST_CLOSED))
+        state = "closed";
+    else
+        state = "_invalid_";
 
     lua_pushstring (L, state);
 
@@ -2909,7 +2915,7 @@ l_dialog_get_state (lua_State * L)
 static int
 l_dialog_get_compact (lua_State * L)
 {
-    lua_pushboolean (L, LUA_TO_DIALOG (L, 1)->flags & DLG_COMPACT);
+    lua_pushboolean (L, LUA_TO_DIALOG (L, 1)->compact);
     return 1;
 }
 
@@ -2918,10 +2924,7 @@ l_dialog_set_compact (lua_State * L)
 {
     WDialog *dlg = LUA_TO_DIALOG (L, 1);
 
-    if (lua_toboolean (L, 2))
-        dlg->flags |= DLG_COMPACT;
-    else
-        dlg->flags &= ~DLG_COMPACT;
+    dlg->compact = lua_toboolean (L, 2);
 
     return 0;
 }
@@ -3093,8 +3096,11 @@ static const luaMC_constReg uilib_constants[] = {
      * we don't use them for anything else, but we provide them nevertheless for
      * advanced users.
      */
+    REGC (WPOS_FULLSCREEN),
     REGC (WPOS_CENTER_HORZ),
     REGC (WPOS_CENTER_VERT),
+    REGC (WPOS_CENTER),
+    REGC (WPOS_TRYUP),
     REGC (WPOS_KEEP_LEFT),
     REGC (WPOS_KEEP_RIGHT),
     REGC (WPOS_KEEP_TOP),
