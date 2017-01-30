@@ -109,13 +109,19 @@ l_panel_set_vdir (lua_State * L)
     /*
      * Changing a panel's dir also calls mc_chdir(). So if we change the "other"
      * panel's dir, the current panel's dir will no longer be the current dir. As
-     * a result the user will see error messages about non existing files.
+     * a result the user will see error messages about non existing files (e.g.,
+     * try pressing ENTER on a directory name).
      *
      * So we refocus the current panel to trigger re-chdir() to the current
      * panel's dir.
      */
     if (current_panel && current_panel != panel)
-        dlg_select_widget (current_panel);
+    {
+        /* We can't just do `widget_select(current_panel)` becuse it's a no-op:
+         * widget_select() (via widget_focus()) does nothing if the widget is
+         * already focused. */
+        widget_set_state (WIDGET (current_panel), WST_FOCUSED, TRUE);
+    }
 
     redraw_dirty_panel (panel);
     return 1;
@@ -252,10 +258,10 @@ l_panel_panelize_by_command (lua_State * L)
      * it'd also have to chdir() to that panel's dir because the command
      * often wants the panel's dir as the current dir (e.g.,
      * "find -iname '*.mp3'" is intended to run in the panel's dir!). */
-    dlg_select_widget (WIDGET (panel));
+    widget_select (WIDGET (panel));
 
     /* @FIXME: do_external_panelize() should accept 'const char *'. */
-    do_external_panelize (const_cast (char *, command));
+    do_external_panelize ((char *) command);    /* const_cast: remove constness. @todo. */
 
     widget_redraw (WIDGET (panel));
     return 0;
