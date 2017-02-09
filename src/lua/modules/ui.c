@@ -532,6 +532,32 @@ l_widget_set_pos_flags (lua_State * L)
     return 0;
 }
 
+/*
+ * Debugging: the widget's low-level **state** variable.
+ *
+ * @attr widget._state_
+ * @property r
+ */
+static int
+l_widget_get__state_ (lua_State * L)
+{
+    lua_pushi (L, luaUI_check_widget (L, 1)->state);
+    return 1;
+}
+
+/*
+ * Debugging: the widget's low-level **options** variable.
+ *
+ * @attr widget._options_
+ * @property r
+ */
+static int
+l_widget_get__options_ (lua_State * L)
+{
+    lua_pushi (L, luaUI_check_widget (L, 1)->options);
+    return 1;
+}
+
 /* The following property is defined in ui-impl.c */
 /**
  * The name of the widget's class.
@@ -565,6 +591,8 @@ static const struct luaL_Reg ui_widget_methods_lib[] = {
     { "focus", l_widget_focus },
     { "get_canvas", l_widget_get_canvas },
     { "set_pos_flags", l_widget_set_pos_flags },
+    { "get__state_", l_widget_get__state_ },
+    { "get__options_", l_widget_get__options_ },
     { "_destroy", l_widget_destroy },
     { NULL, NULL }
 };
@@ -3329,6 +3357,24 @@ static const luaMC_constReg uilib_constants[] = {
     REGC (WPOS_KEEP_VERT),
     REGC (WPOS_KEEP_ALL),
     REGC (WPOS_KEEP_DEFAULT),
+
+    /*
+     * Debugging purposes only:
+     *
+     * Constants for use with widget._state_ and widget._options_.
+     *
+     * We may remove these in the future.
+     */
+    REGC (WST_DISABLED),
+    REGC (WST_IDLE),
+    REGC (WST_MODAL),
+    REGC (WST_FOCUSED),
+    REGC (WOP_WANT_HOTKEY),
+    REGC (WOP_WANT_CURSOR),
+    REGC (WOP_WANT_TAB),
+    REGC (WOP_IS_INPUT),
+    REGC (WOP_SELECTABLE),
+    REGC (WOP_TOP_SELECT),
 
     /*
      * Constants for widget:_send_message().
